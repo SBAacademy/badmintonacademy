@@ -23,6 +23,7 @@ import { ACADEMY_DATA } from "@/data/academy";
 import { LOCATIONS, LOCATION_SLUGS, getLocationBySlug } from "@/data/locations";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
+import { CentreGallerySection } from "@/components/sections/CentreGallerySection";
 
 interface LocationPageProps {
   params: Promise<{
@@ -493,6 +494,15 @@ export default async function LocationPage({ params }: LocationPageProps) {
           </div>
         </div>
       </section>
+
+      {/* 5.5 Centre Photo Gallery */}
+      <CentreGallerySection
+        branchSlug={location.slug}
+        branchName={location.shortName}
+        eyebrow={`FACILITY TOUR // ${location.shortName.toUpperCase()}`}
+        title={`${location.shortName} Court & Facility Gallery`}
+        description={`Explore the BWF-grade wooden/synthetic courts, 750 Lux anti-glare illumination, and training sessions at ${location.name}.`}
+      />
 
       {/* 6. Coaching Faculty Spotlight */}
       <section className="py-16 lg:py-20 border-b border-[#26313D] bg-[#0E141B]/50">

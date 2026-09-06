@@ -7,6 +7,7 @@ import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { createMetadata } from "@/lib/seo";
 import { PROGRAMS } from "@/data/programs";
 import { FinalCTA } from "@/components/sections/FinalCTA";
+import { CentreGallerySection } from "@/components/sections/CentreGallerySection";
 
 export const metadata: Metadata = createMetadata({
   title: "Badminton Coaching Programs in Kochi | Kids, Juniors, Adults & Pros",
@@ -121,6 +122,13 @@ export default function ProgramsPage() {
         </div>
 
       </div>
+
+      {/* Centre Arenas & Courts Gallery */}
+      <CentreGallerySection
+        eyebrow="FACILITY INFRASTRUCTURE // ALL VENUES"
+        title="TRAINING CENTRES & COURTS GALLERY"
+        description="Every program at S&A is conducted in world-class indoor badminton facilities with specialized wooden-sprung and synthetic rubber mat flooring."
+      />
 
       {/* Campaign Ending CTA */}
       <FinalCTA />

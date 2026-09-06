@@ -11,6 +11,7 @@ import { createMetadata, getFAQSchema, SITE_URL } from "@/lib/seo";
 import { EnquiryForm } from "@/components/forms/EnquiryForm";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { FinalCTA } from "@/components/sections/FinalCTA";
+import { CentreGallerySection } from "@/components/sections/CentreGallerySection";
 
 interface ProgramDetailPageProps {
   params: Promise<{ slug: string }>;
@@ -310,6 +311,13 @@ export default async function ProgramDetailPage({ params }: ProgramDetailPagePro
         </div>
 
       </div>
+
+      {/* Training Facilities & Courts Gallery */}
+      <CentreGallerySection
+        eyebrow="FACILITIES // S&A CENTRES"
+        title="TRAINING COURTS & ARENA GALLERY"
+        description="Our coaching sessions take place on international-standard BWF courts equipped with glare-free illumination and anti-injury flooring."
+      />
 
       <FinalCTA />
     </div>

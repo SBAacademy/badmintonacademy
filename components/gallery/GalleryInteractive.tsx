@@ -14,9 +14,12 @@ const CATEGORIES = [
   "Coaching Sessions",
 ];
 
+const BRANCH_FILTERS = ["All Centres", "Kadavanthra", "Edappally", "Kakkanad"];
+
 export function GalleryInteractive({ initialItems }: { initialItems?: GalleryItem[] }) {
   const [items, setItems] = useState<GalleryItem[]>(initialItems || GALLERY_ITEMS);
   const [activeCategory, setActiveCategory] = useState("All");
+  const [activeBranch, setActiveBranch] = useState("All Centres");
   const [selectedItem, setSelectedItem] = useState<GalleryItem | null>(null);
 
   React.useEffect(() => {
@@ -30,9 +33,16 @@ export function GalleryInteractive({ initialItems }: { initialItems?: GalleryIte
       .catch(() => {});
   }, []);
 
-  const filteredItems = activeCategory === "All"
-    ? items
-    : items.filter((item) => item.category === activeCategory);
+  const filteredItems = items.filter((item) => {
+    const matchesCategory = activeCategory === "All" || item.category === activeCategory;
+    const itemBranchClean = (item.branch || "").toLowerCase();
+    const activeBranchClean = activeBranch.toLowerCase();
+    const matchesBranch =
+      activeBranch === "All Centres" ||
+      itemBranchClean.includes(activeBranchClean) ||
+      itemBranchClean === "all centres";
+    return matchesCategory && matchesBranch;
+  });
 
   const handleNext = () => {
     if (!selectedItem) return;
@@ -49,19 +59,47 @@ export function GalleryInteractive({ initialItems }: { initialItems?: GalleryIte
   };
 
   return (
-    <div>
-      {/* Filter Category Pills */}
-      <div className="flex items-center justify-center gap-2 flex-wrap mb-12">
+    <div className="space-y-8">
+      {/* 1. Centre / Branch Selector Strip */}
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+        <span className="text-xs font-mono uppercase font-bold text-[#A8B0BA] flex items-center gap-1.5">
+          <MapPin className="w-3.5 h-3.5 text-[#B8F000]" />
+          <span>Select Centre:</span>
+        </span>
+        <div className="flex items-center gap-2 flex-wrap justify-center font-mono text-xs">
+          {BRANCH_FILTERS.map((branch) => {
+            const isActive = activeBranch === branch;
+            return (
+              <button
+                key={branch}
+                type="button"
+                onClick={() => setActiveBranch(branch)}
+                className={`px-3.5 py-1.5 border uppercase font-bold transition-all cursor-pointer ${
+                  isActive
+                    ? "bg-[#B8F000] text-[#07090D] border-[#B8F000] shadow-[0_0_12px_rgba(184,240,0,0.2)]"
+                    : "bg-[#0B0F14] text-[#A8B0BA] border-[#1F2937] hover:border-[#374151] hover:text-white"
+                }`}
+              >
+                {branch}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* 2. Filter Category Pills */}
+      <div className="flex items-center justify-center gap-2 flex-wrap pb-4">
         {CATEGORIES.map((cat) => {
           const isActive = activeCategory === cat;
           return (
             <button
               key={cat}
+              type="button"
               onClick={() => setActiveCategory(cat)}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${
+              className={`px-3 py-1 text-xs font-mono transition-all cursor-pointer ${
                 isActive
-                  ? "bg-emerald-500 text-[#090D16] shadow-md shadow-emerald-500/20"
-                  : "bg-slate-900/80 text-slate-300 border border-slate-800 hover:border-slate-700 hover:text-white"
+                  ? "bg-[#1F2937] text-white border border-[#B8F000]/60 font-bold"
+                  : "bg-transparent text-[#6B7280] border border-transparent hover:text-[#A8B0BA]"
               }`}
             >
               {cat}

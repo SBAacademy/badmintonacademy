@@ -8,6 +8,7 @@ import { createMetadata } from "@/lib/seo";
 import { LOCATIONS } from "@/data/locations";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { FinalCTA } from "@/components/sections/FinalCTA";
+import { CentreGallerySection } from "@/components/sections/CentreGallerySection";
 
 export const metadata: Metadata = createMetadata({
   title: "Badminton Academy Centres in Kochi | Kadavanthra, Edappally, Kakkanad",
@@ -147,6 +148,13 @@ export default function BranchesPage() {
         </div>
 
       </div>
+
+      {/* Centre Court Visuals Gallery */}
+      <CentreGallerySection
+        eyebrow="NETWORK INFRASTRUCTURE // KOCHI CENTRES"
+        title="CENTRES & COURTS PHOTO GALLERY"
+        description="Take an interactive tour through our BWF Grade-1 certified badminton courts across Kadavanthra, Edappally, and Kakkanad."
+      />
 
       <FinalCTA />
     </div>

@@ -3,88 +3,84 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, MessageCircle, CheckCircle2 } from "lucide-react";
+import { ArrowRight, MessageCircle, ChevronDown } from "lucide-react";
 import { ACADEMY_DATA } from "@/data/academy";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { trackEvent } from "@/lib/analytics";
 
 export function HeroSection() {
   const handleWhatsApp = () => {
-    trackEvent("whatsapp_click", { source: "hero_primary" });
+    trackEvent("whatsapp_click", { source: "hero_rebel" });
   };
 
   return (
-    <section className="relative min-h-[82vh] lg:min-h-[86vh] flex items-center justify-center overflow-hidden bg-[#080B10] border-b border-[#26313D]">
-      
-      {/* Real High-Performance Badminton Athlete Photograph as Hero Right Backdrop */}
-      <div className="absolute inset-0 z-0">
+    <section className="relative min-h-[90vh] lg:min-h-[95vh] flex items-center justify-center overflow-hidden bg-[#07090D] border-b border-[#1F2937]">
+      {/* Full-bleed Athlete Action Photography with Vignette & Depth */}
+      <div className="absolute inset-0 z-0 select-none">
         <div className="relative w-full h-full">
           <Image
             src="/images/hero-athlete.jpg"
-            alt="Badminton athlete performing explosive jump smash at S&A Badminton Academy Kochi"
+            alt="Elite badminton athlete executing an explosive jump smash at S&A Badminton Academy Kochi"
             fill
             priority
-            className="object-cover object-right lg:object-center"
+            className="object-cover object-right lg:object-center opacity-85 transition-transform duration-700 hover:scale-[1.02]"
             sizes="100vw"
           />
 
-          {/* Cinematic Editorial Gradient Mask - Keeps text readable while showcasing athlete */}
+          {/* Cinematic Editorial Gradients — Dark pitch black on left, revealing player on right */}
           <div
             className="absolute inset-0 pointer-events-none"
             style={{
               background: `linear-gradient(90deg, 
-                rgba(8,11,16,0.98) 0%, 
-                rgba(8,11,16,0.92) 42%, 
-                rgba(8,11,16,0.60) 70%, 
-                rgba(8,11,16,0.30) 100%)`,
+                rgba(7,9,13,0.98) 0%, 
+                rgba(7,9,13,0.93) 45%, 
+                rgba(7,9,13,0.60) 75%, 
+                rgba(7,9,13,0.30) 100%)`,
             }}
           />
 
-          {/* Subtle Mobile Bottom & Top Vignette for Maximum Contrast on Phones */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#080B10] via-[#080B10]/60 to-[#080B10]/80 lg:hidden pointer-events-none" />
+          {/* Mobile Vignette for Maximum Readability */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#07090D] via-[#07090D]/75 to-[#07090D]/85 lg:hidden pointer-events-none" />
 
-          {/* Subtle Warm Athletic Lime Atmospheric Halo Behind Player */}
-          <div className="absolute top-1/3 right-1/4 w-[380px] h-[380px] bg-[#B8F000]/8 rounded-full blur-3xl pointer-events-none" />
+          {/* Cinematic subtle film grain & dark edge vignette */}
+          <div className="absolute inset-0 shadow-[inset_0_0_120px_rgba(0,0,0,0.8)] pointer-events-none" />
         </div>
       </div>
 
-      {/* Subtle Court Line Accent */}
-      <div className="absolute inset-0 pointer-events-none opacity-10 court-grid-subtle" />
-
-      {/* Hero Content Layer */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full py-10 sm:py-12 lg:py-16">
-        <div className="max-w-2xl lg:max-w-3xl space-y-5 sm:space-y-6 text-left">
+      {/* Hero Content Container */}
+      <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full pt-12 pb-16 lg:py-20">
+        <div className="max-w-3xl lg:max-w-4xl text-left space-y-6 sm:space-y-8">
           
-          {/* 1. Editorial Eyebrow with Lime Accent Bar */}
-          <div className="flex items-center gap-2.5">
-            <span className="w-5 sm:w-6 h-0.5 bg-[#B8F000]" />
-            <span className="text-[11px] sm:text-xs font-bold uppercase tracking-widest text-[#B8F000]">
-              S & A BADMINTON ACADEMY • KOCHI & ERNAKULAM
+          {/* 01. Micro Eyebrow with Monospace Index */}
+          <div className="flex items-center gap-3">
+            <span className="px-2 py-0.5 text-[11px] font-mono font-black tracking-widest text-[#07090D] bg-[#B8F000] uppercase">
+              01 // PERFORMANCE
+            </span>
+            <span className="text-[11px] sm:text-xs font-mono tracking-[0.25em] text-[#A8B0BA] uppercase">
+              S&amp;A BADMINTON ACADEMY • KOCHI
             </span>
           </div>
 
-          {/* 2. Bold Display Typography (Lines 1 & 2 in White, Line 3 in Athletic Lime #B8F000) */}
-          <h1 className="text-3xl sm:text-5xl lg:text-7xl font-black tracking-tight text-[#F8FAFC] leading-[1.06] uppercase">
-            Train Hard. <br />
-            Smash Harder. <br />
-            <span className="text-[#B8F000]">
-              Master The Court.
-            </span>
+          {/* 02. Colossal Asymmetric Editorial Typography */}
+          <h1 className="text-[clamp(2.8rem,7.5vw,6.5rem)] font-black tracking-[-0.04em] text-white leading-[0.92] uppercase select-none">
+            <span className="block text-white">TRAIN HARD.</span>
+            <span className="block text-[#B8F000] my-1 sm:my-2">SMASH HARDER.</span>
+            <span className="block text-white/95">MASTER THE COURT.</span>
           </h1>
 
-          {/* 3. Editorial Description */}
-          <p className="text-base sm:text-lg text-[#A7B0BC] max-w-xl font-normal leading-relaxed pt-1">
+          {/* 03. Supporting Performance Copy */}
+          <p className="text-base sm:text-lg lg:text-xl text-[#A8B0BA] max-w-xl font-normal leading-relaxed">
             {ACADEMY_DATA.subheadline}
           </p>
 
-          {/* 4. Streamlined CTAs (Primary Book Free Trial + Secondary WhatsApp) */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 pt-3">
+          {/* 04. Tactile, High-Voltage Action CTAs */}
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 pt-2">
             <Link
               href="/contact"
-              className="px-8 py-4 rounded-xl bg-[#B8F000] hover:bg-[#c7fb1e] text-[#07100A] font-extrabold text-sm sm:text-base flex items-center justify-center gap-2 shadow-sm transition-all duration-200 group"
+              className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-[#B8F000] hover:bg-[#cbf722] text-[#07090D] font-black text-sm uppercase tracking-wider transition-all duration-150 group shadow-md"
             >
               <span>BOOK A FREE TRIAL</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform duration-150" />
             </Link>
 
             <a
@@ -92,26 +88,26 @@ export function HeroSection() {
               target="_blank"
               rel="noopener noreferrer"
               onClick={handleWhatsApp}
-              className="px-7 py-4 rounded-xl bg-[#121A23]/90 hover:bg-[#17212C] text-[#F8FAFC] font-semibold text-sm sm:text-base border border-[#26313D] hover:border-[#374758] transition-colors flex items-center justify-center gap-2.5"
+              className="inline-flex items-center justify-center gap-2.5 px-7 py-4 bg-[#11161D] hover:bg-[#17212C] text-white font-bold text-sm uppercase tracking-wider border border-[#1F2937] hover:border-[#B8F000]/60 transition-colors"
             >
               <MessageCircle className="w-4 h-4 text-[#22C55E]" />
-              <span>WHATSAPP US</span>
+              <span>WHATSAPP ADMISSIONS</span>
             </a>
           </div>
 
-          {/* 5. Safe, Data-Driven Trust Pillars (No unverified claims) */}
-          <div className="pt-8 border-t border-[#26313D]/80 grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-xl">
+          {/* 05. Safe Verified Operational Footprint */}
+          <div className="pt-8 border-t border-[#1F2937] grid grid-cols-1 sm:grid-cols-3 gap-5 max-w-2xl">
             {ACADEMY_DATA.trustPillars.map((pillar, idx) => (
-              <div key={idx} className="flex items-start gap-2 text-left">
-                <CheckCircle2 className="w-4 h-4 text-[#B8F000] shrink-0 mt-0.5" />
-                <div>
-                  <div className="text-xs font-bold text-[#F8FAFC] leading-tight">
-                    {pillar.title}
-                  </div>
-                  <div className="text-[11px] text-[#6B7280] mt-0.5">
-                    {pillar.subtitle}
-                  </div>
-                </div>
+              <div key={idx} className="flex flex-col border-l-2 border-[#1F2937] pl-3.5 hover:border-[#B8F000] transition-colors">
+                <span className="font-mono text-[10px] text-[#B8F000] font-bold">
+                  0{idx + 1}
+                </span>
+                <span className="text-xs font-bold text-white uppercase tracking-tight mt-0.5">
+                  {pillar.title}
+                </span>
+                <span className="text-[11px] text-[#A8B0BA] mt-0.5 leading-snug">
+                  {pillar.subtitle}
+                </span>
               </div>
             ))}
           </div>
@@ -119,13 +115,21 @@ export function HeroSection() {
         </div>
       </div>
 
-      {/* Subtle Secondary Floating Shuttlecock Silhouette in bottom-right corner */}
-      <div className="hidden xl:block absolute bottom-8 right-12 z-10 pointer-events-none opacity-40 animate-subtle-float">
-        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#B8F000" strokeWidth="1.5">
-          <path d="M12 2l2.5 5.5L12 10l-2.5-2.5L12 2z" />
-          <path d="M12 10v12" />
-          <path d="M7 16a5 5 0 0 0 10 0" />
-        </svg>
+      {/* Bottom Editorial Coordinates & Scroll Indicator */}
+      <div className="hidden md:flex absolute bottom-6 left-8 right-8 z-10 items-center justify-between pointer-events-none text-[#A8B0BA] font-mono text-xs">
+        <div className="flex items-center gap-3">
+          <span className="w-2 h-2 bg-[#B8F000] rounded-none animate-pulse" />
+          <span className="tracking-widest uppercase text-white font-bold">
+            01 / 04 CENTRES ACROSS KOCHI
+          </span>
+          <span className="text-[#1F2937]">|</span>
+          <span className="text-[#A8B0BA]">KADAVANTHRA • EDAPPALLY • KAKKANAD</span>
+        </div>
+
+        <div className="flex items-center gap-2 text-[#A8B0BA] opacity-70">
+          <span className="text-[10px] tracking-widest uppercase">SCROLL TO EXPLORE</span>
+          <ChevronDown className="w-3.5 h-3.5 animate-bounce" />
+        </div>
       </div>
     </section>
   );

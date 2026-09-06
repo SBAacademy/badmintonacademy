@@ -2,24 +2,24 @@
 
 @layer base {
   :root {
-    --bg-main: #080B10;
-    --bg-secondary: #0E141B;
-    --bg-card: #121A23;
-    --bg-card-hover: #17212C;
+    --bg-pitch: #07090D;
+    --bg-carbon: #0B0F14;
+    --bg-panel: #11161D;
+    --bg-panel-hover: #17212C;
     --brand-lime: #B8F000;
-    --accent-green: #22C55E;
-    --accent-cyan: #22D3EE;
-    --text-primary: #F8FAFC;
-    --text-secondary: #A7B0BC;
-    --text-muted: #6B7280;
-    --border-color: #26313D;
+    --brand-lime-hover: #c7fb1e;
+    --text-white: #FFFFFF;
+    --text-silver: #A8B0BA;
+    --text-muted: #9CA3AF;
+    --border-subtle: #1F2937;
+    --border-active: #B8F000;
     --cta-dark: #07100A;
   }
 
   html {
     scroll-behavior: smooth;
-    background-color: var(--bg-main);
-    color: var(--text-primary);
+    background-color: var(--bg-pitch);
+    color: var(--text-white);
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent;
@@ -27,8 +27,8 @@
   }
 
   body {
-    background-color: #080B10;
-    color: #F8FAFC;
+    background-color: #07090D;
+    color: #FFFFFF;
     min-height: 100vh;
     overflow-x: hidden;
     width: 100%;
@@ -39,53 +39,85 @@
 
   /* Custom Athletic Scrollbar */
   ::-webkit-scrollbar {
-    width: 7px;
+    width: 6px;
   }
   ::-webkit-scrollbar-track {
-    background: #080B10;
+    background: #07090D;
   }
   ::-webkit-scrollbar-thumb {
-    background: #26313D;
-    border-radius: 4px;
+    background: #1F2937;
+    border-radius: 2px;
   }
   ::-webkit-scrollbar-thumb:hover {
     background: #B8F000;
   }
 }
 
-/* Subtle Court Grid (Very faint, not overwhelming) */
+/* Restrained Court Grid Texture */
 .court-grid-subtle {
   background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
-  background-size: 48px 48px;
+    linear-gradient(to right, rgba(255, 255, 255, 0.012) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.012) 1px, transparent 1px);
+  background-size: 40px 40px;
 }
 
-/* Restrained Shuttlecock Float Animation */
+/* Ambient Subtle Float */
 @keyframes subtleFloat {
   0%, 100% {
     transform: translateY(0px) rotate(0deg);
   }
   50% {
-    transform: translateY(-8px) rotate(1.5deg);
+    transform: translateY(-6px) rotate(1deg);
   }
 }
-
 .animate-subtle-float {
   animation: subtleFloat 6s ease-in-out infinite;
 }
 
-/* Standard Premium Athletic Card */
+/* Continuous Performance Marquee Keyframes (GPU Composited) */
+@keyframes marqueeLeft {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes marqueeRight {
+  0% {
+    transform: translate3d(-50%, 0, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.animate-marquee-left {
+  display: flex;
+  width: max-content;
+  animation: marqueeLeft 28s linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee-right {
+  display: flex;
+  width: max-content;
+  animation: marqueeRight 28s linear infinite;
+  will-change: transform;
+}
+
+/* Rebel Performance Card */
 .sports-card {
-  background-color: #121A23;
-  border: 1px solid #26313D;
-  border-radius: 16px;
+  background-color: #11161D;
+  border: 1px solid #1F2937;
+  border-radius: 12px;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .sports-card:hover {
   background-color: #17212C;
-  border-color: #374758;
-  transform: translateY(-4px);
+  border-color: #374151;
+  transform: translateY(-3px);
 }
 
 /* Primary Athletic Button */
@@ -93,29 +125,31 @@
   background-color: #B8F000;
   color: #07100A;
   font-weight: 800;
+  border-radius: 10px;
   transition: all 0.2s ease;
 }
 .btn-primary-lime:hover {
   background-color: #c7fb1e;
   transform: translateY(-1px);
-  box-shadow: 0 10px 25px -5px rgba(184, 240, 0, 0.25);
+  box-shadow: 0 8px 20px -4px rgba(184, 240, 0, 0.25);
 }
 
 /* Secondary Action Button */
 .btn-secondary-dark {
-  background-color: #0E141B;
-  color: #F8FAFC;
-  border: 1px solid #26313D;
+  background-color: #0B0F14;
+  color: #FFFFFF;
+  border: 1px solid #1F2937;
+  border-radius: 10px;
   font-weight: 600;
   transition: all 0.2s ease;
 }
 .btn-secondary-dark:hover {
   background-color: #17212C;
-  border-color: #374758;
-  color: #FFFFFF;
+  border-color: #374151;
+  color: #B8F000;
 }
 
-/* Accessibility: Reduced Motion */
+/* Accessibility: Reduced Motion Overrides */
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {
     animation-duration: 0.01ms !important;
@@ -123,7 +157,9 @@
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-  .animate-subtle-float {
+  .animate-subtle-float,
+  .animate-marquee-left,
+  .animate-marquee-right {
     animation: none !important;
   }
 }

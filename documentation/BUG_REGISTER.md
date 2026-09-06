@@ -12,7 +12,7 @@
 | :---: | :--- | :---: | :---: | :---: | :---: |
 | **BUG-001** | Desktop Dropdown Premature Closure on Cursor Transition | **HIGH** | Desktop (≥ 1024px) | **RESOLVED** | `571976a` |
 | **BUG-002** | Mobile Drawer Programs & Centres Submenus Not Expanding on Tap | **CRITICAL** | Mobile (< 1024px) | **RESOLVED** | `4e7c4f0` |
-| **BUG-003** | Console Warning: Missing `data-scroll-behavior="smooth"` on `<html>` | **LOW** | All Viewports | **ACTIVE** | Documented for Phase 2 |
+| **BUG-003** | Console Warning: Missing `data-scroll-behavior="smooth"` on `<html>` | **LOW** | All Viewports | **RESOLVED** | Added `data-scroll-behavior="smooth"` to `app/layout.tsx` |
 | **BUG-004** | GTM Container ID Missing from Root Layout | **LOW** | All Viewports | **ACTIVE** | Documented for Phase 2 |
 
 ---
@@ -48,9 +48,8 @@
 
 ### BUG-003: Next.js Scroll Behavior Warning
 * **Severity:** LOW (Development Console Warning).
-* **Observed Output:** `Detected 'scroll-behavior: smooth' on the <html> element. To disable smooth scrolling during route transitions, add data-scroll-behavior="smooth" to your <html> element.`
-* **Root Cause:** Next.js 16 recommends `data-scroll-behavior="smooth"` attribute on `<html>` when CSS smooth scrolling is enabled in `app/globals.css`.
-* **Recommended Fix:** Add `data-scroll-behavior="smooth"` to `<html lang="en" ...>` in `app/layout.tsx`.
+* **Status:** **RESOLVED**
+* **Fix Applied:** Added `data-scroll-behavior="smooth"` to `<html lang="en" ...>` in `app/layout.tsx`. Suppressed hydration warnings and removed transition warnings.
 
 ---
 

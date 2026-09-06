@@ -123,8 +123,8 @@ export function Navbar() {
         ref={headerRef}
         className={`sticky top-0 z-40 w-full transition-all duration-200 h-16 lg:h-20 ${
           isScrolled
-            ? "bg-[#080B10]/95 backdrop-blur-md shadow-lg shadow-black/60 border-b border-[#26313D]"
-            : "bg-[#080B10]/90 backdrop-blur-sm border-b border-[#26313D]/70"
+            ? "bg-[#07090D]/95 backdrop-blur-md shadow-lg shadow-black/80 border-b border-[#1F2937]"
+            : "bg-[#07090D]/90 backdrop-blur-sm border-b border-[#1F2937]/80"
         }`}
       >
         <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between">
@@ -213,7 +213,7 @@ export function Navbar() {
                         onMouseEnter={() => handleMouseEnter(link.name)}
                         onMouseLeave={handleMouseLeave}
                       >
-                        <div className="rounded-2xl bg-[#121A23] border border-[#26313D] shadow-2xl p-2 space-y-0.5 backdrop-blur-xl">
+                        <div className="rounded-xl bg-[#11161D] border border-[#1F2937] shadow-2xl p-2 space-y-0.5 backdrop-blur-xl">
                           {link.dropdown?.map((subItem) => (
                             <Link
                               key={subItem.href}
@@ -233,11 +233,11 @@ export function Navbar() {
                           ))}
 
                           {/* Overview Link for SEO & Direct Navigation */}
-                          <div className="pt-1.5 mt-1.5 border-t border-[#26313D]/70">
+                          <div className="pt-1.5 mt-1.5 border-t border-[#1F2937]">
                             <Link
                               href={link.href}
                               onClick={() => setOpenDropdown(null)}
-                              className="flex items-center justify-between px-3.5 py-2 rounded-xl text-xs font-bold text-[#B8F000] hover:bg-[#17212C] transition-colors group/all"
+                              className="flex items-center justify-between px-3.5 py-2 rounded-lg text-xs font-bold text-[#B8F000] hover:bg-[#17212C] transition-colors group/all"
                             >
                               <span>Explore all {link.name.toLowerCase()}</span>
                               <ArrowRight className="w-3.5 h-3.5 group-hover/all:translate-x-0.5 transition-transform" />
@@ -315,10 +315,10 @@ export function Navbar() {
       {mobileMenuOpen && (
         <div
           className="lg:hidden fixed inset-0 z-[100] flex flex-col overflow-hidden animate-in fade-in duration-200"
-          style={{ backgroundColor: "#080B10" }}
+          style={{ backgroundColor: "#07090D" }}
         >
           {/* Mobile Drawer Header */}
-          <div className="h-16 px-4 sm:px-6 flex items-center justify-between border-b border-[#26313D] shrink-0 bg-[#080B10]">
+          <div className="h-16 px-4 sm:px-6 flex items-center justify-between border-b border-[#1F2937] shrink-0 bg-[#07090D]">
             <Link
               href="/"
               onClick={() => setMobileMenuOpen(false)}
@@ -407,7 +407,7 @@ export function Navbar() {
                     {isExpanded && (
                       <div
                         id={`mobile-submenu-${menuKey}`}
-                        className="pl-3 pr-2 py-2 space-y-1 bg-[#0E141B] rounded-xl my-1 border-l-2 border-[#B8F000] animate-in fade-in slide-in-from-top-1 duration-200"
+                        className="pl-3 pr-2 py-2 space-y-1 bg-[#0B0F14] rounded-lg my-1 border-l-2 border-[#B8F000] animate-in fade-in slide-in-from-top-1 duration-200"
                       >
                         {link.dropdown?.map((sub) => (
                           <Link
@@ -485,7 +485,7 @@ export function Navbar() {
 
           {/* Mobile Drawer Bottom Quick Action Bar with Safe-Area Clearance */}
           <div
-            className="border-t border-[#26313D] bg-[#0E141B] p-4 sm:p-5 space-y-3 shrink-0"
+            className="border-t border-[#1F2937] bg-[#0B0F14] p-4 sm:p-5 space-y-3 shrink-0"
             style={{ paddingBottom: "max(1.5rem, env(safe-area-inset-bottom))" }}
           >
             <Link

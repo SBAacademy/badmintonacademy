@@ -1,137 +1,143 @@
 import React from "react";
-import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, ShieldCheck, Activity, MapPin, Trophy } from "lucide-react";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
-const WHY_PILLARS = [
+const MANIFESTO_POINTS = [
   {
     num: "01",
-    title: "Expert Coaching",
-    subtitle: "Technical training & structured progression",
-    description: "Every athlete is coached with proper stroke mechanics, racquet grip transitions, and kinetic energy transfer, ensuring rapid improvement without repetitive stress injuries.",
-    icon: ShieldCheck,
+    tagline: "DISCIPLINE OVER MOTIVATION.",
+    subtitle: "Motivation is temporary. Daily habits build champions.",
+    body: "We do not rely on occasional enthusiasm. We build rigorous, structured athletic routines where players show up, drill fundamentals, and develop mental stamina court by court.",
   },
   {
     num: "02",
-    title: "Player Development",
-    subtitle: "Footwork, strokes, movement & fitness",
-    description: "From 6-corner court agility and shadow drills to explosive vertical jump smashes and situational match play, our curriculum develops complete, intelligent athletes.",
-    icon: Activity,
+    tagline: "TECHNIQUE OVER SHORTCUTS.",
+    subtitle: "Power without precision is wasted kinetic force.",
+    body: "Every stroke is broken down to racquet grip dynamics, hip rotation, kinetic energy transfer, and clean footwork recoveries. Speed without correct mechanics causes injuries; correct mechanics produce effortless speed.",
   },
   {
     num: "03",
-    title: "Three Kochi Locations",
-    subtitle: "Kadavanthra · Edappally · Kakkanad",
-    description: "Train at full-scale arenas across Central, North, and East Kochi. Featuring international BWF-standard synthetic court mats laid over shock-absorbing wooden subfloors.",
-    icon: MapPin,
-  },
-  {
-    num: "04",
-    title: "Beginner to Competitive",
-    subtitle: "Programs designed around player level",
-    description: "Dedicated batch cohorts for kids (ages 5–9), junior development (ages 10–16), adult corporate fitness, and elite tournament ranking squads.",
-    icon: Trophy,
+    tagline: "CONSISTENCY OVER EXCUSES.",
+    subtitle: "Show up. Put in the hours. Master the game.",
+    body: "Whether starting at age 6 in foundation batches or competing on state-level ranking circuits, progress is measured in thousands of repetitions, high-pressure drills, and honest match reviews.",
   },
 ];
 
 export function WhySA() {
   return (
-    <section className="py-20 lg:py-28 bg-[#0E141B] relative border-b border-[#26313D]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section 
+      className="py-24 lg:py-36 bg-[#07090D] relative border-b border-[#1F2937] overflow-hidden select-none"
+      aria-label="Academy Philosophy and Manifesto"
+    >
+      <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Editorial Section Header */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-16">
-          <div className="space-y-3 max-w-2xl">
-            <div className="flex items-center gap-2">
-              <span className="w-5 h-0.5 bg-[#B8F000]" />
-              <span className="text-xs font-bold uppercase tracking-widest text-[#B8F000]">
-                WHY S & A BADMINTON
+        {/* Editorial Eyebrow & Category Index */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-12 sm:pb-16 border-b border-[#1F2937]">
+          <div className="space-y-3">
+            <div className="flex items-center gap-3">
+              <span className="px-2 py-0.5 text-[10px] font-mono font-black tracking-widest text-[#07090D] bg-[#B8F000] uppercase">
+                02 // MANIFESTO
+              </span>
+              <span className="text-[11px] font-mono tracking-[0.25em] text-[#A8B0BA] uppercase">
+                THE REBEL PHILOSOPHY
               </span>
             </div>
-            <h2 className="text-3xl sm:text-5xl font-black text-[#F8FAFC] tracking-tight uppercase leading-tight">
-              Built For Players Who <br className="hidden sm:inline" />
-              <span className="text-[#B8F000]">Want To Improve.</span>
+            <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-[-0.03em] uppercase leading-[0.95]">
+              HOW CHAMPIONS <br />
+              <span className="text-[#B8F000]">ARE FORGED.</span>
             </h2>
           </div>
 
-          <p className="text-sm sm:text-base text-[#A7B0BC] max-w-md leading-relaxed">
-            We don’t just rent courts — we systematically cultivate badminton athletes through sports science, qualified coaching pedigree, and modern training infrastructure.
-          </p>
+          <div className="max-w-md text-left">
+            <p className="text-sm sm:text-base text-[#A8B0BA] leading-relaxed font-normal">
+              Most academies teach badminton like a hobby. We treat it as a disciplined athletic discipline. No gimmicks, no easy shortcuts — just elite fundamentals practiced with unyielding focus.
+            </p>
+          </div>
         </div>
 
-        {/* 4 Large Editorial Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-          {WHY_PILLARS.map((pillar) => {
-            const Icon = pillar.icon;
-            return (
-              <div
-                key={pillar.num}
-                className="sports-card p-7 flex flex-col justify-between group"
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-6">
-                    <span className="font-mono text-2xl font-black text-[#26313D] group-hover:text-[#B8F000] transition-colors">
-                      {pillar.num}
-                    </span>
-                    <div className="w-10 h-10 rounded-xl bg-[#080B10] border border-[#26313D] flex items-center justify-center text-[#B8F000]">
-                      <Icon className="w-5 h-5" />
-                    </div>
-                  </div>
-
-                  <h3 className="text-lg font-bold text-[#F8FAFC] group-hover:text-[#B8F000] transition-colors">
-                    {pillar.title}
-                  </h3>
-
-                  <div className="text-xs font-semibold text-[#A7B0BC] mt-1 mb-3">
-                    {pillar.subtitle}
-                  </div>
-
-                  <p className="text-xs text-[#6B7280] leading-relaxed">
-                    {pillar.description}
-                  </p>
+        {/* 3 Staggered Manifesto Columns with Thin Lime Rules */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 divide-y lg:divide-y-0 lg:divide-x divide-[#1F2937] border-b border-[#1F2937]">
+          {MANIFESTO_POINTS.map((item) => (
+            <div 
+              key={item.num}
+              className="py-12 lg:py-16 lg:px-10 first:pl-0 last:pr-0 flex flex-col justify-between group transition-colors hover:bg-[#0B0F14]/50"
+            >
+              <div className="space-y-6">
+                {/* Numeric Index + Lime Vertical Rule */}
+                <div className="flex items-center gap-4">
+                  <span className="font-mono text-3xl sm:text-4xl font-black text-white/40 group-hover:text-[#B8F000] transition-colors">
+                    {item.num}
+                  </span>
+                  <div className="w-12 h-0.5 bg-[#1F2937] group-hover:bg-[#B8F000] group-hover:w-16 transition-all duration-300" />
                 </div>
 
-                <div className="mt-6 pt-4 border-t border-[#26313D]/60 text-[11px] font-bold text-[#A7B0BC] flex items-center gap-1">
-                  <span>Standard at all branches</span>
+                {/* Tagline */}
+                <h3 className="text-2xl sm:text-3xl font-black text-white uppercase tracking-tight leading-tight group-hover:text-[#B8F000] transition-colors">
+                  {item.tagline}
+                </h3>
+
+                {/* Subtitle */}
+                <div className="text-xs sm:text-sm font-semibold text-[#B8F000] tracking-wide uppercase">
+                  {item.subtitle}
                 </div>
+
+                {/* Body description */}
+                <p className="text-xs sm:text-sm text-[#A8B0BA] leading-relaxed font-normal">
+                  {item.body}
+                </p>
               </div>
-            );
-          })}
+
+              <div className="pt-8 mt-8 border-t border-[#1F2937]/50 flex items-center justify-between text-[11px] font-mono text-[#A8B0BA]/60 uppercase tracking-wider">
+                <span>ATHLETIC STANDARD</span>
+                <span className="text-[#B8F000]">CONFIRMED</span>
+              </div>
+            </div>
+          ))}
         </div>
 
-        {/* Feature Visual Band: Training Photograph + Facility Note */}
-        <div className="rounded-3xl bg-[#121A23] border border-[#26313D] overflow-hidden grid grid-cols-1 lg:grid-cols-12 gap-8 items-center p-6 sm:p-10">
-          <div className="lg:col-span-6 relative aspect-[16/10] rounded-2xl overflow-hidden bg-[#080B10] border border-[#26313D]">
+        {/* Cinematic Editorial Feature: Court Infrastructure & Athlete Concentration */}
+        <div className="mt-16 lg:mt-24 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center bg-[#0B0F14] border border-[#1F2937] p-6 sm:p-10 lg:p-12">
+          
+          <div className="lg:col-span-6 relative aspect-[16/10] overflow-hidden bg-[#07090D] border border-[#1F2937]">
             <Image
               src="/images/training-coach.jpg"
-              alt="S&A Badminton Academy coach training student on court"
+              alt="Real S&A coach working on court stroke mechanics with athlete"
               fill
-              className="object-cover"
+              className="object-cover object-center filter grayscale contrast-125 hover:grayscale-0 transition-all duration-500"
               sizes="(max-width: 1024px) 100vw, 50vw"
             />
+            {/* Cinematic dark corner mask */}
+            <div className="absolute inset-0 shadow-[inset_0_0_80px_rgba(0,0,0,0.7)] pointer-events-none" />
           </div>
 
-          <div className="lg:col-span-6 space-y-5 text-left">
-            <span className="text-xs font-bold text-[#B8F000] uppercase tracking-wider">
-              Training Standards
-            </span>
-            <h3 className="text-2xl sm:text-3xl font-extrabold text-[#F8FAFC] tracking-tight">
-              BWF-Standard Synthetic Courts on Sprung Wood
+          <div className="lg:col-span-6 space-y-6 text-left">
+            <div className="flex items-center gap-3">
+              <span className="w-2.5 h-2.5 bg-[#B8F000]" />
+              <span className="font-mono text-xs font-bold text-[#B8F000] uppercase tracking-widest">
+                VERIFIED TRAINING INFRASTRUCTURE
+              </span>
+            </div>
+
+            <h3 className="text-2xl sm:text-4xl font-black text-white tracking-tight uppercase leading-snug">
+              BWF-GRADE SYNTHETIC MATS ON SHOCK-ABSORBING SPRUNG WOOD
             </h3>
-            <p className="text-sm text-[#A7B0BC] leading-relaxed">
-              Badminton involves sudden lunges and high-impact decelerations that place intense strain on player knees and ankles. All our courts across Kadavanthra, Edappally, and Kakkanad feature multi-layer shock-absorbing wooden subfloors, reducing joint impact by over 50% compared to concrete or tile floors.
+
+            <p className="text-sm sm:text-base text-[#A8B0BA] leading-relaxed">
+              Competitive badminton requires brutal deceleration and explosive lateral change-of-direction. To protect knees and ankles from cumulative joint stress, all academy courts across Kadavanthra, Edappally, and Kakkanad utilize tournament-spec synthetic mats installed over shock-absorbing sprung wooden subfloors.
             </p>
 
-            <div className="pt-2 flex items-center gap-4">
+            <div className="pt-2">
               <Link
                 href="/programs"
-                className="inline-flex items-center gap-2 text-xs font-bold text-[#B8F000] hover:text-[#c7fb1e] transition-colors"
+                className="inline-flex items-center gap-3 px-6 py-3.5 bg-[#11161D] hover:bg-[#17212C] text-white text-xs font-black uppercase tracking-wider border border-[#1F2937] hover:border-[#B8F000]/60 transition-colors group"
               >
-                <span>View All Training Programs</span>
-                <ArrowRight className="w-4 h-4" />
+                <span>EXPLORE TRAINING TRACKS</span>
+                <ArrowRight className="w-4 h-4 text-[#B8F000] group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
           </div>
+
         </div>
 
       </div>

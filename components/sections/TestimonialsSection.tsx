@@ -1,81 +1,114 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import Link from "next/link";
-import { Star, Quote, ArrowRight, CheckCircle } from "lucide-react";
+import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { TESTIMONIALS } from "@/data/testimonials";
 
 export function TestimonialsSection() {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const currentItem = TESTIMONIALS[currentIndex] || TESTIMONIALS[0];
+
+  const handlePrev = () => {
+    setCurrentIndex((prev) => (prev === 0 ? TESTIMONIALS.length - 1 : prev - 1));
+  };
+
+  const handleNext = () => {
+    setCurrentIndex((prev) => (prev === TESTIMONIALS.length - 1 ? 0 : prev + 1));
+  };
+
   return (
-    <section className="py-20 lg:py-28 bg-[#080B10] relative border-b border-[#26313D]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section 
+      className="py-24 lg:py-36 bg-[#07090D] relative border-b border-[#1F2937] select-none"
+      aria-label="Editorial Testimonials"
+    >
+      <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-14 gap-6">
-          <div className="space-y-3 max-w-2xl">
-            <div className="flex items-center gap-2">
-              <span className="w-5 h-0.5 bg-[#B8F000]" />
-              <span className="text-xs font-bold uppercase tracking-widest text-[#B8F000]">
-                STUDENT & PARENT REVIEWS
-              </span>
-            </div>
-            <h2 className="text-3xl sm:text-5xl font-black text-[#F8FAFC] tracking-tight uppercase leading-tight">
-              Trusted by Badminton Families in Kochi
-            </h2>
-            <p className="text-[#A7B0BC] text-sm sm:text-base leading-relaxed">
-              Real feedback from junior parents, amateur adult players, and tournament contenders across our Kadavanthra, Edappally, and Kakkanad facilities.
-            </p>
+        {/* Editorial Eyebrow */}
+        <div className="flex items-center justify-between pb-12 sm:pb-16 border-b border-[#1F2937]">
+          <div className="flex items-center gap-3">
+            <span className="px-2 py-0.5 text-[10px] font-mono font-black tracking-widest text-[#07090D] bg-[#B8F000] uppercase">
+              08 // VOICES
+            </span>
+            <span className="text-[11px] font-mono tracking-[0.25em] text-[#A8B0BA] uppercase">
+              VERIFIED ATHLETE &amp; PARENT FEEDBACK
+            </span>
           </div>
 
-          <Link
-            href="/testimonials"
-            className="inline-flex items-center gap-2 text-xs font-bold text-[#B8F000] hover:text-[#c7fb1e] uppercase tracking-wider group shrink-0"
-          >
-            <span>All Reviews</span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </Link>
+          {/* Carousel Arrows */}
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={handlePrev}
+              className="w-10 h-10 bg-[#11161D] border border-[#1F2937] hover:border-[#B8F000] text-white flex items-center justify-center transition-colors"
+              aria-label="Previous testimonial"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+            <span className="font-mono text-xs text-[#A8B0BA] px-2">
+              0{currentIndex + 1} / 0{TESTIMONIALS.length}
+            </span>
+            <button
+              type="button"
+              onClick={handleNext}
+              className="w-10 h-10 bg-[#11161D] border border-[#1F2937] hover:border-[#B8F000] text-white flex items-center justify-center transition-colors"
+              aria-label="Next testimonial"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
         </div>
 
-        {/* Testimonials Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {TESTIMONIALS.slice(0, 3).map((item) => (
-            <div
-              key={item.id}
-              className="sports-card p-6 sm:p-7 flex flex-col justify-between text-left group"
-            >
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center space-x-1">
-                    {[...Array(item.rating)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 text-[#B8F000] fill-[#B8F000]" />
-                    ))}
-                  </div>
-                  <Quote className="w-5 h-5 text-[#26313D] group-hover:text-[#B8F000]/40 transition-colors" />
-                </div>
+        {/* Large Editorial Magazine Quote Composition */}
+        <div className="pt-12 sm:pt-16 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+          
+          {/* Left: Colossal Magazine Quote */}
+          <div className="lg:col-span-8 space-y-6 text-left">
+            <div className="font-mono text-xs text-[#B8F000] uppercase tracking-widest">
+              &ldquo; {currentItem.highlight.toUpperCase()} &rdquo;
+            </div>
 
-                <div className="text-sm font-bold text-[#F8FAFC] mb-2">
-                  &ldquo;{item.highlight}&rdquo;
-                </div>
+            <blockquote className="text-2xl sm:text-3xl lg:text-4xl font-black text-white uppercase tracking-tight leading-tight">
+              &ldquo;{currentItem.content}&rdquo;
+            </blockquote>
+          </div>
 
-                <p className="text-xs sm:text-sm text-[#A7B0BC] leading-relaxed italic">
-                  &ldquo;{item.content}&rdquo;
-                </p>
+          {/* Right: Attribution Card */}
+          <div className="lg:col-span-4 bg-[#0B0F14] border border-[#1F2937] p-6 sm:p-8 space-y-4 text-left">
+            <div className="space-y-1 border-b border-[#1F2937] pb-4">
+              <div className="font-mono text-[10px] text-[#B8F000] uppercase tracking-wider">
+                VERIFIED REVIEW
               </div>
-
-              {/* Author Info */}
-              <div className="mt-6 pt-4 border-t border-[#26313D]/60 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[#080B10] text-[#B8F000] border border-[#26313D] font-bold text-xs flex items-center justify-center shrink-0">
-                  {item.avatarText}
-                </div>
-                <div>
-                  <div className="text-xs font-bold text-[#F8FAFC] flex items-center gap-1">
-                    <span>{item.name}</span>
-                    <CheckCircle className="w-3 h-3 text-[#22C55E]" />
-                  </div>
-                  <div className="text-[11px] text-[#6B7280]">{item.role}</div>
-                  <div className="text-[10px] text-[#B8F000] font-medium">{item.branch}</div>
-                </div>
+              <h3 className="text-xl font-black text-white uppercase tracking-tight">
+                {currentItem.name}
+              </h3>
+              <div className="text-xs text-[#A8B0BA] font-mono">
+                {currentItem.role}
               </div>
             </div>
-          ))}
+
+            <div className="space-y-2 text-xs font-mono">
+              <div className="flex items-center justify-between text-[#A8B0BA]">
+                <span>CENTRE:</span>
+                <span className="text-white font-bold">{currentItem.branch}</span>
+              </div>
+              <div className="flex items-center justify-between text-[#A8B0BA]">
+                <span>EVALUATION:</span>
+                <span className="text-[#B8F000] font-bold">5.0 / 5.0 VERIFIED</span>
+              </div>
+            </div>
+
+            <div className="pt-2">
+              <Link
+                href="/testimonials"
+                className="inline-flex items-center gap-2 text-xs font-mono font-bold text-[#B8F000] hover:text-white uppercase transition-colors"
+              >
+                <span>READ ALL REVIEWS</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+          </div>
+
         </div>
 
       </div>

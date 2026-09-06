@@ -2,11 +2,10 @@ import React from "react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { ShieldCheck, Award, HeartHandshake, Sparkles, CheckCircle2, ArrowRight } from "lucide-react";
+import { ArrowRight, ShieldCheck, Check } from "lucide-react";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { createMetadata } from "@/lib/seo";
 import { ACADEMY_DATA } from "@/data/academy";
-import { TrustStats } from "@/components/sections/TrustStats";
 import { FinalCTA } from "@/components/sections/FinalCTA";
 
 export const metadata: Metadata = createMetadata({
@@ -23,107 +22,123 @@ export const metadata: Metadata = createMetadata({
 
 export default function AboutPage() {
   return (
-    <div className="py-8 sm:py-12 bg-[#090D16]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="bg-[#07090D] min-h-screen text-white select-none">
+      <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-16">
         
         {/* Breadcrumb Navigation */}
         <Breadcrumbs items={[{ name: "About Us", url: "/about" }]} />
 
-        {/* Hero Section of About */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center mb-20">
-          <div className="lg:col-span-7 space-y-6">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold uppercase tracking-wider">
-              About Our Academy
-            </div>
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight">
-              Building Badminton Champions Through Sports Science & Pure Passion
-            </h1>
-            <p className="text-slate-300 text-base sm:text-lg leading-relaxed">
-              Founded in {ACADEMY_DATA.foundedYear}, <strong className="text-white">S & A Badminton Academy</strong> was established with a singular mission: to provide world-class, injury-safe badminton coaching to aspiring athletes in Kerala, removing the gap between recreational play and international-standard athletic development.
-            </p>
-            <p className="text-slate-400 text-sm sm:text-base leading-relaxed">
-              Over the last decade, we have expanded from a single arena in Kadavanthra to three flagship facilities across Kochi—training over {ACADEMY_DATA.stats.studentsTrained} students ranging from 5-year-old beginners to Kerala State ranking champions and corporate fitness athletes.
-            </p>
-
-            <div className="flex flex-wrap gap-3 pt-2">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                Affiliated with District Associations
-              </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-cyan-500/10 text-cyan-300 border border-cyan-500/20">
-                <CheckCircle2 className="w-4 h-4 text-cyan-400" />
-                BWF Certified Coaches Only
-              </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-amber-500/10 text-amber-300 border border-amber-500/20">
-                <CheckCircle2 className="w-4 h-4 text-amber-400" />
-                Sprung Wooden Subflooring
-              </span>
-            </div>
+        {/* Rebel Editorial Hero */}
+        <div className="pt-8 pb-16 border-b border-[#1F2937] space-y-6">
+          <div className="flex items-center gap-3">
+            <span className="px-2 py-0.5 text-[10px] font-mono font-black tracking-widest text-[#07090D] bg-[#B8F000] uppercase">
+              ABOUT // S&amp;A
+            </span>
+            <span className="text-[11px] font-mono tracking-[0.25em] text-[#A8B0BA] uppercase">
+              ATHLETIC IDENTITY &amp; FOUNDATION
+            </span>
           </div>
 
-          <div className="lg:col-span-5 relative">
-            <div className="relative rounded-3xl overflow-hidden aspect-[4/3] sm:aspect-square border border-slate-700 shadow-2xl">
-              <Image
-                src="https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?q=80&w=1200&auto=format&fit=crop"
-                alt="S&A Badminton Academy Court Arena in Kochi"
-                fill
-                className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 40vw"
-                priority
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#090D16] via-transparent to-transparent opacity-80" />
+          <h1 className="text-[clamp(2.8rem,7vw,6rem)] font-black uppercase tracking-[-0.04em] leading-[0.92]">
+            THE ACADEMY <br />
+            <span className="text-[#B8F000]">BEHIND THE PLAYER.</span>
+          </h1>
 
-              <div className="absolute bottom-6 left-6 right-6 p-4 rounded-2xl bg-[#090D16]/90 backdrop-blur-md border border-slate-800">
-                <div className="text-xs font-mono text-emerald-400 font-bold uppercase tracking-wider">
-                  Facility Standard
-                </div>
-                <div className="text-sm font-bold text-white mt-0.5">
-                  14 BWF-Approved Courts Across 3 Kochi Hubs
-                </div>
+          <p className="text-base sm:text-xl text-[#A8B0BA] max-w-2xl font-normal leading-relaxed">
+            Founded in {ACADEMY_DATA.foundedYear}, S&amp;A Badminton Academy was built with a singular mission: to provide world-class, injury-safe badminton coaching in Kerala, bridging the gap between casual recreation and elite competitive sports science.
+          </p>
+        </div>
+
+        {/* Large Cinematic Photography Banner */}
+        <div className="py-12 border-b border-[#1F2937]">
+          <div className="relative aspect-[21/9] w-full overflow-hidden bg-[#0B0F14] border border-[#1F2937]">
+            <Image
+              src="/images/badminton-arena.jpg"
+              alt="S&A Badminton Academy Arena Kochi"
+              fill
+              className="object-cover filter contrast-110"
+              sizes="100vw"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#07090D] via-transparent to-transparent" />
+            <div className="absolute bottom-6 left-6 right-6 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div className="font-mono text-xs text-[#B8F000] uppercase tracking-wider font-bold">
+                OPERATIONAL CENTRES // KADAVANTHRA &bull; EDAPPALLY &bull; KAKKANAD
+              </div>
+              <div className="font-mono text-[11px] text-[#A8B0BA] uppercase">
+                BWF-SPEC SYNTHETIC MATS ON SPRUNG WOOD
               </div>
             </div>
           </div>
         </div>
 
-        {/* Philosophy & Pillars */}
-        <div className="mb-20 space-y-12">
-          <div className="text-center max-w-2xl mx-auto space-y-3">
-            <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-              Our Core Coaching Pillars
+        {/* Editorial Story & Philosophy Sequence */}
+        <div className="py-16 grid grid-cols-1 lg:grid-cols-12 gap-12 border-b border-[#1F2937]">
+          
+          <div className="lg:col-span-5 space-y-4 text-left">
+            <span className="font-mono text-xs text-[#B8F000] uppercase tracking-widest">
+              01 // THE STORY
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-black uppercase tracking-tight leading-snug">
+              FROM A SINGLE COURT TO A CITYWIDE MOVEMENT.
             </h2>
-            <p className="text-slate-400 text-sm">
-              We believe great badminton players are shaped by proper biomechanics, character discipline, and progressive physical conditioning.
-            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="p-8 rounded-2xl bg-[#111827] border border-slate-800 space-y-4">
-              <div className="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
-                <ShieldCheck className="w-6 h-6" />
+          <div className="lg:col-span-7 space-y-6 text-left text-sm sm:text-base text-[#A8B0BA] leading-relaxed">
+            <p>
+              Badminton in Kerala has unmatched grassroots passion. However, for decades, players lacked systematic biomechanical instruction and safe court infrastructure. Most training took place on hard concrete or tiles, causing premature meniscus wear and chronic ankle injuries.
+            </p>
+            <p>
+              S&amp;A changed that reality. By investing in international-standard tournament synthetic mats over shock-absorbing wooden subfloors, and uniting certified BWF coaches under one rigorous curriculum, we created an academy environment where talent is nurtured without physical breakdown.
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 font-mono text-xs">
+              <div className="p-4 bg-[#0B0F14] border border-[#1F2937] space-y-1">
+                <span className="text-[#B8F000] font-bold">CERTIFIED PEDAGOGY</span>
+                <p className="text-[#A8B0BA] text-[11px]">BWF &amp; NIS credentialed coaches leading every session.</p>
               </div>
-              <h3 className="text-lg font-bold text-white">Injury-Free Biomechanics</h3>
-              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                Badminton places immense demand on knees, ankles, and shoulders. We pair shock-absorbing sprung wooden court surfaces with proper kinetic chain stroke mechanics so athletes can train intensively without joint injury.
+              <div className="p-4 bg-[#0B0F14] border border-[#1F2937] space-y-1">
+                <span className="text-[#B8F000] font-bold">JOINT SAFETY</span>
+                <p className="text-[#A8B0BA] text-[11px]">Sprung subfloors absorbing over 50% of vertical shock.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        {/* 3 Core Editorial Principles */}
+        <div className="py-16 space-y-12">
+          <div className="space-y-2 text-left">
+            <span className="font-mono text-xs text-[#B8F000] uppercase tracking-widest">
+              02 // CODE OF CONDUCT
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-black uppercase tracking-tight">
+              OUR CORE OPERATIONAL PILLARS
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 divide-y lg:divide-y-0 lg:divide-x divide-[#1F2937] border-y border-[#1F2937]">
+            <div className="py-8 lg:py-10 lg:pr-8 space-y-3 text-left">
+              <span className="font-mono text-3xl font-black text-white/30">01</span>
+              <h3 className="text-xl font-black uppercase text-white">Injury-Free Biomechanics</h3>
+              <p className="text-xs sm:text-sm text-[#A8B0BA] leading-relaxed">
+                Proper kinetic chain energy transfer prevents rotator cuff damage and patellar tendonitis. We teach athletes how to generate immense smash steepness through fluid core rotation rather than brute arm tension.
               </p>
             </div>
 
-            <div className="p-8 rounded-2xl bg-[#111827] border border-slate-800 space-y-4">
-              <div className="w-12 h-12 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center">
-                <Award className="w-6 h-6" />
-              </div>
-              <h3 className="text-lg font-bold text-white">Structured Progression</h3>
-              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                No child or beginner is thrown into random matches. Every student follows a documented curriculum progressing through 4 defined stages: grip, 6-corner footwork, stroke repetition, and situational match play.
+            <div className="py-8 lg:py-10 lg:px-8 space-y-3 text-left">
+              <span className="font-mono text-3xl font-black text-white/30">02</span>
+              <h3 className="text-xl font-black uppercase text-white">Documented Progression</h3>
+              <p className="text-xs sm:text-sm text-[#A8B0BA] leading-relaxed">
+                No student is thrown into unstructured matches without fundamentals. Beginners master grip rotation and split-step recovery before progressing to multi-shuttle high-tempo drills.
               </p>
             </div>
 
-            <div className="p-8 rounded-2xl bg-[#111827] border border-slate-800 space-y-4">
-              <div className="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center">
-                <HeartHandshake className="w-6 h-6" />
-              </div>
-              <h3 className="text-lg font-bold text-white">Character & Sportsmanship</h3>
-              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                Sports build life habits. We cultivate mental resilience, punctuality, humility in victory, and analytical composure in defeat—qualities that empower students far beyond the boundary lines.
+            <div className="py-8 lg:py-10 lg:pl-8 space-y-3 text-left">
+              <span className="font-mono text-3xl font-black text-white/30">03</span>
+              <h3 className="text-xl font-black uppercase text-white">Competitive Composure</h3>
+              <p className="text-xs sm:text-sm text-[#A8B0BA] leading-relaxed">
+                Matches are won between rallies. We teach emotional control under deuce pressure, sportsmanship in defeat, and disciplined tactical analysis after every competition.
               </p>
             </div>
           </div>
@@ -131,10 +146,7 @@ export default function AboutPage() {
 
       </div>
 
-      {/* Statistics Strip */}
-      <TrustStats />
-
-      {/* Closing Call to Action */}
+      {/* Closing Campaign Action */}
       <FinalCTA />
     </div>
   );

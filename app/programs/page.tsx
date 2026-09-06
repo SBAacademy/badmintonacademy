@@ -2,11 +2,10 @@ import React from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, CheckCircle2, Clock, Users, Calendar, Sparkles } from "lucide-react";
+import { ArrowRight, Target, Clock, Users } from "lucide-react";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { createMetadata } from "@/lib/seo";
 import { PROGRAMS } from "@/data/programs";
-import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { FinalCTA } from "@/components/sections/FinalCTA";
 
 export const metadata: Metadata = createMetadata({
@@ -25,139 +24,97 @@ export const metadata: Metadata = createMetadata({
 
 export default function ProgramsPage() {
   return (
-    <div className="py-8 sm:py-12 bg-[#090D16]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="bg-[#07090D] min-h-screen text-white select-none">
+      <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-16">
         
         {/* Breadcrumb Navigation */}
         <Breadcrumbs items={[{ name: "Training Programs", url: "/programs" }]} />
 
-        {/* Page Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold uppercase tracking-wider">
-            All Academy Programs
+        {/* Rebel Hero */}
+        <div className="pt-8 pb-16 border-b border-[#1F2937] space-y-6">
+          <div className="flex items-center gap-3">
+            <span className="px-2 py-0.5 text-[10px] font-mono font-black tracking-widest text-[#07090D] bg-[#B8F000] uppercase">
+              PATHWAYS // ALL TRACKS
+            </span>
+            <span className="text-[11px] font-mono tracking-[0.25em] text-[#A8B0BA] uppercase">
+              ATHLETIC CURRICULUM
+            </span>
           </div>
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
-            Coaching Programs Tailored to Every Skill Level & Age Group
+
+          <h1 className="text-[clamp(2.8rem,7vw,6.5rem)] font-black uppercase tracking-[-0.04em] leading-[0.92]">
+            FIND YOUR <br />
+            <span className="text-[#B8F000]">GAME.</span>
           </h1>
-          <p className="text-slate-400 text-sm sm:text-base leading-relaxed">
-            Whether your goal is recreational fitness, technical stroke perfection, or national ranking tournament titles, our certified coaching faculty provides a structured training home.
+
+          <p className="text-base sm:text-xl text-[#A8B0BA] max-w-2xl font-normal leading-relaxed">
+            From children taking their first court steps to corporate athletes and state tournament qualifiers, our curriculum provides a disciplined, structured athletic training pathway.
           </p>
         </div>
 
-        {/* Program Cards Listing */}
-        <div className="space-y-12 mb-20">
+        {/* Editorial Program Rows */}
+        <div className="divide-y divide-[#1F2937] border-b border-[#1F2937]">
           {PROGRAMS.map((program, idx) => (
             <div
               key={program.slug}
-              className="rounded-3xl bg-[#111827] border border-slate-800 hover:border-emerald-500/40 p-6 sm:p-8 lg:p-10 transition-all duration-300 shadow-xl overflow-hidden"
+              className="py-12 lg:py-16 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center group hover:bg-[#0B0F14]/60 px-4 sm:px-6 transition-colors"
             >
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                
-                {/* Left: Program Visual */}
-                <div className={`lg:col-span-5 relative ${idx % 2 === 1 ? "lg:order-2" : ""}`}>
-                  <div className="relative rounded-2xl overflow-hidden aspect-[4/3] border border-slate-700 shadow-lg">
-                    <Image
-                      src={program.image}
-                      alt={`${program.name} badminton coaching Kochi`}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 1024px) 100vw, 40vw"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#090D16] via-transparent to-transparent opacity-80" />
+              {/* Monospace Number & Badge */}
+              <div className="lg:col-span-2 space-y-2 text-left">
+                <span className="font-mono text-4xl sm:text-5xl font-black text-white/30 group-hover:text-[#B8F000] transition-colors">
+                  0{idx + 1}
+                </span>
+                <div className="font-mono text-[10px] text-[#B8F000] tracking-widest uppercase">
+                  {program.badge}
+                </div>
+              </div>
 
-                    <div className="absolute top-3 left-3 px-3 py-1 rounded-xl bg-[#090D16]/85 backdrop-blur-md border border-slate-700 text-white text-xs font-extrabold">
-                      {program.badge}
-                    </div>
-
-                    <div className="absolute bottom-3 left-3 right-3 p-3 rounded-xl bg-[#090D16]/85 backdrop-blur-md border border-slate-800">
-                      <div className="text-xs font-bold text-white">{program.tagline}</div>
-                    </div>
-                  </div>
+              {/* Title & Description */}
+              <div className="lg:col-span-6 space-y-3 text-left">
+                <div className="flex items-center gap-3 text-xs font-mono text-[#A8B0BA] uppercase">
+                  <span>LEVEL: {program.skillLevel}</span>
+                  <span>&bull;</span>
+                  <span>AGE: {program.targetAge}</span>
                 </div>
 
-                {/* Right: Program Copy & Specs */}
-                <div className={`lg:col-span-7 space-y-5 ${idx % 2 === 1 ? "lg:order-1" : ""}`}>
-                  <div className="flex flex-wrap items-center gap-2">
-                    <span className="px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-400 font-bold text-xs">
-                      {program.skillLevel}
-                    </span>
-                    <span className="px-3 py-1 rounded-full bg-slate-800 text-slate-300 text-xs font-medium">
-                      Age: {program.targetAge}
-                    </span>
-                  </div>
+                <h2 className="text-2xl sm:text-3xl font-black text-white uppercase tracking-tight group-hover:text-white">
+                  {program.name}
+                </h2>
 
-                  <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-                    {program.name}
-                  </h2>
+                <p className="text-xs sm:text-sm text-[#A8B0BA] leading-relaxed max-w-xl">
+                  {program.fullDescription}
+                </p>
 
-                  <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-                    {program.shortDescription}
-                  </p>
+                <div className="flex flex-wrap gap-4 pt-2 font-mono text-xs text-[#A8B0BA]">
+                  <span className="flex items-center gap-1.5">
+                    <Clock className="w-3.5 h-3.5 text-[#B8F000]" />
+                    {program.duration}
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <Users className="w-3.5 h-3.5 text-[#B8F000]" />
+                    {program.batchRatio} RATIO
+                  </span>
+                </div>
+              </div>
 
-                  {/* Program Meta Badges */}
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <div className="p-3 rounded-xl bg-slate-900/80 border border-slate-800 text-xs">
-                      <div className="flex items-center gap-1 text-slate-400 mb-0.5">
-                        <Clock className="w-3.5 h-3.5 text-emerald-400" />
-                        <span>Duration</span>
-                      </div>
-                      <div className="font-bold text-white truncate">{program.duration}</div>
-                    </div>
-
-                    <div className="p-3 rounded-xl bg-slate-900/80 border border-slate-800 text-xs">
-                      <div className="flex items-center gap-1 text-slate-400 mb-0.5">
-                        <Users className="w-3.5 h-3.5 text-cyan-400" />
-                        <span>Ratio</span>
-                      </div>
-                      <div className="font-bold text-white truncate">{program.batchRatio}</div>
-                    </div>
-
-                    <div className="p-3 rounded-xl bg-slate-900/80 border border-slate-800 text-xs">
-                      <div className="flex items-center gap-1 text-slate-400 mb-0.5">
-                        <Calendar className="w-3.5 h-3.5 text-amber-400" />
-                        <span>Batches</span>
-                      </div>
-                      <div className="font-bold text-white truncate">Morning & Evening</div>
-                    </div>
-                  </div>
-
-                  {/* Top 3 Benefits */}
-                  <div className="space-y-1.5 pt-1">
-                    <div className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-                      Key Highlights:
-                    </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-300">
-                      {program.benefits.slice(0, 4).map((benefit, bIdx) => (
-                        <div key={bIdx} className="flex items-start gap-2">
-                          <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                          <span>{benefit}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Actions */}
-                  <div className="flex flex-col sm:flex-row items-center gap-3 pt-3 border-t border-slate-800">
-                    <Link
-                      href={`/programs/${program.slug}`}
-                      className="w-full sm:w-auto px-6 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-[#090D16] text-xs font-bold flex items-center justify-center gap-2 transition-colors shadow-md shadow-emerald-500/20"
-                    >
-                      <span>Full Curriculum & Schedule</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </Link>
-
-                    <a
-                      href={buildWhatsAppUrl({ programName: program.name })}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-full sm:w-auto px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold flex items-center justify-center gap-2 border border-slate-700 transition-colors"
-                    >
-                      <span>Enquire on WhatsApp</span>
-                    </a>
-                  </div>
-
+              {/* Visual Thumbnail & CTA */}
+              <div className="lg:col-span-4 flex flex-col sm:flex-row lg:flex-col items-stretch lg:items-end justify-between gap-4">
+                <div className="relative aspect-[16/10] w-full lg:w-48 overflow-hidden bg-[#07090D] border border-[#1F2937]">
+                  <Image
+                    src={program.image}
+                    alt={program.name}
+                    fill
+                    className="object-cover filter contrast-115 group-hover:scale-105 transition-transform duration-300"
+                    sizes="(max-width: 1024px) 100vw, 200px"
+                  />
                 </div>
 
+                <Link
+                  href={`/programs/${program.slug}`}
+                  className="inline-flex items-center justify-center gap-3 px-6 py-3.5 bg-[#11161D] group-hover:bg-[#B8F000] text-white group-hover:text-[#07090D] font-black text-xs uppercase tracking-wider border border-[#1F2937] group-hover:border-[#B8F000] transition-all"
+                >
+                  <span>EXPLORE CURRICULUM</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
               </div>
             </div>
           ))}
@@ -165,7 +122,7 @@ export default function ProgramsPage() {
 
       </div>
 
-      {/* Final Call to Action */}
+      {/* Campaign Ending CTA */}
       <FinalCTA />
     </div>
   );

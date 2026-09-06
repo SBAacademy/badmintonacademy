@@ -65,11 +65,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={jakarta.variable}>
+    <html lang="en" className={jakarta.variable} data-scroll-behavior="smooth">
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
-      <body className="antialiased bg-[#080B10] text-[#F8FAFC] min-h-screen flex flex-col font-sans selection:bg-[#B8F000] selection:text-[#07100A]">
+      <body className="antialiased bg-[#07090D] text-[#FFFFFF] min-h-screen flex flex-col font-sans selection:bg-[#B8F000] selection:text-[#07100A]">
         <SEOJsonLd schema={getOrganizationSchema()} />
         <AnnouncementBar />
         <Navbar />

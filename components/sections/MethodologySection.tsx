@@ -1,106 +1,148 @@
 import React from "react";
-import { Search, Dumbbell, Zap, Trophy, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
-const STEPS = [
+const STAGES = [
   {
-    step: "01",
-    name: "Assess",
-    title: "Diagnostic Baseline Assessment",
-    description: "Every athlete begins with a 45-minute evaluation analyzing hand-eye reaction, grip mechanics, split-step timing, and athletic stamina.",
-    icon: Search,
+    num: "01",
+    phase: "ASSESS",
+    headline: "Kinetic & Mechanics Diagnostic",
+    body: "Every athlete undergoes a 45-minute baseline evaluation: reaction speed, grip dynamics, split-step timing, and kinetic movement patterns.",
+    metric: "BASELINE EVALUATION",
   },
   {
-    step: "02",
-    name: "Train",
-    title: "Biomechanics & 6-Corner Footwork",
-    description: "Systematic stroke drilling under coach supervision. We refine kinetic shoulder rotation, drop shot touch, and effortless court recovery.",
-    icon: Dumbbell,
+    num: "02",
+    phase: "TRAIN",
+    headline: "Stroke Biomechanics & 6-Corner Agility",
+    body: "Intensive stroke drills under coach supervision. We build efficient shoulder rotation, precise net drops, and explosive lateral footwork recoveries.",
+    metric: "FOUNDATION MASTERY",
   },
   {
-    step: "03",
-    name: "Develop",
-    title: "Multi-Shuttle Cadence & Video Review",
-    description: "High-cadence rapid shuttle feeds building anaerobic capacity. Video analysis sessions reveal micro-inefficiencies in body rotation.",
-    icon: Zap,
+    num: "03",
+    phase: "DEVELOP",
+    headline: "Multi-Shuttle Cadence & Match Tempo",
+    body: "High-volume feeder drills pushing anaerobic stamina to tournament speed. Video analysis breakdowns target micro-inefficiencies in movement.",
+    metric: "ANAEROBIC CONDITIONING",
   },
   {
-    step: "04",
-    name: "Compete",
-    title: "Match Play & Tournament Readiness",
-    description: "Athletes test skills in internal ranking ladders, pressure deuce simulations, and official District, State, and ranking tournaments.",
-    icon: Trophy,
-  }
+    num: "04",
+    phase: "COMPETE",
+    headline: "High-Pressure Match Play & Rankings",
+    body: "Players test tactical composure through deuce-point pressure simulations, internal ladder tournaments, and official BWF-circuit events.",
+    metric: "TOURNAMENT READINESS",
+  },
 ];
 
 export function MethodologySection() {
   return (
-    <section className="py-20 lg:py-28 bg-[#080B10] relative border-b border-[#26313D]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section 
+      className="py-24 lg:py-36 bg-[#0B0F14] relative border-b border-[#1F2937] select-none"
+      aria-label="Coaching Methodology Sequence"
+    >
+      <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
-          <div className="flex items-center justify-center gap-2">
-            <span className="w-5 h-0.5 bg-[#B8F000]" />
-            <span className="text-xs font-bold uppercase tracking-widest text-[#B8F000]">
-              COACHING METHODOLOGY
-            </span>
+        {/* Editorial Eyebrow & Headline */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-12 sm:pb-16 border-b border-[#1F2937]">
+          <div className="space-y-3">
+            <div className="flex items-center gap-3">
+              <span className="px-2 py-0.5 text-[10px] font-mono font-black tracking-widest text-[#07090D] bg-[#B8F000] uppercase">
+                04 // METHOD
+              </span>
+              <span className="text-[11px] font-mono tracking-[0.25em] text-[#A8B0BA] uppercase">
+                DEVELOPMENT PIPELINE
+              </span>
+            </div>
+            <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-[-0.03em] uppercase leading-[0.95]">
+              HOW WE BUILD <br />
+              <span className="text-[#B8F000]">BETTER PLAYERS.</span>
+            </h2>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-black text-[#F8FAFC] tracking-tight uppercase leading-tight">
-            The 4-Stage Player Progression Pathway
-          </h2>
-          <p className="text-[#A7B0BC] text-sm sm:text-base leading-relaxed">
-            A structured coaching progression that transforms raw enthusiasm into technical mastery, court discipline, and competitive composure.
+
+          <p className="text-sm sm:text-base text-[#A8B0BA] max-w-md font-normal leading-relaxed">
+            Progress is not accidental. It is engineered through a proven 4-stage athletic progression from initial diagnostic to competitive match play.
           </p>
         </div>
 
-        {/* 4 Steps Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {STEPS.map((item, idx) => {
-            const Icon = item.icon;
-            return (
-              <div
-                key={idx}
-                className="sports-card p-7 flex flex-col justify-between group text-left"
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-5">
-                    <span className="font-mono text-2xl font-black text-[#26313D] group-hover:text-[#B8F000] transition-colors">
-                      {item.step}
-                    </span>
-                    <div className="w-10 h-10 rounded-xl bg-[#080B10] border border-[#26313D] flex items-center justify-center text-[#B8F000]">
-                      <Icon className="w-5 h-5" />
-                    </div>
-                  </div>
-
-                  <div className="text-xs font-bold uppercase tracking-wider mb-1 text-[#B8F000]">
-                    Phase {item.step}: {item.name}
-                  </div>
-
-                  <h3 className="text-base font-bold text-[#F8FAFC] mb-2 group-hover:text-[#B8F000] transition-colors">
-                    {item.title}
-                  </h3>
-
-                  <p className="text-xs text-[#6B7280] leading-relaxed">
-                    {item.description}
-                  </p>
-                </div>
-
-                <div className="mt-6 pt-4 border-t border-[#26313D]/60 flex items-center text-[11px] font-semibold text-[#A7B0BC]">
-                  <span>Milestone Evaluation</span>
-                </div>
+        {/* Desktop Horizontal Stepped Sequence */}
+        <div className="hidden lg:grid lg:grid-cols-4 gap-0 border-b border-[#1F2937] divide-x divide-[#1F2937] pt-8">
+          {STAGES.map((stage, idx) => (
+            <div
+              key={stage.num}
+              className="py-12 px-8 flex flex-col justify-between group hover:bg-[#11161D] transition-colors relative"
+            >
+              {/* Connector Step Line */}
+              <div className="w-full h-0.5 bg-[#1F2937] mb-8 relative">
+                <div className="absolute top-0 left-0 w-8 h-0.5 bg-[#B8F000] group-hover:w-full transition-all duration-300" />
+                <div className="absolute -top-1.5 left-0 w-3.5 h-3.5 bg-[#07090D] border-2 border-[#B8F000]" />
               </div>
-            );
-          })}
+
+              <div className="space-y-4">
+                <div className="flex items-baseline justify-between">
+                  <span className="font-mono text-4xl font-black text-white/30 group-hover:text-[#B8F000] transition-colors">
+                    {stage.num}
+                  </span>
+                  <span className="font-mono text-xs font-black tracking-widest text-[#B8F000] uppercase">
+                    STAGE {stage.num}
+                  </span>
+                </div>
+
+                <h3 className="text-xl font-black text-white uppercase tracking-tight leading-tight group-hover:text-white">
+                  {stage.phase}
+                </h3>
+
+                <div className="text-xs font-bold text-[#A8B0BA] uppercase">
+                  {stage.headline}
+                </div>
+
+                <p className="text-xs text-[#A8B0BA] leading-relaxed pt-2">
+                  {stage.body}
+                </p>
+              </div>
+
+              <div className="pt-8 mt-8 border-t border-[#1F2937]/50 font-mono text-[10px] text-[#A8B0BA] tracking-wider uppercase">
+                {stage.metric}
+              </div>
+            </div>
+          ))}
         </div>
 
-        {/* Bottom Callout */}
-        <div className="mt-12 text-center">
+        {/* Mobile Vertical Progression (Left-side lime connector line) */}
+        <div className="lg:hidden pt-8 space-y-8 relative pl-6 border-l-2 border-[#1F2937]">
+          {STAGES.map((stage) => (
+            <div key={stage.num} className="relative space-y-2">
+              {/* Node Indicator on the Left Line */}
+              <div className="absolute -left-[31px] top-1.5 w-3.5 h-3.5 bg-[#07090D] border-2 border-[#B8F000]" />
+
+              <div className="flex items-center gap-2">
+                <span className="font-mono text-xs font-black text-[#B8F000]">
+                  {stage.num} //
+                </span>
+                <span className="font-black text-lg text-white uppercase tracking-tight">
+                  {stage.phase}: {stage.headline}
+                </span>
+              </div>
+
+              <p className="text-xs text-[#A8B0BA] leading-relaxed">
+                {stage.body}
+              </p>
+
+              <div className="font-mono text-[10px] text-[#B8F000] uppercase tracking-wider pt-1">
+                KEY OUTCOME: {stage.metric}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Bottom Editorial Direct Link */}
+        <div className="pt-12 sm:pt-16 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <span className="font-mono text-xs text-[#A8B0BA] uppercase tracking-wider">
+            READY TO BENCHMARK YOUR CURRENT GAME?
+          </span>
           <Link
             href="/contact"
-            className="inline-flex items-center gap-2 text-xs font-bold text-[#B8F000] hover:text-[#c7fb1e] uppercase tracking-wider"
+            className="inline-flex items-center gap-3 text-xs font-black tracking-widest text-[#B8F000] hover:text-white uppercase transition-colors"
           >
-            <span>Book an initial skills assessment session</span>
+            <span>SCHEDULE 45-MIN ASSESSMENT SESSION</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>

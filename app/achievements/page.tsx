@@ -1,6 +1,5 @@
 import React from "react";
 import type { Metadata } from "next";
-import { Trophy, Medal, Award, Star, ShieldCheck } from "lucide-react";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { createMetadata } from "@/lib/seo";
 import { ACHIEVEMENTS } from "@/data/achievements";
@@ -20,62 +19,69 @@ export const metadata: Metadata = createMetadata({
 
 export default function AchievementsPage() {
   return (
-    <div className="py-8 sm:py-12 bg-[#090D16]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="bg-[#07090D] min-h-screen text-white select-none">
+      <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-16">
         
         {/* Breadcrumbs */}
-        <Breadcrumbs items={[{ name: "Achievements & Medals", url: "/achievements" }]} />
+        <Breadcrumbs items={[{ name: "Tournament Archive", url: "/achievements" }]} />
 
-        {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-semibold uppercase tracking-wider">
-            Tournament Hall of Fame
+        {/* Rebel Hero */}
+        <div className="pt-8 pb-16 border-b border-[#1F2937] space-y-6">
+          <div className="flex items-center gap-3">
+            <span className="px-2 py-0.5 text-[10px] font-mono font-black tracking-widest text-[#07090D] bg-[#B8F000] uppercase">
+              ARCHIVE // MEDALS
+            </span>
+            <span className="text-[11px] font-mono tracking-[0.25em] text-[#A8B0BA] uppercase">
+              PODIUM TRACK RECORD
+            </span>
           </div>
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
-            Championship Honors & Player Progression Milestones
+
+          <h1 className="text-[clamp(2.8rem,7vw,6rem)] font-black uppercase tracking-[-0.04em] leading-[0.92]">
+            BUILT THROUGH <br />
+            <span className="text-[#B8F000]">COMPETITION.</span>
           </h1>
-          <p className="text-slate-400 text-sm sm:text-base leading-relaxed">
-            Every medal represents hundreds of hours of 6-corner footwork, kinetic chain conditioning, and mental resilience cultivated across our Kochi training courts.
+
+          <p className="text-base sm:text-xl text-[#A8B0BA] max-w-2xl font-normal leading-relaxed">
+            Every title represents thousands of repetitions on court. Below is our verified record of state, district, and regional tournament milestones.
           </p>
         </div>
 
-        {/* Achievements Timeline & Cards */}
-        <div className="space-y-6 mb-20 max-w-4xl mx-auto">
+        {/* Timeline Archive */}
+        <div className="divide-y divide-[#1F2937] border-b border-[#1F2937] py-8">
           {ACHIEVEMENTS.map((ach) => (
             <div
               key={ach.id}
-              className="p-6 sm:p-8 rounded-3xl bg-[#111827] border border-slate-800 hover:border-amber-500/40 transition-all duration-300 shadow-xl flex flex-col sm:flex-row items-start gap-6 group"
+              className="py-10 grid grid-cols-1 md:grid-cols-12 gap-6 items-baseline group hover:bg-[#0B0F14]/60 px-4 sm:px-6 transition-colors"
             >
-              <div className="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center shrink-0">
-                <Trophy className="w-7 h-7" />
+              {/* Year Column */}
+              <div className="md:col-span-2 space-y-1 text-left">
+                <span className="font-mono text-4xl sm:text-5xl font-black text-white/30 group-hover:text-[#B8F000] transition-colors">
+                  {ach.year}
+                </span>
+                <div className="font-mono text-[10px] text-[#B8F000] tracking-widest uppercase">
+                  {ach.category}
+                </div>
               </div>
 
-              <div className="space-y-2 flex-1">
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30">
-                    <Medal className="w-3.5 h-3.5" />
-                    <span>{ach.badge}</span>
-                  </span>
-                  <span className="font-mono text-xs font-bold text-slate-500">
-                    Season {ach.year}
-                  </span>
-                </div>
-
-                <h2 className="text-xl font-bold text-white group-hover:text-amber-300 transition-colors">
+              {/* Title & Description */}
+              <div className="md:col-span-7 space-y-2 text-left">
+                <h2 className="text-xl sm:text-2xl font-black text-white uppercase tracking-tight group-hover:text-white">
                   {ach.title}
                 </h2>
-
-                <div className="text-xs font-semibold text-emerald-400">
-                  Athlete / Squad: <span className="text-slate-200">{ach.athleteOrTeam}</span>
-                </div>
-
-                <p className="text-xs sm:text-sm text-slate-400 leading-relaxed pt-1">
+                <p className="text-xs sm:text-sm text-[#A8B0BA] leading-relaxed">
                   {ach.description}
                 </p>
+                <div className="font-mono text-xs text-[#A8B0BA] pt-2">
+                  ATHLETE / SQUAD: <span className="text-white font-bold">{ach.athleteOrTeam}</span>
+                </div>
+              </div>
 
-                <div className="pt-2 flex items-center gap-2 text-[11px] text-slate-500">
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>Category: {ach.category}</span>
+              {/* Result Badge */}
+              <div className="md:col-span-3 flex md:justify-end items-center">
+                <div className="px-4 py-2 bg-[#11161D] border border-[#1F2937] group-hover:border-[#B8F000]/60 transition-colors">
+                  <span className="font-mono text-xs font-bold text-[#B8F000] uppercase tracking-wider">
+                    {ach.badge}
+                  </span>
                 </div>
               </div>
             </div>

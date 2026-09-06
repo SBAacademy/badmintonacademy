@@ -1,12 +1,12 @@
 import React from "react";
 import type { Metadata } from "next";
 import { HeroSection } from "@/components/hero/HeroSection";
+import { PerformanceMarquee } from "@/components/sections/PerformanceMarquee";
 import { WhySA } from "@/components/sections/WhySA";
-import { TrustStats } from "@/components/sections/TrustStats";
 import { ProgramsSection } from "@/components/sections/ProgramsSection";
 import { MethodologySection } from "@/components/sections/MethodologySection";
-import { CoachesSpotlight } from "@/components/sections/CoachesSpotlight";
 import { BranchesSection } from "@/components/sections/BranchesSection";
+import { CoachesSpotlight } from "@/components/sections/CoachesSpotlight";
 import { AchievementsSection } from "@/components/sections/AchievementsSection";
 import { GalleryPreview } from "@/components/sections/GalleryPreview";
 import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
@@ -32,40 +32,40 @@ export const metadata: Metadata = createMetadata({
 export default function HomePage() {
   return (
     <>
-      {/* 1. High-Performance Athletic Animated Hero */}
+      {/* 01. Cinematic Athletic Hero */}
       <HeroSection />
 
-      {/* 2. Brand Story / Why S&A Visual Section */}
+      {/* 02. Performance Ticker Marquee */}
+      <PerformanceMarquee />
+
+      {/* 03. Rebel Performance Manifesto */}
       <WhySA />
 
-      {/* 3. Verified Statistics & Trust Indicators */}
-      <TrustStats />
-
-      {/* 4. Training Programs Showcase */}
+      {/* 04. Program Experience */}
       <ProgramsSection />
 
-      {/* 5. 4-Stage Coaching Methodology */}
+      {/* 05. 4-Stage Methodology Sequence */}
       <MethodologySection />
 
-      {/* 6. Certified Coaches Spotlight */}
-      <CoachesSpotlight />
-
-      {/* 7. Academy Branches Across Kochi */}
+      {/* 06. Four-Centre Arena Selector */}
       <BranchesSection />
 
-      {/* 8. Recent Tournament Achievements */}
+      {/* 07. Editorial Coaches Spotlight */}
+      <CoachesSpotlight />
+
+      {/* 08. Trophy Wall Tournament Archive */}
       <AchievementsSection />
 
-      {/* 9. Photo & Video Gallery Preview */}
+      {/* 09. Court Action Visual Gallery */}
       <GalleryPreview />
 
-      {/* 10. Student & Parent Reviews */}
+      {/* 10. Editorial Testimonials */}
       <TestimonialsSection />
 
-      {/* 11. FAQ Accordion */}
+      {/* 11. FAQ Intel Briefing */}
       <FAQSection limit={6} />
 
-      {/* 12. Final Standardized CTA */}
+      {/* 12. Final Campaign CTA */}
       <FinalCTA />
     </>
   );

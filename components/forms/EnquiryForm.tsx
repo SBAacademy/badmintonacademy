@@ -122,26 +122,26 @@ export function EnquiryForm({ initialBranch = "", initialProgram = "" }: Enquiry
     const selectedProgramObj = PROGRAMS.find((p) => p.slug === formData.preferredProgram);
 
     return (
-      <div className="p-8 sm:p-10 rounded-3xl bg-[#121A23] border border-[#26313D] shadow-2xl text-center space-y-6 animate-in fade-in zoom-in-95 duration-200">
-        <div className="w-14 h-14 rounded-2xl bg-[#080B10] text-[#B8F000] flex items-center justify-center mx-auto border border-[#26313D]">
+      <div className="p-8 sm:p-10 bg-[#0B0F14] border border-[#1F2937] text-center space-y-6 animate-in fade-in zoom-in-95 duration-200">
+        <div className="w-14 h-14 bg-[#07090D] text-[#B8F000] flex items-center justify-center mx-auto border border-[#1F2937]">
           <CheckCircle2 className="w-7 h-7" />
         </div>
 
         <div className="space-y-2">
-          <h3 className="text-2xl font-black text-[#F8FAFC]">
-            Trial Request Received
+          <h3 className="text-2xl font-black text-white uppercase tracking-tight">
+            Trial Request Confirmed
           </h3>
-          <p className="text-sm text-[#A7B0BC] max-w-md mx-auto leading-relaxed">
-            Thank you, <strong className="text-[#F8FAFC]">{formData.name}</strong>. Our admissions coach at the{" "}
-            <strong className="text-[#B8F000]">{selectedBranchObj?.shortName || "Kochi Academy"}</strong> will call you at{" "}
-            <strong className="text-[#F8FAFC]">{formData.phone}</strong> within 2 hours to confirm your free slot.
+          <p className="text-sm text-[#A8B0BA] max-w-md mx-auto leading-relaxed">
+            Thank you, <strong className="text-white">{formData.name}</strong>. Our admissions coach at the{" "}
+            <strong className="text-[#B8F000]">{selectedBranchObj?.shortName || "Kochi Academy"}</strong> will contact you at{" "}
+            <strong className="text-white">{formData.phone}</strong> within 2 hours to confirm your free slot.
           </p>
         </div>
 
-        <div className="p-4 rounded-xl bg-[#080B10] border border-[#26313D] text-xs text-[#A7B0BC] space-y-1 max-w-sm mx-auto text-left">
-          <div><span className="font-semibold text-[#F8FAFC]">Selected Track:</span> {selectedProgramObj?.name || formData.preferredProgram}</div>
-          <div><span className="font-semibold text-[#F8FAFC]">Preferred Slot:</span> {formData.preferredSlot}</div>
-          <div><span className="font-semibold text-[#F8FAFC]">Target Arena:</span> {selectedBranchObj?.address.split(",")[1]?.trim() || selectedBranchObj?.city || "Central Kochi"}</div>
+        <div className="p-4 bg-[#07090D] border border-[#1F2937] text-xs text-[#A8B0BA] space-y-1 max-w-sm mx-auto text-left font-mono">
+          <div><span className="font-bold text-white">SELECTED TRACK:</span> {selectedProgramObj?.name || formData.preferredProgram}</div>
+          <div><span className="font-bold text-white">PREFERRED SLOT:</span> {formData.preferredSlot}</div>
+          <div><span className="font-bold text-white">TARGET ARENA:</span> {selectedBranchObj?.address.split(",")[1]?.trim() || selectedBranchObj?.city || "Central Kochi"}</div>
         </div>
 
         <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -153,7 +153,7 @@ export function EnquiryForm({ initialBranch = "", initialProgram = "" }: Enquiry
             })}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full sm:w-auto px-6 py-3 rounded-xl bg-[#B8F000] hover:bg-[#c7fb1e] text-[#07100A] font-extrabold text-xs flex items-center justify-center gap-2 transition-colors"
+            className="w-full sm:w-auto px-6 py-3.5 bg-[#B8F000] hover:bg-[#cbf722] text-[#07090D] font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-colors"
           >
             <MessageCircle className="w-4 h-4" />
             <span>Connect on WhatsApp Now</span>
@@ -162,7 +162,7 @@ export function EnquiryForm({ initialBranch = "", initialProgram = "" }: Enquiry
           <button
             type="button"
             onClick={() => setSuccess(false)}
-            className="w-full sm:w-auto px-5 py-3 rounded-xl bg-[#080B10] hover:bg-[#17212C] text-[#A7B0BC] hover:text-[#F8FAFC] text-xs font-semibold border border-[#26313D] transition-colors"
+            className="w-full sm:w-auto px-5 py-3.5 bg-[#11161D] hover:bg-[#17212C] text-[#A8B0BA] hover:text-white text-xs font-bold uppercase tracking-wider border border-[#1F2937] transition-colors"
           >
             Submit Another Request
           </button>
@@ -172,22 +172,24 @@ export function EnquiryForm({ initialBranch = "", initialProgram = "" }: Enquiry
   }
 
   return (
-    <div className="p-6 sm:p-10 rounded-3xl bg-[#121A23] border border-[#26313D] shadow-2xl relative overflow-hidden">
+    <div className="p-6 sm:p-10 bg-[#0B0F14] border border-[#1F2937] relative overflow-hidden">
       {/* Top Subtle Line */}
       <div className="absolute top-0 inset-x-0 h-0.5 bg-[#B8F000]" />
 
       <div className="mb-7 space-y-2 text-left">
-        <div className="flex items-center gap-2">
-          <span className="w-4 h-0.5 bg-[#B8F000]" />
-          <span className="text-xs font-bold uppercase tracking-widest text-[#B8F000]">
+        <div className="flex items-center gap-3">
+          <span className="px-2 py-0.5 text-[10px] font-mono font-black tracking-widest text-[#07090D] bg-[#B8F000] uppercase">
+            REGISTRATION // TRIAL
+          </span>
+          <span className="text-[11px] font-mono tracking-[0.25em] text-[#A8B0BA] uppercase">
             FREE ASSESSMENT SESSION
           </span>
         </div>
-        <h3 className="text-2xl sm:text-3xl font-black text-[#F8FAFC] tracking-tight">
+        <h3 className="text-2xl sm:text-3xl font-black text-white tracking-tight uppercase">
           Book a Free Trial Session
         </h3>
-        <p className="text-xs sm:text-sm text-[#A7B0BC]">
-          Experience our BWF sprung wooden courts and receive a coach evaluation. No equipment required.
+        <p className="text-xs sm:text-sm text-[#A8B0BA]">
+          Experience our BWF sprung wooden courts and receive an individual coach evaluation. Zero equipment required.
         </p>
       </div>
 
@@ -216,7 +218,7 @@ export function EnquiryForm({ initialBranch = "", initialProgram = "" }: Enquiry
         {/* Name & Phone */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-bold text-[#A7B0BC] uppercase tracking-wider mb-1.5">
+            <label className="block text-xs font-mono font-bold text-[#A8B0BA] uppercase tracking-wider mb-1.5">
               Player / Parent Name <span className="text-[#B8F000]">*</span>
             </label>
             <input
@@ -226,12 +228,12 @@ export function EnquiryForm({ initialBranch = "", initialProgram = "" }: Enquiry
               value={formData.name}
               onChange={handleChange}
               placeholder="e.g. Rahul Nair"
-              className="w-full px-4 py-3 rounded-xl bg-[#080B10] border border-[#26313D] text-[#F8FAFC] placeholder-[#6B7280] text-base sm:text-sm focus:outline-none focus:border-[#B8F000] transition-colors"
+              className="w-full px-4 py-3 bg-[#07090D] border border-[#1F2937] text-white placeholder-[#6B7280] text-sm focus:outline-none focus:border-[#B8F000] transition-colors font-mono"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-[#A7B0BC] uppercase tracking-wider mb-1.5">
+            <label className="block text-xs font-mono font-bold text-[#A8B0BA] uppercase tracking-wider mb-1.5">
               WhatsApp / Phone Number <span className="text-[#B8F000]">*</span>
             </label>
             <input
@@ -241,7 +243,7 @@ export function EnquiryForm({ initialBranch = "", initialProgram = "" }: Enquiry
               value={formData.phone}
               onChange={handleChange}
               placeholder="e.g. +91 94006 XXXXX"
-              className="w-full px-4 py-3 rounded-xl bg-[#080B10] border border-[#26313D] text-[#F8FAFC] placeholder-[#6B7280] text-base sm:text-sm focus:outline-none focus:border-[#B8F000] transition-colors"
+              className="w-full px-4 py-3 bg-[#07090D] border border-[#1F2937] text-white placeholder-[#6B7280] text-sm focus:outline-none focus:border-[#B8F000] transition-colors font-mono"
             />
           </div>
         </div>
@@ -249,7 +251,7 @@ export function EnquiryForm({ initialBranch = "", initialProgram = "" }: Enquiry
         {/* Email & Age Category */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-bold text-[#A7B0BC] uppercase tracking-wider mb-1.5">
+            <label className="block text-xs font-mono font-bold text-[#A8B0BA] uppercase tracking-wider mb-1.5">
               Email Address <span className="text-[#6B7280]">(Optional)</span>
             </label>
             <input
@@ -258,19 +260,19 @@ export function EnquiryForm({ initialBranch = "", initialProgram = "" }: Enquiry
               value={formData.email}
               onChange={handleChange}
               placeholder="rahul@example.com"
-              className="w-full px-4 py-3 rounded-xl bg-[#080B10] border border-[#26313D] text-[#F8FAFC] placeholder-[#6B7280] text-base sm:text-sm focus:outline-none focus:border-[#B8F000] transition-colors"
+              className="w-full px-4 py-3 bg-[#07090D] border border-[#1F2937] text-white placeholder-[#6B7280] text-sm focus:outline-none focus:border-[#B8F000] transition-colors font-mono"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-[#A7B0BC] uppercase tracking-wider mb-1.5">
+            <label className="block text-xs font-mono font-bold text-[#A8B0BA] uppercase tracking-wider mb-1.5">
               Age Category <span className="text-[#B8F000]">*</span>
             </label>
             <select
               name="ageCategory"
               value={formData.ageCategory}
               onChange={handleChange}
-              className="w-full px-4 py-3 rounded-xl bg-[#080B10] border border-[#26313D] text-[#F8FAFC] text-base sm:text-sm focus:outline-none focus:border-[#B8F000] transition-colors"
+              className="w-full px-4 py-3 bg-[#07090D] border border-[#1F2937] text-white text-sm focus:outline-none focus:border-[#B8F000] transition-colors font-mono"
             >
               <option value="Kids (Ages 5-9)">Kids (Ages 5–9)</option>
               <option value="Junior (Ages 10-16)">Junior (Ages 10–16)</option>
@@ -283,14 +285,14 @@ export function EnquiryForm({ initialBranch = "", initialProgram = "" }: Enquiry
         {/* Preferred Branch & Program */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-bold text-[#A7B0BC] uppercase tracking-wider mb-1.5">
-              Preferred Kochi Branch <span className="text-[#B8F000]">*</span>
+            <label className="block text-xs font-mono font-bold text-[#A8B0BA] uppercase tracking-wider mb-1.5">
+              Preferred Kochi Centre <span className="text-[#B8F000]">*</span>
             </label>
             <select
               name="preferredBranch"
               value={formData.preferredBranch}
               onChange={handleChange}
-              className="w-full px-4 py-3 rounded-xl bg-[#080B10] border border-[#26313D] text-[#F8FAFC] text-base sm:text-sm focus:outline-none focus:border-[#B8F000] transition-colors"
+              className="w-full px-4 py-3 bg-[#07090D] border border-[#1F2937] text-white text-sm focus:outline-none focus:border-[#B8F000] transition-colors font-mono"
             >
               {Object.values(LOCATIONS).map((b) => (
                 <option key={b.slug} value={b.slug}>
@@ -301,14 +303,14 @@ export function EnquiryForm({ initialBranch = "", initialProgram = "" }: Enquiry
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-[#A7B0BC] uppercase tracking-wider mb-1.5">
-              Preferred Program
+            <label className="block text-xs font-mono font-bold text-[#A8B0BA] uppercase tracking-wider mb-1.5">
+              Preferred Track
             </label>
             <select
               name="preferredProgram"
               value={formData.preferredProgram}
               onChange={handleChange}
-              className="w-full px-4 py-3 rounded-xl bg-[#080B10] border border-[#26313D] text-[#F8FAFC] text-base sm:text-sm focus:outline-none focus:border-[#B8F000] transition-colors"
+              className="w-full px-4 py-3 bg-[#07090D] border border-[#1F2937] text-white text-sm focus:outline-none focus:border-[#B8F000] transition-colors font-mono"
             >
               {PROGRAMS.map((p) => (
                 <option key={p.slug} value={p.slug}>
@@ -321,8 +323,8 @@ export function EnquiryForm({ initialBranch = "", initialProgram = "" }: Enquiry
 
         {/* Preferred Slot */}
         <div>
-          <label className="block text-xs font-bold text-[#A7B0BC] uppercase tracking-wider mb-1.5">
-            Preferred Time Slot
+          <label className="block text-xs font-mono font-bold text-[#A8B0BA] uppercase tracking-wider mb-1.5">
+            Preferred Training Slot
           </label>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
             {[
@@ -332,10 +334,10 @@ export function EnquiryForm({ initialBranch = "", initialProgram = "" }: Enquiry
             ].map((slot) => (
               <label
                 key={slot}
-                className={`flex items-center gap-2 p-3 rounded-xl border text-xs cursor-pointer transition-colors ${
+                className={`flex items-center gap-2 p-3 border text-xs cursor-pointer transition-colors font-mono ${
                   formData.preferredSlot === slot
-                    ? "bg-[#080B10] border-[#B8F000] text-[#B8F000] font-bold"
-                    : "bg-[#080B10] border-[#26313D] text-[#6B7280] hover:border-[#374758] hover:text-[#A7B0BC]"
+                    ? "bg-[#07090D] border-[#B8F000] text-[#B8F000] font-bold"
+                    : "bg-[#07090D] border-[#1F2937] text-[#A8B0BA] hover:border-[#B8F000]/60 hover:text-white"
                 }`}
               >
                 <input
@@ -354,7 +356,7 @@ export function EnquiryForm({ initialBranch = "", initialProgram = "" }: Enquiry
 
         {/* Message */}
         <div>
-          <label className="block text-xs font-bold text-[#A7B0BC] uppercase tracking-wider mb-1.5">
+          <label className="block text-xs font-mono font-bold text-[#A8B0BA] uppercase tracking-wider mb-1.5">
             Specific Goals or Player Level <span className="text-[#6B7280]">(Optional)</span>
           </label>
           <textarea
@@ -363,7 +365,7 @@ export function EnquiryForm({ initialBranch = "", initialProgram = "" }: Enquiry
             value={formData.message}
             onChange={handleChange}
             placeholder="e.g. Complete beginner, or junior preparing for school badminton team trials..."
-            className="w-full px-4 py-3 rounded-xl bg-[#080B10] border border-[#26313D] text-[#F8FAFC] placeholder-[#6B7280] text-base sm:text-sm focus:outline-none focus:border-[#B8F000] transition-colors"
+            className="w-full px-4 py-3 bg-[#07090D] border border-[#1F2937] text-white placeholder-[#6B7280] text-sm focus:outline-none focus:border-[#B8F000] transition-colors font-mono"
           />
         </div>
 
@@ -371,7 +373,7 @@ export function EnquiryForm({ initialBranch = "", initialProgram = "" }: Enquiry
         <button
           type="submit"
           disabled={loading}
-          className="w-full py-4 rounded-xl bg-[#B8F000] hover:bg-[#c7fb1e] text-[#07100A] font-extrabold text-sm sm:text-base flex items-center justify-center gap-2 shadow-sm transition-all duration-200 disabled:opacity-50 cursor-pointer"
+          className="w-full py-4 bg-[#B8F000] hover:bg-[#cbf722] text-[#07090D] font-black text-sm uppercase tracking-wider flex items-center justify-center gap-2 transition-all duration-150 disabled:opacity-50 cursor-pointer shadow-md"
         >
           {loading ? (
             <>
@@ -386,8 +388,8 @@ export function EnquiryForm({ initialBranch = "", initialProgram = "" }: Enquiry
           )}
         </button>
 
-        <p className="text-[11px] text-center text-[#6B7280] pt-1">
-          🔒 Contact details are kept strictly private. No spam calls.
+        <p className="text-[11px] font-mono text-center text-[#A8B0BA] pt-1">
+          🔒 Contact details are kept strictly private. Direct coach confirmation.
         </p>
       </form>
     </div>

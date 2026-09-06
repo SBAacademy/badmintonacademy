@@ -123,7 +123,7 @@ export async function GET(request: Request) {
 export async function PATCH(request: Request) {
   try {
     const body = await request.json();
-    const { id, status, notes } = body;
+    const { id, ...updates } = body;
 
     if (!id) {
       return NextResponse.json(
@@ -132,7 +132,7 @@ export async function PATCH(request: Request) {
       );
     }
 
-    const updatedLead = await updateLead(id, { status, notes });
+    const updatedLead = await updateLead(id, updates);
 
     if (!updatedLead) {
       return NextResponse.json(

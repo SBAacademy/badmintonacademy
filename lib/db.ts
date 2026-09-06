@@ -228,7 +228,7 @@ export async function createLead(lead: LeadItem): Promise<LeadItem> {
 
 export async function updateLead(
   id: string,
-  updates: { status?: LeadItem["status"]; notes?: string }
+  updates: Partial<Omit<LeadItem, "id" | "submittedAt">>
 ): Promise<LeadItem | null> {
   const now = new Date().toISOString();
   const sql = getSql();
@@ -236,38 +236,53 @@ export async function updateLead(
   if (sql) {
     try {
       await initDb();
-      if (updates.status && typeof updates.notes === "string") {
-        await sql`
-          UPDATE leads
-          SET status = ${updates.status}, notes = ${updates.notes}, updated_at = ${now}
-          WHERE id = ${id};
-        `;
-      } else if (updates.status) {
-        await sql`
-          UPDATE leads
-          SET status = ${updates.status}, updated_at = ${now}
-          WHERE id = ${id};
-        `;
-      } else if (typeof updates.notes === "string") {
-        await sql`
-          UPDATE leads
-          SET notes = ${updates.notes}, updated_at = ${now}
-          WHERE id = ${id};
-        `;
+      
+      // Fetch current record first
+      const currentRows = (await sql`SELECT * FROM leads WHERE id = ${id} LIMIT 1;`) as unknown as Record<string, unknown>[];
+      if (currentRows.length === 0) return null;
+      const current = mapRowToLead(currentRows[0]);
+
+      const merged: LeadItem = {
+        ...current,
+        name: updates.name ?? current.name,
+        phone: updates.phone ?? current.phone,
+        email: updates.email !== undefined ? updates.email : current.email,
+        ageCategory: updates.ageCategory ?? current.ageCategory,
+        branch: updates.branch ?? current.branch,
+        program: updates.program ?? current.program,
+        slot: updates.slot ?? current.slot,
+        message: updates.message ?? current.message,
+        status: updates.status ?? current.status,
+        notes: updates.notes !== undefined ? updates.notes : current.notes,
+        updatedAt: now,
+      };
+
+      await sql`
+        UPDATE leads
+        SET 
+          name = ${merged.name},
+          phone = ${merged.phone},
+          email = ${merged.email || null},
+          age_category = ${merged.ageCategory},
+          branch = ${merged.branch},
+          program = ${merged.program},
+          slot = ${merged.slot},
+          message = ${merged.message || ""},
+          status = ${merged.status},
+          notes = ${merged.notes || ""},
+          updated_at = ${now}
+        WHERE id = ${id};
+      `;
+
+      // Sync fallback JSON
+      const fallbackLeads = await readFallbackLeads();
+      const idx = fallbackLeads.findIndex((l) => l.id === id);
+      if (idx !== -1) {
+        fallbackLeads[idx] = merged;
+        await saveFallbackLeads(fallbackLeads);
       }
 
-      const rows = (await sql`SELECT * FROM leads WHERE id = ${id} LIMIT 1;`) as unknown as Record<string, unknown>[];
-      if (rows.length > 0) {
-        const updated = mapRowToLead(rows[0]);
-        // Sync fallback JSON
-        const fallbackLeads = await readFallbackLeads();
-        const idx = fallbackLeads.findIndex((l) => l.id === id);
-        if (idx !== -1) {
-          fallbackLeads[idx] = updated;
-          await saveFallbackLeads(fallbackLeads);
-        }
-        return updated;
-      }
+      return merged;
     } catch (err) {
       console.error("Failed to update lead in Neon DB:", err);
     }
@@ -278,9 +293,11 @@ export async function updateLead(
   const idx = fallbackLeads.findIndex((l) => l.id === id);
   if (idx === -1) return null;
 
-  if (updates.status) fallbackLeads[idx].status = updates.status;
-  if (typeof updates.notes === "string") fallbackLeads[idx].notes = updates.notes;
-  fallbackLeads[idx].updatedAt = now;
+  fallbackLeads[idx] = {
+    ...fallbackLeads[idx],
+    ...updates,
+    updatedAt: now,
+  };
 
   await saveFallbackLeads(fallbackLeads);
   return fallbackLeads[idx];

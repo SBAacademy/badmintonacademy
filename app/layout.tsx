@@ -1,10 +1,7 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
-import { AnnouncementBar } from "@/components/layout/AnnouncementBar";
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
-import { MobileConversionBar } from "@/components/layout/MobileConversionBar";
+import { AppLayoutWrapper } from "@/components/layout/AppLayoutWrapper";
 import { SEOJsonLd } from "@/components/seo/SEOJsonLd";
 import { getOrganizationSchema } from "@/lib/seo";
 import { ACADEMY_DATA } from "@/data/academy";
@@ -71,11 +68,7 @@ export default function RootLayout({
       </head>
       <body className="antialiased bg-[#07090D] text-[#FFFFFF] min-h-screen flex flex-col font-sans selection:bg-[#B8F000] selection:text-[#07100A]">
         <SEOJsonLd schema={getOrganizationSchema()} />
-        <AnnouncementBar />
-        <Navbar />
-        <main className="flex-1 w-full">{children}</main>
-        <Footer />
-        <MobileConversionBar />
+        <AppLayoutWrapper>{children}</AppLayoutWrapper>
       </body>
     </html>
   );

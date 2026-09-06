@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X, MessageCircle, ChevronDown, ArrowRight, Phone } from "lucide-react";
 import { ACADEMY_DATA } from "@/data/academy";
-import { BRANCHES } from "@/data/branches";
+import { LOCATIONS } from "@/data/locations";
 import { PROGRAMS } from "@/data/programs";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { trackEvent } from "@/lib/analytics";
@@ -23,12 +23,12 @@ const NAV_LINKS = [
     }))
   },
   { 
-    name: "Branches", 
+    name: "Centres", 
     href: "/branches",
-    dropdown: BRANCHES.map(b => ({ 
-      name: b.shortName, 
-      href: `/branches/${b.slug}`,
-      desc: b.cityArea 
+    dropdown: Object.values(LOCATIONS).map(l => ({ 
+      name: l.shortName, 
+      href: `/${l.slug}`,
+      desc: l.city 
     }))
   },
   { name: "Coaches", href: "/coaches" },

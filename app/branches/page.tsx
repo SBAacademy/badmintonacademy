@@ -2,16 +2,16 @@ import React from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { MapPin, Clock, ShieldCheck, ArrowRight, MessageCircle, Navigation, Award } from "lucide-react";
+import { MapPin, Clock, ShieldCheck, ArrowRight, MessageCircle, Navigation } from "lucide-react";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { createMetadata } from "@/lib/seo";
-import { BRANCHES } from "@/data/branches";
+import { LOCATIONS } from "@/data/locations";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { FinalCTA } from "@/components/sections/FinalCTA";
 
 export const metadata: Metadata = createMetadata({
-  title: "Badminton Academy Branches in Kochi | Kadavanthra, Edappally, Kakkanad",
-  description: "Find S & A Badminton Academy near you in Kochi. 3 international-standard training centers across Kadavanthra, Edappally, and Kakkanad with 14 synthetic courts on sprung teakwood.",
+  title: "Badminton Academy Centres in Kochi | Kadavanthra, Edappally, Kakkanad",
+  description: "Explore all S & A Badminton Academy training centres across Kochi. Dedicated multi-court facilities in Kadavanthra, Edappally, Kakkanad, and expanding locations.",
   path: "/branches",
   keywords: [
     "badminton academy near me",
@@ -23,59 +23,68 @@ export const metadata: Metadata = createMetadata({
 });
 
 export default function BranchesPage() {
+  const centres = Object.values(LOCATIONS);
+
   return (
-    <div className="py-8 sm:py-12 bg-[#090D16]">
+    <div className="py-8 sm:py-12 bg-[#080B10] text-[#F8FAFC]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Breadcrumb Navigation */}
-        <Breadcrumbs items={[{ name: "Training Branches", url: "/branches" }]} />
+        <Breadcrumbs items={[{ name: "Our Centres", url: "/branches" }]} />
 
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold uppercase tracking-wider">
-            Our Kochi Locations
+        <div className="text-center max-w-3xl mx-auto mb-16 space-y-4 pt-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#B8F000]/10 border border-[#B8F000]/30 text-[#B8F000] text-xs font-bold uppercase tracking-wider">
+            Centre Directory
           </div>
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
-            3 Premier Training Centers Across Kochi
+          <h1 className="text-3xl sm:text-5xl font-black text-[#F8FAFC] tracking-tight uppercase leading-tight">
+            Four Dedicated Badminton Arenas Across Kochi
           </h1>
-          <p className="text-slate-400 text-sm sm:text-base leading-relaxed">
-            Strategically located across Central, North, and East Kochi so students and working professionals can access BWF-standard coaching without commuting across the city.
+          <p className="text-[#A7B0BC] text-sm sm:text-base leading-relaxed">
+            Strategically positioned across Central, North, and East Kochi so students, junior athletes, and working professionals can access international-grade coaching without extensive city transit.
           </p>
         </div>
 
-        {/* Detailed Branch Cards */}
+        {/* Detailed Centre Cards */}
         <div className="space-y-12 mb-20">
-          {BRANCHES.map((branch, idx) => (
+          {centres.map((centre, idx) => (
             <div
-              key={branch.slug}
-              className="rounded-3xl bg-[#111827] border border-slate-800 hover:border-emerald-500/40 p-6 sm:p-8 lg:p-10 transition-all duration-300 shadow-xl overflow-hidden"
+              key={centre.slug}
+              className="rounded-3xl bg-[#121A23] border border-[#26313D] hover:border-[#374758] p-6 sm:p-8 lg:p-10 transition-all duration-300 shadow-xl overflow-hidden text-left"
             >
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
                 
                 {/* Media Column */}
                 <div className={`lg:col-span-5 relative ${idx % 2 === 1 ? "lg:order-2" : ""}`}>
-                  <div className="relative rounded-2xl overflow-hidden aspect-[16/10] sm:aspect-[4/3] border border-slate-700 shadow-lg">
+                  <div className="relative rounded-2xl overflow-hidden aspect-[16/10] sm:aspect-[4/3] border border-[#26313D] shadow-lg">
                     <Image
-                      src={branch.image}
-                      alt={`${branch.name} badminton courts Kochi`}
+                      src={centre.gallery[0]?.url || "/images/hero-athlete.jpg"}
+                      alt={`${centre.name} badminton courts Kochi`}
                       fill
                       className="object-cover"
                       sizes="(max-width: 1024px) 100vw, 40vw"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#090D16] via-transparent to-transparent opacity-80" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#080B10] via-transparent to-transparent opacity-85" />
 
-                    <div className="absolute top-3 left-3 px-3 py-1 rounded-xl bg-[#090D16]/85 backdrop-blur-md border border-slate-700 text-white text-xs font-extrabold">
-                      {branch.courtsCount} BWF Courts
+                    <div className="absolute top-3 left-3 px-3 py-1 rounded-xl bg-[#080B10]/90 backdrop-blur-md border border-[#26313D] text-[#F8FAFC] text-xs font-extrabold flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-[#B8F000]" />
+                      <span>{centre.courtInformation.courtCount ? `${centre.courtInformation.courtCount} Courts` : "Upcoming Arena"}</span>
                     </div>
 
-                    {branch.isHeadquarters && (
-                      <div className="absolute top-3 right-3 px-2.5 py-1 rounded-xl bg-emerald-500 text-[#090D16] text-[10px] font-black uppercase tracking-wider">
+                    {centre.slug === "kadavanthra" && (
+                      <div className="absolute top-3 right-3 px-2.5 py-1 rounded-xl bg-[#B8F000] text-[#07100A] text-[10px] font-black uppercase tracking-wider">
                         Academy HQ
                       </div>
                     )}
 
-                    <div className="absolute bottom-3 left-3 right-3 p-3 rounded-xl bg-[#090D16]/85 backdrop-blur-md border border-slate-800">
-                      <div className="text-xs font-bold text-white">{branch.tagline}</div>
+                    {centre.isPlaceholder && (
+                      <div className="absolute top-3 right-3 px-2.5 py-1 rounded-xl bg-[#22D3EE] text-[#07100A] text-[10px] font-black uppercase tracking-wider">
+                        Coming Soon
+                      </div>
+                    )}
+
+                    <div className="absolute bottom-3 left-3 right-3 p-3 rounded-xl bg-[#080B10]/90 backdrop-blur-md border border-[#26313D]">
+                      <div className="text-xs font-bold text-[#F8FAFC]">{centre.intro.subheading}</div>
                     </div>
                   </div>
                 </div>
@@ -83,34 +92,34 @@ export default function BranchesPage() {
                 {/* Details Column */}
                 <div className={`lg:col-span-7 space-y-5 ${idx % 2 === 1 ? "lg:order-1" : ""}`}>
                   <div>
-                    <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">
-                      {branch.cityArea}
+                    <span className="text-xs font-bold text-[#B8F000] uppercase tracking-wider">
+                      {centre.city} • {centre.district}
                     </span>
-                    <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight mt-1">
-                      {branch.name}
+                    <h2 className="text-2xl sm:text-3xl font-black text-[#F8FAFC] tracking-tight uppercase mt-1">
+                      {centre.name}
                     </h2>
                   </div>
 
-                  <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-                    {branch.description}
+                  <p className="text-[#A7B0BC] text-sm sm:text-base leading-relaxed font-normal">
+                    {centre.intro.description}
                   </p>
 
                   {/* Metadata Grid */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                    <div className="flex items-start gap-2 p-3 rounded-xl bg-slate-900/70 border border-slate-800">
-                      <MapPin className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                    <div className="flex items-start gap-2 p-3 rounded-xl bg-[#080B10] border border-[#26313D]">
+                      <MapPin className="w-4 h-4 text-[#B8F000] shrink-0 mt-0.5" />
                       <div>
-                        <div className="font-bold text-white">Full Address</div>
-                        <div className="text-slate-400 text-[11px] mt-0.5">{branch.address}</div>
+                        <div className="font-bold text-[#F8FAFC]">Physical Address</div>
+                        <div className="text-[#A7B0BC] text-[11px] mt-0.5 leading-relaxed">{centre.address}</div>
                       </div>
                     </div>
 
-                    <div className="flex items-start gap-2 p-3 rounded-xl bg-slate-900/70 border border-slate-800">
-                      <Clock className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
+                    <div className="flex items-start gap-2 p-3 rounded-xl bg-[#080B10] border border-[#26313D]">
+                      <Clock className="w-4 h-4 text-[#B8F000] shrink-0 mt-0.5" />
                       <div>
-                        <div className="font-bold text-white">{branch.timings.days}</div>
-                        <div className="text-slate-400 text-[11px] mt-0.5">
-                          {branch.timings.morning} | {branch.timings.evening}
+                        <div className="font-bold text-[#F8FAFC]">{centre.openingHours.days}</div>
+                        <div className="text-[#A7B0BC] text-[11px] mt-0.5">
+                          Morning: {centre.openingHours.morning} | Evening: {centre.openingHours.evening}
                         </div>
                       </div>
                     </div>
@@ -118,14 +127,14 @@ export default function BranchesPage() {
 
                   {/* Amenities List */}
                   <div className="space-y-1.5 pt-1">
-                    <div className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-                      Arena Infrastructure:
+                    <div className="text-xs font-bold text-[#6B7280] uppercase tracking-wider">
+                      Arena Facilities:
                     </div>
                     <div className="flex flex-wrap gap-1.5">
-                      {branch.facilities.slice(0, 5).map((fac, fIdx) => (
+                      {centre.facilities.slice(0, 5).map((fac, fIdx) => (
                         <span
                           key={fIdx}
-                          className="text-[11px] px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-slate-300 font-medium"
+                          className="text-[11px] px-2.5 py-1 rounded-md bg-[#080B10] border border-[#26313D] text-[#A7B0BC] font-medium"
                         >
                           {fac}
                         </span>
@@ -134,32 +143,32 @@ export default function BranchesPage() {
                   </div>
 
                   {/* CTAs */}
-                  <div className="flex flex-wrap items-center gap-3 pt-3 border-t border-slate-800">
+                  <div className="flex flex-wrap items-center gap-3 pt-3 border-t border-[#26313D]">
                     <Link
-                      href={`/branches/${branch.slug}`}
-                      className="px-6 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-[#090D16] text-xs font-bold flex items-center gap-2 transition-colors shadow-md shadow-emerald-500/20"
+                      href={`/${centre.slug}`}
+                      className="px-6 py-3.5 rounded-xl bg-[#B8F000] hover:bg-[#c7fb1e] text-[#07100A] text-xs font-black uppercase tracking-wider flex items-center gap-2 transition-all shadow-sm"
                     >
-                      <span>Explore Branch & Schedule</span>
+                      <span>Explore {centre.shortName} Centre</span>
                       <ArrowRight className="w-4 h-4" />
                     </Link>
 
                     <a
-                      href={buildWhatsAppUrl({ branchName: branch.name })}
+                      href={buildWhatsAppUrl({ locationSlug: centre.slug, locationName: centre.name })}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="px-5 py-3 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-400 text-xs font-semibold flex items-center gap-1.5 transition-colors"
+                      className="px-5 py-3.5 rounded-xl bg-[#121A23] hover:bg-[#17212C] border border-[#26313D] text-[#F8FAFC] text-xs font-bold flex items-center gap-1.5 transition-colors"
                     >
-                      <MessageCircle className="w-4 h-4" />
+                      <MessageCircle className="w-4 h-4 text-[#22C55E]" />
                       <span>WhatsApp Desk</span>
                     </a>
 
                     <a
-                      href={branch.googleMapDirectionsUrl}
+                      href={centre.googleMapsUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="px-4 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 text-xs font-semibold flex items-center gap-1.5 border border-slate-800 transition-colors"
+                      className="px-4 py-3.5 rounded-xl bg-[#080B10] hover:bg-[#17212C] text-[#A7B0BC] text-xs font-semibold flex items-center gap-1.5 border border-[#26313D] transition-colors"
                     >
-                      <Navigation className="w-4 h-4 text-cyan-400" />
+                      <Navigation className="w-4 h-4 text-[#B8F000]" />
                       <span>Google Maps</span>
                     </a>
                   </div>

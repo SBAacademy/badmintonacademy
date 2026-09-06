@@ -1,72 +1,111 @@
-# S & A BADMINTON ACADEMY — CLIENT ASSET & CONTENT REQUIREMENTS CHECKLIST
+# S & A BADMINTON ACADEMY — CLIENT CONTENT REQUIREMENTS & VERIFICATION CHECKLIST
 
-This checklist outlines all real-world assets, contact numbers, official photography, and verified achievements required from the client (**S & A Badminton Academy**) to finalize the production deployment.
-
-All current content has been structured in centralized config files (`data/academy.ts`, `data/branches.ts`, `data/programs.ts`, `data/coaches.ts`) so client updates can be applied in minutes.
-
----
-
-## 1. Academy Core Brand Assets
-- [ ] **Official Logo Files**: High-resolution vector `.svg` or transparent `.png` (Light & Dark versions).
-- [ ] **Favicon**: High-resolution square icon (32x32, 192x192, 512x512).
-- [ ] **Official Brand Hex Colors**: Primary accent and secondary brand colors if distinct from our sports emerald palette.
-- [ ] **Official Contact Phone**: Central mobile/landline number for primary calls.
-- [ ] **Dedicated WhatsApp Number**: The business WhatsApp number that will receive instant pre-filled enquiries.
-- [ ] **Admissions Email**: E.g. `admissions@sabadminton.com` or Gmail address.
+**Client Representative:** Head Coach Sooraj  
+**Entity:** S & A Badminton Academy (Kochi / Ernakulam)  
+**Locations:** Kadavanthra, Edappally, Kakkanad, and Fourth Centre (Expansion)
 
 ---
 
-## 2. Branch-Level Data (Kadavanthra, Edappally, Kakkanad)
-For each branch:
-- [ ] **Exact Registered Postal Address**: With PIN code and landmark.
-- [ ] **Live Google Business Profile (GBP) Share Link**: Direct URL to Google Maps profile.
-- [ ] **Local Branch Phone Lines**: If individual branches have dedicated managers.
-- [ ] **Court Arena Photos**:
-  - Minimum 3–5 horizontal high-resolution interior court photographs showing flooring and lighting.
-  - Exterior front entrance / arena signboard photograph.
-  - Parent viewing gallery photograph.
-- [ ] **Exact Public Timings**: Morning batches, evening batches, and weekend slots.
-- [ ] **Parking Details**: Four-wheeler and two-wheeler capacity.
+## 1. Strict Data Verification Policy
+
+To protect academy credibility, consumer trust, and comply with Google search quality guidelines (E-E-A-T):
+* **Zero Fabricated Claims:** No unverified metrics may be published on live pages.
+* The following elements must **NEVER** be invented:
+  * Exact number of courts
+  * Coach certifications (e.g. BWF Level 1/2, NIS, SAI certifications)
+  * Number of trained athletes or state champions
+  * Training batch schedules and daily operating hours
+  * Specific tournament medals and honours
+  * Client testimonials and ratings
+  * Flooring specifications (e.g., specific brand of synthetic mats or wooden sub-cushioning)
+* **Placeholder Rule:** If a verified value is not yet supplied by Coach Sooraj, the database explicitly sets it to `null` or uses a clean, controlled placeholder (e.g., `[FACILITY_NAME]`, `[AREA]`).
 
 ---
 
-## 3. Coaching Staff Profiles
-For Head Coaches and Senior Trainers:
-- [ ] **High-Resolution Portrait Photographs**: In academy coaching jersey or athletic attire.
-- [ ] **Full Names & Professional Designations**: E.g. Head Coach, Senior Junior Coach.
-- [ ] **Verified Certifications**: Official BWF Level 1/2 or NIS certification dates.
-- [ ] **Years of Coaching Experience**: Verified timeline.
-- [ ] **Notable Playing Career Achievements**: State / National tournament titles won.
+## 2. Master Centre Information Checklist
+
+Please complete and confirm the following data points for all four centres:
+
+### Centre 1: Kadavanthra (Central Kochi HQ)
+* [ ] **Exact Arena Name:** (e.g., Rajiv Gandhi Indoor Stadium / S&A Kadavanthra Arena)
+* [ ] **Full Street Address:** 
+* [ ] **PIN Code:** 
+* [ ] **Primary Phone:** (+91 94006 35548 verified)
+* [ ] **Direct WhatsApp Number:** (+91 94006 35548 verified)
+* [ ] **Contact Email:** 
+* [ ] **Google Maps Share URL / Embed Link:**
+* [ ] **Google Business Profile (GBP) CID URL:**
+* [ ] **Exact Coordinates:** Latitude: `9.9678° N`, Longitude: `76.2995° E` (Pending final confirmation)
+* [ ] **Operating Hours:**
+  * Monday – Friday: [ ] AM to [ ] PM
+  * Saturday – Sunday: [ ] AM to [ ] PM
+* [ ] **Court Specifications:**
+  * Number of active courts: [ ]
+  * Flooring type: [ ] BWF-certified wooden / [ ] 5mm Vinyl Synthetic mat
+* [ ] **Facilities Available On-Site:**
+  * [ ] Player Changing Rooms
+  * [ ] Dedicated Showers
+  * [ ] Purified Drinking Water
+  * [ ] Spectator Gallery
+  * [ ] Racket Stringing & Grip Service
+  * [ ] Dedicated Car & Two-Wheeler Parking
+* [ ] **Assigned Coaches & Credentials:**
+  * Head Coach Name: 
+  * Certifications: 
+* [ ] **Authentic Photography:** High-resolution photographs of courts, lighting, and exterior entrance.
 
 ---
 
-## 4. Program Curricula & Public Fees (Optional)
-- [ ] **Monthly Fee Structure**: If the academy wishes to display public pricing or promotional packages.
-- [ ] **Registration / Kit Fees**: Academy jersey kit or demo equipment charges.
-- [ ] **Batch Capacities**: Exact coach-to-student ratio caps per branch.
+### Centre 2: Edappally (North Kochi Hub)
+* [ ] **Exact Arena Name:**
+* [ ] **Full Street Address:** (Currently: Near Edappally Metro Station / Lulu Junction)
+* [ ] **PIN Code:** 
+* [ ] **Primary Phone:** 
+* [ ] **Direct WhatsApp Number:** 
+* [ ] **Contact Email:** 
+* [ ] **Google Maps Share URL / Embed Link:**
+* [ ] **Google Business Profile (GBP) CID URL:**
+* [ ] **Exact Coordinates:** Latitude: `10.0261° N`, Longitude: `76.3125° E` (Pending final confirmation)
+* [ ] **Operating Hours:** 
+* [ ] **Court Specifications:** Number of courts: [ ] / Surface: [ ]
+* [ ] **Facilities Available On-Site:** 
+* [ ] **Assigned Coaches & Credentials:**
+* [ ] **Authentic Photography:** High-resolution photographs of courts and amenities.
 
 ---
 
-## 5. Achievements & Hall of Fame
-- [ ] **Verified Tournament Titles**: Tournament name, category (U-13, U-15, U-17, Senior), and medal status.
-- [ ] **Player Names**: Official names of student champions.
-- [ ] **High-Resolution Trophy / Podium Photos**: Students receiving state or district medals.
+### Centre 3: Kakkanad (IT Corridor / Infopark Arena)
+* [ ] **Exact Arena Name:**
+* [ ] **Full Street Address:** (Currently: Near Infopark Expressway, Kakkanad)
+* [ ] **PIN Code:** 
+* [ ] **Primary Phone:** 
+* [ ] **Direct WhatsApp Number:** 
+* [ ] **Contact Email:** 
+* [ ] **Google Maps Share URL / Embed Link:**
+* [ ] **Google Business Profile (GBP) CID URL:**
+* [ ] **Exact Coordinates:** Latitude: `10.0159° N`, Longitude: `76.3419° E` (Pending final confirmation)
+* [ ] **Operating Hours & Corporate Batches:** (Confirm early morning and post-7 PM slots)
+* [ ] **Court Specifications:** Number of courts: [ ] / Surface: [ ]
+* [ ] **Facilities Available On-Site:** 
+* [ ] **Assigned Coaches & Credentials:**
+* [ ] **Authentic Photography:** High-resolution court and batch photos.
 
 ---
 
-## 6. Client Testimonials & Google Reviews
-- [ ] **Genuine Parent & Player Quotes**: Verified feedback from actual students across branches.
-- [ ] **Player / Parent Photos**: With written consent for promotional website display.
+### Centre 4: Fourth Centre (Upcoming Expansion)
+* [ ] **Target Locality / Area:** (e.g. Aluva / Thoppumpady / Tripunithura / Palarivattom)
+* [ ] **Exact Facility / Arena Name:** 
+* [ ] **Full Street Address:** 
+* [ ] **PIN Code:** 
+* [ ] **Primary Phone:** 
+* [ ] **Expected Opening / Batch Start Date:** 
+* [ ] **Court Specifications:** Number of courts: [ ] / Surface: [ ]
+* [ ] **Available Programs:** 
 
 ---
 
-## Centralized Update File Locations
-| Item to Update | File Location |
-| :--- | :--- |
-| Academy phone, WhatsApp, email, hours | `data/academy.ts` |
-| Branch addresses, maps, facilities | `data/branches.ts` |
-| Programs, ages, ratios, curriculum | `data/programs.ts` |
-| Coach credentials and photos | `data/coaches.ts` |
-| Medals and tournament records | `data/achievements.ts` |
-| Parent & student reviews | `data/testimonials.ts` |
-| Frequently asked questions | `data/faqs.ts` |
+## 3. Academy Credentials & Coaching Panel Data Required
+* [ ] Head Coach Sooraj Biography & State/National Career Highlights
+* [ ] Verified list of Assistant Coaches & Fitness Trainers
+* [ ] Verified list of Tournament Medals / State Ranking Player Names
+* [ ] Signed consent/quotes for student & parent testimonials

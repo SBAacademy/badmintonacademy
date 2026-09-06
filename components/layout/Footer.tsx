@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { MapPin, Phone, Mail, Clock, Shield, Sparkles, ExternalLink, MessageCircle } from "lucide-react";
 import { ACADEMY_DATA } from "@/data/academy";
-import { BRANCHES } from "@/data/branches";
+import { LOCATIONS } from "@/data/locations";
 import { PROGRAMS } from "@/data/programs";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 
@@ -133,25 +133,25 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Col 3: Branches (Local SEO) */}
+          {/* Col 3: Centres (Local SEO) */}
           <div className="space-y-3">
             <h4 className="text-[#F8FAFC] font-bold text-sm uppercase tracking-wider">
-              Kochi Hubs
+              Our Centres
             </h4>
             <ul className="space-y-3 text-xs">
-              {BRANCHES.map((branch) => (
-                <li key={branch.slug} className="border-b border-[#26313D]/60 pb-2 last:border-0">
+              {Object.values(LOCATIONS).map((centre) => (
+                <li key={centre.slug} className="border-b border-[#26313D]/60 pb-2 last:border-0">
                   <Link
-                    href={`/branches/${branch.slug}`}
+                    href={`/${centre.slug}`}
                     className="font-semibold text-[#F8FAFC] hover:text-[#B8F000] transition-colors block"
                   >
-                    {branch.shortName}
+                    {centre.shortName}
                   </Link>
                   <p className="text-[11px] text-[#6B7280] truncate mt-0.5">
-                    {branch.landmark}
+                    {centre.address.split(",")[1]?.trim() || centre.city}
                   </p>
                   <a
-                    href={branch.googleMapDirectionsUrl}
+                    href={centre.googleMapsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-[10px] text-[#B8F000] hover:underline inline-flex items-center gap-1 mt-0.5"

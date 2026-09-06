@@ -4,17 +4,19 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { MapPin, Clock, ArrowRight, MessageCircle, Navigation, ShieldCheck } from "lucide-react";
-import { BRANCHES } from "@/data/branches";
+import { LOCATIONS } from "@/data/locations";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { trackEvent } from "@/lib/analytics";
 
 export function BranchesSection() {
-  const handleWhatsAppBranch = (branchName: string) => {
-    trackEvent("whatsapp_click", { branch: branchName, source: "branches_section" });
+  const locationsList = Object.values(LOCATIONS);
+
+  const handleWhatsAppLocation = (locName: string, locSlug: string) => {
+    trackEvent("whatsapp_click", { location: locSlug, source: "branches_section" });
   };
 
-  const handleDirections = (branchName: string) => {
-    trackEvent("map_directions_click", { branch: branchName, source: "branches_section" });
+  const handleDirections = (locName: string, locSlug: string) => {
+    trackEvent("map_directions_click", { location: locSlug, source: "branches_section" });
   };
 
   return (
@@ -26,135 +28,124 @@ export function BranchesSection() {
           <div className="flex items-center justify-center gap-2">
             <span className="w-5 h-0.5 bg-[#B8F000]" />
             <span className="text-xs font-bold uppercase tracking-widest text-[#B8F000]">
-              TRAINING LOCATIONS
+              OUR PHYSICAL CENTRES
             </span>
           </div>
           <h2 className="text-3xl sm:text-5xl font-black text-[#F8FAFC] tracking-tight uppercase leading-tight">
-            Three Premier Training Hubs Across Kochi
+            Four Dedicated Badminton Arenas Across Kochi
           </h2>
           <p className="text-[#A7B0BC] text-sm sm:text-base leading-relaxed">
             Train at your nearest dedicated facility equipped with BWF-standard synthetic court mats on shock-absorbing wooden subfloors.
           </p>
         </div>
 
-        {/* Branches Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {BRANCHES.map((branch) => (
+        {/* Centres Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {locationsList.map((loc) => (
             <div
-              key={branch.slug}
-              className="sports-card overflow-hidden flex flex-col justify-between group"
+              key={loc.slug}
+              className="sports-card overflow-hidden flex flex-col justify-between group rounded-2xl bg-[#121A23] border border-[#26313D] hover:border-[#374758] transition-all"
             >
               <div>
-                {/* Branch Hero Image & Badge */}
+                {/* Centre Image & Badge */}
                 <div className="relative aspect-[16/10] w-full bg-[#080B10] overflow-hidden">
                   <Image
-                    src={branch.image}
-                    alt={`${branch.name} badminton courts Kochi`}
+                    src={loc.gallery[0]?.url || "/images/hero-athlete.jpg"}
+                    alt={`${loc.name} badminton courts Kochi`}
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
-                    sizes="(max-width: 1024px) 100vw, 33vw"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#121A23] via-transparent to-transparent opacity-90" />
 
-                  {/* Court Count Badge */}
-                  <div className="absolute top-3 left-3 px-3 py-1 rounded-lg bg-[#080B10]/85 backdrop-blur-md border border-[#26313D] text-[#F8FAFC] text-xs font-extrabold flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-[#B8F000]" />
-                    <span>{branch.courtsCount} BWF Courts</span>
+                  {/* Badge */}
+                  <div className="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-[#080B10]/90 backdrop-blur-md border border-[#26313D] text-[#F8FAFC] text-[11px] font-extrabold flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#B8F000]" />
+                    <span>{loc.courtInformation.courtCount ? `${loc.courtInformation.courtCount} Courts` : "Upcoming"}</span>
                   </div>
 
-                  {branch.isHeadquarters && (
-                    <div className="absolute top-3 right-3 px-2.5 py-1 rounded-lg bg-[#B8F000] text-[#07100A] text-[10px] font-extrabold uppercase tracking-wider">
-                      Academy HQ
+                  {loc.slug === "kadavanthra" && (
+                    <div className="absolute top-3 right-3 px-2 py-0.5 rounded-md bg-[#B8F000] text-[#07100A] text-[10px] font-black uppercase tracking-wider">
+                      HQ
+                    </div>
+                  )}
+
+                  {loc.isPlaceholder && (
+                    <div className="absolute top-3 right-3 px-2 py-0.5 rounded-md bg-[#22D3EE] text-[#07100A] text-[10px] font-black uppercase tracking-wider">
+                      Coming Soon
                     </div>
                   )}
 
                   <div className="absolute bottom-3 left-4 right-4 text-left">
-                    <h3 className="text-xl font-bold text-[#F8FAFC] group-hover:text-[#B8F000] transition-colors">
-                      {branch.shortName}
+                    <h3 className="text-lg font-bold text-[#F8FAFC] group-hover:text-[#B8F000] transition-colors">
+                      {loc.shortName}
                     </h3>
-                    <p className="text-xs text-[#A7B0BC] truncate mt-0.5">
-                      {branch.landmark}
+                    <p className="text-[11px] text-[#A7B0BC] truncate mt-0.5">
+                      {loc.city} • {loc.district}
                     </p>
                   </div>
                 </div>
 
-                {/* Branch Details */}
-                <div className="p-6 space-y-4 text-left">
+                {/* Details */}
+                <div className="p-5 space-y-3.5 text-left">
                   {/* Address */}
                   <div className="flex items-start gap-2 text-xs text-[#A7B0BC]">
                     <MapPin className="w-4 h-4 text-[#B8F000] shrink-0 mt-0.5" />
-                    <span>{branch.address}</span>
+                    <span className="line-clamp-2">{loc.address}</span>
                   </div>
 
                   {/* Timings */}
                   <div className="flex items-start gap-2 text-xs text-[#A7B0BC]">
                     <Clock className="w-4 h-4 text-[#B8F000] shrink-0 mt-0.5" />
                     <div>
-                      <div className="text-[#F8FAFC] font-semibold">{branch.timings.days}</div>
+                      <div className="text-[#F8FAFC] font-semibold text-xs">{loc.openingHours.days.split("(")[0]}</div>
                       <div className="text-[11px] text-[#6B7280]">
-                        {branch.timings.morning} | {branch.timings.evening}
+                        {loc.openingHours.morning}
                       </div>
                     </div>
                   </div>
 
-                  {/* Flooring */}
+                  {/* Surface */}
                   <div className="flex items-start gap-2 text-xs text-[#6B7280]">
                     <ShieldCheck className="w-4 h-4 text-[#22C55E] shrink-0 mt-0.5" />
-                    <span className="text-[11px] text-[#A7B0BC] leading-tight">
-                      {branch.courtType}
+                    <span className="text-[11px] text-[#A7B0BC] leading-tight line-clamp-1">
+                      {loc.courtInformation.surfaceType}
                     </span>
-                  </div>
-
-                  {/* Facilities Pills */}
-                  <div className="pt-1">
-                    <div className="text-[11px] font-bold uppercase tracking-wider text-[#6B7280] mb-2">
-                      Key Facilities:
-                    </div>
-                    <div className="flex flex-wrap gap-1.5">
-                      {branch.facilities.slice(0, 4).map((fac, fIdx) => (
-                        <span
-                          key={fIdx}
-                          className="text-[11px] px-2.5 py-1 rounded-md bg-[#080B10] border border-[#26313D] text-[#A7B0BC] font-medium"
-                        >
-                          {fac}
-                        </span>
-                      ))}
-                    </div>
                   </div>
                 </div>
               </div>
 
               {/* Conversion Buttons Footer */}
-              <div className="p-6 pt-0 space-y-2.5">
+              <div className="p-5 pt-0 space-y-2">
                 <Link
-                  href={`/branches/${branch.slug}`}
-                  className="w-full py-2.5 px-4 rounded-xl bg-[#080B10] hover:bg-[#17212C] text-[#F8FAFC] text-xs font-bold flex items-center justify-center gap-1.5 border border-[#26313D] hover:border-[#374758] transition-colors"
+                  href={`/${loc.slug}`}
+                  className="w-full py-2.5 px-3 rounded-xl bg-[#080B10] hover:bg-[#17212C] text-[#F8FAFC] text-xs font-bold flex items-center justify-center gap-1.5 border border-[#26313D] hover:border-[#374758] transition-colors"
                 >
-                  <span>Explore {branch.shortName} & Schedule</span>
+                  <span>View {loc.shortName} Centre</span>
                   <ArrowRight className="w-3.5 h-3.5 text-[#B8F000]" />
                 </Link>
 
                 <div className="grid grid-cols-2 gap-2">
                   <a
-                    href={buildWhatsAppUrl({ branchName: branch.name })}
+                    href={buildWhatsAppUrl({ locationSlug: loc.slug, locationName: loc.name })}
                     target="_blank"
                     rel="noopener noreferrer"
-                    onClick={() => handleWhatsAppBranch(branch.name)}
-                    className="py-2 px-3 rounded-lg bg-[#121A23] hover:bg-[#17212C] border border-[#26313D] text-[#F8FAFC] text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors"
+                    onClick={() => handleWhatsAppLocation(loc.name, loc.slug)}
+                    className="py-2 px-2 rounded-lg bg-[#121A23] hover:bg-[#17212C] border border-[#26313D] text-[#F8FAFC] text-[11px] font-semibold flex items-center justify-center gap-1 transition-colors"
                   >
                     <MessageCircle className="w-3.5 h-3.5 text-[#22C55E]" />
                     <span>WhatsApp</span>
                   </a>
 
                   <a
-                    href={branch.googleMapDirectionsUrl}
+                    href={loc.googleMapsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    onClick={() => handleDirections(branch.name)}
-                    className="py-2 px-3 rounded-lg bg-[#080B10] hover:bg-[#17212C] border border-[#26313D] text-[#A7B0BC] text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors"
+                    onClick={() => handleDirections(loc.name, loc.slug)}
+                    className="py-2 px-2 rounded-lg bg-[#080B10] hover:bg-[#17212C] border border-[#26313D] text-[#A7B0BC] text-[11px] font-semibold flex items-center justify-center gap-1 transition-colors"
                   >
                     <Navigation className="w-3.5 h-3.5 text-[#B8F000]" />
-                    <span>Map Route</span>
+                    <span>Directions</span>
                   </a>
                 </div>
               </div>

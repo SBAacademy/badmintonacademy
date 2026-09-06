@@ -1,67 +1,184 @@
-# S & A BADMINTON ACADEMY — SEO TECHNICAL IMPLEMENTATION GUIDE
-
-This document summarizes the technical SEO architecture, structured data schemas, canonicalization rules, and local search infrastructure implemented for **S & A BADMINTON ACADEMY**.
-
----
-
-## 1. Technical SEO Architecture Overview
-
-* **Framework**: Next.js 15 App Router with full Server Component optimization for instant initial HTML rendering and fast crawling.
-* **Canonical URL Policy**: Every page explicitly generates an absolute canonical URL using `lib/seo.ts` preventing duplicate parameters or trailing slash penalties.
-* **OpenGraph & Social Meta**: Complete OpenGraph and Twitter card image previews dynamically mapped to individual programs and branches.
-* **Semantic HTML Hierarchy**: Strict rule of exactly one `<h1>` per page, followed by logical `<h2>` and `<h3>` heading hierarchies.
-* **Crawler Directives**: Dynamic `app/robots.ts` permitting all public search engines while blocking private admin and `/api/` paths.
-* **Dynamic XML Sitemap**: `app/sitemap.ts` auto-compiles static pages, all program routes, all localized branch routes, and blog articles with update timestamps and priority weights.
+# S & A BADMINTON ACADEMY — TECHNICAL SEO IMPLEMENTATION SPECIFICATION
+**Architecture:** Next.js App Router (SSG / Static Pre-Rendering)  
+**Protocol / Host:** `https://sabadmintonacademy.com`  
+**Target Geographic Entity:** Kochi / Ernakulam, Kerala  
+**Centres:** Kadavanthra, Edappally, Kakkanad, Fourth Centre (Placeholder)
 
 ---
 
-## 2. Structured Data (JSON-LD) Implementations
+## 1. URL Architecture & Dynamic Routing
 
-The website injects rich, schema.org-compliant JSON-LD markup to achieve rich snippets in Google Search:
+### Primary Production Routes
+* **Main Website / City Level:** `/`
+* **All-Centre Directory:** `/branches`
+* **Local SEO Landing Pages:**
+  * `/kadavanthra`
+  * `/edappally`
+  * `/kakkanad`
+  * `/fourth-centre` (Placeholder until verified locality name is confirmed)
+* **Program Landing Pages:**
+  * `/programs/kids-badminton-coaching`
+  * `/programs/junior-badminton-coaching`
+  * `/programs/adult-badminton-coaching`
+  * `/programs/competitive-training`
+  * `/programs/badminton-camp`
+* **Core Pages:** `/about`, `/coaches`, `/achievements`, `/gallery`, `/testimonials`, `/contact`, `/blog`
 
-### A. Organization & SportsOrganization
-* **Target**: Global Root (`app/layout.tsx`)
-* **Types**: `["SportsOrganization", "EducationalOrganization"]`
-* **Properties**: Legal name, URL, official logo, telephone, headquarters address, geo coordinates, and social profiles.
-
-### B. LocalBusiness & SportsActivityLocation
-* **Target**: Dedicated Branch Landing Pages (`/branches/kadavanthra`, `/branches/edappally`, `/branches/kakkanad`)
-* **Types**: `["SportsActivityLocation", "LocalBusiness"]`
-* **Properties**: Specific physical address, exact latitude & longitude coordinates, direct phone line, operational opening hours (05:30 to 22:00), and parent organization link.
-
-### C. Course Schema
-* **Target**: Program Detail Pages (`/programs/[slug]`)
-* **Type**: `Course`
-* **Properties**: Program title, curriculum overview, provider organization, and session duration.
-
-### D. FAQPage Schema
-* **Target**: Homepage, Program Pages, and Branch Pages
-* **Type**: `FAQPage`
-* **Properties**: Main entity array of `Question` and `Answer` matching only genuinely visible accordion text on the page.
-
-### E. BreadcrumbList Schema
-* **Target**: All inner navigation paths (`components/seo/Breadcrumbs.tsx`)
-* **Type**: `BreadcrumbList`
-* **Properties**: Explicit indexed `itemListElement` trail linking to Home and sub-categories.
+### Dynamic Route Implementation
+* File: `app/[location]/page.tsx`
+* Uses `generateStaticParams()` returning only the approved locations:
+  * `kadavanthra`, `edappally`, `kakkanad`, `fourth-centre`.
+* Unknown or invalid paths trigger `notFound()` immediately, returning HTTP 404.
+* Does NOT collide with static routes (`/about`, `/branches`, `/programs`, etc.) because static file system routes have precedence in Next.js App Router.
 
 ---
 
-## 3. Local SEO & Google Business Profile Synergy
+## 2. Legacy URL Redirections (HTTP 308)
 
-To maximize rank for *"badminton academy near me"* and *"badminton coaching in Kochi"*, the website adheres to strict Local SEO principles:
-
-1. **NAP Consistency**: Centralized Name, Address, and Phone numbers in `data/academy.ts` and `data/branches.ts` ensure exact matching with Google Business Profile listings.
-2. **Dedicated Branch URLs**: Separate crawlable URLs for Kadavanthra, Edappally, and Kakkanad rather than a single compressed page.
-3. **Embedded Google Maps**: Responsive responsive iframes on each branch page allowing one-tap Google Maps directions.
-4. **Local Suburb Mention**: Content naturally mentions adjacent Kochi micro-neighborhoods (Panampilly Nagar, Girinagar, Palarivattom, Kalamassery, Infopark, SmartCity, Thrikkakara).
+To preserve link equity and support seamless migration from older URL structures:
+* Legacy paths:
+  * `/branches/kadavanthra` → `/kadavanthra`
+  * `/branches/edappally` → `/edappally`
+  * `/branches/kakkanad` → `/kakkanad`
+  * `/branches/fourth-centre` → `/fourth-centre`
+* Configured in `next.config.mjs` using `permanent: true`.
+* In Next.js, `permanent: true` emits an **HTTP 308 Permanent Redirect**.
+* Verification via curl:
+  ```bash
+  curl -I http://localhost:3000/branches/kadavanthra
+  # Returns: HTTP/1.1 308 Permanent Redirect
+  # Location: /kadavanthra
+  ```
+* No redirect chains exist: legacy URLs jump directly to the root slug in 1 hop.
 
 ---
 
-## 4. Google Search Console & Analytics Integration
+## 3. Metadata & Self-Referential Canonicals
 
-The site is pre-configured with the standard conversion tracking dispatcher in `lib/analytics.ts`:
+Every location page generates unique metadata via `generateMetadata()` in `app/[location]/page.tsx`:
+* **Title Template:** `S & A Badminton Academy | Badminton Coaching in [Location]`
+* **Open Graph:** Includes location-specific image, title, description, and canonical URL.
+* **Canonical URL:** Strictly self-canonicalizing:
+  * `/kadavanthra` → `https://sabadmintonacademy.com/kadavanthra`
+  * `/edappally` → `https://sabadmintonacademy.com/edappally`
+  * `/kakkanad` → `https://sabadmintonacademy.com/kakkanad`
+  * `/fourth-centre` → `https://sabadmintonacademy.com/fourth-centre`
 
-* `generate_lead`: Triggered when an athlete or parent submits a free trial request.
-* `whatsapp_click`: Contextually tracks which branch or program triggered the chat.
-* `phone_click`: Tracks direct calls to admissions desks.
-* `map_directions_click`: Tracks when a user clicks to navigate to a branch court.
+---
+
+## 4. Multi-Location Structured Data (JSON-LD)
+
+Each physical location is established as a distinct entity linked to the parent organization:
+
+### Academy Parent Entity
+* Concept: `SportsOrganization` / `BadmintonAcademy`
+* `@id`: `https://sabadmintonacademy.com/#academy`
+
+### Location-Specific Structured Data
+On each location landing page:
+1. **`SportsActivityLocation` / `LocalBusiness`:**
+   * `@id`: `https://sabadmintonacademy.com/[slug]#location`
+   * `name`: S & A Badminton Academy - [Centre Name]
+   * `parentOrganization`: `{ "@id": "https://sabadmintonacademy.com/#academy" }`
+   * `address`: `PostalAddress` with Street, City (Kochi), State (Kerala), Country (IN), PostalCode.
+   * `geo`: `GeoCoordinates` with verified latitude and longitude.
+   * `telephone`: `+919400635548`
+   * `openingHoursSpecification`: Verified day/time arrays.
+2. **`BreadcrumbList`:**
+   * Step 1: Home (`https://sabadmintonacademy.com`)
+   * Step 2: Centres (`https://sabadmintonacademy.com/branches`)
+   * Step 3: [Location Name] (`https://sabadmintonacademy.com/[slug]`)
+3. **`FAQPage`:**
+   * Contains only visible, genuine on-page questions directly addressing search intent for that location.
+
+---
+
+## 5. Local NAP Consistency
+
+The Name, Address, and Phone number are enforced consistently across the codebase via `data/locations.ts`:
+* **Name:** S & A Badminton Academy ([Location])
+* **Phone:** `+91 94006 35548` (Click-to-call: `tel:+919400635548`)
+* **WhatsApp:** `+91 94006 35548` (Pre-filled URL with contextual location query)
+* **NAP Verification Points:**
+  1. Header & Navigation dropdown
+  2. Location hero contact badges
+  3. Location NAP card with Google Maps embed & directions link
+  4. Footer crawlable directory
+  5. Mobile bottom conversion bar
+  6. Structured JSON-LD schema
+  7. Google Business Profile link (when verified by client)
+
+---
+
+## 6. XML Sitemap & Robots Configuration
+
+### Sitemap (`app/sitemap.ts`)
+* Automatically enumerates:
+  * City-level pages (`/`, `/about`, `/coaches`, `/contact`, `/branches`, etc.)
+  * 4 Location landing pages (`/kadavanthra`, `/edappally`, `/kakkanad`, `/fourth-centre`) with `priority: 0.95` and `changeFrequency: 'weekly'`
+  * All 5 program landing pages with `priority: 0.9`
+  * All blog posts with `priority: 0.7`
+* Dynamic generation at `https://sabadmintonacademy.com/sitemap.xml`.
+
+### Robots (`app/robots.ts`)
+* Allows all legitimate search engine crawlers: `Allow: /`
+* Protects private/API endpoints:
+  * `Disallow: /api/`
+  * `Disallow: /admin/`
+  * `Disallow: /private/`
+* Points directly to the sitemap: `Sitemap: https://sabadmintonacademy.com/sitemap.xml`
+
+---
+
+## 7. Performance & Core Web Vitals Optimization
+
+The design system maintains premium athletic aesthetics without compromising Core Web Vitals:
+1. **LCP (Largest Contentful Paint):**
+   * Uses Next.js `<Image priority>` on hero photography.
+   * Modern WebP format with explicitly declared aspect ratios to eliminate layout shifts.
+   * CSS grid backgrounds and hardware-accelerated animations (`transform`, `opacity`).
+2. **CLS (Cumulative Layout Shift):**
+   * Pre-allocated dimensions on all image containers, badges, and card wrappers.
+   * Static system font fallbacks with modern Google Fonts (`Outfit`, `Plus Jakarta Sans`).
+3. **INP (Interaction to Next Paint):**
+   * Lightweight interactive components; no heavy client-side animation runtime blocks user clicks.
+   * Mobile navigation drawer uses CSS transitions with native pointer event handling.
+
+---
+
+## 8. Conversion Tracking & Custom Event Analytics
+
+All conversion actions trigger structured custom events (ready for Google Tag Manager / GA4):
+* `location_view`: Triggered when a visitor lands on a centre page:
+  ```json
+  { "event": "location_view", "location": "kadavanthra" }
+  ```
+* `whatsapp_click`: Contextual click with centre attribution:
+  ```json
+  { "event": "whatsapp_click", "location": "kadavanthra", "source_page": "/kadavanthra" }
+  ```
+* `phone_click`: Direct dial click:
+  ```json
+  { "event": "phone_click", "location": "kadavanthra", "source_page": "/kadavanthra" }
+  ```
+* `directions_click`: Triggered when visitor clicks "Get Directions" / Google Maps:
+  ```json
+  { "event": "directions_click", "location": "kadavanthra" }
+  ```
+* `trial_click`: Click on Free Trial / Assessment button.
+* `enquiry_start`: Visitor interacts with form input.
+* `enquiry_submit`: Form successfully submitted with preferred branch and program.
+
+---
+
+## 9. Google Search Console & Local SEO Maintenance Checklist
+
+1. **Property Setup:**
+   * Create Domain Property in Google Search Console for `sabadmintonacademy.com`.
+   * Submit `https://sabadmintonacademy.com/sitemap.xml`.
+2. **URL Inspection:**
+   * Inspect `/kadavanthra`, `/edappally`, `/kakkanad`, and ensure "URL is on Google" with valid `SportsActivityLocation` and `BreadcrumbList` rich results detected.
+3. **Google Business Profile Synchronization:**
+   * For each physical branch, create/claim the official Google Business Profile.
+   * Link the GBP primary website button directly to that branch's landing page (`/kadavanthra`, `/edappally`, etc.), NOT to the general homepage.
+   * Ensure Business Name matches: `S & A Badminton Academy - Kadavanthra`.

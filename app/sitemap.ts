@@ -1,6 +1,6 @@
 import { MetadataRoute } from "next";
 import { PROGRAMS } from "@/data/programs";
-import { BRANCHES } from "@/data/branches";
+import { LOCATIONS } from "@/data/locations";
 import { BLOG_POSTS } from "@/data/blog";
 import { SITE_URL } from "@/lib/seo";
 
@@ -26,20 +26,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: route === "" ? 1.0 : 0.8,
   }));
 
+  // Primary 4 Centre Local SEO Pages
+  const locationRoutes = Object.values(LOCATIONS).map((loc) => ({
+    url: `${SITE_URL}/${loc.slug}`,
+    lastModified: now,
+    changeFrequency: "weekly" as const,
+    priority: 0.95,
+  }));
+
   // Program Detail Dynamic Pages
   const programRoutes = PROGRAMS.map((p) => ({
     url: `${SITE_URL}/programs/${p.slug}`,
     lastModified: now,
     changeFrequency: "weekly" as const,
     priority: 0.9,
-  }));
-
-  // Branch Detail Local SEO Dynamic Pages
-  const branchRoutes = BRANCHES.map((b) => ({
-    url: `${SITE_URL}/branches/${b.slug}`,
-    lastModified: now,
-    changeFrequency: "weekly" as const,
-    priority: 0.95,
   }));
 
   // Blog Posts Dynamic Pages
@@ -50,5 +50,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  return [...staticRoutes, ...branchRoutes, ...programRoutes, ...blogRoutes];
+  return [...staticRoutes, ...locationRoutes, ...programRoutes, ...blogRoutes];
 }

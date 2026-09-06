@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import confetti from "canvas-confetti";
 import { CheckCircle2, AlertCircle, Send, MessageCircle, Loader2 } from "lucide-react";
-import { BRANCHES } from "@/data/branches";
+import { LOCATIONS } from "@/data/locations";
 import { PROGRAMS } from "@/data/programs";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { trackEvent } from "@/lib/analytics";
@@ -39,6 +39,15 @@ export function EnquiryForm({ initialBranch = "", initialProgram = "" }: Enquiry
   useEffect(() => {
     if (typeof window !== "undefined") {
       const urlParams = new URLSearchParams(window.location.search);
+      const branchParam = urlParams.get("branch");
+      const programParam = urlParams.get("program");
+
+      setFormData((prev) => ({
+        ...prev,
+        preferredBranch: branchParam || prev.preferredBranch,
+        preferredProgram: programParam || prev.preferredProgram,
+      }));
+
       setUtmParams({
         utm_source: urlParams.get("utm_source") || "direct",
         utm_medium: urlParams.get("utm_medium") || "website",
@@ -109,7 +118,7 @@ export function EnquiryForm({ initialBranch = "", initialProgram = "" }: Enquiry
   };
 
   if (success) {
-    const selectedBranchObj = BRANCHES.find((b) => b.slug === formData.preferredBranch);
+    const selectedBranchObj = Object.values(LOCATIONS).find((b) => b.slug === formData.preferredBranch);
     const selectedProgramObj = PROGRAMS.find((p) => p.slug === formData.preferredProgram);
 
     return (
@@ -132,7 +141,7 @@ export function EnquiryForm({ initialBranch = "", initialProgram = "" }: Enquiry
         <div className="p-4 rounded-xl bg-[#080B10] border border-[#26313D] text-xs text-[#A7B0BC] space-y-1 max-w-sm mx-auto text-left">
           <div><span className="font-semibold text-[#F8FAFC]">Selected Track:</span> {selectedProgramObj?.name || formData.preferredProgram}</div>
           <div><span className="font-semibold text-[#F8FAFC]">Preferred Slot:</span> {formData.preferredSlot}</div>
-          <div><span className="font-semibold text-[#F8FAFC]">Target Arena:</span> {selectedBranchObj?.landmark || "Central Kochi"}</div>
+          <div><span className="font-semibold text-[#F8FAFC]">Target Arena:</span> {selectedBranchObj?.address.split(",")[1]?.trim() || selectedBranchObj?.city || "Central Kochi"}</div>
         </div>
 
         <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -283,7 +292,7 @@ export function EnquiryForm({ initialBranch = "", initialProgram = "" }: Enquiry
               onChange={handleChange}
               className="w-full px-4 py-3 rounded-xl bg-[#080B10] border border-[#26313D] text-[#F8FAFC] text-base sm:text-sm focus:outline-none focus:border-[#B8F000] transition-colors"
             >
-              {BRANCHES.map((b) => (
+              {Object.values(LOCATIONS).map((b) => (
                 <option key={b.slug} value={b.slug}>
                   {b.name}
                 </option>

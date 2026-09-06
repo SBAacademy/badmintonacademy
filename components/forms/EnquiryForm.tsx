@@ -98,9 +98,13 @@ export function EnquiryForm({ initialBranch = "", initialProgram = "" }: Enquiry
         setSuccess(true);
         if (result.whatsappUrl) {
           setWhatsappRedirectUrl(result.whatsappUrl);
-          // Directly open WhatsApp with the pre-composed booking message
           if (typeof window !== "undefined") {
-            window.open(result.whatsappUrl, "_blank");
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            if (isMobile) {
+              window.location.href = result.whatsappUrl;
+            } else {
+              window.open(result.whatsappUrl, "_blank");
+            }
           }
         }
 
@@ -389,18 +393,18 @@ export function EnquiryForm({ initialBranch = "", initialProgram = "" }: Enquiry
           {loading ? (
             <>
               <Loader2 className="w-5 h-5 animate-spin" />
-              <span>Confirming Free Slot...</span>
+              <span>Logging Enquiry &amp; Connecting WhatsApp...</span>
             </>
           ) : (
             <>
-              <Send className="w-4 h-4" />
-              <span>CONFIRM FREE TRIAL SLOT</span>
+              <MessageCircle className="w-4 h-4 text-[#07090D] fill-current" />
+              <span>SUBMIT &amp; SEND VIA WHATSAPP &rarr;</span>
             </>
           )}
         </button>
 
         <p className="text-[11px] font-mono text-center text-[#A8B0BA] pt-1">
-          🔒 Contact details are kept strictly private. Direct coach confirmation.
+          ⚡ Submits your details directly to our academy CRM &amp; connects immediately to our coaching desk on WhatsApp.
         </p>
       </form>
     </div>

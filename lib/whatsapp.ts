@@ -30,3 +30,34 @@ export function buildWhatsAppUrl(options: WhatsAppOptions = {}): string {
   const encoded = encodeURIComponent(text);
   return `https://wa.me/${targetPhone}?text=${encoded}`;
 }
+
+export interface FormSubmissionData {
+  name: string;
+  phone: string;
+  email?: string;
+  ageCategory: string;
+  preferredBranchName: string;
+  preferredProgramName: string;
+  preferredSlot: string;
+  message?: string;
+}
+
+export function buildEnquiryWhatsAppUrl(data: FormSubmissionData): string {
+  const lines = [
+    "🏸 *S&A BADMINTON ACADEMY — FREE TRIAL BOOKING*",
+    "--------------------------------------------------",
+    `👤 *Name:* ${data.name}`,
+    `📞 *Phone:* ${data.phone}`,
+    data.email ? `✉️ *Email:* ${data.email}` : null,
+    `🎯 *Age Group:* ${data.ageCategory}`,
+    `📍 *Preferred Centre:* ${data.preferredBranchName}`,
+    `🏆 *Training Track:* ${data.preferredProgramName}`,
+    `⏰ *Preferred Slot:* ${data.preferredSlot}`,
+    data.message ? `💬 *Goal/Level:* ${data.message}` : null,
+    "--------------------------------------------------",
+    "_Please confirm available trial slots for this week._",
+  ].filter(Boolean);
+
+  const text = lines.join("\n");
+  return `https://wa.me/${ACADEMY_DATA.whatsappNumber}?text=${encodeURIComponent(text)}`;
+}

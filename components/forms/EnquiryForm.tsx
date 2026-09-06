@@ -62,6 +62,8 @@ export function EnquiryForm({ initialBranch = "", initialProgram = "" }: Enquiry
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  const [whatsappRedirectUrl, setWhatsappRedirectUrl] = useState<string | null>(null);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
@@ -94,6 +96,14 @@ export function EnquiryForm({ initialBranch = "", initialProgram = "" }: Enquiry
 
       if (response.ok && result.success) {
         setSuccess(true);
+        if (result.whatsappUrl) {
+          setWhatsappRedirectUrl(result.whatsappUrl);
+          // Directly open WhatsApp with the pre-composed booking message
+          if (typeof window !== "undefined") {
+            window.open(result.whatsappUrl, "_blank");
+          }
+        }
+
         trackEvent("generate_lead", {
           branch: formData.preferredBranch,
           program: formData.preferredProgram,
@@ -120,6 +130,10 @@ export function EnquiryForm({ initialBranch = "", initialProgram = "" }: Enquiry
   if (success) {
     const selectedBranchObj = Object.values(LOCATIONS).find((b) => b.slug === formData.preferredBranch);
     const selectedProgramObj = PROGRAMS.find((p) => p.slug === formData.preferredProgram);
+    const targetUrl = whatsappRedirectUrl || buildWhatsAppUrl({
+      branchName: selectedBranchObj?.shortName,
+      programName: selectedProgramObj?.shortName,
+    });
 
     return (
       <div className="p-8 sm:p-10 bg-[#0B0F14] border border-[#1F2937] text-center space-y-6 animate-in fade-in zoom-in-95 duration-200">
@@ -128,13 +142,14 @@ export function EnquiryForm({ initialBranch = "", initialProgram = "" }: Enquiry
         </div>
 
         <div className="space-y-2">
+          <div className="inline-flex items-center gap-2 px-2.5 py-0.5 bg-[#B8F000]/10 border border-[#B8F000]/30 font-mono text-[10px] text-[#B8F000] uppercase font-bold">
+            LEAD RECORDED IN ACADEMY CRM
+          </div>
           <h3 className="text-2xl font-black text-white uppercase tracking-tight">
-            Trial Request Confirmed
+            Sending Booking via WhatsApp...
           </h3>
           <p className="text-sm text-[#A8B0BA] max-w-md mx-auto leading-relaxed">
-            Thank you, <strong className="text-white">{formData.name}</strong>. Our admissions coach at the{" "}
-            <strong className="text-[#B8F000]">{selectedBranchObj?.shortName || "Kochi Academy"}</strong> will contact you at{" "}
-            <strong className="text-white">{formData.phone}</strong> within 2 hours to confirm your free slot.
+            Your booking details for <strong className="text-white">{formData.name}</strong> have been registered in our CRM. If WhatsApp didn&apos;t open automatically, click the button below to send your message.
           </p>
         </div>
 
@@ -146,23 +161,19 @@ export function EnquiryForm({ initialBranch = "", initialProgram = "" }: Enquiry
 
         <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
           <a
-            href={buildWhatsAppUrl({
-              branchName: selectedBranchObj?.shortName,
-              programName: selectedProgramObj?.shortName,
-              customMessage: `Hello S&A Academy! I just submitted a trial booking for ${formData.name} at ${selectedBranchObj?.shortName}. Could you share batch availability?`
-            })}
+            href={targetUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full sm:w-auto px-6 py-3.5 bg-[#B8F000] hover:bg-[#cbf722] text-[#07090D] font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-colors"
+            className="w-full sm:w-auto px-7 py-4 bg-[#B8F000] hover:bg-[#cbf722] text-[#07090D] font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-colors shadow-md"
           >
-            <MessageCircle className="w-4 h-4" />
-            <span>Connect on WhatsApp Now</span>
+            <MessageCircle className="w-4 h-4 text-[#07090D]" />
+            <span>SEND ON WHATSAPP NOW &rarr;</span>
           </a>
 
           <button
             type="button"
             onClick={() => setSuccess(false)}
-            className="w-full sm:w-auto px-5 py-3.5 bg-[#11161D] hover:bg-[#17212C] text-[#A8B0BA] hover:text-white text-xs font-bold uppercase tracking-wider border border-[#1F2937] transition-colors"
+            className="w-full sm:w-auto px-5 py-4 bg-[#11161D] hover:bg-[#17212C] text-[#A8B0BA] hover:text-white text-xs font-bold uppercase tracking-wider border border-[#1F2937] transition-colors"
           >
             Submit Another Request
           </button>

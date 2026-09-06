@@ -14,7 +14,9 @@ import {
   Medal,
   Calendar,
 } from "lucide-react";
+import Image from "next/image";
 import { Achievement, ACHIEVEMENTS } from "@/data/achievements";
+import { ImageUploadField } from "./ImageUploadField";
 
 const CATEGORIES: Achievement["category"][] = [
   "State Championship",
@@ -40,6 +42,7 @@ export function AchievementsManager() {
     athleteOrTeam: "",
     badge: "Gold Medal",
     description: "",
+    image: "",
   });
 
   const fetchAchievements = async () => {
@@ -72,6 +75,7 @@ export function AchievementsManager() {
       athleteOrTeam: "",
       badge: "Gold Medal",
       description: "",
+      image: "",
     });
     setIsModalOpen(true);
   };
@@ -260,6 +264,18 @@ export function AchievementsManager() {
                   {item.year}
                 </div>
 
+                {item.image && (
+                  <div className="relative w-20 h-16 bg-[#07090D] border border-[#1F2937] shrink-0 overflow-hidden hidden sm:block">
+                    <Image
+                      src={item.image}
+                      alt={item.title}
+                      fill
+                      className="object-cover"
+                      unoptimized
+                    />
+                  </div>
+                )}
+
                 <div className="space-y-1">
                   <div className="flex items-center gap-2 flex-wrap">
                     <span className="px-2 py-0.5 bg-[#11161D] border border-[#1F2937] font-mono text-[9px] text-[#B8F000] uppercase font-bold">
@@ -405,6 +421,14 @@ export function AchievementsManager() {
                   className="w-full px-3 py-2 bg-[#07090D] border border-[#1F2937] text-white focus:outline-none focus:border-[#B8F000]"
                 />
               </div>
+
+              <ImageUploadField
+                label="Trophy / Podium Photo (Optional)"
+                value={form.image || ""}
+                onChange={(url) => setForm({ ...form, image: url })}
+                aspectRatio="16/9"
+                helpText="Upload a tournament podium, medal ceremony, or victory picture from your computer or paste an external URL."
+              />
 
               <div className="pt-2 flex justify-end gap-2">
                 <button

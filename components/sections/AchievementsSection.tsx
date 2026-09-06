@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { ACHIEVEMENTS, Achievement } from "@/data/achievements";
@@ -66,7 +67,18 @@ export async function AchievementsSection({ initialAchievements }: { initialAchi
               </div>
 
               {/* Badge & Result */}
-              <div className="md:col-span-3 flex md:justify-end items-center">
+              <div className="md:col-span-3 flex items-center md:justify-end gap-2.5">
+                {ach.image && (
+                  <div className="relative w-16 h-10 bg-[#07090D] border border-[#1F2937] overflow-hidden shrink-0">
+                    <Image
+                      src={ach.image}
+                      alt={ach.title}
+                      fill
+                      className="object-cover"
+                      unoptimized
+                    />
+                  </div>
+                )}
                 <div className="px-3.5 py-1.5 bg-[#07090D] border border-[#1F2937] group-hover:border-[#B8F000]/60 transition-colors">
                   <span className="font-mono text-xs font-bold text-[#B8F000] uppercase tracking-wider">
                     {ach.badge}

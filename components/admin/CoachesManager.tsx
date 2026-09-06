@@ -16,6 +16,7 @@ import {
   UserCheck,
 } from "lucide-react";
 import { Coach, COACHES } from "@/data/coaches";
+import { ImageUploadField } from "./ImageUploadField";
 
 const BRANCHES = [
   "Kadavanthra (Headquarters)",
@@ -418,17 +419,14 @@ export function CoachesManager() {
                 />
               </div>
 
-              <div>
-                <label className="block text-[#A8B0BA] uppercase mb-1">Photo URL *</label>
-                <input
-                  type="url"
-                  required
-                  value={form.image}
-                  onChange={(e) => setForm({ ...form, image: e.target.value })}
-                  placeholder="https://images.unsplash.com/..."
-                  className="w-full px-3 py-2 bg-[#07090D] border border-[#1F2937] text-white focus:outline-none focus:border-[#B8F000]"
-                />
-              </div>
+              <ImageUploadField
+                label="Coach Portrait / Headshot"
+                value={form.image || ""}
+                onChange={(url) => setForm({ ...form, image: url })}
+                required
+                aspectRatio="1/1"
+                helpText="Upload a square or portrait photo from your computer or paste an external link."
+              />
 
               <div>
                 <label className="block text-[#A8B0BA] uppercase mb-1">Certifications (1 per line)</label>

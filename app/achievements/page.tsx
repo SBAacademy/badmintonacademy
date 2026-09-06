@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import type { Metadata } from "next";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { createMetadata } from "@/lib/seo";
@@ -80,8 +81,19 @@ export default async function AchievementsPage() {
                 </div>
               </div>
 
-              {/* Result Badge */}
-              <div className="md:col-span-3 flex md:justify-end items-center">
+              {/* Result Badge & Photo */}
+              <div className="md:col-span-3 flex flex-col md:items-end justify-center gap-2">
+                {ach.image && (
+                  <div className="relative w-full md:w-36 h-20 bg-[#07090D] border border-[#1F2937] overflow-hidden">
+                    <Image
+                      src={ach.image}
+                      alt={ach.title}
+                      fill
+                      className="object-cover"
+                      unoptimized
+                    />
+                  </div>
+                )}
                 <div className="px-4 py-2 bg-[#11161D] border border-[#1F2937] group-hover:border-[#B8F000]/60 transition-colors">
                   <span className="font-mono text-xs font-bold text-[#B8F000] uppercase tracking-wider">
                     {ach.badge}

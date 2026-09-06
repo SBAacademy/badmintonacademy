@@ -18,6 +18,7 @@ import {
   Tag,
 } from "lucide-react";
 import { BlogPost, BLOG_POSTS } from "@/data/blog";
+import { ImageUploadField } from "./ImageUploadField";
 
 const CATEGORIES = [
   "Beginner's Guide",
@@ -477,17 +478,14 @@ export function BlogManager() {
                 </div>
               </div>
 
-              <div>
-                <label className="block text-[#A8B0BA] uppercase mb-1">Featured Image URL *</label>
-                <input
-                  type="url"
-                  required
-                  value={form.image}
-                  onChange={(e) => setForm({ ...form, image: e.target.value })}
-                  placeholder="https://images.unsplash.com/..."
-                  className="w-full px-3 py-2 bg-[#07090D] border border-[#1F2937] text-white focus:outline-none focus:border-[#B8F000]"
-                />
-              </div>
+              <ImageUploadField
+                label="Cover / Featured Image"
+                value={form.image || ""}
+                onChange={(url) => setForm({ ...form, image: url })}
+                required
+                aspectRatio="16/9"
+                helpText="Upload an article cover image from your device or paste an external URL."
+              />
 
               <div>
                 <label className="block text-[#A8B0BA] uppercase mb-1">Tags (comma-separated)</label>

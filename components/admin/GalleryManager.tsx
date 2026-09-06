@@ -17,6 +17,7 @@ import {
   Tag,
 } from "lucide-react";
 import { GalleryItem, GALLERY_ITEMS } from "@/data/gallery";
+import { ImageUploadField } from "./ImageUploadField";
 
 const CATEGORIES: GalleryItem["category"][] = [
   "Courts & Arena",
@@ -381,33 +382,14 @@ export function GalleryManager() {
                 </div>
               </div>
 
-              <div>
-                <label className="block text-[#A8B0BA] uppercase mb-1">Image URL (Unsplash, CDN or hosted path) *</label>
-                <input
-                  type="url"
-                  required
-                  value={form.image || ""}
-                  onChange={(e) => setForm({ ...form, image: e.target.value })}
-                  placeholder="https://images.unsplash.com/..."
-                  className="w-full px-3 py-2 bg-[#07090D] border border-[#1F2937] text-white focus:outline-none focus:border-[#B8F000]"
-                />
-              </div>
-
-              {/* Image Preview Box */}
-              {form.image && (
-                <div className="relative aspect-[16/9] w-full bg-[#07090D] border border-[#1F2937] overflow-hidden">
-                  <Image
-                    src={form.image}
-                    alt="Preview"
-                    fill
-                    className="object-cover"
-                    unoptimized
-                  />
-                  <span className="absolute bottom-2 left-2 px-2 py-0.5 bg-[#07090D]/90 text-[#B8F000] text-[9px] font-bold">
-                    LIVE IMAGE PREVIEW
-                  </span>
-                </div>
-              )}
+              <ImageUploadField
+                label="Gallery Photo"
+                value={form.image || ""}
+                onChange={(url) => setForm({ ...form, image: url })}
+                required
+                aspectRatio="16/9"
+                helpText="Upload a high-res photo from your device or paste an external URL."
+              />
 
               <div>
                 <label className="block text-[#A8B0BA] uppercase mb-1">Caption / Description</label>

@@ -6,6 +6,7 @@ export interface Achievement {
   athleteOrTeam: string;
   description: string;
   badge: string;
+  image?: string;
 }
 
 export const ACHIEVEMENTS: Achievement[] = [

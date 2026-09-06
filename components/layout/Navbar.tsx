@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X, MessageCircle, ChevronDown, ArrowRight, Phone } from "lucide-react";
@@ -42,6 +42,43 @@ export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const headerRef = useRef<HTMLElement | null>(null);
+
+  const handleMouseEnter = (name: string) => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+    setOpenDropdown(name);
+  };
+
+  const handleMouseLeave = () => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => {
+      setOpenDropdown(null);
+    }, 180);
+  };
+
+  useEffect(() => {
+    const handleOutsideClick = (e: MouseEvent) => {
+      if (headerRef.current && !headerRef.current.contains(e.target as Node)) {
+        setOpenDropdown(null);
+      }
+    };
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setOpenDropdown(null);
+      }
+    };
+    document.addEventListener("click", handleOutsideClick);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("click", handleOutsideClick);
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -81,6 +118,7 @@ export function Navbar() {
   return (
     <>
       <header
+        ref={headerRef}
         className={`sticky top-0 z-40 w-full transition-all duration-200 h-16 lg:h-20 ${
           isScrolled
             ? "bg-[#080B10]/95 backdrop-blur-md shadow-lg shadow-black/60 border-b border-[#26313D]"
@@ -135,50 +173,77 @@ export function Navbar() {
               const hasDropdown = !!link.dropdown;
 
               if (hasDropdown) {
+                const isOpen = openDropdown === link.name;
                 return (
                   <div
                     key={link.name}
-                    className="relative group"
-                    onMouseEnter={() => setOpenDropdown(link.name)}
-                    onMouseLeave={() => setOpenDropdown(null)}
+                    className="relative"
+                    onMouseEnter={() => handleMouseEnter(link.name)}
+                    onMouseLeave={handleMouseLeave}
                   >
-                    <Link
-                      href={link.href}
-                      className={`px-3 py-2 text-[13px] xl:text-sm font-semibold rounded-xl flex items-center gap-1.5 transition-colors ${
-                        isActive
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (timeoutRef.current) clearTimeout(timeoutRef.current);
+                        setOpenDropdown(isOpen ? null : link.name);
+                      }}
+                      className={`px-3 py-2 text-[13px] xl:text-sm font-semibold rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer ${
+                        isActive || isOpen
                           ? "text-[#B8F000] bg-[#121A23] border border-[#26313D] font-bold"
                           : "text-[#A7B0BC] hover:text-[#F8FAFC] hover:bg-[#121A23]/60"
                       }`}
+                      aria-expanded={isOpen}
+                      aria-haspopup="true"
                     >
                       <span>{link.name}</span>
-                      <ChevronDown className="w-3.5 h-3.5 text-[#6B7280] group-hover:text-[#B8F000] group-hover:rotate-180 transition-transform duration-200" />
-                    </Link>
+                      <ChevronDown
+                        className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                          isOpen ? "rotate-180 text-[#B8F000]" : "text-[#6B7280]"
+                        }`}
+                      />
+                    </button>
 
-                    {/* Dropdown Menu */}
-                    <div
-                      className={`absolute left-0 top-full mt-2 w-56 rounded-2xl bg-[#121A23] border border-[#26313D] shadow-2xl p-2 transition-all duration-150 origin-top-left z-50 ${
-                        openDropdown === link.name
-                          ? "opacity-100 scale-100 visible pointer-events-auto"
-                          : "opacity-0 scale-95 invisible pointer-events-none"
-                      }`}
-                    >
-                      {link.dropdown?.map((subItem) => (
-                        <Link
-                          key={subItem.href}
-                          href={subItem.href}
-                          className="block px-3.5 py-2.5 rounded-xl hover:bg-[#17212C] transition-colors group/item"
-                        >
-                          <div className="text-xs font-semibold text-[#F8FAFC] group-hover/item:text-[#B8F000] transition-colors">
-                            {subItem.name}
+                    {/* Dropdown Menu - No gap: pt-2 creates visual spacing within the continuous hover context */}
+                    {isOpen && (
+                      <div
+                        className="absolute left-0 top-full pt-2 w-64 z-50 animate-in fade-in slide-in-from-top-1 duration-150"
+                        onMouseEnter={() => handleMouseEnter(link.name)}
+                        onMouseLeave={handleMouseLeave}
+                      >
+                        <div className="rounded-2xl bg-[#121A23] border border-[#26313D] shadow-2xl p-2 space-y-0.5 backdrop-blur-xl">
+                          {link.dropdown?.map((subItem) => (
+                            <Link
+                              key={subItem.href}
+                              href={subItem.href}
+                              onClick={() => setOpenDropdown(null)}
+                              className="block px-3.5 py-2.5 rounded-xl hover:bg-[#17212C] transition-colors group/item"
+                            >
+                              <div className="text-xs font-semibold text-[#F8FAFC] group-hover/item:text-[#B8F000] transition-colors">
+                                {subItem.name}
+                              </div>
+                              {"desc" in subItem && subItem.desc && (
+                                <div className="text-[11px] text-[#6B7280] mt-0.5 truncate">
+                                  {subItem.desc}
+                                </div>
+                              )}
+                            </Link>
+                          ))}
+
+                          {/* Overview Link for SEO & Direct Navigation */}
+                          <div className="pt-1.5 mt-1.5 border-t border-[#26313D]/70">
+                            <Link
+                              href={link.href}
+                              onClick={() => setOpenDropdown(null)}
+                              className="flex items-center justify-between px-3.5 py-2 rounded-xl text-xs font-bold text-[#B8F000] hover:bg-[#17212C] transition-colors group/all"
+                            >
+                              <span>Explore all {link.name.toLowerCase()}</span>
+                              <ArrowRight className="w-3.5 h-3.5 group-hover/all:translate-x-0.5 transition-transform" />
+                            </Link>
                           </div>
-                          {"desc" in subItem && (
-                            <div className="text-[11px] text-[#6B7280] mt-0.5 truncate">
-                              {subItem.desc}
-                            </div>
-                          )}
-                        </Link>
-                      ))}
-                    </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 );
               }

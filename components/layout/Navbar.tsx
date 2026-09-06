@@ -42,6 +42,7 @@ export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [openMobileMenu, setOpenMobileMenu] = useState<string | null>(null);
   
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const headerRef = useRef<HTMLElement | null>(null);
@@ -109,6 +110,7 @@ export function Navbar() {
   useEffect(() => {
     setMobileMenuOpen(false);
     setOpenDropdown(null);
+    setOpenMobileMenu(null);
   }, [pathname]);
 
   const handleWhatsAppClick = () => {
@@ -355,7 +357,10 @@ export function Navbar() {
 
             <button
               type="button"
-              onClick={() => setMobileMenuOpen(false)}
+              onClick={() => {
+                setMobileMenuOpen(false);
+                setOpenMobileMenu(null);
+              }}
               className="w-10 h-10 rounded-xl bg-[#121A23] border border-[#26313D] text-[#F8FAFC] hover:text-[#B8F000] flex items-center justify-center active:scale-95 transition-all"
               aria-label="Close navigation menu"
             >
@@ -372,55 +377,89 @@ export function Navbar() {
             {NAV_LINKS.map((link) => {
               const isActive = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href));
               const hasDropdown = !!link.dropdown;
+              const menuKey = link.name.toLowerCase();
+              const isExpanded = openMobileMenu === menuKey;
+
+              if (hasDropdown) {
+                return (
+                  <div key={link.name} className="rounded-xl overflow-hidden">
+                    {/* Entire Row is Interactive Button */}
+                    <button
+                      type="button"
+                      onClick={() => setOpenMobileMenu(isExpanded ? null : menuKey)}
+                      className={`w-full min-h-[48px] px-3.5 py-3 text-base font-bold rounded-xl flex items-center justify-between transition-colors text-left active:bg-[#121A23] ${
+                        isActive || isExpanded
+                          ? "text-[#B8F000] bg-[#121A23]"
+                          : "text-[#F8FAFC] hover:text-[#B8F000]"
+                      }`}
+                      aria-expanded={isExpanded}
+                      aria-controls={`mobile-submenu-${menuKey}`}
+                    >
+                      <span>{link.name}</span>
+                      <ChevronDown
+                        className={`w-5 h-5 transition-transform duration-200 ${
+                          isExpanded ? "rotate-180 text-[#B8F000]" : "text-[#A7B0BC]"
+                        }`}
+                      />
+                    </button>
+
+                    {/* Smooth Accordion Submenu */}
+                    {isExpanded && (
+                      <div
+                        id={`mobile-submenu-${menuKey}`}
+                        className="pl-3 pr-2 py-2 space-y-1 bg-[#0E141B] rounded-xl my-1 border-l-2 border-[#B8F000] animate-in fade-in slide-in-from-top-1 duration-200"
+                      >
+                        {link.dropdown?.map((sub) => (
+                          <Link
+                            key={sub.href}
+                            href={sub.href}
+                            onClick={() => {
+                              setMobileMenuOpen(false);
+                              setOpenMobileMenu(null);
+                            }}
+                            className="block min-h-[44px] px-3.5 py-2.5 rounded-lg text-sm active:bg-[#17212C] text-[#F8FAFC] active:text-[#B8F000] transition-colors"
+                          >
+                            <div className="font-semibold text-sm">{sub.name}</div>
+                            {"desc" in sub && sub.desc && (
+                              <div className="text-xs text-[#6B7280] mt-0.5">{sub.desc}</div>
+                            )}
+                          </Link>
+                        ))}
+
+                        {/* Direct overview link */}
+                        <Link
+                          href={link.href}
+                          onClick={() => {
+                            setMobileMenuOpen(false);
+                            setOpenMobileMenu(null);
+                          }}
+                          className="flex items-center justify-between min-h-[44px] px-3.5 py-2 rounded-lg text-xs font-bold text-[#B8F000] border-t border-[#26313D]/50 mt-1 pt-2 active:bg-[#17212C]"
+                        >
+                          <span>View all {link.name.toLowerCase()}</span>
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </Link>
+                      </div>
+                    )}
+                  </div>
+                );
+              }
 
               return (
                 <div key={link.name} className="rounded-xl overflow-hidden">
-                  <div className="flex items-center justify-between">
-                    <Link
-                      href={link.href}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className={`flex-1 px-3.5 py-3 text-base font-bold rounded-xl transition-colors ${
-                        isActive
-                          ? "text-[#B8F000] bg-[#121A23]"
-                          : "text-[#F8FAFC] active:bg-[#121A23]/60"
-                      }`}
-                    >
-                      {link.name}
-                    </Link>
-
-                    {hasDropdown && (
-                      <button
-                        onClick={() => setOpenDropdown(openDropdown === link.name ? null : link.name)}
-                        className="p-3 text-[#A7B0BC] hover:text-[#B8F000] active:scale-95 transition-transform"
-                        aria-label={`Toggle ${link.name} sub-links`}
-                      >
-                        <ChevronDown
-                          className={`w-4 h-4 transition-transform duration-200 ${
-                            openDropdown === link.name ? "rotate-180 text-[#B8F000]" : ""
-                          }`}
-                        />
-                      </button>
-                    )}
-                  </div>
-
-                  {/* Accordion Sub-Links */}
-                  {hasDropdown && openDropdown === link.name && (
-                    <div className="pl-3 pr-2 py-2 space-y-1 bg-[#0E141B] rounded-xl my-1 border-l-2 border-[#B8F000]">
-                      {link.dropdown?.map((sub) => (
-                        <Link
-                          key={sub.href}
-                          href={sub.href}
-                          onClick={() => setMobileMenuOpen(false)}
-                          className="block px-3 py-2.5 rounded-lg text-sm active:bg-[#17212C] transition-colors"
-                        >
-                          <div className="font-semibold text-[#F8FAFC]">{sub.name}</div>
-                          {"desc" in sub && (
-                            <div className="text-xs text-[#6B7280] mt-0.5">{sub.desc}</div>
-                          )}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
+                  <Link
+                    href={link.href}
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      setOpenMobileMenu(null);
+                    }}
+                    className={`flex items-center min-h-[48px] px-3.5 py-3 text-base font-bold rounded-xl transition-colors ${
+                      isActive
+                        ? "text-[#B8F000] bg-[#121A23]"
+                        : "text-[#F8FAFC] active:bg-[#121A23]/60"
+                    }`}
+                  >
+                    {link.name}
+                  </Link>
                 </div>
               );
             })}
@@ -429,8 +468,11 @@ export function Navbar() {
             <div className="rounded-xl overflow-hidden pt-1">
               <Link
                 href="/testimonials"
-                onClick={() => setMobileMenuOpen(false)}
-                className={`block px-3.5 py-3 text-base font-bold rounded-xl transition-colors ${
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  setOpenMobileMenu(null);
+                }}
+                className={`flex items-center min-h-[48px] px-3.5 py-3 text-base font-bold rounded-xl transition-colors ${
                   pathname === "/testimonials"
                     ? "text-[#B8F000] bg-[#121A23]"
                     : "text-[#F8FAFC] active:bg-[#121A23]/60"

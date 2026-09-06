@@ -3,18 +3,31 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
-import { TESTIMONIALS } from "@/data/testimonials";
+import { TESTIMONIALS, Testimonial } from "@/data/testimonials";
 
-export function TestimonialsSection() {
+export function TestimonialsSection({ initialTestimonials }: { initialTestimonials?: Testimonial[] }) {
+  const [items, setItems] = useState<Testimonial[]>(initialTestimonials || TESTIMONIALS);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const currentItem = TESTIMONIALS[currentIndex] || TESTIMONIALS[0];
+
+  React.useEffect(() => {
+    fetch("/api/content/testimonials")
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.success && Array.isArray(d.items)) {
+          setItems(d.items);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const currentItem = items[currentIndex] || items[0] || TESTIMONIALS[0];
 
   const handlePrev = () => {
-    setCurrentIndex((prev) => (prev === 0 ? TESTIMONIALS.length - 1 : prev - 1));
+    setCurrentIndex((prev) => (prev === 0 ? items.length - 1 : prev - 1));
   };
 
   const handleNext = () => {
-    setCurrentIndex((prev) => (prev === TESTIMONIALS.length - 1 ? 0 : prev + 1));
+    setCurrentIndex((prev) => (prev === items.length - 1 ? 0 : prev + 1));
   };
 
   return (

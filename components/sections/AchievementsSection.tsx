@@ -1,9 +1,11 @@
 import React from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { ACHIEVEMENTS } from "@/data/achievements";
+import { ACHIEVEMENTS, Achievement } from "@/data/achievements";
+import { getAchievements } from "@/lib/contentDb";
 
-export function AchievementsSection() {
+export async function AchievementsSection({ initialAchievements }: { initialAchievements?: Achievement[] }) {
+  const achievements = initialAchievements || (await getAchievements());
   return (
     <section 
       className="py-24 lg:py-36 bg-[#0B0F14] relative border-b border-[#1F2937] select-none"
@@ -35,7 +37,7 @@ export function AchievementsSection() {
 
         {/* Editorial Timeline Archive List */}
         <div className="divide-y divide-[#1F2937] border-b border-[#1F2937] pt-8">
-          {ACHIEVEMENTS.slice(0, 4).map((ach) => (
+          {achievements.slice(0, 4).map((ach) => (
             <div
               key={ach.id}
               className="py-8 lg:py-10 grid grid-cols-1 md:grid-cols-12 gap-6 items-baseline group hover:bg-[#11161D]/60 px-4 sm:px-6 transition-colors"

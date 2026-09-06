@@ -1,0 +1,234 @@
+import { NextResponse } from "next/server";
+import {
+  ContentSectionKey,
+  getContentSection,
+  saveContentSection,
+} from "@/lib/contentDb";
+import { GALLERY_ITEMS } from "@/data/gallery";
+import { COACHES } from "@/data/coaches";
+import { ACHIEVEMENTS } from "@/data/achievements";
+import { TESTIMONIALS } from "@/data/testimonials";
+import { BLOG_POSTS } from "@/data/blog";
+
+const VALID_SECTIONS: ContentSectionKey[] = [
+  "gallery",
+  "coaches",
+  "achievements",
+  "testimonials",
+  "blog",
+];
+
+function getDefaultItems(section: ContentSectionKey): unknown[] {
+  switch (section) {
+    case "gallery":
+      return GALLERY_ITEMS;
+    case "coaches":
+      return COACHES;
+    case "achievements":
+      return ACHIEVEMENTS;
+    case "testimonials":
+      return TESTIMONIALS;
+    case "blog":
+      return BLOG_POSTS;
+    default:
+      return [];
+  }
+}
+
+// 1. GET: Fetch items for the given content section
+export async function GET(
+  request: Request,
+  { params }: { params: Promise<{ section: string }> }
+) {
+  try {
+    const { section } = await params;
+
+    if (!VALID_SECTIONS.includes(section as ContentSectionKey)) {
+      return NextResponse.json(
+        { success: false, message: `Invalid section: ${section}` },
+        { status: 400 }
+      );
+    }
+
+    const sectionKey = section as ContentSectionKey;
+    const defaults = getDefaultItems(sectionKey);
+    const items = await getContentSection(sectionKey, defaults);
+
+    return NextResponse.json({
+      success: true,
+      section: sectionKey,
+      total: items.length,
+      items,
+    });
+  } catch (error) {
+    console.error("Content API GET error:", error);
+    return NextResponse.json(
+      { success: false, message: "Failed to fetch content." },
+      { status: 500 }
+    );
+  }
+}
+
+// 2. POST: Add a new item to the section
+export async function POST(
+  request: Request,
+  { params }: { params: Promise<{ section: string }> }
+) {
+  try {
+    const { section } = await params;
+
+    if (!VALID_SECTIONS.includes(section as ContentSectionKey)) {
+      return NextResponse.json(
+        { success: false, message: `Invalid section: ${section}` },
+        { status: 400 }
+      );
+    }
+
+    const sectionKey = section as ContentSectionKey;
+    const body = await request.json();
+
+    const defaults = getDefaultItems(sectionKey);
+    const currentItems = await getContentSection<Record<string, unknown>>(sectionKey, defaults as Record<string, unknown>[]);
+
+    // Ensure item has an ID or slug
+    const newItem = {
+      ...body,
+      id: body.id || `${sectionKey.substring(0, 3)}-${Date.now()}`,
+    };
+
+    if (sectionKey === "blog" && !newItem.slug) {
+      newItem.slug = String(newItem.title || "new-article")
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/(^-|-$)/g, "");
+    }
+
+    const updatedItems = [newItem, ...currentItems];
+    await saveContentSection(sectionKey, updatedItems);
+
+    return NextResponse.json({
+      success: true,
+      message: `${sectionKey} item created successfully.`,
+      item: newItem,
+      items: updatedItems,
+    });
+  } catch (error) {
+    console.error("Content API POST error:", error);
+    return NextResponse.json(
+      { success: false, message: "Failed to create content item." },
+      { status: 500 }
+    );
+  }
+}
+
+// 3. PUT: Update an existing item
+export async function PUT(
+  request: Request,
+  { params }: { params: Promise<{ section: string }> }
+) {
+  try {
+    const { section } = await params;
+
+    if (!VALID_SECTIONS.includes(section as ContentSectionKey)) {
+      return NextResponse.json(
+        { success: false, message: `Invalid section: ${section}` },
+        { status: 400 }
+      );
+    }
+
+    const sectionKey = section as ContentSectionKey;
+    const body = await request.json();
+    const identifier = body.id || body.slug;
+
+    if (!identifier) {
+      return NextResponse.json(
+        { success: false, message: "Item ID or slug is required for update." },
+        { status: 400 }
+      );
+    }
+
+    const defaults = getDefaultItems(sectionKey);
+    const currentItems = await getContentSection<Record<string, unknown>>(sectionKey, defaults as Record<string, unknown>[]);
+
+    const itemIndex = currentItems.findIndex(
+      (item) => item.id === identifier || item.slug === identifier
+    );
+
+    if (itemIndex === -1) {
+      return NextResponse.json(
+        { success: false, message: "Item not found." },
+        { status: 404 }
+      );
+    }
+
+    const updatedItem = {
+      ...currentItems[itemIndex],
+      ...body,
+    };
+
+    currentItems[itemIndex] = updatedItem;
+    await saveContentSection(sectionKey, currentItems);
+
+    return NextResponse.json({
+      success: true,
+      message: `${sectionKey} item updated successfully.`,
+      item: updatedItem,
+      items: currentItems,
+    });
+  } catch (error) {
+    console.error("Content API PUT error:", error);
+    return NextResponse.json(
+      { success: false, message: "Failed to update content item." },
+      { status: 500 }
+    );
+  }
+}
+
+// 4. DELETE: Remove an item by id or slug
+export async function DELETE(
+  request: Request,
+  { params }: { params: Promise<{ section: string }> }
+) {
+  try {
+    const { section } = await params;
+
+    if (!VALID_SECTIONS.includes(section as ContentSectionKey)) {
+      return NextResponse.json(
+        { success: false, message: `Invalid section: ${section}` },
+        { status: 400 }
+      );
+    }
+
+    const sectionKey = section as ContentSectionKey;
+    const { searchParams } = new URL(request.url);
+    const identifier = searchParams.get("id") || searchParams.get("slug");
+
+    if (!identifier) {
+      return NextResponse.json(
+        { success: false, message: "Item ID or slug is required for deletion." },
+        { status: 400 }
+      );
+    }
+
+    const defaults = getDefaultItems(sectionKey);
+    const currentItems = await getContentSection<Record<string, unknown>>(sectionKey, defaults as Record<string, unknown>[]);
+
+    const filteredItems = currentItems.filter(
+      (item) => item.id !== identifier && item.slug !== identifier
+    );
+
+    await saveContentSection(sectionKey, filteredItems);
+
+    return NextResponse.json({
+      success: true,
+      message: `${sectionKey} item deleted successfully.`,
+      items: filteredItems,
+    });
+  } catch (error) {
+    console.error("Content API DELETE error:", error);
+    return NextResponse.json(
+      { success: false, message: "Failed to delete content item." },
+      { status: 500 }
+    );
+  }
+}

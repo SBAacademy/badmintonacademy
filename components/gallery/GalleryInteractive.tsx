@@ -14,13 +14,25 @@ const CATEGORIES = [
   "Coaching Sessions",
 ];
 
-export function GalleryInteractive() {
+export function GalleryInteractive({ initialItems }: { initialItems?: GalleryItem[] }) {
+  const [items, setItems] = useState<GalleryItem[]>(initialItems || GALLERY_ITEMS);
   const [activeCategory, setActiveCategory] = useState("All");
   const [selectedItem, setSelectedItem] = useState<GalleryItem | null>(null);
 
+  React.useEffect(() => {
+    fetch("/api/content/gallery")
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.success && Array.isArray(d.items)) {
+          setItems(d.items);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   const filteredItems = activeCategory === "All"
-    ? GALLERY_ITEMS
-    : GALLERY_ITEMS.filter((item) => item.category === activeCategory);
+    ? items
+    : items.filter((item) => item.category === activeCategory);
 
   const handleNext = () => {
     if (!selectedItem) return;

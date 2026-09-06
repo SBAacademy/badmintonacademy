@@ -2,9 +2,11 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Eye } from "lucide-react";
-import { GALLERY_ITEMS } from "@/data/gallery";
+import { GALLERY_ITEMS, GalleryItem } from "@/data/gallery";
+import { getGalleryItems } from "@/lib/contentDb";
 
-export function GalleryPreview() {
+export async function GalleryPreview({ initialGallery }: { initialGallery?: GalleryItem[] }) {
+  const gallery = initialGallery || (await getGalleryItems());
   return (
     <section 
       className="py-24 lg:py-36 bg-[#07090D] relative border-b border-[#1F2937] select-none"
@@ -42,7 +44,7 @@ export function GalleryPreview() {
 
         {/* Editorial Sports Gallery Grid: Hard corners, 1px borders */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-12">
-          {GALLERY_ITEMS.slice(0, 4).map((item) => (
+          {gallery.slice(0, 4).map((item) => (
             <Link
               key={item.id}
               href="/gallery"

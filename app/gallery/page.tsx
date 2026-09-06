@@ -17,7 +17,11 @@ export const metadata: Metadata = createMetadata({
   ],
 });
 
-export default function GalleryPage() {
+import { getGalleryItems } from "@/lib/contentDb";
+
+export default async function GalleryPage() {
+  const galleryItems = await getGalleryItems();
+
   return (
     <div className="py-8 sm:py-12 bg-[#090D16]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -39,7 +43,7 @@ export default function GalleryPage() {
         </div>
 
         {/* Interactive Filterable Gallery */}
-        <GalleryInteractive />
+        <GalleryInteractive initialItems={galleryItems} />
 
       </div>
 

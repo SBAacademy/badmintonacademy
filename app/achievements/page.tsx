@@ -17,7 +17,11 @@ export const metadata: Metadata = createMetadata({
   ],
 });
 
-export default function AchievementsPage() {
+import { getAchievements } from "@/lib/contentDb";
+
+export default async function AchievementsPage() {
+  const achievements = await getAchievements();
+
   return (
     <div className="bg-[#07090D] min-h-screen text-white select-none">
       <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-16">
@@ -48,7 +52,7 @@ export default function AchievementsPage() {
 
         {/* Timeline Archive */}
         <div className="divide-y divide-[#1F2937] border-b border-[#1F2937] py-8">
-          {ACHIEVEMENTS.map((ach) => (
+          {achievements.map((ach) => (
             <div
               key={ach.id}
               className="py-10 grid grid-cols-1 md:grid-cols-12 gap-6 items-baseline group hover:bg-[#0B0F14]/60 px-4 sm:px-6 transition-colors"

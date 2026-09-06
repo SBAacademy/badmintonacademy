@@ -10,17 +10,21 @@ import { SEOJsonLd } from "@/components/seo/SEOJsonLd";
 import { createMetadata, SITE_URL } from "@/lib/seo";
 import { FinalCTA } from "@/components/sections/FinalCTA";
 
+import { getBlogPosts } from "@/lib/contentDb";
+
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
-  return BLOG_POSTS.map((b) => ({ slug: b.slug }));
+  const posts = await getBlogPosts();
+  return posts.map((b) => ({ slug: b.slug }));
 }
 
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const post = BLOG_POSTS.find((b) => b.slug === slug);
+  const posts = await getBlogPosts();
+  const post = posts.find((b) => b.slug === slug);
 
   if (!post) {
     return { title: "Article Not Found" };
@@ -37,7 +41,8 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug } = await params;
-  const post = BLOG_POSTS.find((b) => b.slug === slug);
+  const posts = await getBlogPosts();
+  const post = posts.find((b) => b.slug === slug);
 
   if (!post) {
     notFound();

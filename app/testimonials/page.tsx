@@ -17,7 +17,11 @@ export const metadata: Metadata = createMetadata({
   ],
 });
 
-export default function TestimonialsPage() {
+import { getTestimonials } from "@/lib/contentDb";
+
+export default async function TestimonialsPage() {
+  const testimonials = await getTestimonials();
+
   return (
     <div className="py-8 sm:py-12 bg-[#090D16]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -40,7 +44,7 @@ export default function TestimonialsPage() {
 
         {/* Testimonials Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
-          {TESTIMONIALS.map((item) => (
+          {testimonials.map((item) => (
             <div
               key={item.id}
               className="p-8 rounded-3xl bg-[#111827] border border-slate-800 hover:border-emerald-500/40 transition-all duration-300 flex flex-col justify-between shadow-xl relative group"

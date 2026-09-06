@@ -2,9 +2,11 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, ShieldCheck } from "lucide-react";
-import { COACHES } from "@/data/coaches";
+import { COACHES, Coach } from "@/data/coaches";
+import { getCoaches } from "@/lib/contentDb";
 
-export function CoachesSpotlight() {
+export async function CoachesSpotlight({ initialCoaches }: { initialCoaches?: Coach[] }) {
+  const coaches = initialCoaches || (await getCoaches());
   return (
     <section 
       className="py-24 lg:py-36 bg-[#07090D] relative border-b border-[#1F2937] select-none"

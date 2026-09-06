@@ -41,7 +41,17 @@ import {
   Flame,
   User,
   ArrowUpRight,
+  Image as ImageIcon,
+  BookOpen,
+  Trophy,
+  Star,
+  Users2,
 } from "lucide-react";
+import { GalleryManager } from "@/components/admin/GalleryManager";
+import { BlogManager } from "@/components/admin/BlogManager";
+import { CoachesManager } from "@/components/admin/CoachesManager";
+import { AchievementsManager } from "@/components/admin/AchievementsManager";
+import { TestimonialsManager } from "@/components/admin/TestimonialsManager";
 import { LOCATIONS } from "@/data/locations";
 import { PROGRAMS } from "@/data/programs";
 import { LeadItem } from "@/lib/db";
@@ -141,6 +151,11 @@ export default function AdminCRMPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [pinInput, setPinInput] = useState("");
   const [pinError, setPinError] = useState(false);
+
+  // Top-level workspace navigation (CRM vs Website Content Studio)
+  const [activeWorkspace, setActiveWorkspace] = useState<
+    "crm" | "gallery" | "blog" | "coaches" | "achievements" | "testimonials"
+  >("crm");
 
   // CRM Data & UI states
   const [leads, setLeads] = useState<LeadItem[]>([]);
@@ -645,7 +660,7 @@ export default function AdminCRMPage() {
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="text-base sm:text-lg font-black uppercase text-white tracking-tight flex items-center gap-2">
-                  <span>S&amp;A ADMISSIONS CRM</span>
+                  <span>{activeWorkspace === "crm" ? "S&A ADMISSIONS CRM" : "S&A WEBSITE CMS"}</span>
                 </h1>
                 <span className="inline-flex items-center gap-1.5 text-[10px] font-mono font-bold text-[#B8F000] bg-[#B8F000]/10 border border-[#B8F000]/30 px-2 py-0.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#B8F000] animate-pulse" />
@@ -653,96 +668,124 @@ export default function AdminCRMPage() {
                 </span>
               </div>
               <div className="font-mono text-[10px] text-[#A8B0BA] hidden sm:block">
-                KOCHI CENTRES PIPELINE &bull; {leads.length} LEADS TRACKED
-                {lastRefreshed && (
-                  <span className="text-[#6B7280]"> &bull; Synced {formatTimeAgo(lastRefreshed.toISOString())}</span>
+                {activeWorkspace === "crm" ? (
+                  <>
+                    KOCHI CENTRES PIPELINE &bull; {leads.length} LEADS TRACKED
+                    {lastRefreshed && (
+                      <span className="text-[#6B7280]"> &bull; Synced {formatTimeAgo(lastRefreshed.toISOString())}</span>
+                    )}
+                  </>
+                ) : (
+                  <>DYNAMIC WEBSITE CONTENT MANAGEMENT &bull; POSTGRESQL PERSISTENCE</>
                 )}
               </div>
             </div>
           </div>
 
-          {/* View Mode Switcher */}
-          <div className="hidden md:flex items-center bg-[#07090D] p-1 border border-[#1F2937]">
-            <button
-              type="button"
-              onClick={() => setViewMode("kanban")}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 font-mono text-xs uppercase font-bold transition-colors ${
-                viewMode === "kanban"
-                  ? "bg-[#B8F000] text-[#07090D]"
-                  : "text-[#A8B0BA] hover:text-white"
-              }`}
-            >
-              <Kanban className="w-3.5 h-3.5" />
-              <span>Pipeline</span>
-            </button>
+          {/* Center: View Switcher (CRM) or Quick Preview Link (CMS) */}
+          {activeWorkspace === "crm" ? (
+            <div className="hidden md:flex items-center bg-[#07090D] p-1 border border-[#1F2937]">
+              <button
+                type="button"
+                onClick={() => setViewMode("kanban")}
+                className={`flex items-center gap-1.5 px-3.5 py-1.5 font-mono text-xs uppercase font-bold transition-colors ${
+                  viewMode === "kanban"
+                    ? "bg-[#B8F000] text-[#07090D]"
+                    : "text-[#A8B0BA] hover:text-white"
+                }`}
+              >
+                <Kanban className="w-3.5 h-3.5" />
+                <span>Pipeline</span>
+              </button>
 
-            <button
-              type="button"
-              onClick={() => setViewMode("table")}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 font-mono text-xs uppercase font-bold transition-colors ${
-                viewMode === "table"
-                  ? "bg-[#B8F000] text-[#07090D]"
-                  : "text-[#A8B0BA] hover:text-white"
-              }`}
-            >
-              <LayoutList className="w-3.5 h-3.5" />
-              <span>Table</span>
-              {selectedLeadIds.length > 0 && (
-                <span className="ml-1 px-1.5 py-0.2 bg-[#07090D] text-[#B8F000] text-[10px]">
-                  {selectedLeadIds.length}
-                </span>
-              )}
-            </button>
+              <button
+                type="button"
+                onClick={() => setViewMode("table")}
+                className={`flex items-center gap-1.5 px-3.5 py-1.5 font-mono text-xs uppercase font-bold transition-colors ${
+                  viewMode === "table"
+                    ? "bg-[#B8F000] text-[#07090D]"
+                    : "text-[#A8B0BA] hover:text-white"
+                }`}
+              >
+                <LayoutList className="w-3.5 h-3.5" />
+                <span>Table</span>
+                {selectedLeadIds.length > 0 && (
+                  <span className="ml-1 px-1.5 py-0.2 bg-[#07090D] text-[#B8F000] text-[10px]">
+                    {selectedLeadIds.length}
+                  </span>
+                )}
+              </button>
 
-            <button
-              type="button"
-              onClick={() => setViewMode("analytics")}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 font-mono text-xs uppercase font-bold transition-colors ${
-                viewMode === "analytics"
-                  ? "bg-[#B8F000] text-[#07090D]"
-                  : "text-[#A8B0BA] hover:text-white"
-              }`}
-            >
-              <BarChart3 className="w-3.5 h-3.5" />
-              <span>Analytics</span>
-            </button>
-          </div>
+              <button
+                type="button"
+                onClick={() => setViewMode("analytics")}
+                className={`flex items-center gap-1.5 px-3.5 py-1.5 font-mono text-xs uppercase font-bold transition-colors ${
+                  viewMode === "analytics"
+                    ? "bg-[#B8F000] text-[#07090D]"
+                    : "text-[#A8B0BA] hover:text-white"
+                }`}
+              >
+                <BarChart3 className="w-3.5 h-3.5" />
+                <span>Analytics</span>
+              </button>
+            </div>
+          ) : (
+            <div className="hidden md:flex items-center gap-3 font-mono text-xs">
+              <span className="text-[#A8B0BA] uppercase">Editing:</span>
+              <span className="text-[#B8F000] font-black uppercase bg-[#B8F000]/10 border border-[#B8F000]/40 px-3 py-1 tracking-wider">
+                {activeWorkspace === "testimonials" ? "REVIEWS" : activeWorkspace === "achievements" ? "TRACK RECORD" : activeWorkspace.toUpperCase()}
+              </span>
+              <Link
+                href={`/${activeWorkspace === "testimonials" ? "testimonials" : activeWorkspace === "achievements" ? "achievements" : activeWorkspace}`}
+                target="_blank"
+                className="flex items-center gap-1.5 text-[#A8B0BA] hover:text-[#B8F000] border border-[#1F2937] hover:border-[#B8F000]/50 px-2.5 py-1 bg-[#11161D] transition-colors"
+                title="Open live public page in new tab"
+              >
+                <span>Live View</span>
+                <ExternalLink className="w-3.5 h-3.5 text-[#B8F000]" />
+              </Link>
+            </div>
+          )}
 
           {/* Action Tools */}
           <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={fetchLeads}
-              disabled={loading}
-              className="p-2 sm:px-3 sm:py-2 bg-[#11161D] hover:bg-[#17212C] border border-[#1F2937] text-[#A8B0BA] hover:text-white font-mono text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
-              title="Refresh from Neon PostgreSQL"
-            >
-              <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin text-[#B8F000]" : ""}`} />
-              <span className="hidden sm:inline">Sync</span>
-            </button>
+            {activeWorkspace === "crm" && (
+              <>
+                <button
+                  type="button"
+                  onClick={fetchLeads}
+                  disabled={loading}
+                  className="p-2 sm:px-3 sm:py-2 bg-[#11161D] hover:bg-[#17212C] border border-[#1F2937] text-[#A8B0BA] hover:text-white font-mono text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
+                  title="Refresh from Neon PostgreSQL"
+                >
+                  <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin text-[#B8F000]" : ""}`} />
+                  <span className="hidden sm:inline">Sync</span>
+                </button>
 
-            <button
-              type="button"
-              onClick={() => handleExportCSV(false)}
-              className="p-2 sm:px-3 sm:py-2 bg-[#11161D] hover:bg-[#17212C] border border-[#1F2937] text-[#A8B0BA] hover:text-white font-mono text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
-              title="Export all leads to CSV"
-            >
-              <Download className="w-3.5 h-3.5 text-[#B8F000]" />
-              <span className="hidden sm:inline">Export CSV</span>
-            </button>
+                <button
+                  type="button"
+                  onClick={() => handleExportCSV(false)}
+                  className="p-2 sm:px-3 sm:py-2 bg-[#11161D] hover:bg-[#17212C] border border-[#1F2937] text-[#A8B0BA] hover:text-white font-mono text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
+                  title="Export all leads to CSV"
+                >
+                  <Download className="w-3.5 h-3.5 text-[#B8F000]" />
+                  <span className="hidden sm:inline">Export CSV</span>
+                </button>
 
-            <button
-              type="button"
-              onClick={() => {
-                setAddModalInitialStage("NEW");
-                setNewLeadForm((prev) => ({ ...prev, status: "NEW" }));
-                setIsAddModalOpen(true);
-              }}
-              className="px-3 sm:px-4 py-2 bg-[#B8F000] hover:bg-[#cbf722] text-[#07090D] font-black text-xs uppercase tracking-wider flex items-center gap-1.5 shadow-sm cursor-pointer"
-            >
-              <Plus className="w-4 h-4" />
-              <span className="hidden sm:inline">Add Lead</span>
-            </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setAddModalInitialStage("NEW");
+                    setNewLeadForm((prev) => ({ ...prev, status: "NEW" }));
+                    setIsAddModalOpen(true);
+                  }}
+                  className="px-3 sm:px-4 py-2 bg-[#B8F000] hover:bg-[#cbf722] text-[#07090D] font-black text-xs uppercase tracking-wider flex items-center gap-1.5 shadow-sm cursor-pointer"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span className="hidden sm:inline">Add Lead</span>
+                </button>
+              </>
+            )}
 
             <button
               type="button"
@@ -751,7 +794,7 @@ export default function AdminCRMPage() {
                 sessionStorage.removeItem("sa_crm_auth");
               }}
               className="p-2 bg-[#11161D] border border-[#1F2937] text-[#A8B0BA] hover:text-rose-400 transition-colors cursor-pointer"
-              title="Lock CRM"
+              title="Lock Admin Panel"
             >
               <Unlock className="w-4 h-4" />
             </button>
@@ -760,8 +803,106 @@ export default function AdminCRMPage() {
         </div>
       </header>
 
-      {/* Main CRM Workspace */}
-      <main className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 pt-6 space-y-6">
+      {/* Admin Module Navigation Bar */}
+      <div className="bg-[#0B0F14] border-b border-[#1F2937] px-4 sm:px-6 lg:px-8">
+        <div className="max-w-[1600px] mx-auto flex items-center justify-between gap-4 overflow-x-auto no-scrollbar py-2">
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <button
+              type="button"
+              onClick={() => setActiveWorkspace("crm")}
+              className={`px-3.5 py-2 font-mono text-xs uppercase font-bold tracking-wider flex items-center gap-2 border transition-all cursor-pointer whitespace-nowrap ${
+                activeWorkspace === "crm"
+                  ? "bg-[#B8F000] text-[#07090D] border-[#B8F000] shadow-[0_0_15px_rgba(184,240,0,0.2)] font-black"
+                  : "bg-[#07090D] text-[#A8B0BA] border-[#1F2937] hover:border-[#374151] hover:text-white"
+              }`}
+            >
+              <Users className="w-3.5 h-3.5" />
+              <span>Admissions CRM</span>
+              <span
+                className={`px-1.5 py-0.2 text-[10px] font-mono ${
+                  activeWorkspace === "crm" ? "bg-[#07090D] text-[#B8F000]" : "bg-[#1F2937] text-white"
+                }`}
+              >
+                {leads.length}
+              </span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveWorkspace("gallery")}
+              className={`px-3.5 py-2 font-mono text-xs uppercase font-bold tracking-wider flex items-center gap-2 border transition-all cursor-pointer whitespace-nowrap ${
+                activeWorkspace === "gallery"
+                  ? "bg-[#B8F000] text-[#07090D] border-[#B8F000] shadow-[0_0_15px_rgba(184,240,0,0.2)] font-black"
+                  : "bg-[#07090D] text-[#A8B0BA] border-[#1F2937] hover:border-[#374151] hover:text-white"
+              }`}
+            >
+              <ImageIcon className="w-3.5 h-3.5" />
+              <span>Gallery</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveWorkspace("blog")}
+              className={`px-3.5 py-2 font-mono text-xs uppercase font-bold tracking-wider flex items-center gap-2 border transition-all cursor-pointer whitespace-nowrap ${
+                activeWorkspace === "blog"
+                  ? "bg-[#B8F000] text-[#07090D] border-[#B8F000] shadow-[0_0_15px_rgba(184,240,0,0.2)] font-black"
+                  : "bg-[#07090D] text-[#A8B0BA] border-[#1F2937] hover:border-[#374151] hover:text-white"
+              }`}
+            >
+              <BookOpen className="w-3.5 h-3.5" />
+              <span>Blog Articles</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveWorkspace("coaches")}
+              className={`px-3.5 py-2 font-mono text-xs uppercase font-bold tracking-wider flex items-center gap-2 border transition-all cursor-pointer whitespace-nowrap ${
+                activeWorkspace === "coaches"
+                  ? "bg-[#B8F000] text-[#07090D] border-[#B8F000] shadow-[0_0_15px_rgba(184,240,0,0.2)] font-black"
+                  : "bg-[#07090D] text-[#A8B0BA] border-[#1F2937] hover:border-[#374151] hover:text-white"
+              }`}
+            >
+              <Users2 className="w-3.5 h-3.5" />
+              <span>Coaches</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveWorkspace("achievements")}
+              className={`px-3.5 py-2 font-mono text-xs uppercase font-bold tracking-wider flex items-center gap-2 border transition-all cursor-pointer whitespace-nowrap ${
+                activeWorkspace === "achievements"
+                  ? "bg-[#B8F000] text-[#07090D] border-[#B8F000] shadow-[0_0_15px_rgba(184,240,0,0.2)] font-black"
+                  : "bg-[#07090D] text-[#A8B0BA] border-[#1F2937] hover:border-[#374151] hover:text-white"
+              }`}
+            >
+              <Trophy className="w-3.5 h-3.5" />
+              <span>Track Record</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveWorkspace("testimonials")}
+              className={`px-3.5 py-2 font-mono text-xs uppercase font-bold tracking-wider flex items-center gap-2 border transition-all cursor-pointer whitespace-nowrap ${
+                activeWorkspace === "testimonials"
+                  ? "bg-[#B8F000] text-[#07090D] border-[#B8F000] shadow-[0_0_15px_rgba(184,240,0,0.2)] font-black"
+                  : "bg-[#07090D] text-[#A8B0BA] border-[#1F2937] hover:border-[#374151] hover:text-white"
+              }`}
+            >
+              <Star className="w-3.5 h-3.5" />
+              <span>Reviews</span>
+            </button>
+          </div>
+
+          <div className="hidden lg:flex items-center gap-2 font-mono text-[11px] text-[#6B7280]">
+            <span>Database:</span>
+            <span className="text-emerald-400 font-bold">Neon PostgreSQL (Live)</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Main CRM Workspace (Rendered when activeWorkspace === "crm") */}
+      {activeWorkspace === "crm" && (
+        <main className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 pt-6 space-y-6">
         
         {/* Metric KPI Cards (Interactive Filters) */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
@@ -1563,6 +1704,40 @@ export default function AdminCRMPage() {
         )}
 
       </main>
+      )}
+
+      {/* ------------------------------------------------------------- */}
+      {/* WEBSITE CMS STUDIO MODULES                                    */}
+      {/* ------------------------------------------------------------- */}
+      {activeWorkspace === "gallery" && (
+        <main className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+          <GalleryManager />
+        </main>
+      )}
+
+      {activeWorkspace === "blog" && (
+        <main className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+          <BlogManager />
+        </main>
+      )}
+
+      {activeWorkspace === "coaches" && (
+        <main className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+          <CoachesManager />
+        </main>
+      )}
+
+      {activeWorkspace === "achievements" && (
+        <main className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+          <AchievementsManager />
+        </main>
+      )}
+
+      {activeWorkspace === "testimonials" && (
+        <main className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+          <TestimonialsManager />
+        </main>
+      )}
 
       {/* ------------------------------------------------------------- */}
       {/* SLIDE-OVER LEAD DETAIL DRAWER (THE CORE CRM WORKSPACE)        */}

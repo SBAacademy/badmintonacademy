@@ -19,7 +19,11 @@ export const metadata: Metadata = createMetadata({
   ],
 });
 
-export default function CoachesPage() {
+import { getCoaches } from "@/lib/contentDb";
+
+export default async function CoachesPage() {
+  const coaches = await getCoaches();
+
   return (
     <div className="bg-[#07090D] min-h-screen text-white select-none">
       <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-16">
@@ -50,7 +54,7 @@ export default function CoachesPage() {
 
         {/* Editorial Coach Portraits Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 py-16 border-b border-[#1F2937]">
-          {COACHES.map((coach, idx) => (
+          {coaches.map((coach, idx) => (
             <div
               key={coach.id}
               className="bg-[#0B0F14] border border-[#1F2937] p-6 sm:p-8 flex flex-col justify-between group hover:border-[#B8F000]/60 transition-colors"

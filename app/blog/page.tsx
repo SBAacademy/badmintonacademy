@@ -20,7 +20,11 @@ export const metadata: Metadata = createMetadata({
   ],
 });
 
-export default function BlogPage() {
+import { getBlogPosts } from "@/lib/contentDb";
+
+export default async function BlogPage() {
+  const blogPosts = await getBlogPosts();
+
   return (
     <div className="py-8 sm:py-12 bg-[#090D16]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -43,7 +47,7 @@ export default function BlogPage() {
 
         {/* Blog Posts Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
-          {BLOG_POSTS.map((post) => (
+          {blogPosts.map((post) => (
             <article
               key={post.slug}
               className="rounded-3xl bg-[#111827] border border-slate-800 hover:border-emerald-500/40 overflow-hidden transition-all duration-300 flex flex-col justify-between group shadow-xl"

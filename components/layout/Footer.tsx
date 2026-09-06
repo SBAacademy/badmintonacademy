@@ -8,7 +8,7 @@ import { buildWhatsAppUrl } from "@/lib/whatsapp";
 
 export function Footer() {
   return (
-    <footer className="bg-[#080B10] border-t border-[#26313D] text-[#A7B0BC] text-sm relative z-10 pb-20 lg:pb-8">
+    <footer className="bg-[#080B10] border-t border-[#26313D] text-[#A7B0BC] text-sm relative z-10 pb-32 lg:pb-12">
       {/* Top Accent Line */}
       <div className="h-0.5 bg-[#B8F000]" />
 

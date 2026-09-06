@@ -19,14 +19,18 @@ export function MobileConversionBar() {
   return (
     <aside
       aria-label="Quick Actions"
-      className="lg:hidden fixed bottom-0 inset-x-0 z-50 bg-[#080B10]/95 backdrop-blur-xl border-t border-[#26313D] px-4 py-2.5 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-2xl"
+      className="lg:hidden fixed bottom-0 inset-x-0 z-40 border-t border-[#26313D] px-4 pt-2.5 shadow-2xl backdrop-blur-xl"
+      style={{
+        backgroundColor: "rgba(8, 11, 16, 0.98)",
+        paddingBottom: "max(14px, env(safe-area-inset-bottom))",
+      }}
     >
       <div className="grid grid-cols-3 gap-2.5 max-w-md mx-auto">
         {/* Direct Call */}
         <a
           href={`tel:${ACADEMY_DATA.phone}`}
           onClick={handleCall}
-          className="flex flex-col items-center justify-center py-2 px-2.5 rounded-xl bg-[#121A23] border border-[#26313D] text-[#A7B0BC] hover:text-[#F8FAFC] text-[11px] font-bold active:scale-95 transition-transform"
+          className="flex flex-col items-center justify-center min-h-[48px] py-1.5 px-2 rounded-xl bg-[#121A23] border border-[#26313D] text-[#A7B0BC] hover:text-[#F8FAFC] text-[11px] font-bold active:scale-95 transition-transform"
         >
           <Phone className="w-4 h-4 text-[#B8F000] mb-0.5" />
           <span>Call Desk</span>
@@ -38,7 +42,7 @@ export function MobileConversionBar() {
           target="_blank"
           rel="noopener noreferrer"
           onClick={handleWhatsApp}
-          className="flex flex-col items-center justify-center py-2 px-2.5 rounded-xl bg-[#121A23] border border-[#26313D] text-[#F8FAFC] text-[11px] font-bold active:scale-95 transition-transform"
+          className="flex flex-col items-center justify-center min-h-[48px] py-1.5 px-2 rounded-xl bg-[#121A23] border border-[#26313D] text-[#F8FAFC] text-[11px] font-bold active:scale-95 transition-transform"
         >
           <MessageCircle className="w-4 h-4 text-[#22C55E] mb-0.5" />
           <span>WhatsApp</span>
@@ -47,7 +51,7 @@ export function MobileConversionBar() {
         {/* Book Trial */}
         <Link
           href="/contact"
-          className="flex flex-col items-center justify-center py-2 px-2.5 rounded-xl bg-[#B8F000] text-[#07100A] text-[11px] font-black uppercase tracking-wider active:scale-95 transition-transform shadow-sm"
+          className="flex flex-col items-center justify-center min-h-[48px] py-1.5 px-2 rounded-xl bg-[#B8F000] text-[#07100A] text-[11px] font-black uppercase tracking-wider active:scale-95 transition-transform shadow-sm"
         >
           <CalendarCheck className="w-4 h-4 text-[#07100A] mb-0.5" />
           <span>Free Trial</span>

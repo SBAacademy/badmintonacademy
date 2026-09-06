@@ -40,8 +40,8 @@ export function HeroSection() {
             }}
           />
 
-          {/* Subtle Mobile Bottom & Top Vignette */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#080B10] via-transparent to-[#080B10]/60 lg:hidden pointer-events-none" />
+          {/* Subtle Mobile Bottom & Top Vignette for Maximum Contrast on Phones */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#080B10] via-[#080B10]/60 to-[#080B10]/80 lg:hidden pointer-events-none" />
 
           {/* Subtle Warm Athletic Lime Atmospheric Halo Behind Player */}
           <div className="absolute top-1/3 right-1/4 w-[380px] h-[380px] bg-[#B8F000]/8 rounded-full blur-3xl pointer-events-none" />
@@ -52,19 +52,19 @@ export function HeroSection() {
       <div className="absolute inset-0 pointer-events-none opacity-10 court-grid-subtle" />
 
       {/* Hero Content Layer */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full py-12 lg:py-16">
-        <div className="max-w-2xl lg:max-w-3xl space-y-6 text-left">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full py-10 sm:py-12 lg:py-16">
+        <div className="max-w-2xl lg:max-w-3xl space-y-5 sm:space-y-6 text-left">
           
           {/* 1. Editorial Eyebrow with Lime Accent Bar */}
           <div className="flex items-center gap-2.5">
-            <span className="w-6 h-0.5 bg-[#B8F000]" />
-            <span className="text-xs sm:text-sm font-bold uppercase tracking-widest text-[#B8F000]">
+            <span className="w-5 sm:w-6 h-0.5 bg-[#B8F000]" />
+            <span className="text-[11px] sm:text-xs font-bold uppercase tracking-widest text-[#B8F000]">
               S & A BADMINTON ACADEMY • KOCHI & ERNAKULAM
             </span>
           </div>
 
           {/* 2. Bold Display Typography (Lines 1 & 2 in White, Line 3 in Athletic Lime #B8F000) */}
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-[#F8FAFC] leading-[1.04] uppercase">
+          <h1 className="text-3xl sm:text-5xl lg:text-7xl font-black tracking-tight text-[#F8FAFC] leading-[1.06] uppercase">
             Train Hard. <br />
             Smash Harder. <br />
             <span className="text-[#B8F000]">

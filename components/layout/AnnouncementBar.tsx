@@ -17,11 +17,12 @@ export function AnnouncementBar() {
     >
       <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto w-full px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
         {/* Left Message Cluster */}
-        <div className="flex items-center gap-3 overflow-hidden">
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-extrabold tracking-wider bg-[#B8F000]/15 text-[#B8F000] border border-[#B8F000]/30 shrink-0 uppercase">
-            {ACADEMY_DATA.announcement.badge}
+        <div className="flex items-center gap-2 sm:gap-3 overflow-hidden">
+          <span className="inline-flex items-center px-2 sm:px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-extrabold tracking-wider bg-[#B8F000]/15 text-[#B8F000] border border-[#B8F000]/30 shrink-0 uppercase">
+            <span className="sm:hidden">2026–27</span>
+            <span className="hidden sm:inline">{ACADEMY_DATA.announcement.badge}</span>
           </span>
-          <span className="font-medium text-[#F8FAFC] text-xs sm:text-[13px] truncate">
+          <span className="font-medium text-[#F8FAFC] text-[11px] sm:text-[13px] truncate">
             {ACADEMY_DATA.announcement.text}
           </span>
         </div>

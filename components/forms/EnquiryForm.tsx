@@ -217,7 +217,7 @@ export function EnquiryForm({ initialBranch = "", initialProgram = "" }: Enquiry
               value={formData.name}
               onChange={handleChange}
               placeholder="e.g. Rahul Nair"
-              className="w-full px-4 py-3 rounded-xl bg-[#080B10] border border-[#26313D] text-[#F8FAFC] placeholder-[#6B7280] text-sm focus:outline-none focus:border-[#B8F000] transition-colors"
+              className="w-full px-4 py-3 rounded-xl bg-[#080B10] border border-[#26313D] text-[#F8FAFC] placeholder-[#6B7280] text-base sm:text-sm focus:outline-none focus:border-[#B8F000] transition-colors"
             />
           </div>
 
@@ -232,7 +232,7 @@ export function EnquiryForm({ initialBranch = "", initialProgram = "" }: Enquiry
               value={formData.phone}
               onChange={handleChange}
               placeholder="e.g. +91 94006 XXXXX"
-              className="w-full px-4 py-3 rounded-xl bg-[#080B10] border border-[#26313D] text-[#F8FAFC] placeholder-[#6B7280] text-sm focus:outline-none focus:border-[#B8F000] transition-colors"
+              className="w-full px-4 py-3 rounded-xl bg-[#080B10] border border-[#26313D] text-[#F8FAFC] placeholder-[#6B7280] text-base sm:text-sm focus:outline-none focus:border-[#B8F000] transition-colors"
             />
           </div>
         </div>
@@ -249,7 +249,7 @@ export function EnquiryForm({ initialBranch = "", initialProgram = "" }: Enquiry
               value={formData.email}
               onChange={handleChange}
               placeholder="rahul@example.com"
-              className="w-full px-4 py-3 rounded-xl bg-[#080B10] border border-[#26313D] text-[#F8FAFC] placeholder-[#6B7280] text-sm focus:outline-none focus:border-[#B8F000] transition-colors"
+              className="w-full px-4 py-3 rounded-xl bg-[#080B10] border border-[#26313D] text-[#F8FAFC] placeholder-[#6B7280] text-base sm:text-sm focus:outline-none focus:border-[#B8F000] transition-colors"
             />
           </div>
 
@@ -261,7 +261,7 @@ export function EnquiryForm({ initialBranch = "", initialProgram = "" }: Enquiry
               name="ageCategory"
               value={formData.ageCategory}
               onChange={handleChange}
-              className="w-full px-4 py-3 rounded-xl bg-[#080B10] border border-[#26313D] text-[#F8FAFC] text-sm focus:outline-none focus:border-[#B8F000] transition-colors"
+              className="w-full px-4 py-3 rounded-xl bg-[#080B10] border border-[#26313D] text-[#F8FAFC] text-base sm:text-sm focus:outline-none focus:border-[#B8F000] transition-colors"
             >
               <option value="Kids (Ages 5-9)">Kids (Ages 5–9)</option>
               <option value="Junior (Ages 10-16)">Junior (Ages 10–16)</option>
@@ -281,7 +281,7 @@ export function EnquiryForm({ initialBranch = "", initialProgram = "" }: Enquiry
               name="preferredBranch"
               value={formData.preferredBranch}
               onChange={handleChange}
-              className="w-full px-4 py-3 rounded-xl bg-[#080B10] border border-[#26313D] text-[#F8FAFC] text-sm focus:outline-none focus:border-[#B8F000] transition-colors"
+              className="w-full px-4 py-3 rounded-xl bg-[#080B10] border border-[#26313D] text-[#F8FAFC] text-base sm:text-sm focus:outline-none focus:border-[#B8F000] transition-colors"
             >
               {BRANCHES.map((b) => (
                 <option key={b.slug} value={b.slug}>
@@ -299,7 +299,7 @@ export function EnquiryForm({ initialBranch = "", initialProgram = "" }: Enquiry
               name="preferredProgram"
               value={formData.preferredProgram}
               onChange={handleChange}
-              className="w-full px-4 py-3 rounded-xl bg-[#080B10] border border-[#26313D] text-[#F8FAFC] text-sm focus:outline-none focus:border-[#B8F000] transition-colors"
+              className="w-full px-4 py-3 rounded-xl bg-[#080B10] border border-[#26313D] text-[#F8FAFC] text-base sm:text-sm focus:outline-none focus:border-[#B8F000] transition-colors"
             >
               {PROGRAMS.map((p) => (
                 <option key={p.slug} value={p.slug}>
@@ -354,7 +354,7 @@ export function EnquiryForm({ initialBranch = "", initialProgram = "" }: Enquiry
             value={formData.message}
             onChange={handleChange}
             placeholder="e.g. Complete beginner, or junior preparing for school badminton team trials..."
-            className="w-full px-4 py-3 rounded-xl bg-[#080B10] border border-[#26313D] text-[#F8FAFC] placeholder-[#6B7280] text-sm focus:outline-none focus:border-[#B8F000] transition-colors"
+            className="w-full px-4 py-3 rounded-xl bg-[#080B10] border border-[#26313D] text-[#F8FAFC] placeholder-[#6B7280] text-base sm:text-sm focus:outline-none focus:border-[#B8F000] transition-colors"
           />
         </div>
 

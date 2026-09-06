@@ -21,6 +21,9 @@
     background-color: var(--bg-main);
     color: var(--text-primary);
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+    overflow-x: hidden;
   }
 
   body {
@@ -28,6 +31,8 @@
     color: #F8FAFC;
     min-height: 100vh;
     overflow-x: hidden;
+    width: 100%;
+    position: relative;
     selection-background-color: #B8F000;
     selection-color: #07100A;
   }

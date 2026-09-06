@@ -1,0 +1,46 @@
+{
+  "name": "badminton-academy-quotation",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Professional 12-page Commercial Quotation and Service Agreement PDF generator for Badminton Academy Website + 30-Day Local SEO Launch.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "generate:pdf": "node generate-pdf.mjs",
+    "test": "node generate-pdf.mjs"
+  },
+  "dependencies": {
+    "canvas-confetti": "^1.9.4",
+    "clsx": "^2.1.1",
+    "framer-motion": "^13.2.0",
+    "lucide-react": "^1.41.0",
+    "next": "^16.3.4",
+    "pdf-lib": "^1.17.1",
+    "puppeteer": "^23.6.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "tailwind-merge": "^3.6.0"
+  },
+  "keywords": [
+    "badminton-academy",
+    "quotation",
+    "local-seo",
+    "website-development",
+    "pdf-generator",
+    "puppeteer"
+  ],
+  "author": "Digital Agency",
+  "license": "ISC",
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/canvas-confetti": "^1.9.0",
+    "@types/node": "^26.4.1",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "autoprefixer": "^10.5.5",
+    "postcss": "^8.5.28",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^7.0.2"
+  }
+}

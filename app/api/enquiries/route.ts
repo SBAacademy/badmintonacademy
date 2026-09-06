@@ -1,45 +1,18 @@
 import { NextResponse } from "next/server";
-import fs from "fs/promises";
-import path from "path";
 import { LOCATIONS } from "@/data/locations";
 import { PROGRAMS } from "@/data/programs";
 import { buildEnquiryWhatsAppUrl } from "@/lib/whatsapp";
+import {
+  LeadItem,
+  getLeads,
+  createLead,
+  updateLead,
+  deleteLead,
+} from "@/lib/db";
 
-const LEADS_FILE_PATH = path.join(process.cwd(), "data", "leads.json");
+export type { LeadItem };
 
-export interface LeadItem {
-  id: string;
-  name: string;
-  phone: string;
-  email?: string | null;
-  ageCategory: string;
-  branch: string;
-  program: string;
-  slot: string;
-  message?: string;
-  status: "NEW" | "CONTACTED" | "TRIAL_SCHEDULED" | "ENROLLED" | "DROPPED";
-  notes?: string;
-  utmSource?: string;
-  utmMedium?: string;
-  utmCampaign?: string;
-  submittedAt: string;
-  updatedAt?: string;
-}
-
-async function readLeads(): Promise<LeadItem[]> {
-  try {
-    const fileData = await fs.readFile(LEADS_FILE_PATH, "utf-8");
-    return JSON.parse(fileData);
-  } catch {
-    return [];
-  }
-}
-
-async function saveLeads(leads: LeadItem[]): Promise<void> {
-  await fs.writeFile(LEADS_FILE_PATH, JSON.stringify(leads, null, 2), "utf-8");
-}
-
-// 1. POST: Register new lead and construct instant WhatsApp link
+// 1. POST: Register new lead into Neon PostgreSQL CRM and construct instant WhatsApp link
 export async function POST(request: Request) {
   try {
     const data = await request.json();
@@ -91,29 +64,27 @@ export async function POST(request: Request) {
       updatedAt: new Date().toISOString(),
     };
 
-    // Save lead persistently to CRM store
-    const existingLeads = await readLeads();
-    const updatedLeads = [newLead, ...existingLeads];
-    await saveLeads(updatedLeads);
+    // Save lead persistently to Neon PostgreSQL DB (with local fallback)
+    const savedLead = await createLead(newLead);
 
     // Build WhatsApp URL with full filled details
     const whatsappUrl = buildEnquiryWhatsAppUrl({
-      name: newLead.name,
-      phone: newLead.phone,
-      email: newLead.email || undefined,
-      ageCategory: newLead.ageCategory,
+      name: savedLead.name,
+      phone: savedLead.phone,
+      email: savedLead.email || undefined,
+      ageCategory: savedLead.ageCategory,
       preferredBranchName: branchDisplayName,
       preferredProgramName: programDisplayName,
-      preferredSlot: newLead.slot,
-      message: newLead.message,
+      preferredSlot: savedLead.slot,
+      message: savedLead.message,
     });
 
     return NextResponse.json({
       success: true,
       message: "Lead recorded in CRM. Opening WhatsApp...",
-      enquiryId: newLead.id,
+      enquiryId: savedLead.id,
       whatsappUrl,
-      lead: newLead,
+      lead: savedLead,
     });
   } catch (error) {
     console.error("Enquiry API POST error:", error);
@@ -124,32 +95,15 @@ export async function POST(request: Request) {
   }
 }
 
-// 2. GET: Retrieve leads for CRM tool with optional filtering
+// 2. GET: Retrieve leads from Neon DB for CRM tool with optional filtering
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const status = searchParams.get("status");
     const branch = searchParams.get("branch");
-    const search = searchParams.get("search")?.toLowerCase();
+    const search = searchParams.get("search");
 
-    let leads = await readLeads();
-
-    if (status && status !== "ALL") {
-      leads = leads.filter((l) => l.status === status);
-    }
-
-    if (branch && branch !== "ALL") {
-      leads = leads.filter((l) => l.branch === branch);
-    }
-
-    if (search) {
-      leads = leads.filter(
-        (l) =>
-          l.name.toLowerCase().includes(search) ||
-          l.phone.includes(search) ||
-          (l.email && l.email.toLowerCase().includes(search))
-      );
-    }
+    const leads = await getLeads({ status, branch, search });
 
     return NextResponse.json({
       success: true,
@@ -165,7 +119,7 @@ export async function GET(request: Request) {
   }
 }
 
-// 3. PATCH: Update lead status or internal notes from CRM
+// 3. PATCH: Update lead status or internal notes in Neon DB from CRM
 export async function PATCH(request: Request) {
   try {
     const body = await request.json();
@@ -178,31 +132,18 @@ export async function PATCH(request: Request) {
       );
     }
 
-    const leads = await readLeads();
-    const leadIndex = leads.findIndex((l) => l.id === id);
+    const updatedLead = await updateLead(id, { status, notes });
 
-    if (leadIndex === -1) {
+    if (!updatedLead) {
       return NextResponse.json(
         { success: false, message: "Lead not found." },
         { status: 404 }
       );
     }
 
-    if (status) {
-      leads[leadIndex].status = status;
-    }
-
-    if (typeof notes === "string") {
-      leads[leadIndex].notes = notes;
-    }
-
-    leads[leadIndex].updatedAt = new Date().toISOString();
-
-    await saveLeads(leads);
-
     return NextResponse.json({
       success: true,
-      lead: leads[leadIndex],
+      lead: updatedLead,
     });
   } catch (error) {
     console.error("Enquiry API PATCH error:", error);
@@ -213,7 +154,7 @@ export async function PATCH(request: Request) {
   }
 }
 
-// 4. DELETE: Remove lead from CRM
+// 4. DELETE: Remove lead from Neon DB
 export async function DELETE(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -226,10 +167,7 @@ export async function DELETE(request: Request) {
       );
     }
 
-    const leads = await readLeads();
-    const filteredLeads = leads.filter((l) => l.id !== id);
-
-    await saveLeads(filteredLeads);
+    await deleteLead(id);
 
     return NextResponse.json({
       success: true,

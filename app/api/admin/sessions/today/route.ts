@@ -73,9 +73,9 @@ export async function GET(request: Request) {
       LEFT JOIN programs p ON b.program_slug = p.slug
       LEFT JOIN batch_students bs ON b.id = bs.batch_id AND bs.status = 'ACTIVE'
       LEFT JOIN attendance a ON s.id = a.session_id
-      WHERE s.session_date = ${todayStr}
+      WHERE s.session_date = $1::date
     `;
-    const params: (string | number)[] = [];
+    const params: (string | number)[] = [todayStr];
 
     if (centre && centre !== "ALL") {
       params.push(centre);
@@ -90,7 +90,7 @@ export async function GET(request: Request) {
     query += ` GROUP BY s.id, b.name, c.name, cen.name, p.name ORDER BY s.start_time ASC;`;
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const sessions = await (sql as any)(query, params);
+    const sessions = await (sql as any).query(query, params);
 
     return NextResponse.json({
       success: true,

@@ -37,7 +37,7 @@ export async function GET(request: Request) {
     params.push(limit);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const logs = await (sql as any)(query, params);
+    const logs = await (sql as any).query(query, params);
 
     return NextResponse.json({
       success: true,

@@ -53,7 +53,7 @@ export async function GET(request: Request) {
     query += ` GROUP BY p.id ORDER BY p.created_at DESC LIMIT 100;`;
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const rows = await (sql as any)(query, params);
+    const rows = await (sql as any).query(query, params);
 
     return NextResponse.json({
       success: true,

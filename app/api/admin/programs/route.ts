@@ -22,12 +22,12 @@ export async function GET(request: Request) {
       SELECT 
         p.*,
         COUNT(DISTINCT b.id)::int as active_batches_count,
-        COUNT(DISTINCT s.id)::int as enrolled_students_count
+        COUNT(DISTINCT bs.student_id)::int as enrolled_students_count
       FROM programs p
       LEFT JOIN batches b ON p.slug = b.program_slug AND b.status = 'ACTIVE'
-      LEFT JOIN students s ON p.slug = s.program_slug AND s.status = 'ACTIVE'
-      WHERE p.is_active = true
-      GROUP BY p.id
+      LEFT JOIN batch_students bs ON b.id = bs.batch_id AND bs.status = 'ACTIVE'
+      WHERE p.status = 'ACTIVE'
+      GROUP BY p.slug
       ORDER BY p.name ASC;
     `;
 

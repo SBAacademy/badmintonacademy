@@ -26,8 +26,8 @@ export async function GET(request: Request) {
       FROM centres c
       LEFT JOIN batches b ON c.slug = b.centre_slug AND b.status = 'ACTIVE'
       LEFT JOIN batch_students bs ON b.id = bs.batch_id AND bs.status = 'ACTIVE'
-      WHERE c.is_active = true
-      GROUP BY c.id
+      WHERE c.status = 'ACTIVE'
+      GROUP BY c.slug
       ORDER BY c.name ASC;
     `;
 

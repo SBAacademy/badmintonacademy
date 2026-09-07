@@ -9,6 +9,15 @@ class SecureStorageService {
   static const _keyAccessToken = 'sa_access_token';
   static const _keyRefreshToken = 'sa_refresh_token';
   static const _keyUserJson = 'sa_user_json';
+  static const _keyBaseUrl = 'sa_base_url';
+
+  Future<void> saveBaseUrl(String url) async {
+    await _storage.write(key: _keyBaseUrl, value: url);
+  }
+
+  Future<String?> getBaseUrl() async {
+    return await _storage.read(key: _keyBaseUrl);
+  }
 
   Future<void> saveTokens({
     required String accessToken,

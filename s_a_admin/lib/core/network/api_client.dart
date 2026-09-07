@@ -9,6 +9,23 @@ class ApiClient {
   final SecureStorageService _storage = SecureStorageService();
   String baseUrl = 'http://172.20.10.9:3000';
 
+  Future<void> initBaseUrl() async {
+    final saved = await _storage.getBaseUrl();
+    if (saved != null && saved.trim().isNotEmpty) {
+      updateBaseUrl(saved.trim());
+    }
+  }
+
+  void updateBaseUrl(String newUrl) {
+    var formatted = newUrl.trim();
+    if (formatted.endsWith('/')) {
+      formatted = formatted.substring(0, formatted.length - 1);
+    }
+    baseUrl = formatted;
+    dio.options.baseUrl = formatted;
+    _storage.saveBaseUrl(formatted);
+  }
+
   ApiClient._internal() {
     dio = Dio(
       BaseOptions(

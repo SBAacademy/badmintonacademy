@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/auth/auth_provider.dart';
+import '../../../core/network/api_client.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -35,6 +36,56 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     if (success && mounted) {
       context.go('/today');
     }
+  }
+
+  void _showServerDialog() {
+    final controller = TextEditingController(text: ApiClient().baseUrl);
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppTheme.surface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: const BorderSide(color: AppTheme.border),
+        ),
+        title: const Text('Backend Server URL', style: TextStyle(color: AppTheme.textPrimary, fontSize: 16)),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Specify the academy backend host (e.g. http://172.20.10.9:3000):',
+              style: TextStyle(color: AppTheme.textMuted, fontSize: 13),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: controller,
+              style: const TextStyle(color: AppTheme.textPrimary, fontSize: 14),
+              decoration: const InputDecoration(
+                hintText: 'http://172.20.10.9:3000',
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('CANCEL', style: TextStyle(color: AppTheme.textMuted)),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              final newUrl = controller.text.trim();
+              if (newUrl.isNotEmpty) {
+                ApiClient().updateBaseUrl(newUrl);
+                setState(() {});
+              }
+              Navigator.pop(ctx);
+            },
+            child: const Text('SAVE'),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -190,6 +241,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                 child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xFF07090D)),
                               )
                             : const Text('AUTHENTICATE & ENTER →'),
+                      ),
+                      const SizedBox(height: 16),
+
+                      // Server configuration shortcut
+                      Center(
+                        child: TextButton.icon(
+                          icon: const Icon(Icons.dns_outlined, size: 14, color: AppTheme.textMuted),
+                          label: Text(
+                            'Server: ${ApiClient().baseUrl}',
+                            style: const TextStyle(fontSize: 11, color: AppTheme.textMuted),
+                          ),
+                          onPressed: _showServerDialog,
+                        ),
                       ),
                     ],
                   ),

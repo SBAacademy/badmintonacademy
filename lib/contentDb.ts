@@ -85,6 +85,21 @@ export async function initContentDb(): Promise<void> {
   }
 }
 
+function sanitizeItemImageUrls<T>(item: T): T {
+  if (!item || typeof item !== "object") return item;
+  const clone = { ...(item as Record<string, unknown>) };
+  for (const key of ["image", "src", "url", "avatar", "photo"]) {
+    if (typeof clone[key] === "string") {
+      const val = clone[key] as string;
+      const apiIdx = val.indexOf("/api/images/");
+      if (apiIdx !== -1) {
+        clone[key] = val.substring(apiIdx);
+      }
+    }
+  }
+  return clone as T;
+}
+
 export async function getContentSection<T>(
   section: ContentSectionKey,
   defaultItems: T[]
@@ -101,7 +116,7 @@ export async function getContentSection<T>(
       if (rows.length > 0 && rows[0].data) {
         const raw = rows[0].data;
         const parsed = typeof raw === "string" ? JSON.parse(raw) : raw;
-        if (Array.isArray(parsed)) return parsed as T[];
+        if (Array.isArray(parsed)) return (parsed as T[]).map(sanitizeItemImageUrls);
       }
     } catch (err) {
       console.error(`Error querying section ${section} from Neon DB:`, err);
@@ -111,9 +126,9 @@ export async function getContentSection<T>(
   // Fallback to local JSON or hardcoded defaults
   const fallback = await readFallbackContent();
   if (fallback[section] && Array.isArray(fallback[section])) {
-    return fallback[section] as T[];
+    return (fallback[section] as T[]).map(sanitizeItemImageUrls);
   }
-  return defaultItems;
+  return defaultItems.map(sanitizeItemImageUrls);
 }
 
 export async function saveContentSection<T>(
@@ -122,13 +137,14 @@ export async function saveContentSection<T>(
 ): Promise<void> {
   const sql = getSql();
   const now = new Date().toISOString();
+  const sanitizedItems = items.map(sanitizeItemImageUrls);
 
   if (sql) {
     try {
       await initContentDb();
       await sql`
         INSERT INTO site_content (section, data, updated_at)
-        VALUES (${section}, ${JSON.stringify(items)}, ${now})
+        VALUES (${section}, ${JSON.stringify(sanitizedItems)}, ${now})
         ON CONFLICT (section) DO UPDATE
         SET data = EXCLUDED.data, updated_at = EXCLUDED.updated_at;
       `;
@@ -139,7 +155,7 @@ export async function saveContentSection<T>(
 
   // Sync to fallback file
   const fallback = await readFallbackContent();
-  fallback[section] = items;
+  fallback[section] = sanitizedItems;
   await writeFallbackContent(fallback);
 }
 

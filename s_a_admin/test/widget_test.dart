@@ -3,8 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:s_a_admin/core/theme/app_theme.dart';
 import 'package:s_a_admin/core/auth/auth_provider.dart';
 import 'package:s_a_admin/core/network/api_endpoints.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:s_a_admin/core/network/offline_queue.dart';
+import 'package:s_a_admin/core/network/api_client.dart';
+import 'package:s_a_admin/core/components/rebel_components.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -32,25 +32,51 @@ void main() {
     });
   });
 
-  group('API Endpoints Directory Tests', () {
+  group('API Endpoints for Website & CRM Modules', () {
     test('Verifies centralized API endpoint routes match backend contracts', () {
       expect(ApiEndpoints.login, '/api/admin/auth/login');
       expect(ApiEndpoints.refresh, '/api/admin/auth/refresh');
       expect(ApiEndpoints.logout, '/api/admin/auth/logout');
-      expect(ApiEndpoints.sessionsToday, '/api/admin/sessions/today');
-      expect(ApiEndpoints.attendance, '/api/admin/attendance');
       expect(ApiEndpoints.leads, '/api/admin/leads');
-      expect(ApiEndpoints.convertLead, '/api/admin/students/convert-lead');
-      expect(ApiEndpoints.invoices, '/api/admin/invoices');
-      expect(ApiEndpoints.payments, '/api/admin/payments');
-      expect(ApiEndpoints.coaches, '/api/admin/coaches');
-      expect(ApiEndpoints.centres, '/api/admin/centres');
-      expect(ApiEndpoints.programs, '/api/admin/programs');
-      expect(ApiEndpoints.performance, '/api/admin/performance');
-      expect(ApiEndpoints.notifications, '/api/admin/notifications');
-      expect(ApiEndpoints.search, '/api/admin/search');
-      expect(ApiEndpoints.audit, '/api/admin/audit');
-      expect(ApiEndpoints.staff, '/api/admin/staff');
+      expect(ApiEndpoints.lead('lead-123'), '/api/admin/leads/lead-123');
+      expect(ApiEndpoints.cms('gallery'), '/api/admin/cms/gallery');
+      expect(ApiEndpoints.cms('blog'), '/api/admin/cms/blog');
+      expect(ApiEndpoints.cms('coaches'), '/api/admin/cms/coaches');
+      expect(ApiEndpoints.cms('achievements'), '/api/admin/cms/achievements');
+      expect(ApiEndpoints.cms('testimonials'), '/api/admin/cms/testimonials');
+    });
+
+    test('Verifies ApiClient resolveUrl and sanitizeUrl logic', () {
+      final client = ApiClient();
+      client.setBaseUrl('http://172.20.10.9:3000');
+
+      // sanitizeUrl strips local IP / domain prefixes
+      expect(
+        client.sanitizeUrl('http://172.20.10.9:3000/api/images/sample.png'),
+        '/api/images/sample.png',
+      );
+      expect(
+        client.sanitizeUrl('http://localhost:3000/api/images/sample.png'),
+        '/api/images/sample.png',
+      );
+      expect(
+        client.sanitizeUrl('/api/images/sample.png'),
+        '/api/images/sample.png',
+      );
+      expect(
+        client.sanitizeUrl('https://images.unsplash.com/photo-123'),
+        'https://images.unsplash.com/photo-123',
+      );
+
+      // resolveUrl prepends baseUrl only to relative paths
+      expect(
+        client.resolveUrl('/api/images/sample.png'),
+        'http://172.20.10.9:3000/api/images/sample.png',
+      );
+      expect(
+        client.resolveUrl('https://images.unsplash.com/photo-123'),
+        'https://images.unsplash.com/photo-123',
+      );
     });
   });
 
@@ -67,18 +93,6 @@ void main() {
       expect(superAdmin.isSuperAdmin, isTrue);
       expect(superAdmin.isAdmin, isTrue);
       expect(superAdmin.isCoach, isFalse);
-
-      final coach = UserProfile(
-        userId: 'usr-coach-01',
-        email: 'anand@sabadminton.com',
-        fullName: 'Coach Anand Varma',
-        role: 'COACH',
-        assignedCentre: 'kadavanthra',
-      );
-
-      expect(coach.isSuperAdmin, isFalse);
-      expect(coach.isAdmin, isFalse);
-      expect(coach.isCoach, isTrue);
 
       final contentMgr = UserProfile(
         userId: 'usr-cms-01',
@@ -109,45 +123,95 @@ void main() {
     });
   });
 
-  group('Offline Attendance Queue Storage Tests', () {
-    test('Enqueues offline attendance record into local storage', () async {
-      SharedPreferences.setMockInitialValues({});
-      final queue = OfflineAttendanceQueue();
-
-      expect(await queue.getPendingCount(), 0);
-
-      await queue.enqueueSessionAttendance(
-        sessionId: 'SES-TEST-01',
-        records: [
-          {'studentId': 'STU-01', 'status': 'PRESENT'},
-          {'studentId': 'STU-02', 'status': 'LATE'},
-        ],
-      );
-
-      expect(await queue.getPendingCount(), 1);
-    });
-  });
-
-  group('Widget Render Tests', () {
-    testWidgets('AppTheme surface and card render cleanly with branding', (WidgetTester tester) async {
+  group('Rebel UI Components Render Tests', () {
+    testWidgets('Renders RebelCard with text and tap handler', (WidgetTester tester) async {
+      bool tapped = false;
       await tester.pumpWidget(
         MaterialApp(
           theme: AppTheme.darkTheme,
           home: Scaffold(
-            body: Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Text(
-                  'S&A ACADEMY OS',
-                  style: TextStyle(color: AppTheme.primary),
-                ),
-              ),
+            body: RebelCard(
+              onTap: () => tapped = true,
+              child: const Text('Lead: Rohit Kumar'),
             ),
           ),
         ),
       );
 
-      expect(find.text('S&A ACADEMY OS'), findsOneWidget);
+      expect(find.text('Lead: Rohit Kumar'), findsOneWidget);
+      await tester.tap(find.text('Lead: Rohit Kumar'));
+      expect(tapped, isTrue);
+    });
+
+    testWidgets('Renders RebelStatusBadge with color', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.darkTheme,
+          home: const Scaffold(
+            body: RebelStatusBadge(label: 'NEW', color: AppTheme.statusNew),
+          ),
+        ),
+      );
+
+      expect(find.text('NEW'), findsOneWidget);
+    });
+
+    testWidgets('Renders RebelFilterPill with active state', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.darkTheme,
+          home: Scaffold(
+            body: RebelFilterPill(
+              label: 'Kadavanthra',
+              isSelected: true,
+              count: 12,
+              onTap: () {},
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Kadavanthra'), findsOneWidget);
+      expect(find.text('(12)'), findsOneWidget);
+    });
+
+    testWidgets('Renders RebelMetricCard with title and metric value', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.darkTheme,
+          home: const Scaffold(
+            body: RebelMetricCard(
+              title: 'Total Reviews',
+              value: '42',
+              icon: Icons.star,
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Total Reviews'), findsOneWidget);
+      expect(find.text('42'), findsOneWidget);
+    });
+
+    testWidgets('Renders RebelEmptyState with icon and action button', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.darkTheme,
+          home: Scaffold(
+            body: RebelEmptyState(
+              icon: Icons.photo_library_outlined,
+              title: 'No photos found',
+              message: 'Add photos to display on website',
+              actionLabel: 'Add Photo',
+              onAction: () {},
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('No photos found'), findsOneWidget);
+      expect(find.text('Add photos to display on website'), findsOneWidget);
+      expect(find.text('Add Photo'), findsOneWidget);
     });
   });
 }

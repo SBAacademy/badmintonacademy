@@ -34,6 +34,9 @@ export async function GET(request: Request) {
         prg.name as program_name,
         p.full_name as parent_name,
         p.phone as parent_phone,
+        p.phone as phone,
+        s.emergency_contact as student_phone,
+        s.emergency_contact as emergency_contact,
         COALESCE(SUM(pa.allocated_amount), 0)::numeric as paid_amount,
         (fi.amount_due - COALESCE(SUM(pa.allocated_amount), 0))::numeric as balance_due
       FROM fee_invoices fi
@@ -62,7 +65,7 @@ export async function GET(request: Request) {
     }
 
     query += `
-      GROUP BY fi.id, s.full_name, s.primary_centre, cen.name, prg.name, p.full_name, p.phone
+      GROUP BY fi.id, s.full_name, s.primary_centre, s.emergency_contact, cen.name, prg.name, p.full_name, p.phone
       ORDER BY fi.due_date DESC, fi.created_at DESC LIMIT 100;
     `;
 

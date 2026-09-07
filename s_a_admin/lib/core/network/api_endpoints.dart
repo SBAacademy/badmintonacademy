@@ -46,4 +46,5 @@ class ApiEndpoints {
   static const String search = '/api/admin/search';
   static const String audit = '/api/admin/audit';
   static const String staff = '/api/admin/staff';
+  static const String upload = '/api/upload';
 }

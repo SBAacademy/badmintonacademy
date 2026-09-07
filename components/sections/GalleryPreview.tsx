@@ -4,6 +4,7 @@ import Image from "next/image";
 import { ArrowRight, Eye } from "lucide-react";
 import { GALLERY_ITEMS, GalleryItem } from "@/data/gallery";
 import { getGalleryItems } from "@/lib/contentDb";
+import { normalizeImageSrc, isInternalImage } from "@/lib/imageUtils";
 
 export async function GalleryPreview({ initialGallery }: { initialGallery?: GalleryItem[] }) {
   const gallery = initialGallery || (await getGalleryItems());
@@ -44,32 +45,36 @@ export async function GalleryPreview({ initialGallery }: { initialGallery?: Gall
 
         {/* Editorial Sports Gallery Grid: Hard corners, 1px borders */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-12">
-          {gallery.slice(0, 4).map((item) => (
-            <Link
-              key={item.id}
-              href="/gallery"
-              className="group relative aspect-square overflow-hidden bg-[#0B0F14] border border-[#1F2937] block hover:border-[#B8F000]/70 transition-colors"
-            >
-              <Image
-                src={item.image}
-                alt={item.title}
-                fill
-                className="object-cover filter contrast-115 group-hover:scale-105 transition-transform duration-500"
-                sizes="(max-width: 768px) 50vw, 25vw"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#07090D] via-[#07090D]/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex flex-col justify-end p-4 text-left">
-                <div className="w-7 h-7 bg-[#11161D] text-[#B8F000] border border-[#1F2937] flex items-center justify-center mb-2">
-                  <Eye className="w-3.5 h-3.5" />
+          {gallery.slice(0, 4).map((item) => {
+            const imgSrc = normalizeImageSrc(item.image);
+            return (
+              <Link
+                key={item.id}
+                href="/gallery"
+                className="group relative aspect-square overflow-hidden bg-[#0B0F14] border border-[#1F2937] block hover:border-[#B8F000]/70 transition-colors"
+              >
+                <Image
+                  src={imgSrc}
+                  alt={item.title}
+                  fill
+                  unoptimized={isInternalImage(imgSrc)}
+                  className="object-cover filter contrast-115 group-hover:scale-105 transition-transform duration-500"
+                  sizes="(max-width: 768px) 50vw, 25vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#07090D] via-[#07090D]/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex flex-col justify-end p-4 text-left">
+                  <div className="w-7 h-7 bg-[#11161D] text-[#B8F000] border border-[#1F2937] flex items-center justify-center mb-2">
+                    <Eye className="w-3.5 h-3.5" />
+                  </div>
+                  <div className="text-xs font-bold text-white uppercase tracking-tight leading-snug">
+                    {item.title}
+                  </div>
+                  <div className="font-mono text-[10px] text-[#B8F000] mt-0.5 uppercase tracking-wider">
+                    {item.category} • {item.branch}
+                  </div>
                 </div>
-                <div className="text-xs font-bold text-white uppercase tracking-tight leading-snug">
-                  {item.title}
-                </div>
-                <div className="font-mono text-[10px] text-[#B8F000] mt-0.5 uppercase tracking-wider">
-                  {item.category} • {item.branch}
-                </div>
-              </div>
-            </Link>
-          ))}
+              </Link>
+            );
+          })}
         </div>
 
       </div>

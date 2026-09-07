@@ -99,4 +99,30 @@ class ApiClient {
     baseUrl = url;
     dio.options.baseUrl = url;
   }
+
+  /// Resolves relative API paths (e.g. /api/images/...) to absolute URLs using baseUrl for local display
+  String resolveUrl(String? url) {
+    if (url == null || url.trim().isEmpty) return '';
+    final trimmed = url.trim();
+    if (trimmed.startsWith('/')) {
+      return '$baseUrl$trimmed';
+    }
+    return trimmed;
+  }
+
+  /// Strips host/IP from internal API paths so URLs are stored portably as relative paths
+  String sanitizeUrl(String? url) {
+    if (url == null || url.trim().isEmpty) return '';
+    final trimmed = url.trim();
+    final apiIdx = trimmed.indexOf('/api/images/');
+    if (apiIdx != -1) {
+      return trimmed.substring(apiIdx);
+    }
+    final uploadIdx = trimmed.indexOf('/uploads/');
+    if (uploadIdx != -1) {
+      return trimmed.substring(uploadIdx);
+    }
+    return trimmed;
+  }
 }
+

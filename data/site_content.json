@@ -1,0 +1,341 @@
+{
+  "gallery": [
+    {
+      "id": "g-1",
+      "image": "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?q=80&w=1200&auto=format&fit=crop",
+      "title": "Central Arena 6-Court Layout",
+      "branch": "Kadavanthra",
+      "caption": "BWF Grade-1 certified courts with glare-free 750 Lux overhead LED illumination at Kadavanthra.",
+      "category": "Courts & Arena"
+    },
+    {
+      "id": "g-2",
+      "image": "https://images.unsplash.com/photo-1613918108466-292b78a8ef95?q=80&w=1200&auto=format&fit=crop",
+      "title": "Junior Multi-Shuttle Footwork Drills",
+      "branch": "Edappally",
+      "caption": "High-cadence corner shadow movement and racquet speed drills under senior coaches.",
+      "category": "Training Drills"
+    },
+    {
+      "id": "g-3",
+      "image": "https://images.unsplash.com/photo-1599474924187-334a4ae5bd3c?q=80&w=1200&auto=format&fit=crop",
+      "title": "District Championship Gold Podium",
+      "branch": "Kadavanthra",
+      "caption": "S&A athletes celebrating their Under-17 doubles championship triumph in Ernakulam.",
+      "category": "Tournaments"
+    },
+    {
+      "id": "g-4",
+      "image": "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=1200&auto=format&fit=crop",
+      "title": "Kids Foundation Agility Games",
+      "branch": "Edappally",
+      "caption": "Young beginners developing hand-eye coordination with specialized mini-rackets.",
+      "category": "Juniors & Camps"
+    },
+    {
+      "id": "g-5",
+      "image": "https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?q=80&w=1200&auto=format&fit=crop",
+      "title": "Adult Prime Evening Corporate Session",
+      "branch": "Kakkanad",
+      "caption": "Corporate athletes training on doubles rotation and tactical smashing in Kakkanad.",
+      "category": "Coaching Sessions"
+    },
+    {
+      "id": "g-1788816692072",
+      "title": "hughgg",
+      "caption": "fyvbjn",
+      "description": "fyvbjn",
+      "image": "/api/images/image_picker_79776b6f-22c8-489_1788816672574.png",
+      "src": "/api/images/image_picker_79776b6f-22c8-489_1788816672574.png",
+      "url": "/api/images/image_picker_79776b6f-22c8-489_1788816672574.png",
+      "branch": "Kadavanthra",
+      "centre": "Kadavanthra",
+      "category": "Courts & Arena",
+      "display_order": 9,
+      "published": true,
+      "is_published": true,
+      "status": "published"
+    },
+    {
+      "id": "g-6",
+      "image": "https://images.unsplash.com/photo-1574629810360-7efbbe195018?q=80&w=1200&auto=format&fit=crop",
+      "title": "Biomechanical Video Analysis Room",
+      "branch": "Kadavanthra",
+      "caption": "Frame-by-frame racquet swing velocity and wrist pronation analysis.",
+      "category": "Coaching Sessions"
+    },
+    {
+      "id": "g-7",
+      "image": "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?q=80&w=1200&auto=format&fit=crop",
+      "title": "Annual Summer Camp Grand Finals",
+      "branch": "Kadavanthra",
+      "caption": "Over 120 summer camp graduates receiving their official certificates and medals.",
+      "category": "Juniors & Camps"
+    },
+    {
+      "id": "g-8",
+      "image": "https://images.unsplash.com/photo-1552674605-db6ffd4facb5?q=80&w=1200&auto=format&fit=crop",
+      "title": "North Kochi Training Facility",
+      "branch": "Edappally",
+      "caption": "Spacious 4-court setup with shock-absorbing subflooring at Edappally.",
+      "category": "Courts & Arena"
+    }
+  ],
+  "coaches": [
+    {
+      "id": "anand-varma",
+      "name": "Coach Anand Varma",
+      "role": "Head Coach & Technical Director",
+      "certifications": [
+        "BWF Level 2 Certified Coach",
+        "NIS Diploma in Sports Coaching (Badminton)",
+        "Former Kerala State Senior Champion"
+      ],
+      "experienceYears": 14,
+      "specialization": "High-Performance Singles & Tactical Match Biomechanics",
+      "bio": "With over 14 years of professional coaching experience and a decorated state-level playing career, Coach Anand leads the academy's competitive curriculum. He has personally mentored over 25 state ranking medalists and several junior nationals participants.",
+      "primaryBranch": "Kadavanthra (Headquarters)",
+      "achievements": [
+        "Former Kerala State Senior Men's Singles Champion",
+        "Coached 18+ National Championship Qualifiers",
+        "Official Coach for Ernakulam District Junior Squad (2021–2024)"
+      ],
+      "image": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      "id": "shalini-menon",
+      "name": "Coach Shalini Menon",
+      "role": "Senior Coach — Junior & Girls Development",
+      "certifications": [
+        "BWF Level 1 Certified Coach",
+        "BA Physical Education",
+        "South Zone Inter-University Gold Medalist"
+      ],
+      "experienceYears": 9,
+      "specialization": "Junior Foundation, 6-Point Footwork Agility & Mental Resilience",
+      "bio": "Coach Shalini specializes in child athletic psychology and early stroke mechanics. Her patient, systematic pedagogy builds rock-solid basics, preventing biomechanical faults and inspiring young athletes to love competitive sport.",
+      "primaryBranch": "Edappally Branch",
+      "achievements": [
+        "South Zone Inter-University Badminton Gold Medalist",
+        "Developed 40+ Girls Junior District Title Contenders",
+        "Certified Child Sports Safety & Pedagogy Specialist"
+      ],
+      "image": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      "id": "rohan-mathew",
+      "name": "Coach Rohan Mathew",
+      "role": "Lead Coach — Doubles Strategy & Adult Fitness",
+      "certifications": [
+        "BWF Level 1 Certified Coach",
+        "NSCA Certified Strength & Conditioning Specialist (CSCS)"
+      ],
+      "experienceYears": 11,
+      "specialization": "Doubles Fast-Rotations, Steep Smashing & Kinetic Chain Power",
+      "bio": "A former state doubles champion and CSCS-certified trainer, Coach Rohan coaches our adult batches and competitive doubles pairs. He combines high-tempo multi-shuttle drills with injury-prevention conditioning.",
+      "primaryBranch": "Kakkanad Branch",
+      "achievements": [
+        "Kerala State Doubles Silver Medalist",
+        "Trained 300+ Corporate Tech Athletes in Kochi",
+        "Author of 'Kinetic Efficiency in Modern Badminton'"
+      ],
+      "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      "id": "karthik-nair",
+      "name": "Coach Karthik Nair",
+      "role": "Assistant Coach & Video Analytics Specialist",
+      "certifications": [
+        "BWF Level 1 Coach",
+        "Dartfish Certified Video Analyst"
+      ],
+      "experienceYears": 6,
+      "specialization": "Stroke Biomechanics Video Analysis & Multi-Shuttle Feeds",
+      "bio": "Coach Karthik oversees our digital video review rooms across branches, breaking down students' racquet angle, court recovery time, and shuttle contact points frame-by-frame to fast-track technical breakthroughs.",
+      "primaryBranch": "Kadavanthra & Edappally",
+      "achievements": [
+        "Analyzed 1,500+ student match videos",
+        "Ernakulam Under-19 District Champion (2018)",
+        "Specialist in Rapid Shuttle Machine Drill Programming"
+      ],
+      "image": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=800&auto=format&fit=crop"
+    }
+  ],
+  "achievements": [
+    {
+      "id": "ach-1",
+      "year": "2024",
+      "title": "Kerala State Junior Championship — Gold & Silver Double",
+      "category": "State Championship",
+      "athleteOrTeam": "Arjun K. & Neha Menon (Under-17 Singles)",
+      "description": "S&A athletes captured both the Boys U-17 Singles Gold and Girls U-17 Singles Silver at the 2024 Kerala State Junior Ranking Tournament held in Thrissur.",
+      "badge": "Gold & Silver Medals"
+    },
+    {
+      "id": "ach-2",
+      "year": "2024",
+      "title": "Ernakulam District Overall Champions Trophy",
+      "category": "District Title",
+      "athleteOrTeam": "S & A Badminton Academy Squad",
+      "description": "Secured 14 podium finishes across Under-13, Under-15, and Under-19 categories at the Ernakulam District Badminton Championships, winning the prestigious Best Academy Trophy.",
+      "badge": "Best Academy Trophy"
+    },
+    {
+      "id": "ach-3",
+      "year": "2023",
+      "title": "All-India Sub-Junior Ranking Tournament Selection",
+      "category": "National Qualification",
+      "athleteOrTeam": "Rishi Rajesh (Under-15 Boys)",
+      "description": "Ranked among the top 16 seeds in the country after stellar performances across South Zone regional qualifiers.",
+      "badge": "National Ranking"
+    },
+    {
+      "id": "ach-4",
+      "year": "2023",
+      "title": "Kochi Corporate Badminton League — 1st Place",
+      "category": "Academy Milestone",
+      "athleteOrTeam": "S&A Adult Corporate Team",
+      "description": "Dominated the 32-team corporate championship featuring top IT and MNC clubs from Infopark and SmartCity Kochi.",
+      "badge": "Champions 2023"
+    },
+    {
+      "id": "ach-5",
+      "year": "2022",
+      "title": "South Zone Inter-State Badminton Medals",
+      "category": "State Championship",
+      "athleteOrTeam": "Devika Pillai (Girls Under-13)",
+      "description": "Clinched Bronze in Girls Doubles representing Kerala at the South Zone Badminton Championship in Hyderabad.",
+      "badge": "Inter-State Bronze"
+    }
+  ],
+  "testimonials": [
+    {
+      "id": "t-1",
+      "name": "Dr. Sandeep Kurup",
+      "role": "Parent of Junior Player (Aarav, 11 yrs)",
+      "branch": "Kadavanthra Branch",
+      "rating": 5,
+      "highlight": "Remarkable footwork progress and court discipline",
+      "content": "My son joined S&A Academy's junior batch two years ago with zero formal coaching. Under Coach Anand, his court footwork, stamina, and match composure improved drastically. He just reached the quarterfinals of the Ernakulam District U-13. The wooden-cushion courts give me complete peace of mind regarding knee health.",
+      "avatarText": "SK"
+    },
+    {
+      "id": "t-2",
+      "name": "Pooja Varghese",
+      "role": "Senior Software Architect, Infopark",
+      "branch": "Kakkanad Branch",
+      "rating": 5,
+      "highlight": "Perfect post-work fitness and stress buster",
+      "content": "I attend the 8:00 PM adult batch at Kakkanad after long hours at Infopark. Coach Rohan's doubles strategy sessions are brilliant. You burn 800 calories in 75 minutes, and the showers are spotlessly clean. It has transformed my energy levels completely.",
+      "avatarText": "PV"
+    },
+    {
+      "id": "t-3",
+      "name": "Anjana & Rajesh Nambiar",
+      "role": "Parents of Under-9 Twins",
+      "branch": "Edappally Branch",
+      "rating": 5,
+      "highlight": "Gentle, encouraging coaching for young kids",
+      "content": "We were worried our 6-year-old twins might find sports training too strict, but Coach Shalini is wonderful with kids. They eagerly pack their rackets every Tuesday and Thursday! The viewing gallery allows us to watch their smiles from above.",
+      "avatarText": "RN"
+    },
+    {
+      "id": "t-4",
+      "name": "Vivek Gopinath",
+      "role": "Club League Player & Entrepreneur",
+      "branch": "Kadavanthra Branch",
+      "rating": 5,
+      "highlight": "Video stroke analysis was an eye-opener",
+      "content": "I had played recreational badminton for 8 years with persistent shoulder ache. Coach Karthik analyzed my smash swing on video and showed how my forearm angle was stressing the rotator cuff. Within three weeks of technique correction, my smashes got steeper with zero pain.",
+      "avatarText": "VG"
+    },
+    {
+      "id": "t-5",
+      "name": "Meera Krishnakumar",
+      "role": "Mother of State Rank Player",
+      "branch": "Kadavanthra Branch",
+      "rating": 5,
+      "highlight": "Top-tier coaching and tournament support",
+      "content": "S&A Badminton Academy does not merely coach; they travel with students for ranking tournaments, provide courtside tactical advice, and manage hydration and warm-ups. A genuinely professional academy in Kerala.",
+      "avatarText": "MK"
+    }
+  ],
+  "blog": [
+    {
+      "slug": "badminton-coaching-in-kochi-beginners-guide",
+      "title": "Badminton Coaching in Kochi: The Complete Beginner’s Guide to Courts, Gear & Training",
+      "excerpt": "Everything parents and adult beginners in Kochi need to know about choosing the right badminton academy, court flooring types, non-marking shoes, and foundational coaching habits.",
+      "category": "Beginner's Guide",
+      "readTime": "6 min read",
+      "publishDate": "October 14, 2024",
+      "author": "Coach Anand Varma",
+      "authorRole": "Head Coach, S&A Badminton Academy",
+      "tags": [
+        "Badminton Coaching Kochi",
+        "Beginners Guide",
+        "Court Shoes",
+        "Kids Badminton"
+      ],
+      "image": "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?q=80&w=1200&auto=format&fit=crop",
+      "content": [
+        "Badminton in Kochi has transformed from a seasonal recreational hobby into one of the city's most passionately pursued competitive sports. With modern indoor stadiums operating across Kadavanthra, Edappally, and Kakkanad, players of all ages can now train year-round regardless of Kerala's heavy monsoons.",
+        "### Why Court Flooring Matters More Than You Think",
+        "One of the biggest mistakes beginners make is playing on bare concrete or thin linoleum mats. Badminton involves sudden decelerations, lunges, and vertical jumps that exert up to 4x your body weight on your knees. Certified BWF Grade-1 synthetic courts laid over sprung wooden timber provide crucial shock absorption, reducing impact strain by over 50%.",
+        "### The Importance of Genuine Non-Marking Court Shoes",
+        "Standard running sneakers have thick heel wedges and soft outer foam that encourage ankle rolls during lateral lunges. True badminton shoes feature flat, gum-rubber outsoles with radial pivot points, providing maximum grip on synthetic court mats while leaving zero scuff marks.",
+        "### What to Look for in a Coaching Academy in Ernakulam",
+        "When evaluating academies for yourself or your child, check three critical factors: Coach-to-student ratio (never exceed 1:8), coach certification credentials (look for BWF or NIS credentials), and structured progression ladders that evaluate technical strokes systematically."
+      ]
+    },
+    {
+      "slug": "essential-badminton-footwork-drills-for-juniors",
+      "title": "Mastering 6-Point Court Footwork: Drills Every Junior Badminton Player Must Practice",
+      "excerpt": "Stroke power means nothing if you can't reach the shuttle in balance. Discover the step-by-step 6-corner shadow footwork system used by elite junior coaches.",
+      "category": "Training & Technique",
+      "readTime": "7 min read",
+      "publishDate": "November 02, 2024",
+      "author": "Coach Shalini Menon",
+      "authorRole": "Senior Coach, Junior Development",
+      "tags": [
+        "Badminton Footwork",
+        "Junior Coaching",
+        "Agility Drills",
+        "Speed Training"
+      ],
+      "image": "https://images.unsplash.com/photo-1613918108466-292b78a8ef95?q=80&w=1200&auto=format&fit=crop",
+      "content": [
+        "In badminton, your feet take you to the shot, your core stabilizes your torso, and your wrist executes the stroke. If your footwork is delayed by even a quarter of a second, your contact point drops, forcing you into defensive lifting.",
+        "### The Foundation: The Split-Step (Pre-Hop)",
+        "Before moving toward any of the six court corners, elite players execute a split-step: a subtle, spring-loaded hop right as the opponent strikes the shuttle. This loads the calf and quad muscles with elastic energy, allowing instant acceleration in any direction.",
+        "### Mastering Corner Recoveries",
+        "Forehand rear court: Drop step, chasse step, scissor kick, and explosive push-off back to center base. Backhand rear court: Pivot step, cross-over step, and high contact reach. Practicing these sequences through shadow drills daily ingrains muscle memory until movement becomes subconscious."
+      ]
+    },
+    {
+      "slug": "why-badminton-is-the-best-sport-for-kids-fitness",
+      "title": "Why Badminton is the Ultimate Sport for Children’s Physical & Mental Development",
+      "excerpt": "From laser-sharp hand-eye coordination to cardiovascular endurance and problem-solving under pressure, explore why badminton is Kerala's favorite youth sport.",
+      "category": "Youth Development",
+      "readTime": "5 min read",
+      "publishDate": "November 20, 2024",
+      "author": "Coach Rohan Mathew",
+      "authorRole": "Lead Coach & CSCS Specialist",
+      "tags": [
+        "Kids Fitness",
+        "Child Development",
+        "Health & Sports",
+        "Kochi Academy"
+      ],
+      "image": "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=1200&auto=format&fit=crop",
+      "content": [
+        "In an era dominated by screens and sedentary routines, parents are actively seeking sports that keep children engaged, energized, and physically robust. Badminton stands out as an exceptional choice.",
+        "### Hand-Eye Coordination at Hyperspeed",
+        "The badminton shuttlecock is the fastest moving projectile in sports, with smashes clocked well over 350 km/h at the top level. Tracking a shuttle traveling at varying arcs and speeds sharpens ocular reflexes, spatial awareness, and fine motor coordination in growing children.",
+        "### Total Body Aerobic and Anaerobic Conditioning",
+        "Unlike sports with intermittent downtime, a 60-minute badminton coaching session engages all major muscle groups—legs, glutes, core, shoulders, and back—combining aerobic running with explosive anaerobic sprints and lunges.",
+        "### Mental Resilience & Sportsmanship",
+        "Badminton is rapid chess at 150 bpm heart rate. Children learn to read opponent body language, disguise their own shots, manage frustration when making unforced errors, and win or lose with grace."
+      ]
+    }
+  ]
+}

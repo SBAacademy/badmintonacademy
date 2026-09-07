@@ -582,3 +582,242 @@ class RebelEmptyState extends StatelessWidget {
     );
   }
 }
+
+/// Loading state view with branded Electric Lime spinner
+class RebelLoadingState extends StatelessWidget {
+  final String? message;
+
+  const RebelLoadingState({super.key, this.message});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const SizedBox(
+            width: 28,
+            height: 28,
+            child: CircularProgressIndicator(
+              strokeWidth: 2.5,
+              color: AppTheme.primary,
+            ),
+          ),
+          if (message != null) ...[
+            const SizedBox(height: 14),
+            Text(message!, style: AppTheme.bodySecondary),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+/// Reusable error state view with retry action
+class RebelErrorState extends StatelessWidget {
+  final String title;
+  final String message;
+  final VoidCallback onRetry;
+
+  const RebelErrorState({
+    super.key,
+    this.title = 'Unable to load content',
+    required this.message,
+    required this.onRetry,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.cloud_off_rounded, size: 48, color: AppTheme.danger),
+            const SizedBox(height: 16),
+            Text(title, style: AppTheme.cardTitle, textAlign: TextAlign.center),
+            const SizedBox(height: 6),
+            Text(message, style: AppTheme.bodySecondary, textAlign: TextAlign.center),
+            const SizedBox(height: 20),
+            RebelSecondaryButton(
+              label: 'Retry',
+              icon: Icons.refresh_rounded,
+              onPressed: onRetry,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Standardized Confirmation Dialog
+class RebelConfirmationDialog extends StatelessWidget {
+  final String title;
+  final String message;
+  final String confirmLabel;
+  final String cancelLabel;
+  final bool isDestructive;
+
+  const RebelConfirmationDialog({
+    super.key,
+    required this.title,
+    required this.message,
+    this.confirmLabel = 'Confirm',
+    this.cancelLabel = 'Cancel',
+    this.isDestructive = false,
+  });
+
+  static Future<bool> show(
+    BuildContext context, {
+    required String title,
+    required String message,
+    String confirmLabel = 'Confirm',
+    String cancelLabel = 'Cancel',
+    bool isDestructive = false,
+  }) async {
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => RebelConfirmationDialog(
+        title: title,
+        message: message,
+        confirmLabel: confirmLabel,
+        cancelLabel: cancelLabel,
+        isDestructive: isDestructive,
+      ),
+    );
+    return result ?? false;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: AppTheme.surfaceElevated,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: const BorderSide(color: AppTheme.border, width: 1),
+      ),
+      title: Text(title, style: AppTheme.sectionTitle),
+      content: Text(message, style: AppTheme.bodySecondary),
+      actionsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(false),
+          child: Text(cancelLabel, style: const TextStyle(color: AppTheme.textSecondary)),
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: isDestructive ? AppTheme.danger : AppTheme.primary,
+            foregroundColor: isDestructive ? Colors.white : AppTheme.onPrimary,
+            elevation: 0,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          ),
+          onPressed: () => Navigator.of(context).pop(true),
+          child: Text(confirmLabel),
+        ),
+      ],
+    );
+  }
+}
+
+/// Image card with fallback and loading placeholder
+class RebelImageCard extends StatelessWidget {
+  final String imageUrl;
+  final double? height;
+  final double? width;
+  final BoxFit fit;
+  final BorderRadius? borderRadius;
+
+  const RebelImageCard({
+    super.key,
+    required this.imageUrl,
+    this.height,
+    this.width,
+    this.fit = BoxFit.cover,
+    this.borderRadius,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final radius = borderRadius ?? BorderRadius.circular(10);
+    return ClipRRect(
+      borderRadius: radius,
+      child: Image.network(
+        imageUrl,
+        height: height,
+        width: width,
+        fit: fit,
+        loadingBuilder: (context, child, progress) {
+          if (progress == null) return child;
+          return Container(
+            height: height,
+            width: width,
+            color: AppTheme.surfaceAlt,
+            child: const Center(
+              child: SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(strokeWidth: 2, color: AppTheme.primary),
+              ),
+            ),
+          );
+        },
+        errorBuilder: (context, error, stackTrace) {
+          return Container(
+            height: height,
+            width: width,
+            color: AppTheme.surfaceAlt,
+            child: const Center(
+              child: Icon(Icons.broken_image_outlined, size: 28, color: AppTheme.textMuted),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+/// Toast notification helper
+class RebelToast {
+  static void showSuccess(BuildContext context, String message) {
+    _show(context, message, AppTheme.statusPresent, Icons.check_circle_outline);
+  }
+
+  static void showError(BuildContext context, String message) {
+    _show(context, message, AppTheme.danger, Icons.error_outline);
+  }
+
+  static void showInfo(BuildContext context, String message) {
+    _show(context, message, AppTheme.surfaceElevated, Icons.info_outline);
+  }
+
+  static void _show(BuildContext context, String message, Color bg, IconData icon) {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: bg,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+          side: const BorderSide(color: AppTheme.border, width: 1),
+        ),
+        margin: const EdgeInsets.all(16),
+        content: Row(
+          children: [
+            Icon(icon, color: Colors.white, size: 18),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                message,
+                style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w500),
+              ),
+            ),
+          ],
+        ),
+        duration: const Duration(seconds: 3),
+      ),
+    );
+  }
+}
+

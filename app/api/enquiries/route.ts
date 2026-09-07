@@ -67,6 +67,28 @@ export async function POST(request: Request) {
     // Save lead persistently to Neon PostgreSQL DB (with local fallback)
     const savedLead = await createLead(newLead);
 
+    // Create staff in-app notification asynchronously
+    try {
+      if (process.env.DATABASE_URL) {
+        const { neon } = await import("@neondatabase/serverless");
+        const sql = neon(process.env.DATABASE_URL);
+        await sql`
+          INSERT INTO notifications (id, user_id, type, title, body, deep_link, created_at)
+          VALUES (
+            ${'notif_' + Date.now()},
+            NULL,
+            'NEW_LEAD',
+            'New Inbound Website Enquiry',
+            ${`${savedLead.name} (${savedLead.phone}) enquired for ${savedLead.program} at ${savedLead.branch}`},
+            '/leads',
+            NOW()
+          );
+        `;
+      }
+    } catch {
+      // Non-blocking notification
+    }
+
     // Build WhatsApp URL with full filled details
     const whatsappUrl = buildEnquiryWhatsAppUrl({
       name: savedLead.name,

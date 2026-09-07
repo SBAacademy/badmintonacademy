@@ -16,7 +16,20 @@
 
 # misc
 .DS_Store
+**/.DS_Store
 *.pem
+
+# Database backups & exports
+data/backups/
+*.dump
+*.sql.gz
+
+# Xcode & Apple development
+*.xcuserstate
+xcuserdata/
+**/xcuserdata/
+DerivedData/
+**/.build/
 
 # debug
 npm-debug.log*
@@ -33,3 +46,4 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+

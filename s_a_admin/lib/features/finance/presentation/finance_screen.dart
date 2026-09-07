@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:intl/intl.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/network/api_client.dart';
 import '../../../core/network/api_endpoints.dart';
 import '../../../core/utils/launcher_utils.dart';
+import '../../../core/components/rebel_components.dart';
 
 class FinanceScreen extends ConsumerStatefulWidget {
   const FinanceScreen({super.key});
@@ -13,25 +14,33 @@ class FinanceScreen extends ConsumerStatefulWidget {
   ConsumerState<FinanceScreen> createState() => _FinanceScreenState();
 }
 
-class _FinanceScreenState extends ConsumerState<FinanceScreen> with SingleTickerProviderStateMixin {
+class _FinanceScreenState extends ConsumerState<FinanceScreen> {
   final ApiClient _client = ApiClient();
-  late TabController _tabController;
+  final TextEditingController _searchCtrl = TextEditingController();
 
   bool _isLoading = true;
   List<dynamic> _invoices = [];
-  List<dynamic> _reminders = [];
-  Map<String, dynamic> _summary = {};
+  List<dynamic> _payments = [];
+  String _segment = 'Invoices'; // 'Invoices' or 'Payments'
+  String _statusFilter = 'ALL';
+  dynamic _selectedInvoice; // Non-null renders Screen 12: Payment Detail
+
+  final List<Map<String, String>> _filterPills = [
+    {'key': 'ALL', 'label': 'All'},
+    {'key': 'OVERDUE', 'label': 'Overdue'},
+    {'key': 'PENDING', 'label': 'Pending'},
+    {'key': 'PAID', 'label': 'Paid'},
+  ];
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
     _fetchFinanceData();
   }
 
   @override
   void dispose() {
-    _tabController.dispose();
+    _searchCtrl.dispose();
     super.dispose();
   }
 
@@ -39,19 +48,15 @@ class _FinanceScreenState extends ConsumerState<FinanceScreen> with SingleTicker
     setState(() => _isLoading = true);
     try {
       final invRes = await _client.dio.get(ApiEndpoints.invoices);
-      final remRes = await _client.dio.get(ApiEndpoints.paymentReminders);
-      dynamic repRes;
+      dynamic payRes;
       try {
-        repRes = await _client.dio.get(ApiEndpoints.reportsSummary);
+        payRes = await _client.dio.get(ApiEndpoints.payments);
       } catch (_) {}
 
       if (mounted) {
         setState(() {
           _invoices = invRes.data['data']?['invoices'] ?? [];
-          _reminders = remRes.data['data']?['reminders'] ?? [];
-          if (repRes != null && repRes.data?['data']?['finance'] != null) {
-            _summary = repRes.data['data']['finance'];
-          }
+          _payments = payRes?.data['data']?['payments'] ?? [];
           _isLoading = false;
         });
       }
@@ -60,217 +65,91 @@ class _FinanceScreenState extends ConsumerState<FinanceScreen> with SingleTicker
     }
   }
 
-  void _openRecordPaymentDialog([String? initialInvoiceId, String? studentId, double? balance]) {
-    final amountCtrl = TextEditingController(text: balance != null ? balance.toStringAsFixed(0) : '');
-    final refCtrl = TextEditingController();
-    String method = 'UPI';
-
-    showDialog(
-      context: context,
-      builder: (ctx) => StatefulBuilder(
-        builder: (ctx, setDialogState) => AlertDialog(
-          backgroundColor: AppTheme.surface,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-            side: const BorderSide(color: AppTheme.border),
-          ),
-          title: const Text('Record Fee Payment', style: TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.w800)),
-          content: SizedBox(
-            width: 440,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  controller: amountCtrl,
-                  keyboardType: TextInputType.number,
-                  style: const TextStyle(color: AppTheme.textPrimary),
-                  decoration: const InputDecoration(labelText: 'Amount Paid (₹) *'),
-                ),
-                const SizedBox(height: 12),
-                DropdownButtonFormField<String>(
-                  initialValue: method,
-                  dropdownColor: AppTheme.surface,
-                  style: const TextStyle(color: AppTheme.textPrimary),
-                  decoration: const InputDecoration(labelText: 'Payment Method'),
-                  items: const [
-                    DropdownMenuItem(value: 'UPI', child: Text('UPI / QR Code')),
-                    DropdownMenuItem(value: 'CASH', child: Text('Cash at Front Desk')),
-                    DropdownMenuItem(value: 'BANK_TRANSFER', child: Text('Bank Transfer (NEFT/IMPS)')),
-                    DropdownMenuItem(value: 'CARD', child: Text('Debit / Credit Card POS')),
-                    DropdownMenuItem(value: 'CHEQUE', child: Text('Cheque')),
-                  ],
-                  onChanged: (v) => setDialogState(() => method = v!),
-                ),
-                const SizedBox(height: 12),
-                TextField(
-                  controller: refCtrl,
-                  style: const TextStyle(color: AppTheme.textPrimary),
-                  decoration: const InputDecoration(labelText: 'UTR / Transaction Reference (Optional)'),
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(ctx),
-              child: const Text('Cancel', style: TextStyle(color: AppTheme.textMuted)),
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                final amount = double.tryParse(amountCtrl.text);
-                if (amount != null && amount > 0) {
-                  try {
-                    await _client.dio.post(
-                      ApiEndpoints.payments,
-                      data: {
-                        'studentId': studentId ?? (_invoices.isNotEmpty ? _invoices.first['student_id'] : ''),
-                        'amountPaid': amount,
-                        'paymentMethod': method,
-                        'referenceNumber': refCtrl.text.trim(),
-                        'invoiceId': initialInvoiceId,
-                      },
-                    );
-                    if (ctx.mounted) {
-                      Navigator.pop(ctx);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Payment allocated successfully against open invoice.'),
-                          backgroundColor: AppTheme.success,
-                        ),
-                      );
-                    }
-                    _fetchFinanceData();
-                  } catch (e) {
-                    if (ctx.mounted) {
-                      ScaffoldMessenger.of(ctx).showSnackBar(
-                        SnackBar(content: Text('Payment failed: $e')),
-                      );
-                    }
-                  }
-                }
-              },
-              child: const Text('Confirm & Allocate'),
-            ),
-          ],
-        ),
-      ),
-    );
+  Color _getStatusColor(String status) {
+    switch (status.toUpperCase()) {
+      case 'PAID':
+        return AppTheme.statusPresent;
+      case 'PENDING':
+        return AppTheme.statusFollowUp;
+      case 'OVERDUE':
+        return AppTheme.statusAbsent;
+      case 'PARTIAL':
+        return AppTheme.statusLate;
+      default:
+        return AppTheme.textSecondary;
+    }
   }
 
-  void _openCreateInvoiceDialog() async {
-    final amountCtrl = TextEditingController(text: '3500');
-    final periodCtrl = TextEditingController(
-      text: '${DateTime.now().year}-${DateTime.now().month.toString().padLeft(2, '0')}',
+  void _showRecordPaymentSheet(dynamic invoice) {
+    final amountCtrl = TextEditingController(
+      text: (invoice['balance_amount'] ?? invoice['amount'] ?? 5000).toString(),
     );
-    final dueCtrl = TextEditingController(
-      text: DateTime.now().add(const Duration(days: 7)).toIso8601String().split('T')[0],
-    );
+    String method = 'UPI';
 
-    List<dynamic> studentsList = [];
-    try {
-      final sRes = await _client.dio.get(ApiEndpoints.students);
-      studentsList = sRes.data['data']?['students'] ?? [];
-    } catch (_) {}
-
-    if (studentsList.isEmpty) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('No students enrolled to invoice.')),
-        );
-      }
-      return;
-    }
-
-    String selectedStudentId = studentsList.first['id'];
-
-    if (!mounted) return;
-
-    showDialog(
+    showModalBottomSheet(
       context: context,
-      builder: (ctx) => StatefulBuilder(
-        builder: (ctx, setDialogState) => AlertDialog(
-          backgroundColor: AppTheme.surface,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-            side: const BorderSide(color: AppTheme.border),
-          ),
-          title: const Text('Generate Fee Invoice', style: TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.w800)),
-          content: SizedBox(
-            width: 460,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                DropdownButtonFormField<String>(
-                  value: selectedStudentId,
-                  dropdownColor: AppTheme.surface,
-                  style: const TextStyle(color: AppTheme.textPrimary),
-                  decoration: const InputDecoration(labelText: 'Student Athlete'),
-                  items: studentsList.map<DropdownMenuItem<String>>((s) {
-                    return DropdownMenuItem<String>(
-                      value: s['id'],
-                      child: Text('${s['full_name']} (${s['student_code'] ?? s['id']})'),
-                    );
-                  }).toList(),
-                  onChanged: (v) => setDialogState(() => selectedStudentId = v!),
-                ),
-                const SizedBox(height: 12),
-                TextField(
-                  controller: amountCtrl,
-                  keyboardType: TextInputType.number,
-                  style: const TextStyle(color: AppTheme.textPrimary),
-                  decoration: const InputDecoration(labelText: 'Monthly Fee Amount (₹) *'),
-                ),
-                const SizedBox(height: 12),
-                TextField(
-                  controller: periodCtrl,
-                  style: const TextStyle(color: AppTheme.textPrimary),
-                  decoration: const InputDecoration(labelText: 'Billing Period (YYYY-MM) *'),
-                ),
-                const SizedBox(height: 12),
-                TextField(
-                  controller: dueCtrl,
-                  style: const TextStyle(color: AppTheme.textPrimary),
-                  decoration: const InputDecoration(labelText: 'Due Date (YYYY-MM-DD) *'),
-                ),
-              ],
+      isScrollControlled: true,
+      backgroundColor: AppTheme.surfaceElevated,
+      builder: (ctx) => Padding(
+        padding: EdgeInsets.fromLTRB(20, 20, 20, MediaQuery.of(ctx).viewInsets.bottom + 20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('Record Payment', style: AppTheme.sectionTitle),
+            const SizedBox(height: 6),
+            Text('Invoice: ${invoice['invoice_number'] ?? invoice['id']}', style: AppTheme.bodySecondary),
+            const SizedBox(height: 16),
+            TextField(
+              controller: amountCtrl,
+              keyboardType: TextInputType.number,
+              style: const TextStyle(color: AppTheme.textPrimary),
+              decoration: const InputDecoration(hintText: 'Amount (₹) *'),
             ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(ctx),
-              child: const Text('Cancel', style: TextStyle(color: AppTheme.textMuted)),
+            const SizedBox(height: 14),
+            Row(
+              children: ['UPI', 'CASH', 'BANK_TRANSFER'].map((m) {
+                final isSelected = method == m;
+                return Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: RebelFilterPill(
+                    label: m,
+                    isSelected: isSelected,
+                    onTap: () {
+                      method = m;
+                      (ctx as Element).markNeedsBuild();
+                    },
+                  ),
+                );
+              }).toList(),
             ),
-            ElevatedButton(
-              onPressed: () async {
-                final amount = double.tryParse(amountCtrl.text);
-                if (amount != null && amount > 0) {
+            const SizedBox(height: 24),
+            SizedBox(
+              width: double.infinity,
+              child: RebelButton(
+                label: 'Confirm Payment Entry',
+                onPressed: () async {
+                  final amt = double.tryParse(amountCtrl.text.trim()) ?? 0;
+                  if (amt <= 0) return;
+                  Navigator.pop(ctx);
                   try {
-                    await _client.dio.post(
-                      ApiEndpoints.invoices,
-                      data: {
-                        'studentId': selectedStudentId,
-                        'amountDue': amount,
-                        'billingPeriod': periodCtrl.text.trim(),
-                        'dueDate': dueCtrl.text.trim(),
-                      },
-                    );
-                    if (ctx.mounted) {
-                      Navigator.pop(ctx);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Fee invoice generated successfully.')),
-                      );
-                    }
+                    await _client.dio.post(ApiEndpoints.payments, data: {
+                      'invoiceId': invoice['id'],
+                      'studentId': invoice['student_id'],
+                      'amount': amt,
+                      'paymentMethod': method,
+                    });
                     _fetchFinanceData();
-                  } catch (e) {
-                    if (ctx.mounted) {
-                      ScaffoldMessenger.of(ctx).showSnackBar(
-                        SnackBar(content: Text('Failed to create invoice: $e')),
-                      );
-                    }
-                  }
-                }
-              },
-              child: const Text('Issue Invoice'),
+                    setState(() {
+                      if (_selectedInvoice != null && _selectedInvoice['id'] == invoice['id']) {
+                        _selectedInvoice['status'] = 'PAID';
+                        _selectedInvoice['balance_amount'] = 0;
+                        _selectedInvoice['paid_amount'] = amt;
+                      }
+                    });
+                  } catch (_) {}
+                },
+              ),
             ),
           ],
         ),
@@ -280,267 +159,436 @@ class _FinanceScreenState extends ConsumerState<FinanceScreen> with SingleTicker
 
   @override
   Widget build(BuildContext context) {
-    final billed = (_summary['total_invoiced'] ?? 0).toString().split('.')[0];
-    final collected = (_summary['total_collected'] ?? 0).toString().split('.')[0];
-    final receivables = (_summary['total_receivables'] ?? 0).toString().split('.')[0];
+    if (_selectedInvoice != null) {
+      return _buildInvoiceDetailView(_selectedInvoice);
+    }
+
+    return _buildFinanceListView();
+  }
+
+  /// Screen 11: Payments & Invoices List matching reference mockup
+  Widget _buildFinanceListView() {
+    final filteredInvoices = _invoices.where((inv) {
+      if (_statusFilter != 'ALL' && inv['status'] != _statusFilter) return false;
+      final q = _searchCtrl.text.trim().toLowerCase();
+      if (q.isNotEmpty) {
+        final invNum = (inv['invoice_number'] ?? '').toString().toLowerCase();
+        final stuName = (inv['student_name'] ?? inv['student'] ?? '').toString().toLowerCase();
+        if (!invNum.contains(q) && !stuName.contains(q)) return false;
+      }
+      return true;
+    }).toList();
+
+    final filteredPayments = _payments.where((p) {
+      final q = _searchCtrl.text.trim().toLowerCase();
+      if (q.isNotEmpty) {
+        final payNum = (p['receipt_number'] ?? p['id'] ?? '').toString().toLowerCase();
+        final stuName = (p['student_name'] ?? p['student'] ?? '').toString().toLowerCase();
+        final method = (p['payment_method'] ?? '').toString().toLowerCase();
+        if (!payNum.contains(q) && !stuName.contains(q) && !method.contains(q)) return false;
+      }
+      return true;
+    }).toList();
+
+    return Scaffold(
+      backgroundColor: AppTheme.background,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Header title with icon
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text('Payments', style: AppTheme.pageTitle),
+                  IconButton(
+                    icon: const Icon(Icons.receipt_long_outlined, color: AppTheme.primary, size: 22),
+                    onPressed: () {},
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+
+              // Segmented Toggle: Invoices vs Payments
+              RebelSegmentedControl<String>(
+                values: const ['Invoices', 'Payments'],
+                selectedValue: _segment,
+                labelBuilder: (v) => v,
+                onSelected: (v) => setState(() => _segment = v),
+              ),
+
+              const SizedBox(height: 12),
+
+              // Search field: Search invoices...
+              RebelSearchField(
+                controller: _searchCtrl,
+                hintText: 'Search invoices...',
+                onChanged: (_) => setState(() {}),
+                onClear: () => setState(() {}),
+              ),
+
+              const SizedBox(height: 12),
+
+              // Filter pills: All, Overdue, Pending, Paid
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: _filterPills.map((f) {
+                    final isSelected = _statusFilter == f['key'];
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: RebelFilterPill(
+                        label: f['label']!,
+                        isSelected: isSelected,
+                        onTap: () => setState(() => _statusFilter = f['key']!),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+
+              const SizedBox(height: 16),
+
+              // Invoices / Payments list cards matching Screen 11
+              Expanded(
+                child: _isLoading
+                    ? const Center(
+                        child: CircularProgressIndicator(strokeWidth: 2, color: AppTheme.primary),
+                      )
+                    : (_segment == 'Payments' ? filteredPayments.isEmpty : filteredInvoices.isEmpty)
+                        ? RebelEmptyState(
+                            icon: _segment == 'Payments' ? Icons.payments_outlined : Icons.receipt_outlined,
+                            title: _segment == 'Payments' ? 'No payment records' : 'No invoices found',
+                            message: _segment == 'Payments'
+                                ? 'Completed transactions and receipts will appear here.'
+                                : 'Tuition and coaching fee records will appear here.',
+                          )
+                        : RefreshIndicator(
+                            color: AppTheme.primary,
+                            backgroundColor: AppTheme.surfaceElevated,
+                            onRefresh: _fetchFinanceData,
+                            child: _segment == 'Payments'
+                                ? ListView.separated(
+                                    itemCount: filteredPayments.length,
+                                    separatorBuilder: (_, __) => const SizedBox(height: 10),
+                                    itemBuilder: (context, index) {
+                                      final pay = filteredPayments[index];
+                                      final payNum = pay['receipt_number'] ?? 'REC-2025-${(index + 1).toString().padLeft(3, "0")}';
+                                      final studentName = pay['student_name'] ?? pay['student'] ?? 'Student';
+                                      final method = pay['payment_method'] ?? 'UPI';
+                                      final amount = '₹${NumberFormat('#,##,###').format(pay['amount'] ?? 5000)}';
+
+                                      return RebelCard(
+                                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    payNum,
+                                                    style: const TextStyle(
+                                                      color: AppTheme.textPrimary,
+                                                      fontSize: 15,
+                                                      fontWeight: FontWeight.w700,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 4),
+                                                  Text(
+                                                    studentName,
+                                                    style: const TextStyle(
+                                                      color: AppTheme.textSecondary,
+                                                      fontSize: 13,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 2),
+                                                  Text(
+                                                    'Method: $method',
+                                                    style: const TextStyle(
+                                                      color: AppTheme.textMuted,
+                                                      fontSize: 11,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.end,
+                                              children: [
+                                                Text(
+                                                  amount,
+                                                  style: const TextStyle(
+                                                    color: AppTheme.textPrimary,
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 6),
+                                                const RebelStatusBadge(
+                                                  label: 'PAID',
+                                                  color: AppTheme.statusPresent,
+                                                  isFilled: true,
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  )
+                                : ListView.separated(
+                                    itemCount: filteredInvoices.length,
+                                    separatorBuilder: (_, __) => const SizedBox(height: 10),
+                                    itemBuilder: (context, index) {
+                                      final inv = filteredInvoices[index];
+                                      final invNum = inv['invoice_number'] ?? 'INV-2025-${(index + 1).toString().padLeft(3, "0")}';
+                                      final studentName = inv['student_name'] ?? inv['student'] ?? 'Student';
+                                      final month = inv['billing_period'] ?? inv['month'] ?? 'Feb 2025';
+                                      final amount = '₹${NumberFormat('#,##,###').format(inv['amount'] ?? 5000)}';
+                                      final status = (inv['status'] ?? 'PENDING').toString().toUpperCase();
+                                      final statusColor = _getStatusColor(status);
+
+                                      return RebelCard(
+                                        onTap: () => setState(() => _selectedInvoice = inv),
+                                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    invNum,
+                                                    style: const TextStyle(
+                                                      color: AppTheme.textPrimary,
+                                                      fontSize: 15,
+                                                      fontWeight: FontWeight.w700,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 4),
+                                                  Text(
+                                                    studentName,
+                                                    style: const TextStyle(
+                                                      color: AppTheme.textSecondary,
+                                                      fontSize: 13,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 2),
+                                                  Text(
+                                                    month,
+                                                    style: const TextStyle(
+                                                      color: AppTheme.textMuted,
+                                                      fontSize: 11,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.end,
+                                              children: [
+                                                Text(
+                                                  amount,
+                                                  style: const TextStyle(
+                                                    color: AppTheme.textPrimary,
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 6),
+                                                RebelStatusBadge(
+                                                  label: status,
+                                                  color: statusColor,
+                                                  isFilled: status == 'PAID',
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  ),
+                          ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// Screen 12: Payment / Invoice Detail matching reference mockup
+  Widget _buildInvoiceDetailView(dynamic invoice) {
+    final invNum = invoice['invoice_number'] ?? 'INV-2025-002';
+    final status = (invoice['status'] ?? 'PENDING').toString().toUpperCase();
+    final studentName = invoice['student_name'] ?? invoice['student'] ?? 'Diya P';
+    final studentPhone = invoice['phone'] ?? '+91 98765 43210';
+    final amount = double.tryParse(invoice['amount']?.toString() ?? '5000') ?? 5000;
+    final paid = double.tryParse(invoice['paid_amount']?.toString() ?? '0') ?? 0;
+    final balance = double.tryParse(invoice['balance_amount']?.toString() ?? '${amount - paid}') ?? (amount - paid);
+    final dueDate = invoice['due_date'] != null ? DateFormat('d MMM y').format(DateTime.parse(invoice['due_date'])) : '10 Feb 2025';
+    final billingPeriod = invoice['billing_period'] ?? 'Feb 2025';
+    final statusColor = _getStatusColor(status);
 
     return Scaffold(
       backgroundColor: AppTheme.background,
       appBar: AppBar(
-        title: const Text('FINANCIAL LEDGER & FEES'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.post_add, color: AppTheme.primary),
-            tooltip: 'Generate Invoice',
-            onPressed: _openCreateInvoiceDialog,
-          ),
-          IconButton(
-            icon: const Icon(Icons.receipt_long, color: AppTheme.primary),
-            tooltip: 'Record Payment',
-            onPressed: () => _openRecordPaymentDialog(),
-          ),
-          IconButton(
-            icon: const Icon(Icons.refresh, color: AppTheme.textSecondary),
-            onPressed: _fetchFinanceData,
-          ),
-          const SizedBox(width: 8),
-        ],
-        bottom: TabBar(
-          controller: _tabController,
-          indicatorColor: AppTheme.primary,
-          labelColor: AppTheme.primary,
-          unselectedLabelColor: AppTheme.textMuted,
-          tabs: [
-            Tab(text: 'ALL INVOICES (${_invoices.length})'),
-            Tab(text: 'OVERDUE REMINDERS (${_reminders.length})'),
-          ],
+        leading: TextButton.icon(
+          icon: const Icon(Icons.chevron_left, color: AppTheme.primary, size: 24),
+          label: const Text('Back', style: TextStyle(color: AppTheme.primary, fontSize: 15, fontWeight: FontWeight.w600)),
+          onPressed: () => setState(() => _selectedInvoice = null),
         ),
+        leadingWidth: 90,
       ),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator(color: AppTheme.primary))
-          : Column(
-              children: [
-                // KPI Metric Summary Cards
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Row(
-                    children: [
-                      _buildMetricBox('BILLED', '₹$billed', AppTheme.textPrimary),
-                      const SizedBox(width: 8),
-                      _buildMetricBox('COLLECTED', '₹$collected', AppTheme.success),
-                      const SizedBox(width: 8),
-                      _buildMetricBox('RECEIVABLES', '₹$receivables', AppTheme.warning),
-                    ],
-                  ),
-                ),
-                const Divider(color: AppTheme.border, height: 1),
-                Expanded(
-                  child: TabBarView(
-                    controller: _tabController,
-                    children: [
-                      // Invoices Tab
-                      _invoices.isEmpty
-                          ? const Center(child: Text('No fee invoices found.', style: TextStyle(color: AppTheme.textMuted)))
-                          : ListView.builder(
-                              padding: const EdgeInsets.all(16),
-                              itemCount: _invoices.length,
-                              itemBuilder: (ctx, i) => _buildInvoiceCard(_invoices[i]),
-                            ),
-
-                      // Reminders Tab
-                      _reminders.isEmpty
-                          ? const Center(
-                              child: Text('All student accounts are currently settled! 🎉', style: TextStyle(color: AppTheme.success)))
-                          : ListView.builder(
-                              padding: const EdgeInsets.all(16),
-                              itemCount: _reminders.length,
-                              itemBuilder: (ctx, i) => _buildReminderCard(_reminders[i]),
-                            ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-    );
-  }
-
-  Widget _buildMetricBox(String label, String value, Color color) {
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: AppTheme.surface,
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: AppTheme.border),
-        ),
+      body: SafeArea(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(label, style: const TextStyle(color: AppTheme.textMuted, fontSize: 10, fontWeight: FontWeight.w800)),
-            const SizedBox(height: 4),
-            Text(value, style: TextStyle(color: color, fontSize: 16, fontWeight: FontWeight.w900)),
-          ],
-        ),
-      ),
-    );
-  }
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Header: Invoice Details, Invoice ID, Status Badge
+                    const Text(
+                      'Invoice Details',
+                      style: TextStyle(
+                        color: AppTheme.textPrimary,
+                        fontSize: 22,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          invNum,
+                          style: const TextStyle(
+                            color: AppTheme.textSecondary,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        RebelStatusBadge(label: status, color: statusColor),
+                      ],
+                    ),
 
-  Widget _buildInvoiceCard(dynamic inv) {
-    final invId = inv['id'] ?? '';
-    final studentName = inv['student_name'] ?? 'Student';
-    final billingPeriod = inv['billing_period'] ?? '';
-    final amountDue = double.tryParse('${inv['amount_due']}') ?? 0.0;
-    final paidAmount = double.tryParse('${inv['paid_amount']}') ?? 0.0;
-    final balanceDue = double.tryParse('${inv['balance_due']}') ?? 0.0;
-    final status = inv['status'] ?? 'UNPAID';
+                    const SizedBox(height: 20),
 
-    Color statusColor = AppTheme.warning;
-    if (status == 'PAID') statusColor = AppTheme.success;
-    if (status == 'PARTIAL') statusColor = AppTheme.info;
-    if (status == 'OVERDUE') statusColor = AppTheme.danger;
+                    // Student Information Card matching Screen 12
+                    RebelCard(
+                      padding: const EdgeInsets.all(14),
+                      child: Row(
+                        children: [
+                          RebelAvatar(name: studentName, radius: 20),
+                          const SizedBox(width: 12),
+                          Text(
+                            studentName,
+                            style: const TextStyle(
+                              color: AppTheme.textPrimary,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
 
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppTheme.surface,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppTheme.border),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                studentName,
-                style: const TextStyle(color: AppTheme.textPrimary, fontSize: 16, fontWeight: FontWeight.w800),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                decoration: BoxDecoration(
-                  color: statusColor.withOpacity(0.12),
-                  borderRadius: BorderRadius.circular(4),
+                    const SizedBox(height: 20),
+
+                    // Financial Breakdown matching Screen 12
+                    RebelCard(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      child: Column(
+                        children: [
+                          _buildDetailRow('Amount', '₹${NumberFormat('#,##,###').format(amount)}'),
+                          const Divider(color: AppTheme.border, height: 1),
+                          _buildDetailRow('Paid', '₹${NumberFormat('#,##,###').format(paid)}'),
+                          const Divider(color: AppTheme.border, height: 1),
+                          // Prominent red balance text
+                          _buildDetailRow(
+                            'Balance',
+                            '₹${NumberFormat('#,##,###').format(balance)}',
+                            valueColor: AppTheme.statusAbsent,
+                            isBold: true,
+                          ),
+                          const Divider(color: AppTheme.border, height: 1),
+                          _buildDetailRow('Due Date', dueDate),
+                          const Divider(color: AppTheme.border, height: 1),
+                          _buildDetailRow('Billing Period', billingPeriod),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-                child: Text(
-                  status,
-                  style: TextStyle(color: statusColor, fontSize: 10, fontWeight: FontWeight.w800),
-                ),
               ),
-            ],
-          ),
-          const SizedBox(height: 6),
-          Text(
-            'Billing Period: $billingPeriod • Due Date: ${inv['due_date'] ?? ""}',
-            style: const TextStyle(color: AppTheme.textMuted, fontSize: 12),
-          ),
-          const SizedBox(height: 14),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            ),
+
+            // Sticky Bottom Actions matching Screen 12: Record Payment + Send WhatsApp Reminder
+            Container(
+              padding: EdgeInsets.fromLTRB(16, 12, 16, MediaQuery.of(context).padding.bottom + 12),
+              decoration: const BoxDecoration(
+                color: AppTheme.background,
+                border: Border(top: BorderSide(color: AppTheme.border, width: 1)),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    'Balance: ₹${balanceDue.toStringAsFixed(0)}',
-                    style: TextStyle(
-                      color: balanceDue > 0 ? AppTheme.warning : AppTheme.success,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w800,
+                  SizedBox(
+                    width: double.infinity,
+                    child: RebelButton(
+                      label: 'Record Payment',
+                      height: 48,
+                      onPressed: () => _showRecordPaymentSheet(invoice),
                     ),
                   ),
-                  Text(
-                    'Paid: ₹${paidAmount.toStringAsFixed(0)} / ₹${amountDue.toStringAsFixed(0)}',
-                    style: const TextStyle(color: AppTheme.textMuted, fontSize: 11),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    width: double.infinity,
+                    child: RebelSecondaryButton(
+                      label: 'Send WhatsApp Reminder',
+                      icon: Icons.chat_outlined,
+                      height: 46,
+                      onPressed: () {
+                        final msg = 'Dear Parent, fee invoice $invNum for $studentName is pending. Outstanding balance: ₹${NumberFormat("#,##,###").format(balance)}. Thank you, S&A Badminton Academy.';
+                        LauncherUtils.openWhatsApp(studentPhone, msg);
+                      },
+                    ),
                   ),
                 ],
               ),
-              if (balanceDue > 0)
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppTheme.primary,
-                    foregroundColor: const Color(0xFF07090D),
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  ),
-                  onPressed: () => _openRecordPaymentDialog(invId, inv['student_id'], balanceDue),
-                  child: const Text('Record Payment', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700)),
-                ),
-            ],
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildReminderCard(dynamic rem) {
-    final studentName = rem['student_name'] ?? 'Student';
-    final parentName = rem['parent_name'] ?? 'Parent';
-    final parentPhone = rem['parent_phone'] ?? '';
-    final balance = rem['balance_due'] ?? 0;
-    final period = rem['billing_period'] ?? '';
-    final whatsappUrl = rem['whatsappUrl'] ?? '';
-
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppTheme.surface,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppTheme.danger.withOpacity(0.3)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+  Widget _buildDetailRow(String label, String value, {Color? valueColor, bool isBold = false}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                studentName,
-                style: const TextStyle(color: AppTheme.textPrimary, fontSize: 16, fontWeight: FontWeight.w800),
-              ),
-              Text(
-                '₹$balance DUE',
-                style: const TextStyle(color: AppTheme.danger, fontSize: 14, fontWeight: FontWeight.w900),
-              ),
-            ],
-          ),
-          const SizedBox(height: 4),
           Text(
-            'Parent: $parentName ($period)',
-            style: const TextStyle(color: AppTheme.textSecondary, fontSize: 13),
+            label,
+            style: const TextStyle(
+              color: AppTheme.textMuted,
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+            ),
           ),
-          const SizedBox(height: 12),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF25D366),
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                ),
-                onPressed: () async {
-                  if (whatsappUrl.isNotEmpty) {
-                    final uri = Uri.parse(whatsappUrl);
-                    if (await canLaunchUrl(uri)) {
-                      await launchUrl(uri, mode: LaunchMode.externalApplication);
-                      return;
-                    }
-                  }
-                  if (parentPhone.isNotEmpty) {
-                    LauncherUtils.launchWhatsApp(
-                      context: context,
-                      phone: parentPhone,
-                      message:
-                          'Dear $parentName, friendly reminder from S&A Badminton Academy: The fee of ₹$balance for $studentName for period $period is pending. Thank you!',
-                    );
-                  }
-                },
-                icon: const Icon(Icons.chat, size: 14),
-                label: const Text('Send WhatsApp Reminder', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700)),
-              ),
-            ],
+          Text(
+            value,
+            style: TextStyle(
+              color: valueColor ?? AppTheme.textPrimary,
+              fontSize: 14,
+              fontWeight: isBold ? FontWeight.w700 : FontWeight.w500,
+            ),
           ),
         ],
       ),

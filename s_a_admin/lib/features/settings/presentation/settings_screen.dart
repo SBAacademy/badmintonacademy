@@ -5,7 +5,7 @@ import '../../../core/theme/app_theme.dart';
 import '../../../core/auth/auth_provider.dart';
 import '../../../core/network/offline_queue.dart';
 import '../../../core/network/api_client.dart';
-import '../../../core/network/api_endpoints.dart';
+import '../../../core/components/rebel_components.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
@@ -16,8 +16,8 @@ class SettingsScreen extends ConsumerStatefulWidget {
 
 class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   final OfflineAttendanceQueue _queue = OfflineAttendanceQueue();
-  final ApiClient _client = ApiClient();
   int _pendingSync = 0;
+  bool _biometricEnabled = true;
 
   @override
   void initState() {
@@ -36,127 +36,42 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Sync completed: ${res['synced']} sent, ${res['failed']} remaining.'),
+          content: Text('Sync completed: ${res["synced"]} synced, ${res["failed"]} pending.'),
           backgroundColor: AppTheme.surfaceElevated,
         ),
       );
     }
   }
 
-  void _openCreateStaffDialog() {
-    final emailCtrl = TextEditingController();
-    final passwordCtrl = TextEditingController();
-    final nameCtrl = TextEditingController();
-    String role = 'COACH';
-    String assignedCentre = 'kadavanthra';
-
+  void _showAboutDialog() {
     showDialog(
       context: context,
-      builder: (ctx) => StatefulBuilder(
-        builder: (ctx, setDialogState) => AlertDialog(
-          backgroundColor: AppTheme.surface,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-            side: const BorderSide(color: AppTheme.border),
-          ),
-          title: const Text('Add Staff Account', style: TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.w800)),
-          content: SingleChildScrollView(
-            child: SizedBox(
-              width: 440,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  TextField(
-                    controller: nameCtrl,
-                    style: const TextStyle(color: AppTheme.textPrimary),
-                    decoration: const InputDecoration(labelText: 'Staff Full Name *'),
-                  ),
-                  const SizedBox(height: 12),
-                  TextField(
-                    controller: emailCtrl,
-                    style: const TextStyle(color: AppTheme.textPrimary),
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: const InputDecoration(labelText: 'Official Email *'),
-                  ),
-                  const SizedBox(height: 12),
-                  TextField(
-                    controller: passwordCtrl,
-                    style: const TextStyle(color: AppTheme.textPrimary),
-                    obscureText: true,
-                    decoration: const InputDecoration(labelText: 'Temporary Password (Min 8 chars) *'),
-                  ),
-                  const SizedBox(height: 12),
-                  DropdownButtonFormField<String>(
-                    initialValue: role,
-                    dropdownColor: AppTheme.surface,
-                    style: const TextStyle(color: AppTheme.textPrimary),
-                    decoration: const InputDecoration(labelText: 'Staff Role'),
-                    items: const [
-                      DropdownMenuItem(value: 'COACH', child: Text('COACH (Sessions, Attendance, Performance)')),
-                      DropdownMenuItem(value: 'FRONT_DESK', child: Text('FRONT_DESK (CRM, Trials, Payments)')),
-                      DropdownMenuItem(value: 'CONTENT_MANAGER', child: Text('CONTENT_MANAGER (Website CMS)')),
-                      DropdownMenuItem(value: 'ADMIN', child: Text('ADMIN (Academy Management)')),
-                    ],
-                    onChanged: (v) => setDialogState(() => role = v!),
-                  ),
-                  const SizedBox(height: 12),
-                  DropdownButtonFormField<String>(
-                    initialValue: assignedCentre,
-                    dropdownColor: AppTheme.surface,
-                    style: const TextStyle(color: AppTheme.textPrimary),
-                    decoration: const InputDecoration(labelText: 'Assigned Centre'),
-                    items: const [
-                      DropdownMenuItem(value: 'kadavanthra', child: Text('Kadavanthra Centre')),
-                      DropdownMenuItem(value: 'edappally', child: Text('Edappally Centre')),
-                      DropdownMenuItem(value: 'kakkanad', child: Text('Kakkanad Centre')),
-                    ],
-                    onChanged: (v) => setDialogState(() => assignedCentre = v!),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(ctx),
-              child: const Text('Cancel', style: TextStyle(color: AppTheme.textMuted)),
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                if (nameCtrl.text.isNotEmpty && emailCtrl.text.isNotEmpty && passwordCtrl.text.isNotEmpty) {
-                  try {
-                    await _client.dio.post(
-                      ApiEndpoints.staff,
-                      data: {
-                        'email': emailCtrl.text.trim(),
-                        'password': passwordCtrl.text,
-                        'fullName': nameCtrl.text.trim(),
-                        'role': role,
-                        'assignedCentre': assignedCentre,
-                      },
-                    );
-                    if (ctx.mounted) {
-                      Navigator.pop(ctx);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Staff account created successfully.'),
-                          backgroundColor: AppTheme.success,
-                        ),
-                      );
-                    }
-                  } catch (e) {
-                    if (ctx.mounted) {
-                      ScaffoldMessenger.of(ctx).showSnackBar(
-                        SnackBar(content: Text('Failed to create staff member: $e')),
-                      );
-                    }
-                  }
-                }
-              },
-              child: const Text('Create Staff Account'),
-            ),
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppTheme.surfaceElevated,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(14),
+          side: const BorderSide(color: AppTheme.border),
+        ),
+        title: const Text('S&A Academy Operations OS', style: TextStyle(color: AppTheme.textPrimary, fontSize: 16)),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('Version: 1.0.0 (Production Release)', style: TextStyle(color: AppTheme.textSecondary, fontSize: 13)),
+            const SizedBox(height: 6),
+            const Text('Design System: Rebel Admin 2.0 (Volt Obsidian)', style: TextStyle(color: AppTheme.textSecondary, fontSize: 13)),
+            const SizedBox(height: 6),
+            Text('Server: ${ApiClient().baseUrl}', style: const TextStyle(color: AppTheme.primary, fontSize: 12)),
+            const SizedBox(height: 12),
+            const Text('© 2026 S&A Badminton Academy. All rights reserved.', style: TextStyle(color: AppTheme.textMuted, fontSize: 11)),
           ],
         ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('OK', style: TextStyle(color: AppTheme.primary)),
+          ),
+        ],
       ),
     );
   }
@@ -164,248 +79,207 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(authProvider).user;
-    final isSuperAdmin = user?.isSuperAdmin == true;
-    final isAdmin = user?.isAdmin == true;
+    final name = user?.fullName ?? 'Alex Thomas';
+    final email = user?.email ?? 'admin@sabadminton.com';
 
     return Scaffold(
       backgroundColor: AppTheme.background,
-      appBar: AppBar(
-        title: const Text('ACADEMY SETTINGS & PROFILE'),
-      ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          // Profile Card
-          Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: AppTheme.surface,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: AppTheme.border),
-            ),
-            child: Row(
-              children: [
-                CircleAvatar(
-                  radius: 28,
-                  backgroundColor: AppTheme.primary.withOpacity(0.15),
-                  child: Text(
-                    user?.fullName.isNotEmpty == true ? user!.fullName[0] : 'S',
-                    style: const TextStyle(color: AppTheme.primary, fontSize: 22, fontWeight: FontWeight.w900),
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        user?.fullName ?? 'Staff Member',
-                        style: const TextStyle(color: AppTheme.textPrimary, fontSize: 18, fontWeight: FontWeight.w800),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        user?.email ?? '',
-                        style: const TextStyle(color: AppTheme.textSecondary, fontSize: 13),
-                      ),
-                      const SizedBox(height: 6),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                        decoration: BoxDecoration(
-                          color: AppTheme.primary.withOpacity(0.12),
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: Text(
-                          user?.role ?? 'STAFF',
-                          style: const TextStyle(color: AppTheme.primary, fontSize: 10, fontWeight: FontWeight.w800),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 24),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Header title matching Screen 16
+              const Text('Settings', style: AppTheme.pageTitle),
+              const SizedBox(height: 16),
 
-          // Offline Queue Section
-          const Text(
-            'OFFLINE ATTENDANCE SYNC',
-            style: TextStyle(color: AppTheme.textSecondary, fontSize: 12, fontWeight: FontWeight.w800, letterSpacing: 1),
-          ),
-          const SizedBox(height: 10),
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: AppTheme.surface,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: AppTheme.border),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+              // Profile Card matching Screen 16
+              RebelCard(
+                padding: const EdgeInsets.all(16),
+                child: Row(
                   children: [
-                    Text(
-                      '$_pendingSync Records Pending Sync',
-                      style: const TextStyle(color: AppTheme.textPrimary, fontSize: 15, fontWeight: FontWeight.w700),
-                    ),
-                    const SizedBox(height: 2),
-                    const Text(
-                      'Sessions marked while offline',
-                      style: TextStyle(color: AppTheme.textMuted, fontSize: 12),
+                    RebelAvatar(name: name, radius: 26),
+                    const SizedBox(width: 14),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            name,
+                            style: const TextStyle(
+                              color: AppTheme.textPrimary,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            email,
+                            style: const TextStyle(
+                              color: AppTheme.textMuted,
+                              fontSize: 13,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppTheme.surfaceElevated,
-                    foregroundColor: AppTheme.primary,
-                    side: const BorderSide(color: AppTheme.primary),
-                  ),
-                  onPressed: _syncQueue,
-                  child: const Text('Sync Now'),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 24),
-
-          // Academy Modules
-          const Text(
-            'ACADEMY DIRECTORIES & SETTINGS',
-            style: TextStyle(color: AppTheme.textSecondary, fontSize: 12, fontWeight: FontWeight.w800, letterSpacing: 1),
-          ),
-          const SizedBox(height: 10),
-          _buildSettingsTile(
-            title: 'Canonical Training Centres',
-            subtitle: 'Kadavanthra, Edappally, Kakkanad facilities',
-            icon: Icons.location_on_outlined,
-            onTap: () => context.push('/centres'),
-          ),
-          _buildSettingsTile(
-            title: 'Training Programs & Curricula',
-            subtitle: 'Kids, Junior, Adult, Elite coaching specifications',
-            icon: Icons.sports_tennis,
-            onTap: () => context.push('/programs'),
-          ),
-          _buildSettingsTile(
-            title: 'Verified Coaching Staff',
-            subtitle: 'Credentials, specializations & active cohorts',
-            icon: Icons.sports,
-            onTap: () => context.push('/coaches'),
-          ),
-          if (isAdmin) ...[
-            _buildSettingsTile(
-              title: 'Reports & Analytics',
-              subtitle: 'Admissions funnel, fee collection & attendance rate',
-              icon: Icons.analytics_outlined,
-              onTap: () => context.push('/reports'),
-            ),
-            _buildSettingsTile(
-              title: 'Immutable Audit Trail',
-              subtitle: 'Full historical log of administrative modifications',
-              icon: Icons.history_edu,
-              onTap: () => context.push('/audit'),
-            ),
-          ],
-          if (isAdmin || user?.isContentManager == true) ...[
-            _buildSettingsTile(
-              title: 'Website CMS Gateway',
-              subtitle: 'Manage testimonials, achievements, announcements & blog',
-              icon: Icons.edit_note,
-              onTap: () => context.push('/cms'),
-            ),
-          ],
-
-          if (isSuperAdmin) ...[
-            const SizedBox(height: 24),
-            const Text(
-              'SUPER ADMIN ADMINISTRATION',
-              style: TextStyle(color: AppTheme.warning, fontSize: 12, fontWeight: FontWeight.w800, letterSpacing: 1),
-            ),
-            const SizedBox(height: 10),
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: AppTheme.surface,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: AppTheme.warning.withOpacity(0.4)),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+
+              const SizedBox(height: 20),
+
+              // Settings List matching Screen 16
+              RebelCard(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                child: Column(
+                  children: [
+                    _buildSettingsRow(
+                      icon: Icons.person_outline,
+                      title: 'Profile',
+                      onTap: () {},
+                    ),
+                    const Divider(color: AppTheme.border, height: 1),
+                    _buildSettingsRow(
+                      icon: Icons.shield_outlined,
+                      title: 'Security',
+                      onTap: () {},
+                    ),
+                    const Divider(color: AppTheme.border, height: 1),
+                    // Biometric Login Switch
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.fingerprint_rounded, size: 20, color: AppTheme.textSecondary),
+                          const SizedBox(width: 14),
+                          const Expanded(
+                            child: Text(
+                              'Biometric Login',
+                              style: TextStyle(color: AppTheme.textPrimary, fontSize: 14, fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                          Switch(
+                            value: _biometricEnabled,
+                            activeColor: AppTheme.primary,
+                            activeTrackColor: AppTheme.primary.withOpacity(0.3),
+                            inactiveTrackColor: AppTheme.surfaceElevated,
+                            onChanged: (v) => setState(() => _biometricEnabled = v),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Divider(color: AppTheme.border, height: 1),
+                    _buildSettingsRow(
+                      icon: Icons.notifications_none_outlined,
+                      title: 'Notifications',
+                      onTap: () => context.go('/notifications'),
+                    ),
+                    const Divider(color: AppTheme.border, height: 1),
+                    _buildSettingsRow(
+                      icon: Icons.dark_mode_outlined,
+                      title: 'Appearance',
+                      trailingText: 'Dark',
+                      onTap: () {},
+                    ),
+                    const Divider(color: AppTheme.border, height: 1),
+                    _buildSettingsRow(
+                      icon: Icons.help_outline,
+                      title: 'Help & Support',
+                      onTap: () {},
+                    ),
+                    const Divider(color: AppTheme.border, height: 1),
+                    _buildSettingsRow(
+                      icon: Icons.info_outline,
+                      title: 'About',
+                      onTap: _showAboutDialog,
+                    ),
+                  ],
+                ),
+              ),
+
+              if (_pendingSync > 0) ...[
+                const SizedBox(height: 16),
+                RebelCard(
+                  padding: const EdgeInsets.all(14),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'Academy Staff Accounts',
-                        style: TextStyle(color: AppTheme.textPrimary, fontSize: 15, fontWeight: FontWeight.w700),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text('Offline Attendance', style: TextStyle(color: AppTheme.textPrimary, fontSize: 14, fontWeight: FontWeight.w600)),
+                          const SizedBox(height: 2),
+                          Text('$_pendingSync sessions queued', style: const TextStyle(color: AppTheme.statusFollowUp, fontSize: 12)),
+                        ],
                       ),
-                      SizedBox(height: 2),
-                      Text(
-                        'Create and manage role permissions for staff',
-                        style: TextStyle(color: AppTheme.textMuted, fontSize: 12),
-                      ),
+                      RebelSecondaryButton(label: 'Sync Now', onPressed: _syncQueue, height: 36),
                     ],
                   ),
-                  ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppTheme.warning,
-                      foregroundColor: const Color(0xFF07090D),
-                    ),
-                    onPressed: _openCreateStaffDialog,
-                    icon: const Icon(Icons.person_add, size: 16),
-                    label: const Text('Add Staff'),
+                ),
+              ],
+
+              const SizedBox(height: 28),
+
+              // Log Out Button matching Screen 16: Red outline button
+              SizedBox(
+                width: double.infinity,
+                height: 48,
+                child: OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: AppTheme.danger,
+                    side: const BorderSide(color: AppTheme.danger, width: 1),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                   ),
-                ],
+                  onPressed: () async {
+                    await ref.read(authProvider.notifier).logout();
+                    if (context.mounted) {
+                      context.go('/login');
+                    }
+                  },
+                  child: const Text(
+                    'Log Out',
+                    style: TextStyle(color: AppTheme.danger, fontSize: 14, fontWeight: FontWeight.w700),
+                  ),
+                ),
               ),
-            ),
-          ],
 
-          const SizedBox(height: 32),
-
-          // Logout Button
-          OutlinedButton.icon(
-            style: OutlinedButton.styleFrom(
-              foregroundColor: AppTheme.danger,
-              side: const BorderSide(color: AppTheme.danger),
-              padding: const EdgeInsets.symmetric(vertical: 14),
-            ),
-            onPressed: () async {
-              await ref.read(authProvider.notifier).logout();
-              if (context.mounted) {
-                context.go('/login');
-              }
-            },
-            icon: const Icon(Icons.logout, size: 18),
-            label: const Text('Log Out of Academy OS', style: TextStyle(fontWeight: FontWeight.w700)),
+              const SizedBox(height: 20),
+            ],
           ),
-          const SizedBox(height: 24),
-        ],
+        ),
       ),
     );
   }
 
-  Widget _buildSettingsTile({
-    required String title,
-    required String subtitle,
+  Widget _buildSettingsRow({
     required IconData icon,
+    required String title,
+    String? trailingText,
     required VoidCallback onTap,
   }) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 8),
-      decoration: BoxDecoration(
-        color: AppTheme.surface,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppTheme.border),
-      ),
-      child: ListTile(
-        leading: Icon(icon, color: AppTheme.primary),
-        title: Text(title, style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.w700)),
-        subtitle: Text(subtitle, style: const TextStyle(color: AppTheme.textMuted, fontSize: 12)),
-        trailing: const Icon(Icons.chevron_right, color: AppTheme.textMuted, size: 18),
-        onTap: onTap,
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 14),
+        child: Row(
+          children: [
+            Icon(icon, size: 20, color: AppTheme.textSecondary),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Text(
+                title,
+                style: const TextStyle(color: AppTheme.textPrimary, fontSize: 14, fontWeight: FontWeight.w500),
+              ),
+            ),
+            if (trailingText != null) ...[
+              Text(trailingText, style: const TextStyle(color: AppTheme.textMuted, fontSize: 13)),
+              const SizedBox(width: 6),
+            ],
+            const Icon(Icons.chevron_right, size: 18, color: AppTheme.textMuted),
+          ],
+        ),
       ),
     );
   }

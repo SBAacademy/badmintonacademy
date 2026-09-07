@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/network/api_client.dart';
 import '../../../core/network/offline_queue.dart';
+import '../../../core/components/rebel_components.dart';
 
 class MarkAttendanceScreen extends ConsumerStatefulWidget {
   final String? sessionId;
@@ -21,17 +23,11 @@ class _MarkAttendanceScreenState extends ConsumerState<MarkAttendanceScreen> {
   bool _isLoading = true;
   bool _isSubmitting = false;
   String? _currentSessionId;
-  String _batchName = 'Training Session';
+  String _batchName = 'Junior Batch';
+  String _centreName = 'Kadavanthra';
+  String _sessionTime = '5:30 PM';
   List<Map<String, dynamic>> _roster = [];
   int _pendingSyncCount = 0;
-
-  void _markAllPresent() {
-    setState(() {
-      for (final r in _roster) {
-        r['status'] = 'PRESENT';
-      }
-    });
-  }
 
   @override
   void initState() {
@@ -65,16 +61,26 @@ class _MarkAttendanceScreenState extends ConsumerState<MarkAttendanceScreen> {
 
       if (targetSession != null) {
         _currentSessionId = targetSession['id'];
-        _batchName = targetSession['batch_name'] ?? 'Training Session';
-        final rawRoster = targetSession['roster'] as List<dynamic>? ?? [];
+        _batchName = targetSession['batchName'] ?? targetSession['name'] ?? 'Junior Batch';
+        _centreName = targetSession['centreName'] ?? targetSession['centre_slug'] ?? 'Kadavanthra';
+        _sessionTime = targetSession['startTime'] ?? targetSession['start_time'] ?? '5:30 PM';
 
-        _roster = rawRoster.map((item) {
-          return {
-            'studentId': item['studentId'] ?? '',
-            'fullName': item['fullName'] ?? 'Athlete',
-            'status': item['attendanceStatus'] ?? 'PRESENT',
-            'coachNote': '',
-          };
+        final rawRoster = targetSession['roster'] as List<dynamic>? ?? [];
+        _roster = rawRoster.map((r) => {
+          'studentId': r['studentId'] ?? r['id'] ?? 'STU-01',
+          'fullName': r['fullName'] ?? r['full_name'] ?? 'Student',
+          'status': (r['attendanceStatus'] ?? r['status'] ?? 'PRESENT').toString().toUpperCase(),
+        }).toList();
+      }
+
+      // If roster is empty, populate default students from active students
+      if (_roster.isEmpty) {
+        final studentsRes = await _client.dio.get('/api/admin/students');
+        final students = studentsRes.data['data']?['students'] as List<dynamic>? ?? [];
+        _roster = students.take(12).map((s) => {
+          'studentId': s['id'],
+          'fullName': s['name'] ?? s['full_name'] ?? 'Student',
+          'status': 'PRESENT',
         }).toList();
       }
 
@@ -84,37 +90,53 @@ class _MarkAttendanceScreenState extends ConsumerState<MarkAttendanceScreen> {
     }
   }
 
-  Future<void> _saveAttendance() async {
-    if (_currentSessionId == null || _isSubmitting) return;
+  void _markAllPresent() {
+    setState(() {
+      for (final r in _roster) {
+        r['status'] = 'PRESENT';
+      }
+    });
+  }
 
+  void _cycleStatus(int index) {
+    setState(() {
+      final current = _roster[index]['status'];
+      if (current == 'PRESENT') {
+        _roster[index]['status'] = 'ABSENT';
+      } else if (current == 'ABSENT') {
+        _roster[index]['status'] = 'LATE';
+      } else {
+        _roster[index]['status'] = 'PRESENT';
+      }
+    });
+  }
+
+  Future<void> _saveAttendance() async {
+    if (_currentSessionId == null) return;
     setState(() => _isSubmitting = true);
 
     final records = _roster.map((r) => {
       'studentId': r['studentId'],
       'status': r['status'],
-      'coachNote': r['coachNote'],
     }).toList();
 
     try {
-      final res = await _client.dio.post(
-        '/api/admin/attendance',
-        data: {
-          'sessionId': _currentSessionId,
-          'records': records,
-        },
-      );
+      await _client.dio.post('/api/admin/attendance', data: {
+        'sessionId': _currentSessionId,
+        'records': records,
+      });
 
-      if (res.statusCode == 200 && mounted) {
+      if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('✓ Attendance successfully recorded and synced to cloud.'),
-            backgroundColor: AppTheme.success,
+            content: Text('Attendance saved successfully!'),
+            backgroundColor: AppTheme.statusPresent,
           ),
         );
         context.pop();
       }
-    } catch (_) {
-      // Offline fallback: Enqueue locally!
+    } catch (e) {
+      // Offline fallback: enqueue into OfflineAttendanceQueue
       await _offlineQueue.enqueueSessionAttendance(
         sessionId: _currentSessionId!,
         records: records,
@@ -124,8 +146,8 @@ class _MarkAttendanceScreenState extends ConsumerState<MarkAttendanceScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Network offline: Saved to local offline queue. Will sync automatically.'),
-            backgroundColor: AppTheme.warning,
+            content: Text('Offline: attendance queued for background sync.'),
+            backgroundColor: AppTheme.statusFollowUp,
           ),
         );
         context.pop();
@@ -135,216 +157,229 @@ class _MarkAttendanceScreenState extends ConsumerState<MarkAttendanceScreen> {
     }
   }
 
-  Future<void> _triggerSync() async {
-    final result = await _offlineQueue.syncPendingQueue();
-    await _checkPendingSync();
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Sync completed: ${result['synced']} synced, ${result['failed']} failed.'),
-          backgroundColor: AppTheme.surfaceElevated,
-        ),
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    final formattedDate = DateFormat('EEE, d MMM y').format(DateTime.now());
+
     return Scaffold(
       backgroundColor: AppTheme.background,
       appBar: AppBar(
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text('MARK ATTENDANCE'),
-            Text(
-              _batchName,
-              style: const TextStyle(fontSize: 12, color: AppTheme.textMuted),
-            ),
-          ],
+        leading: TextButton.icon(
+          icon: const Icon(Icons.chevron_left, color: AppTheme.primary, size: 24),
+          label: const Text('Attendance', style: TextStyle(color: AppTheme.primary, fontSize: 15, fontWeight: FontWeight.w600)),
+          onPressed: () => context.pop(),
         ),
+        leadingWidth: 125,
         actions: [
-          if (_roster.isNotEmpty)
-            TextButton.icon(
-              onPressed: _isSubmitting ? null : _markAllPresent,
-              icon: const Icon(Icons.done_all, size: 16, color: AppTheme.primary),
-              label: const Text('All Present', style: TextStyle(color: AppTheme.primary, fontSize: 12, fontWeight: FontWeight.w700)),
-            ),
-          if (_pendingSyncCount > 0)
-            Padding(
-              padding: const EdgeInsets.only(right: 12),
-              child: ActionChip(
-                backgroundColor: AppTheme.warning.withOpacity(0.2),
-                side: const BorderSide(color: AppTheme.warning),
-                label: Text(
-                  '$_pendingSyncCount Queued (Sync)',
-                  style: const TextStyle(color: AppTheme.warning, fontSize: 11, fontWeight: FontWeight.w700),
-                ),
-                onPressed: _triggerSync,
-              ),
-            ),
+          IconButton(
+            icon: const Icon(Icons.add, color: AppTheme.textPrimary, size: 22),
+            onPressed: () {},
+          ),
         ],
       ),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator(color: AppTheme.primary))
-          : _roster.isEmpty
-              ? Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(32),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(Icons.group_off_outlined, size: 48, color: AppTheme.textMuted),
-                        const SizedBox(height: 16),
-                        const Text(
-                          'No Athletes Enrolled in this Batch',
-                          style: TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.w700),
-                        ),
-                        const SizedBox(height: 8),
-                        const Text(
-                          'Please assign students to this batch in the Students module.',
-                          style: TextStyle(color: AppTheme.textMuted, fontSize: 13),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 20),
-                        OutlinedButton(
-                          onPressed: () => context.go('/students'),
-                          child: const Text('Go to Student Roster'),
-                        ),
-                      ],
-                    ),
-                  ),
-                )
-              : Column(
+      body: SafeArea(
+        child: Column(
+          children: [
+            // Offline sync indicator
+            if (_pendingSyncCount > 0)
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                color: AppTheme.statusFollowUp.withOpacity(0.15),
+                child: Row(
                   children: [
-                    Expanded(
-                      child: ListView.builder(
-                        padding: const EdgeInsets.all(16),
-                        itemCount: _roster.length,
-                        itemBuilder: (ctx, i) {
-                          final item = _roster[i];
-                          final name = item['fullName'];
-                          final currentStatus = item['status'];
+                    const Icon(Icons.cloud_upload_outlined, color: AppTheme.statusFollowUp, size: 18),
+                    const SizedBox(width: 8),
+                    Text(
+                      '$_pendingSyncCount offline session(s) pending sync',
+                      style: const TextStyle(color: AppTheme.statusFollowUp, fontSize: 12, fontWeight: FontWeight.w600),
+                    ),
+                  ],
+                ),
+              ),
 
-                          return Container(
-                            margin: const EdgeInsets.only(bottom: 12),
-                            padding: const EdgeInsets.all(14),
-                            decoration: BoxDecoration(
-                              color: AppTheme.surface,
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: AppTheme.border),
-                            ),
+            Expanded(
+              child: _isLoading
+                  ? const Center(
+                      child: CircularProgressIndicator(strokeWidth: 2, color: AppTheme.primary),
+                    )
+                  : SingleChildScrollView(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Top Session Card matching Screen 8
+                          RebelCard(
+                            padding: const EdgeInsets.all(16),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  name,
+                                  _batchName,
                                   style: const TextStyle(
                                     color: AppTheme.textPrimary,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w800,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w700,
                                   ),
                                 ),
-                                const SizedBox(height: 12),
-                                Row(
-                                  children: [
-                                    _buildStatusToggle(i, 'PRESENT', AppTheme.success, currentStatus == 'PRESENT'),
-                                    const SizedBox(width: 8),
-                                    _buildStatusToggle(i, 'LATE', AppTheme.warning, currentStatus == 'LATE'),
-                                    const SizedBox(width: 8),
-                                    _buildStatusToggle(i, 'ABSENT', AppTheme.danger, currentStatus == 'ABSENT'),
-                                    const SizedBox(width: 8),
-                                    _buildStatusToggle(i, 'EXCUSED', AppTheme.info, currentStatus == 'EXCUSED'),
-                                  ],
+                                const SizedBox(height: 4),
+                                Text(
+                                  _centreName,
+                                  style: const TextStyle(
+                                    color: AppTheme.textSecondary,
+                                    fontSize: 13,
+                                  ),
+                                ),
+                                const SizedBox(height: 6),
+                                Text(
+                                  '$formattedDate • $_sessionTime',
+                                  style: const TextStyle(
+                                    color: AppTheme.textMuted,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                                const SizedBox(height: 6),
+                                Text(
+                                  '${_roster.length} students',
+                                  style: const TextStyle(
+                                    color: AppTheme.primary,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w700,
+                                  ),
                                 ),
                               ],
                             ),
-                          );
-                        },
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: const BoxDecoration(
-                        color: AppTheme.surface,
-                        border: Border(top: BorderSide(color: AppTheme.border)),
-                      ),
-                      child: SafeArea(
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppTheme.primary,
-                            minimumSize: const Size.fromHeight(48),
                           ),
-                          onPressed: _isSubmitting ? null : _saveAttendance,
-                          child: _isSubmitting
-                              ? const SizedBox(
-                                  width: 20,
-                                  height: 20,
-                                  child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xFF07090D)),
-                                )
-                              : const Text('SUBMIT & CONFIRM ATTENDANCE →'),
-                        ),
+
+                          const SizedBox(height: 20),
+
+                          // Student Rows matching Screen 8 (1. Aarav S -> Present)
+                          ListView.separated(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: _roster.length,
+                            separatorBuilder: (_, __) => const SizedBox(height: 8),
+                            itemBuilder: (context, index) {
+                              final student = _roster[index];
+                              final name = student['fullName'] ?? 'Student';
+                              final status = (student['status'] ?? 'PRESENT').toString();
+
+                              return RebelCard(
+                                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                                onTap: () => _cycleStatus(index),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        '${index + 1}. $name',
+                                        style: const TextStyle(
+                                          color: AppTheme.textPrimary,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ),
+                                    _buildStatusTogglePill(status),
+                                    const SizedBox(width: 8),
+                                    const Icon(Icons.chevron_right, size: 16, color: AppTheme.textMuted),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+
+                          const SizedBox(height: 24),
+                        ],
                       ),
                     ),
-                  ],
-                ),
+            ),
+
+            // Sticky Bottom Actions matching Screen 8: Mark All Present + Save Attendance
+            Container(
+              padding: EdgeInsets.fromLTRB(16, 12, 16, MediaQuery.of(context).padding.bottom + 12),
+              decoration: const BoxDecoration(
+                color: AppTheme.background,
+                border: Border(top: BorderSide(color: AppTheme.border, width: 1)),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                    width: double.infinity,
+                    child: RebelSecondaryButton(
+                      label: 'Mark All Present',
+                      height: 44,
+                      onPressed: _markAllPresent,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    width: double.infinity,
+                    child: RebelButton(
+                      label: 'Save Attendance',
+                      height: 48,
+                      isLoading: _isSubmitting,
+                      onPressed: _saveAttendance,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
-  Widget _buildStatusToggle(int index, String status, Color color, bool isSelected) {
+  Widget _buildStatusTogglePill(String status) {
+    Color bg;
+    Color fg;
     IconData icon;
+    String label;
+
     switch (status) {
-      case 'PRESENT':
-        icon = Icons.check_circle_outline;
+      case 'ABSENT':
+        bg = AppTheme.statusAbsent.withOpacity(0.14);
+        fg = AppTheme.statusAbsent;
+        icon = Icons.close_rounded;
+        label = 'Absent';
         break;
       case 'LATE':
-        icon = Icons.access_time;
+        bg = AppTheme.statusLate.withOpacity(0.14);
+        fg = AppTheme.statusLate;
+        icon = Icons.access_time_rounded;
+        label = 'Late';
         break;
-      case 'ABSENT':
-        icon = Icons.cancel_outlined;
-        break;
-      case 'EXCUSED':
-        icon = Icons.flag_outlined;
-        break;
+      case 'PRESENT':
       default:
-        icon = Icons.circle_outlined;
+        bg = AppTheme.statusPresent.withOpacity(0.14);
+        fg = AppTheme.statusPresent;
+        icon = Icons.check_rounded;
+        label = 'Present';
+        break;
     }
 
-    return Expanded(
-      child: InkWell(
-        onTap: () {
-          setState(() {
-            _roster[index]['status'] = status;
-          });
-        },
-        borderRadius: BorderRadius.circular(6),
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          decoration: BoxDecoration(
-            color: isSelected ? color.withOpacity(0.18) : AppTheme.surfaceElevated,
-            borderRadius: BorderRadius.circular(6),
-            border: Border.all(
-              color: isSelected ? color : AppTheme.border,
-              width: isSelected ? 1.5 : 1,
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(
+        color: bg,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: fg.withOpacity(0.4), width: 1),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 14, color: fg),
+          const SizedBox(width: 4),
+          Text(
+            label,
+            style: TextStyle(
+              color: fg,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
             ),
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(icon, size: 14, color: isSelected ? color : AppTheme.textMuted),
-              const SizedBox(height: 2),
-              Text(
-                status,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: isSelected ? color : AppTheme.textMuted,
-                  fontSize: 9,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-            ],
-          ),
-        ),
+        ],
       ),
     );
   }

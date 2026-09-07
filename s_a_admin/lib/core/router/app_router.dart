@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../auth/auth_provider.dart';
+import '../../features/splash/presentation/splash_screen.dart';
 import '../../features/auth/presentation/login_screen.dart';
 import '../../features/navigation/main_scaffold.dart';
 import '../../features/dashboard/presentation/today_screen.dart';
@@ -28,9 +29,11 @@ final routerProvider = Provider<GoRouter>((ref) {
 
   return GoRouter(
     navigatorKey: _rootNavigatorKey,
-    initialLocation: '/today',
+    initialLocation: '/splash',
     redirect: (context, state) {
+      final isSplash = state.uri.path == '/splash';
       final isLoggingIn = state.uri.path == '/login';
+      if (isSplash) return null;
       if (authState.isLoading) return null;
 
       if (!authState.isAuthenticated && !isLoggingIn) {
@@ -44,6 +47,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       return null;
     },
     routes: [
+      GoRoute(
+        path: '/splash',
+        builder: (context, state) => const SplashScreen(),
+      ),
       GoRoute(
         path: '/login',
         builder: (context, state) => const LoginScreen(),

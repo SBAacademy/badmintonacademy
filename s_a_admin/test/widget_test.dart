@@ -11,13 +11,16 @@ void main() {
 
   group('Rebel Admin Design System & Theme Tests', () {
     test('Verifies Rebel Admin color tokens', () {
-      expect(AppTheme.background, const Color(0xFF07090D));
-      expect(AppTheme.surface, const Color(0xFF12161F));
-      expect(AppTheme.primary, const Color(0xFFB8F000));
-      expect(AppTheme.border, const Color(0xFF1F2937));
-      expect(AppTheme.success, const Color(0xFF34D399));
+      expect(AppTheme.background, const Color(0xFF0A0C0F));
+      expect(AppTheme.surface, const Color(0xFF13161C));
+      expect(AppTheme.primary, const Color(0xFFCCFF00));
+      expect(AppTheme.border, const Color(0xFF232732));
+      expect(AppTheme.success, const Color(0xFF22C55E));
       expect(AppTheme.warning, const Color(0xFFFBBF24));
-      expect(AppTheme.danger, const Color(0xFFF87171));
+      expect(AppTheme.danger, const Color(0xFFEF4444));
+      expect(AppTheme.statusNew, const Color(0xFF38BDF8));
+      expect(AppTheme.statusTrial, const Color(0xFFA855F7));
+      expect(AppTheme.statusLate, const Color(0xFFFB923C));
     });
 
     test('Verifies ThemeData configuration', () {

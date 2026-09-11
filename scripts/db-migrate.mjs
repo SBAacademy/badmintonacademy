@@ -377,12 +377,13 @@ async function migrate() {
 
   console.log(`[Migration] Seeding canonical verified coaches...`);
   await sql`
-    INSERT INTO coaches (id, name, role, bio, certifications, experience_years, specialization, primary_centre, image_url)
+    INSERT INTO coaches (id, name, role, bio, certifications, experience_years, specialization, primary_centre, image_url, display_order)
     VALUES
-      ('anand-varma', 'Coach Anand Varma', 'Head Coach & Technical Director', 'With over 14 years of professional coaching experience, Coach Anand leads the academy competitive curriculum.', ARRAY['BWF Level 2 Certified', 'NIS Sports Coaching Diploma', 'Former Kerala State Champion'], 14, 'High-Performance Singles & Tactical Match Biomechanics', 'kadavanthra', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=800&auto=format&fit=crop'),
-      ('shalini-menon', 'Coach Shalini Menon', 'Senior Coach — Junior & Girls Development', 'Specializes in child athletic psychology and early stroke mechanics.', ARRAY['BWF Level 1 Certified', 'BA Physical Education', 'South Zone Gold Medalist'], 9, 'Junior Foundation, 6-Point Footwork Agility', 'edappally', 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=800&auto=format&fit=crop'),
-      ('rohan-mathew', 'Coach Rohan Mathew', 'Lead Coach — Doubles Strategy & Adult Fitness', 'Former state doubles champion and CSCS-certified trainer coaching adult batches.', ARRAY['BWF Level 1 Certified', 'NSCA CSCS Specialist'], 11, 'Doubles Fast-Rotations, Steep Smashing', 'kakkanad', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=800&auto=format&fit=crop'),
-      ('karthik-nair', 'Coach Karthik Nair', 'Assistant Coach & Video Analytics Specialist', 'Oversees digital video stroke review rooms across branches.', ARRAY['BWF Level 1 Certified', 'Dartfish Certified Video Analyst'], 6, 'Stroke Biomechanics Video Analysis', 'kadavanthra', 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=800&auto=format&fit=crop')
+      ('sooraj-m-s', 'Sooraj M S', 'Senior Badminton Coach', 'Dedicated badminton trainer with extensive experience mentoring junior and adult athletes in Kochi.', ARRAY['BWF Level 1 Certified Coach', 'NIS CERTIFIED', 'Bachelors of physical education (BPed)'], 10, 'Singles Tactical Footwork & Match Conditioning', 'kadavanthra', '/images/training-coach.jpg', 10),
+      ('saniya-george-maijo', 'Saniya George Maijo', 'Sports Nutritionist & Assistant Coach', 'Dedicated badminton trainer with extensive experience mentoring junior and adult athletes in Kochi.', ARRAY[]::TEXT[], 4, 'Singles Tactical Footwork & Match Conditioning', 'kadavanthra', '/images/training-coach.jpg', 11),
+      ('fayis', 'Fayis', 'Assistant Coach', 'Dedicated badminton trainer with extensive experience mentoring junior and adult athletes in Kochi.', ARRAY['BWF Level 1 Certified Coach'], 5, 'Singles Tactical Footwork & Match Conditioning', 'kadavanthra', '/images/training-coach.jpg', 12),
+      ('robin-biju', 'Robin Biju', 'Assistant Coach', 'Dedicated badminton trainer with extensive experience mentoring junior and adult athletes in Kochi.', ARRAY[]::TEXT[], 4, 'Singles Tactical Footwork & Match Conditioning', 'kadavanthra', '/images/training-coach.jpg', 13),
+      ('adithyan-s', 'Adithyan S', 'Assistant Coach', 'Dedicated badminton trainer with extensive experience mentoring junior and adult athletes in Kochi.', ARRAY[]::TEXT[], 3, 'Singles Tactical Footwork & Match Conditioning', 'kadavanthra', '/images/training-coach.jpg', 14)
     ON CONFLICT (id) DO NOTHING;
   `;
 
@@ -394,7 +395,7 @@ async function migrate() {
     INSERT INTO users (id, email, password_hash, full_name, role, phone, assigned_centre)
     VALUES
       ('usr-admin-01', 'admin@sabadminton.com', ${adminPasswordHash}, 'Academy Director', 'SUPER_ADMIN', '+91 98460 12345', 'kadavanthra'),
-      ('usr-coach-01', 'anand@sabadminton.com', ${coachPasswordHash}, 'Coach Anand Varma', 'COACH', '+91 98460 11111', 'kadavanthra')
+      ('usr-coach-01', 'sooraj@sabadminton.com', ${coachPasswordHash}, 'Sooraj M S', 'COACH', '+91 98460 11111', 'kadavanthra')
     ON CONFLICT (email) DO UPDATE SET is_active = TRUE;
   `;
 

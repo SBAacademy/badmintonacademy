@@ -27,7 +27,7 @@ function getDefaultItems(section: ContentSectionKey): unknown[] {
     case "gallery":
       return GALLERY_ITEMS;
     case "coaches":
-      return COACHES;
+      return [];
     case "achievements":
       return ACHIEVEMENTS;
     case "testimonials":
@@ -271,7 +271,7 @@ export async function DELETE(
     }
 
     if (sectionKey === "coaches") {
-      const result = await deleteCoachRecord(identifier, true);
+      const result = await deleteCoachRecord(identifier, false);
       const allCoaches = await getCoaches({ includeUnpublished: true });
 
       revalidatePath("/");

@@ -49,7 +49,7 @@ async function runGate3Tests() {
       scheduled_date, scheduled_slot, status, created_at, updated_at
     ) VALUES (
       ${testTrialId}, ${testLeadId}, 'Test Junior Athlete', ${testPhone}, 'test.athlete@example.com',
-      'kadavanthra', 'junior-badminton-coaching', 'anand-varma',
+      'kadavanthra', 'junior-badminton-coaching', 'sooraj-m-s',
       ${tomorrow}, '05:00 PM - 06:00 PM', 'CONFIRMED', NOW(), NOW()
     );
   `;

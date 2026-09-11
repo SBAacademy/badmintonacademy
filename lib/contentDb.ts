@@ -63,7 +63,7 @@ export async function initContentDb(): Promise<void> {
 
     const defaults: Record<ContentSectionKey, unknown[]> = {
       gallery: GALLERY_ITEMS,
-      coaches: COACHES,
+      coaches: [],
       achievements: ACHIEVEMENTS,
       testimonials: TESTIMONIALS,
       blog: BLOG_POSTS,
@@ -268,11 +268,11 @@ export async function getCoaches(options: { includeUnpublished?: boolean } = {})
           c.updated_at as "updatedAt"
         FROM coaches c
         LEFT JOIN centres cen ON c.primary_centre = cen.slug
-        ${includeUnpublished ? sql`` : sql`WHERE c.status = 'ACTIVE' AND c.is_published = TRUE`}
+        ${includeUnpublished ? sql`WHERE c.status != 'INACTIVE'` : sql`WHERE c.status = 'ACTIVE' AND c.is_published = TRUE`}
         ORDER BY c.display_order ASC, c.experience_years DESC, c.created_at DESC;
       `) as unknown as Record<string, unknown>[];
 
-      if (Array.isArray(rows) && rows.length > 0) {
+      if (Array.isArray(rows)) {
         return rows.map((r) => ({
           id: String(r.id),
           name: String(r.name),
@@ -292,24 +292,27 @@ export async function getCoaches(options: { includeUnpublished?: boolean } = {})
           updatedAt: r.updatedAt ? String(r.updatedAt) : undefined,
         }));
       }
+      return [];
     } catch (err) {
       console.error("Failed to query coaches table from Neon DB:", err);
+      return [];
     }
   }
 
-  // Fallback to site_content / JSON store
-  const fallbackList = await getContentSection<Coach>("coaches", COACHES);
-  const mapped = fallbackList.map((c) => ({
-    ...c,
-    image: ensureCoachImage(c.image),
-    isPublished: c.isPublished !== false,
-    status: c.status || "ACTIVE",
-  }));
-
-  if (!includeUnpublished) {
-    return mapped.filter((c) => c.status === "ACTIVE" && c.isPublished !== false);
+  // Fallback to local file ONLY if DATABASE_URL is not configured at all (local offline dev)
+  const fallback = await readFallbackContent();
+  if (fallback.coaches && Array.isArray(fallback.coaches)) {
+    const list = (fallback.coaches as Coach[]).map((c) => ({
+      ...c,
+      image: ensureCoachImage(c.image),
+      isPublished: c.isPublished !== false,
+      status: c.status || "ACTIVE",
+    }));
+    return includeUnpublished
+      ? list.filter((c) => c.status !== "INACTIVE")
+      : list.filter((c) => c.status === "ACTIVE" && c.isPublished !== false);
   }
-  return mapped;
+  return [];
 }
 
 export async function saveCoachRecord(coachData: Partial<Coach>): Promise<Coach> {
@@ -437,7 +440,7 @@ export async function saveCoachRecord(coachData: Partial<Coach>): Promise<Coach>
 
 export async function deleteCoachRecord(
   id: string,
-  softDelete = true
+  softDelete = false
 ): Promise<{ success: boolean; softDeleted: boolean; message: string }> {
   const sql = getSql();
 
@@ -453,13 +456,14 @@ export async function deleteCoachRecord(
 
   await initContentDb();
 
-  // Check if coach is referenced by batches, sessions, or trials
+  // Check if coach is referenced by batches, sessions, trials, or performance assessments
   let isReferenced = false;
   try {
     const batches = (await sql`SELECT id FROM batches WHERE assigned_coach_id = ${id} LIMIT 1;`) as unknown as Array<{ id: string }>;
     const trials = (await sql`SELECT id FROM free_trials WHERE assigned_coach_id = ${id} LIMIT 1;`) as unknown as Array<{ id: string }>;
     const sessions = (await sql`SELECT id FROM sessions WHERE coach_id = ${id} LIMIT 1;`) as unknown as Array<{ id: string }>;
-    if (batches.length > 0 || trials.length > 0 || sessions.length > 0) {
+    const assessments = (await sql`SELECT id FROM performance_assessments WHERE coach_id = ${id} LIMIT 1;`) as unknown as Array<{ id: string }>;
+    if (batches.length > 0 || trials.length > 0 || sessions.length > 0 || assessments.length > 0) {
       isReferenced = true;
     }
   } catch (checkErr) {
@@ -496,10 +500,10 @@ export async function deleteCoachRecord(
     success: true,
     softDeleted: softDelete || isReferenced,
     message: isReferenced
-      ? "Coach is assigned to existing batches/sessions and has been archived (set to INACTIVE)."
+      ? "Coach is linked to existing academy records and has been deactivated."
       : softDelete
       ? "Coach archived successfully."
-      : "Coach deleted permanently.",
+      : "Coach permanently deleted from database.",
   };
 }
 

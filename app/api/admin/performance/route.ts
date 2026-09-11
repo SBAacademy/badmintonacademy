@@ -37,7 +37,11 @@ export async function POST(request: Request) {
     }
 
     const assessmentId = `PRF-${Date.now()}`;
-    const resolvedCoachId = coachId || "anand-varma";
+    let resolvedCoachId = coachId;
+    if (!resolvedCoachId) {
+      const activeCoach = await sql`SELECT id FROM coaches WHERE status = 'ACTIVE' ORDER BY display_order ASC LIMIT 1;`;
+      resolvedCoachId = activeCoach[0]?.id || "sooraj-m-s";
+    }
 
     await sql`
       INSERT INTO performance_assessments (

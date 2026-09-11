@@ -4,9 +4,9 @@ import {
   ContentSectionKey,
   getContentSection,
   saveContentSection,
+  getCoaches,
 } from "@/lib/contentDb";
 import { GALLERY_ITEMS } from "@/data/gallery";
-import { COACHES } from "@/data/coaches";
 import { ACHIEVEMENTS } from "@/data/achievements";
 import { TESTIMONIALS } from "@/data/testimonials";
 import { BLOG_POSTS } from "@/data/blog";
@@ -23,7 +23,7 @@ const VALID_SECTIONS: ContentSectionKey[] = [
 function getDefaultItems(section: ContentSectionKey): unknown[] {
   switch (section) {
     case "gallery": return GALLERY_ITEMS;
-    case "coaches": return COACHES;
+    case "coaches": return [];
     case "achievements": return ACHIEVEMENTS;
     case "testimonials": return TESTIMONIALS;
     case "blog": return BLOG_POSTS;
@@ -48,6 +48,17 @@ export async function GET(
     }
 
     const sectionKey = section as ContentSectionKey;
+
+    if (sectionKey === "coaches") {
+      const coaches = await getCoaches({ includeUnpublished: true });
+      return NextResponse.json({
+        success: true,
+        section: sectionKey,
+        total: coaches.length,
+        items: coaches,
+      });
+    }
+
     const defaults = getDefaultItems(sectionKey);
     const items = await getContentSection(sectionKey, defaults);
 

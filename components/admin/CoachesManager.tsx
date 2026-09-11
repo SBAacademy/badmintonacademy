@@ -17,7 +17,7 @@ import {
   AlertCircle,
   CheckCircle2,
 } from "lucide-react";
-import { Coach, COACHES } from "@/data/coaches";
+import { Coach } from "@/data/coaches";
 import { ImageUploadField } from "./ImageUploadField";
 
 const BRANCHES = [
@@ -32,6 +32,7 @@ const DEFAULT_AVATAR = "/images/training-coach.jpg";
 export function CoachesManager() {
   const [coaches, setCoaches] = useState<Coach[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedBranchFilter, setSelectedBranchFilter] = useState("ALL");
   const [feedbackMessage, setFeedbackMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
@@ -57,6 +58,7 @@ export function CoachesManager() {
 
   const fetchCoaches = async () => {
     setLoading(true);
+    setLoadError(null);
     setFeedbackMessage(null);
     try {
       const res = await fetch("/api/content/coaches");
@@ -64,11 +66,13 @@ export function CoachesManager() {
       if (data.success && Array.isArray(data.items)) {
         setCoaches(data.items);
       } else {
-        setCoaches(COACHES);
+        setCoaches([]);
+        setLoadError(data.message || "Unable to load coaches. Please refresh or try again.");
       }
     } catch (err) {
       console.error("Failed to load coaches:", err);
-      setCoaches(COACHES);
+      setCoaches([]);
+      setLoadError("Unable to load coaches. Please refresh or try again.");
     } finally {
       setLoading(false);
     }
@@ -204,15 +208,19 @@ export function CoachesManager() {
   };
 
   const handleDelete = async (id: string, name: string) => {
-    if (!window.confirm(`Are you sure you want to remove "${name}"? If they have assigned batches, they will be archived safely.`)) {
+    if (!window.confirm(`Are you sure you want to remove "${name}"? This action permanently deletes the coach from PostgreSQL.`)) {
       return;
     }
     setFeedbackMessage(null);
     try {
-      const res = await fetch(`/api/content/coaches?id=${id}`, { method: "DELETE" });
+      const res = await fetch(`/api/content/coaches?id=${encodeURIComponent(id)}`, { method: "DELETE" });
       const data = await res.json();
       if (data.success) {
-        setCoaches((prev) => prev.filter((c) => c.id !== id));
+        if (Array.isArray(data.items)) {
+          setCoaches(data.items);
+        } else {
+          setCoaches((prev) => prev.filter((c) => c.id !== id));
+        }
         setFeedbackMessage({ type: "success", text: data.message || `Removed "${name}".` });
       } else {
         setFeedbackMessage({ type: "error", text: data.message || "Failed to delete coach." });
@@ -356,8 +364,39 @@ export function CoachesManager() {
         </div>
       </div>
 
-      {/* Coach Cards Grid */}
-      {filteredCoaches.length === 0 ? (
+      {/* Coach Cards Grid / Status View */}
+      {loading ? (
+        <div className="py-20 text-center bg-[#0B0F14] border border-[#1F2937] text-[#A8B0BA] font-mono text-xs flex flex-col items-center justify-center gap-3">
+          <RefreshCw className="w-6 h-6 animate-spin text-[#B8F000]" />
+          <span>Loading faculty roster from PostgreSQL...</span>
+        </div>
+      ) : loadError ? (
+        <div className="py-20 text-center bg-[#0B0F14] border border-rose-500/30 text-rose-400 font-mono text-xs space-y-3">
+          <AlertCircle className="w-8 h-8 text-rose-500 mx-auto" />
+          <p className="font-bold">{loadError}</p>
+          <button
+            type="button"
+            onClick={fetchCoaches}
+            className="px-4 py-2 bg-[#11161D] hover:bg-[#17212C] border border-[#1F2937] text-white font-mono text-xs inline-flex items-center gap-1.5 cursor-pointer"
+          >
+            <RefreshCw className="w-3.5 h-3.5 text-[#B8F000]" />
+            <span>Retry</span>
+          </button>
+        </div>
+      ) : coaches.length === 0 ? (
+        <div className="py-20 text-center bg-[#0B0F14] border border-[#1F2937] text-[#A8B0BA] font-mono text-xs space-y-3">
+          <p className="text-white font-bold text-sm">No coaches found.</p>
+          <p className="text-xs text-[#6B7280]">Database contains no coaches. Click below to add a coach.</p>
+          <button
+            type="button"
+            onClick={openAddModal}
+            className="px-4 py-2 bg-[#B8F000] text-[#07090D] font-bold text-xs uppercase tracking-wider inline-flex items-center gap-1.5 cursor-pointer"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Add New Coach</span>
+          </button>
+        </div>
+      ) : filteredCoaches.length === 0 ? (
         <div className="py-20 text-center bg-[#0B0F14] border border-[#1F2937] text-[#A8B0BA] font-mono text-xs">
           No coaches match your search criteria.
         </div>

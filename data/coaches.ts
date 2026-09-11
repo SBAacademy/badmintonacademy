@@ -19,67 +19,95 @@ export interface Coach {
 
 export const COACHES: Coach[] = [
   {
-    id: "anand-varma",
-    name: "Coach Anand Varma",
-    role: "Head Coach & Technical Director",
-    certifications: ["BWF Level 2 Certified Coach", "NIS Diploma in Sports Coaching (Badminton)", "Former Kerala State Senior Champion"],
-    experienceYears: 14,
-    specialization: "High-Performance Singles & Tactical Match Biomechanics",
-    bio: "With over 14 years of professional coaching experience and a decorated state-level playing career, Coach Anand leads the academy's competitive curriculum. He has personally mentored over 25 state ranking medalists and several junior nationals participants.",
+    id: "sooraj-m-s",
+    name: "Sooraj M S",
+    role: "Senior Badminton Coach",
+    certifications: [
+      "BWF Level 1 Certified Coach",
+      "NIS CERTIFIED",
+      "Bachelors of physical education (BPed)"
+    ],
+    experienceYears: 10,
+    specialization: "Singles Tactical Footwork & Match Conditioning",
+    bio: "Dedicated badminton trainer with extensive experience mentoring junior and adult athletes in Kochi.",
     primaryBranch: "Kadavanthra (Headquarters)",
+    primaryCentre: "kadavanthra",
     achievements: [
-      "Former Kerala State Senior Men's Singles Champion",
-      "Coached 18+ National Championship Qualifiers",
-      "Official Coach for Ernakulam District Junior Squad (2021–2024)"
+      "Asia Book & India Book of records Holder for 40 multi shuttle feeds in 27 seconds 2 milli seconds",
+      "Ernakulam District Team Head Coach for the years 2022,2023,2024"
     ],
-    image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=800&auto=format&fit=crop"
+    image: "/images/training-coach.jpg",
+    status: "ACTIVE",
+    isPublished: true,
+    displayOrder: 10
   },
   {
-    id: "shalini-menon",
-    name: "Coach Shalini Menon",
-    role: "Senior Coach — Junior & Girls Development",
-    certifications: ["BWF Level 1 Certified Coach", "BA Physical Education", "South Zone Inter-University Gold Medalist"],
-    experienceYears: 9,
-    specialization: "Junior Foundation, 6-Point Footwork Agility & Mental Resilience",
-    bio: "Coach Shalini specializes in child athletic psychology and early stroke mechanics. Her patient, systematic pedagogy builds rock-solid basics, preventing biomechanical faults and inspiring young athletes to love competitive sport.",
-    primaryBranch: "Edappally Branch",
+    id: "saniya-george-maijo",
+    name: "Saniya George Maijo",
+    role: "Sports Nutritionist & Assistant Coach",
+    certifications: [],
+    experienceYears: 4,
+    specialization: "Singles Tactical Footwork & Match Conditioning",
+    bio: "Dedicated badminton trainer with extensive experience mentoring junior and adult athletes in Kochi.",
+    primaryBranch: "Kadavanthra (Headquarters)",
+    primaryCentre: "kadavanthra",
     achievements: [
-      "South Zone Inter-University Badminton Gold Medalist",
-      "Developed 40+ Girls Junior District Title Contenders",
-      "Certified Child Sports Safety & Pedagogy Specialist"
+      "All India National Championship Kerala Team representative"
     ],
-    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=800&auto=format&fit=crop"
+    image: "/images/training-coach.jpg",
+    status: "ACTIVE",
+    isPublished: true,
+    displayOrder: 11
   },
   {
-    id: "rohan-mathew",
-    name: "Coach Rohan Mathew",
-    role: "Lead Coach — Doubles Strategy & Adult Fitness",
-    certifications: ["BWF Level 1 Certified Coach", "NSCA Certified Strength & Conditioning Specialist (CSCS)"],
-    experienceYears: 11,
-    specialization: "Doubles Fast-Rotations, Steep Smashing & Kinetic Chain Power",
-    bio: "A former state doubles champion and CSCS-certified trainer, Coach Rohan coaches our adult batches and competitive doubles pairs. He combines high-tempo multi-shuttle drills with injury-prevention conditioning.",
-    primaryBranch: "Kakkanad Branch",
-    achievements: [
-      "Kerala State Doubles Silver Medalist",
-      "Trained 300+ Corporate Tech Athletes in Kochi",
-      "Author of 'Kinetic Efficiency in Modern Badminton'"
-    ],
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=800&auto=format&fit=crop"
+    id: "fayis",
+    name: "Fayis",
+    role: "Assistant Coach",
+    certifications: ["BWF Level 1 Certified Coach"],
+    experienceYears: 5,
+    specialization: "Singles Tactical Footwork & Match Conditioning",
+    bio: "Dedicated badminton trainer with extensive experience mentoring junior and adult athletes in Kochi.",
+    primaryBranch: "Kadavanthra (Headquarters)",
+    primaryCentre: "kadavanthra",
+    achievements: [],
+    image: "/images/training-coach.jpg",
+    status: "ACTIVE",
+    isPublished: true,
+    displayOrder: 12
   },
   {
-    id: "karthik-nair",
-    name: "Coach Karthik Nair",
-    role: "Assistant Coach & Video Analytics Specialist",
-    certifications: ["BWF Level 1 Coach", "Dartfish Certified Video Analyst"],
-    experienceYears: 6,
-    specialization: "Stroke Biomechanics Video Analysis & Multi-Shuttle Feeds",
-    bio: "Coach Karthik oversees our digital video review rooms across branches, breaking down students' racquet angle, court recovery time, and shuttle contact points frame-by-frame to fast-track technical breakthroughs.",
-    primaryBranch: "Kadavanthra & Edappally",
+    id: "robin-biju",
+    name: "Robin Biju",
+    role: "Assistant Coach",
+    certifications: [],
+    experienceYears: 4,
+    specialization: "Singles Tactical Footwork & Match Conditioning",
+    bio: "Dedicated badminton trainer with extensive experience mentoring junior and adult athletes in Kochi.",
+    primaryBranch: "Kadavanthra (Headquarters)",
+    primaryCentre: "kadavanthra",
+    achievements: [],
+    image: "/images/training-coach.jpg",
+    status: "ACTIVE",
+    isPublished: true,
+    displayOrder: 13
+  },
+  {
+    id: "adithyan-s",
+    name: "Adithyan S",
+    role: "Assistant Coach",
+    certifications: [],
+    experienceYears: 3,
+    specialization: "Singles Tactical Footwork & Match Conditioning",
+    bio: "Dedicated badminton trainer with extensive experience mentoring junior and adult athletes in Kochi.",
+    primaryBranch: "Kadavanthra (Headquarters)",
+    primaryCentre: "kadavanthra",
     achievements: [
-      "Analyzed 1,500+ student match videos",
-      "Ernakulam Under-19 District Champion (2018)",
-      "Specialist in Rapid Shuttle Machine Drill Programming"
+      "Former State Senior Medalist",
+      "Coached Ernakulam District Squad"
     ],
-    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=800&auto=format&fit=crop"
+    image: "/images/training-coach.jpg",
+    status: "ACTIVE",
+    isPublished: true,
+    displayOrder: 14
   }
 ];

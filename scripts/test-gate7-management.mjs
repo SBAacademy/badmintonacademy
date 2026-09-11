@@ -30,7 +30,7 @@ async function runGate7Tests() {
       id, student_id, coach_id, assessment_date,
       footwork_score, technique_score, fitness_score, tactical_score, consistency_score, notes
     ) VALUES (
-      ${perfId}, ${testStuId}, 'anand-varma', CURRENT_DATE,
+      ${perfId}, ${testStuId}, 'sooraj-m-s', CURRENT_DATE,
       8.5, 9.0, 8.0, 7.5, 8.0, 'Excellent overhead slice and recovery.'
     );
   `;

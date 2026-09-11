@@ -556,9 +556,10 @@ export function CoachesManager() {
 
       {/* Add / Edit Coach Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm animate-in fade-in duration-150 overflow-y-auto">
-          <div className="max-w-2xl w-full bg-[#0B0F14] border border-[#1F2937] p-6 space-y-5 shadow-2xl relative my-8">
-            <div className="flex items-center justify-between border-b border-[#1F2937] pb-3">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-sm animate-in fade-in duration-150">
+          <div className="max-w-2xl w-full max-h-[92vh] flex flex-col bg-[#0B0F14] border border-[#1F2937] shadow-2xl relative overflow-hidden">
+            {/* Sticky Header */}
+            <div className="flex items-center justify-between p-4 sm:p-5 border-b border-[#1F2937] shrink-0 bg-[#0B0F14]">
               <h3 className="text-base font-black text-white uppercase tracking-tight flex items-center gap-2">
                 <UserCheck className="w-4 h-4 text-[#B8F000]" />
                 <span>{editingCoach ? "Edit Coach Profile" : "Add New Coach to Faculty"}</span>
@@ -566,105 +567,116 @@ export function CoachesManager() {
               <button
                 type="button"
                 onClick={() => setIsModalOpen(false)}
-                className="text-[#A8B0BA] hover:text-white cursor-pointer"
+                className="text-[#A8B0BA] hover:text-white cursor-pointer p-1"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <form onSubmit={handleSave} className="space-y-3.5 font-mono text-xs">
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-[#A8B0BA] uppercase mb-1">Coach Full Name *</label>
-                  <input
-                    type="text"
-                    required
-                    value={form.name}
-                    onChange={(e) => {
-                      const newName = e.target.value;
-                      setForm((prev) => ({
-                        ...prev,
-                        name: newName,
-                        slug: !editingCoach
-                          ? newName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")
-                          : prev.slug,
-                      }));
-                    }}
-                    placeholder="e.g. Coach Anand Varma"
-                    className="w-full px-3 py-2 bg-[#07090D] border border-[#1F2937] text-white focus:outline-none focus:border-[#B8F000]"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[#A8B0BA] uppercase mb-1">Role / Title *</label>
-                  <input
-                    type="text"
-                    required
-                    value={form.role}
-                    onChange={(e) => setForm({ ...form, role: e.target.value })}
-                    placeholder="e.g. Head Coach & Technical Director"
-                    className="w-full px-3 py-2 bg-[#07090D] border border-[#1F2937] text-white focus:outline-none focus:border-[#B8F000]"
-                  />
-                </div>
-              </div>
-
-              {/* WhatsApp Number & Dynamic URL Slug */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3 bg-[#07090D] border border-[#1F2937]">
-                <div>
-                  <label className="block text-[#A8B0BA] uppercase mb-1 flex items-center justify-between">
-                    <span className="flex items-center gap-1.5 font-bold text-white">
-                      <Phone className="w-3.5 h-3.5 text-[#B8F000]" />
-                      <span>WhatsApp Number</span>
-                    </span>
-                    <span className="text-[9px] text-[#6B7280]">International format</span>
-                  </label>
-                  <input
-                    type="text"
-                    value={form.whatsappNumber}
-                    onChange={(e) => setForm({ ...form, whatsappNumber: e.target.value })}
-                    placeholder="+91 98765 43210"
-                    className="w-full px-3 py-2 bg-[#0B0F14] border border-[#1F2937] text-white focus:outline-none focus:border-[#B8F000]"
-                  />
-                  {form.whatsappNumber.trim() ? (
-                    <div className="mt-1.5 text-[10px] text-emerald-400 flex items-center gap-1.5 font-mono">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                      <span>
-                        ✓ Stored as: <strong>{normalizeWhatsAppNumber(form.whatsappNumber)}</strong>
-                      </span>
-                    </div>
-                  ) : (
-                    <div className="mt-1 text-[10px] text-[#6B7280]">
-                      Optional. Leave blank to disable WhatsApp enquiry CTA.
-                    </div>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-[#A8B0BA] uppercase mb-1 flex items-center justify-between">
-                    <span className="flex items-center gap-1.5 font-bold text-white">
-                      <Globe className="w-3.5 h-3.5 text-[#B8F000]" />
-                      <span>Public Profile Slug</span>
-                    </span>
-                    <span className="text-[9px] text-[#6B7280]">URL identifier</span>
-                  </label>
-                  <div className="flex items-center">
-                    <span className="px-2.5 py-2 bg-[#11161D] border border-r-0 border-[#1F2937] text-[#6B7280] text-[11px] select-none">
-                      /coaches/
-                    </span>
+            {/* Form */}
+            <form onSubmit={handleSave} className="flex flex-col flex-1 overflow-hidden">
+              <div className="p-4 sm:p-6 overflow-y-auto space-y-4 font-mono text-xs flex-1">
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-[#A8B0BA] uppercase mb-1">Coach Full Name *</label>
                     <input
                       type="text"
                       required
-                      value={form.slug}
-                      onChange={(e) => setForm({ ...form, slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, "-") })}
-                      placeholder="sooraj-m-s"
-                      className="w-full px-3 py-2 bg-[#0B0F14] border border-[#1F2937] text-white focus:outline-none focus:border-[#B8F000]"
+                      value={form.name}
+                      onChange={(e) => {
+                        const newName = e.target.value;
+                        setForm((prev) => ({
+                          ...prev,
+                          name: newName,
+                          slug: !editingCoach
+                            ? newName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")
+                            : prev.slug,
+                        }));
+                      }}
+                      placeholder="e.g. Coach Anand Varma"
+                      className="w-full px-3 py-2 bg-[#07090D] border border-[#1F2937] text-white focus:outline-none focus:border-[#B8F000]"
                     />
                   </div>
-                  <div className="mt-1 text-[10px] text-[#A8B0BA] truncate">
-                    Preview: <span className="text-[#B8F000]">/coaches/{form.slug || "coach-slug"}</span>
+
+                  <div>
+                    <label className="block text-[#A8B0BA] uppercase mb-1">Role / Title *</label>
+                    <input
+                      type="text"
+                      required
+                      value={form.role}
+                      onChange={(e) => setForm({ ...form, role: e.target.value })}
+                      placeholder="e.g. Head Coach & Technical Director"
+                      className="w-full px-3 py-2 bg-[#07090D] border border-[#1F2937] text-white focus:outline-none focus:border-[#B8F000]"
+                    />
                   </div>
                 </div>
-              </div>
+
+                {/* WhatsApp Number & Dynamic URL Slug - Prominently Highlighted */}
+                <div className="p-3.5 bg-[#07090D] border-2 border-[#B8F000]/40 space-y-3">
+                  <div className="flex items-center justify-between pb-1 border-b border-[#1F2937]">
+                    <span className="text-[11px] font-bold text-[#B8F000] uppercase tracking-wider flex items-center gap-1.5">
+                      <Phone className="w-3.5 h-3.5 text-[#B8F000]" />
+                      <span>WhatsApp / Contact Number &amp; Profile Link</span>
+                    </span>
+                    <span className="px-1.5 py-0.5 bg-[#B8F000]/10 font-mono text-[9px] text-[#B8F000] uppercase font-bold">
+                      Click-to-Chat
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-[#A8B0BA] uppercase mb-1 font-bold flex items-center justify-between">
+                        <span>WhatsApp Number</span>
+                        <span className="text-[9px] text-[#6B7280]">Supports +91 / local</span>
+                      </label>
+                      <div className="relative">
+                        <Phone className="w-3.5 h-3.5 text-[#A8B0BA] absolute left-3 top-1/2 -translate-y-1/2" />
+                        <input
+                          type="text"
+                          value={form.whatsappNumber}
+                          onChange={(e) => setForm({ ...form, whatsappNumber: e.target.value })}
+                          placeholder="+91 98765 43210"
+                          className="w-full pl-9 pr-3 py-2 bg-[#0B0F14] border border-[#1F2937] text-white focus:outline-none focus:border-[#B8F000]"
+                        />
+                      </div>
+                      {form.whatsappNumber.trim() ? (
+                        <div className="mt-1.5 text-[10px] text-emerald-400 flex items-center gap-1.5 font-mono">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                          <span>
+                            ✓ Stored as: <strong>{normalizeWhatsAppNumber(form.whatsappNumber)}</strong>
+                          </span>
+                        </div>
+                      ) : (
+                        <div className="mt-1 text-[10px] text-[#6B7280]">
+                          Optional. Leave blank to disable direct WhatsApp CTA.
+                        </div>
+                      )}
+                    </div>
+
+                    <div>
+                      <label className="block text-[#A8B0BA] uppercase mb-1 font-bold flex items-center justify-between">
+                        <span>Public Profile Slug</span>
+                        <span className="text-[9px] text-[#6B7280]">Auto-generated</span>
+                      </label>
+                      <div className="flex items-center">
+                        <span className="px-2.5 py-2 bg-[#11161D] border border-r-0 border-[#1F2937] text-[#6B7280] text-[11px] select-none">
+                          /coaches/
+                        </span>
+                        <input
+                          type="text"
+                          required
+                          value={form.slug}
+                          onChange={(e) => setForm({ ...form, slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, "-") })}
+                          placeholder="sooraj-m-s"
+                          className="w-full px-3 py-2 bg-[#0B0F14] border border-[#1F2937] text-white focus:outline-none focus:border-[#B8F000]"
+                        />
+                      </div>
+                      <div className="mt-1 text-[10px] text-[#A8B0BA] truncate">
+                        URL: <span className="text-[#B8F000]">/coaches/{form.slug || "coach-slug"}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
               <div className="grid grid-cols-3 gap-3">
                 <div className="col-span-1">
@@ -786,30 +798,45 @@ export function CoachesManager() {
                 </div>
               </div>
 
-              <div className="pt-2 flex justify-end gap-2">
-                <button
-                  type="button"
-                  onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 bg-[#11161D] text-[#A8B0BA] hover:text-white uppercase font-bold text-xs cursor-pointer"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={saving}
-                  className="px-6 py-2 bg-[#B8F000] hover:bg-[#cbf722] text-[#07090D] font-black uppercase text-xs transition-colors cursor-pointer flex items-center gap-1.5"
-                >
-                  {saving ? (
-                    <>
-                      <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-                      <span>Saving to PostgreSQL...</span>
-                    </>
-                  ) : editingCoach ? (
-                    "Update Coach"
+              </div>
+
+              {/* Sticky Modal Footer */}
+              <div className="p-4 border-t border-[#1F2937] bg-[#07090D] flex items-center justify-between shrink-0 font-mono">
+                <span className="text-[10px] text-[#6B7280]">
+                  {form.whatsappNumber.trim() ? (
+                    <span className="text-emerald-400 flex items-center gap-1">
+                      <Phone className="w-3 h-3" />
+                      <span>WhatsApp: {normalizeWhatsAppNumber(form.whatsappNumber)}</span>
+                    </span>
                   ) : (
-                    "Save Coach"
+                    <span className="text-amber-400">⚠ No WhatsApp number</span>
                   )}
-                </button>
+                </span>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setIsModalOpen(false)}
+                    className="px-4 py-2 bg-[#11161D] hover:bg-[#17212C] text-[#A8B0BA] hover:text-white uppercase font-bold text-xs cursor-pointer border border-[#1F2937]"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={saving}
+                    className="px-6 py-2 bg-[#B8F000] hover:bg-[#cbf722] text-[#07090D] font-black uppercase text-xs transition-colors cursor-pointer flex items-center gap-1.5 shadow-sm"
+                  >
+                    {saving ? (
+                      <>
+                        <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                        <span>Saving to PostgreSQL...</span>
+                      </>
+                    ) : editingCoach ? (
+                      "Update Coach"
+                    ) : (
+                      "Save Coach"
+                    )}
+                  </button>
+                </div>
               </div>
             </form>
           </div>

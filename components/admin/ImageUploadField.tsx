@@ -210,7 +210,7 @@ export function ImageUploadField({
       {/* Visual Image Preview & Controls (Rendered whenever value exists) */}
       {value && (
         <div className="space-y-2">
-          <div className={`relative ${aspectClass} w-full bg-[#07090D] border border-[#1F2937] overflow-hidden group`}>
+          <div className={`relative ${aspectClass} max-h-56 max-w-sm mx-auto w-full bg-[#07090D] border border-[#1F2937] overflow-hidden group`}>
             <Image
               src={value}
               alt="Uploaded preview"

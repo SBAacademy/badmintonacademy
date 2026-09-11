@@ -14,6 +14,8 @@ import { FAQSection } from "@/components/sections/FAQSection";
 import { FinalCTA } from "@/components/sections/FinalCTA";
 import { createMetadata } from "@/lib/seo";
 
+export const revalidate = 60;
+
 export const metadata: Metadata = createMetadata({
   title: "Badminton Coaching & Academy in Kochi | Kadavanthra, Edappally, Kakkanad",
   description: "Join S & A Badminton Academy in Kochi. Premier badminton coaching for kids, juniors, adults & competitive athletes across Kadavanthra, Edappally, and Kakkanad. BWF sprung wooden courts & certified coaches.",

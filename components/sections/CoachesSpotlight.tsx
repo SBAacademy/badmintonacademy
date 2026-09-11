@@ -44,7 +44,7 @@ export async function CoachesSpotlight({ initialCoaches }: { initialCoaches?: Co
 
         {/* Editorial Coaches Grid: Large Portraits + Asymmetric Meta */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pt-12">
-          {COACHES.map((coach, idx) => (
+          {coaches.slice(0, 4).map((coach, idx) => (
             <div
               key={coach.id}
               className="bg-[#0B0F14] border border-[#1F2937] flex flex-col justify-between group transition-colors hover:border-[#B8F000]/50"
@@ -53,7 +53,7 @@ export async function CoachesSpotlight({ initialCoaches }: { initialCoaches?: Co
                 {/* Large Editorial Portrait */}
                 <div className="relative aspect-[3/4] w-full overflow-hidden bg-[#07090D]">
                   <Image
-                    src={coach.image}
+                    src={coach.image || "/images/training-coach.jpg"}
                     alt={`${coach.name} - ${coach.role}`}
                     fill
                     className="object-cover object-top filter grayscale contrast-125 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500"

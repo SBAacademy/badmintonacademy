@@ -7,8 +7,14 @@ export interface Coach {
   specialization: string;
   bio: string;
   primaryBranch: string;
+  primaryCentre?: string;
   achievements: string[];
   image: string;
+  status?: "ACTIVE" | "INACTIVE";
+  isPublished?: boolean;
+  displayOrder?: number;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export const COACHES: Coach[] = [

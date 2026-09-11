@@ -101,8 +101,12 @@ async function migrate() {
       specialization VARCHAR(255) NOT NULL,
       primary_centre VARCHAR(64) REFERENCES centres(slug),
       image_url TEXT,
+      achievements TEXT[] NOT NULL DEFAULT '{}',
       status VARCHAR(32) DEFAULT 'ACTIVE',
-      created_at TIMESTAMPTZ DEFAULT NOW()
+      is_published BOOLEAN DEFAULT TRUE,
+      display_order INTEGER DEFAULT 0,
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      updated_at TIMESTAMPTZ DEFAULT NOW()
     );
   `;
 

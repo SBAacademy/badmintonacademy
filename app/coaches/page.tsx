@@ -21,6 +21,8 @@ export const metadata: Metadata = createMetadata({
 
 import { getCoaches } from "@/lib/contentDb";
 
+export const revalidate = 60;
+
 export default async function CoachesPage() {
   const coaches = await getCoaches();
 
@@ -64,7 +66,7 @@ export default async function CoachesPage() {
                   {/* Portrait */}
                   <div className="relative w-28 h-36 sm:w-32 sm:h-40 overflow-hidden bg-[#07090D] shrink-0 border border-[#1F2937]">
                     <Image
-                      src={coach.image}
+                      src={coach.image || "/images/training-coach.jpg"}
                       alt={coach.name}
                       fill
                       className="object-cover object-top filter grayscale contrast-125 group-hover:grayscale-0 transition-all duration-300"

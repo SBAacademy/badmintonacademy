@@ -10,10 +10,12 @@ import {
   ExternalLink,
   X,
   RefreshCw,
-  Award,
   ShieldCheck,
-  MapPin,
   UserCheck,
+  Eye,
+  EyeOff,
+  AlertCircle,
+  CheckCircle2,
 } from "lucide-react";
 import { Coach, COACHES } from "@/data/coaches";
 import { ImageUploadField } from "./ImageUploadField";
@@ -25,10 +27,14 @@ const BRANCHES = [
   "All Centres",
 ];
 
+const DEFAULT_AVATAR = "/images/training-coach.jpg";
+
 export function CoachesManager() {
   const [coaches, setCoaches] = useState<Coach[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedBranchFilter, setSelectedBranchFilter] = useState("ALL");
+  const [feedbackMessage, setFeedbackMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
   // Modal states
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -43,11 +49,15 @@ export function CoachesManager() {
     certifications: "",
     achievements: "",
     bio: "",
-    image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=800&auto=format&fit=crop",
+    image: DEFAULT_AVATAR,
+    isPublished: true,
+    status: "ACTIVE" as "ACTIVE" | "INACTIVE",
+    displayOrder: 0,
   });
 
   const fetchCoaches = async () => {
     setLoading(true);
+    setFeedbackMessage(null);
     try {
       const res = await fetch("/api/content/coaches");
       const data = await res.json();
@@ -56,7 +66,8 @@ export function CoachesManager() {
       } else {
         setCoaches(COACHES);
       }
-    } catch {
+    } catch (err) {
+      console.error("Failed to load coaches:", err);
       setCoaches(COACHES);
     } finally {
       setLoading(false);
@@ -78,7 +89,10 @@ export function CoachesManager() {
       certifications: "BWF Level 1 Certified Coach\nNIS Sports Coaching Diploma",
       achievements: "Former State Senior Medalist\nCoached Ernakulam District Squad",
       bio: "Dedicated badminton trainer with extensive experience mentoring junior and adult athletes in Kochi.",
-      image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=800&auto=format&fit=crop",
+      image: DEFAULT_AVATAR,
+      isPublished: true,
+      status: "ACTIVE",
+      displayOrder: 0,
     });
     setIsModalOpen(true);
   };
@@ -91,89 +105,139 @@ export function CoachesManager() {
       experienceYears: coach.experienceYears,
       primaryBranch: coach.primaryBranch,
       specialization: coach.specialization,
-      certifications: coach.certifications.join("\n"),
-      achievements: coach.achievements.join("\n"),
+      certifications: (coach.certifications || []).join("\n"),
+      achievements: (coach.achievements || []).join("\n"),
       bio: coach.bio,
-      image: coach.image,
+      image: coach.image || DEFAULT_AVATAR,
+      isPublished: coach.isPublished !== false,
+      status: coach.status || "ACTIVE",
+      displayOrder: coach.displayOrder || 0,
     });
     setIsModalOpen(true);
   };
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.name || !form.role) return;
+    if (!form.name.trim() || !form.role.trim()) return;
     setSaving(true);
+    setFeedbackMessage(null);
+
+    const cleanId = editingCoach
+      ? editingCoach.id
+      : form.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
     const payload = {
-      name: form.name,
-      role: form.role,
+      id: cleanId,
+      name: form.name.trim(),
+      role: form.role.trim(),
       experienceYears: Number(form.experienceYears) || 5,
       primaryBranch: form.primaryBranch,
-      specialization: form.specialization,
+      specialization: form.specialization.trim(),
       certifications: form.certifications.split("\n").map((c) => c.trim()).filter(Boolean),
       achievements: form.achievements.split("\n").map((a) => a.trim()).filter(Boolean),
-      bio: form.bio,
-      image: form.image,
+      bio: form.bio.trim(),
+      image: form.image?.trim() || DEFAULT_AVATAR,
+      isPublished: form.isPublished,
+      status: form.status,
+      displayOrder: Number(form.displayOrder) || 0,
     };
 
     try {
-      if (editingCoach) {
-        // Update
-        const res = await fetch("/api/content/coaches", {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ id: editingCoach.id, ...payload }),
-        });
-        const data = await res.json();
-        if (data.success && data.item) {
+      const method = editingCoach ? "PUT" : "POST";
+      const res = await fetch("/api/content/coaches", {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+
+      if (data.success && data.item) {
+        if (editingCoach) {
           setCoaches((prev) =>
             prev.map((c) => (c.id === editingCoach.id ? data.item : c))
           );
-          setIsModalOpen(false);
-        }
-      } else {
-        // Create
-        const id = form.name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
-        const res = await fetch("/api/content/coaches", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ id, ...payload }),
-        });
-        const data = await res.json();
-        if (data.success && data.item) {
+          setFeedbackMessage({ type: "success", text: `Updated "${data.item.name}" successfully.` });
+        } else {
           setCoaches((prev) => [data.item, ...prev]);
-          setIsModalOpen(false);
+          setFeedbackMessage({ type: "success", text: `Created "${data.item.name}" and saved to database.` });
         }
+        setIsModalOpen(false);
+      } else {
+        setFeedbackMessage({ type: "error", text: data.message || "Failed to save coach." });
       }
     } catch (err) {
       console.error("Failed to save coach:", err);
+      setFeedbackMessage({ type: "error", text: "Network error while saving coach." });
     } finally {
       setSaving(false);
     }
   };
 
+  const handleTogglePublish = async (coach: Coach) => {
+    const newPublished = coach.isPublished === false ? true : false;
+    const updatedCoach = { ...coach, isPublished: newPublished };
+
+    // Optimistic update
+    setCoaches((prev) => prev.map((c) => (c.id === coach.id ? updatedCoach : c)));
+
+    try {
+      const res = await fetch("/api/content/coaches", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedCoach),
+      });
+      const data = await res.json();
+      if (!data.success) {
+        // Revert on error
+        setCoaches((prev) => prev.map((c) => (c.id === coach.id ? coach : c)));
+        setFeedbackMessage({ type: "error", text: data.message || "Failed to update publication status." });
+      } else {
+        setFeedbackMessage({
+          type: "success",
+          text: `"${coach.name}" is now ${newPublished ? "Published (LIVE on website)" : "Hidden (Unpublished)"}.`,
+        });
+      }
+    } catch {
+      setCoaches((prev) => prev.map((c) => (c.id === coach.id ? coach : c)));
+      setFeedbackMessage({ type: "error", text: "Failed to toggle status due to network issue." });
+    }
+  };
+
   const handleDelete = async (id: string, name: string) => {
-    if (!window.confirm(`Permanently remove "${name}" from coaching faculty roster?`)) {
+    if (!window.confirm(`Are you sure you want to remove "${name}"? If they have assigned batches, they will be archived safely.`)) {
       return;
     }
-    setCoaches((prev) => prev.filter((c) => c.id !== id));
+    setFeedbackMessage(null);
     try {
-      await fetch(`/api/content/coaches?id=${id}`, { method: "DELETE" });
+      const res = await fetch(`/api/content/coaches?id=${id}`, { method: "DELETE" });
+      const data = await res.json();
+      if (data.success) {
+        setCoaches((prev) => prev.filter((c) => c.id !== id));
+        setFeedbackMessage({ type: "success", text: data.message || `Removed "${name}".` });
+      } else {
+        setFeedbackMessage({ type: "error", text: data.message || "Failed to delete coach." });
+      }
     } catch (err) {
       console.error("Failed to delete coach:", err);
+      setFeedbackMessage({ type: "error", text: "Network error while deleting coach." });
       fetchCoaches();
     }
   };
 
   const filteredCoaches = coaches.filter((coach) => {
     const q = searchQuery.toLowerCase().trim();
-    return (
+    const matchesSearch =
       !q ||
       coach.name.toLowerCase().includes(q) ||
       coach.role.toLowerCase().includes(q) ||
       coach.specialization.toLowerCase().includes(q) ||
-      coach.primaryBranch.toLowerCase().includes(q)
-    );
+      coach.primaryBranch.toLowerCase().includes(q);
+
+    const matchesBranch =
+      selectedBranchFilter === "ALL" ||
+      coach.primaryBranch.toLowerCase().includes(selectedBranchFilter.toLowerCase());
+
+    return matchesSearch && matchesBranch;
   });
 
   return (
@@ -186,14 +250,17 @@ export function CoachesManager() {
               WEBSITE CMS // FACULTY
             </span>
             <span className="px-2 py-0.5 bg-[#B8F000]/10 border border-[#B8F000]/30 font-mono text-[10px] text-[#B8F000]">
-              {coaches.length} Coaches Live
+              {coaches.filter((c) => c.isPublished !== false && c.status !== "INACTIVE").length} Live on Website
+            </span>
+            <span className="px-2 py-0.5 bg-[#1F2937] border border-[#374151] font-mono text-[10px] text-[#A8B0BA]">
+              {coaches.length} Total in DB
             </span>
           </div>
           <h2 className="text-xl font-black text-white uppercase tracking-tight mt-1">
             Coaching Panel &amp; Mentors Manager
           </h2>
           <p className="text-xs text-[#A8B0BA] font-mono">
-            Manage certified BWF coaches and NIS mentors displayed on <a href="/coaches" target="_blank" className="text-[#B8F000] hover:underline">/coaches</a>.
+            Authoritative faculty management. Changes sync directly to PostgreSQL and update <a href="/coaches" target="_blank" className="text-[#B8F000] hover:underline">/coaches</a> and the homepage immediately.
           </p>
         </div>
 
@@ -203,7 +270,7 @@ export function CoachesManager() {
             onClick={fetchCoaches}
             disabled={loading}
             className="p-2.5 bg-[#11161D] hover:bg-[#17212C] border border-[#1F2937] text-[#A8B0BA] hover:text-white font-mono text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
-            title="Reload from Neon DB"
+            title="Reload from Neon PostgreSQL"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin text-[#B8F000]" : ""}`} />
             <span className="hidden sm:inline">Refresh</span>
@@ -230,17 +297,62 @@ export function CoachesManager() {
         </div>
       </div>
 
-      {/* Search Toolbar */}
-      <div className="p-4 bg-[#0B0F14] border border-[#1F2937]">
-        <div className="relative">
+      {/* Feedback Banner */}
+      {feedbackMessage && (
+        <div
+          className={`p-3 border font-mono text-xs flex items-center justify-between transition-all ${
+            feedbackMessage.type === "success"
+              ? "bg-[#B8F000]/10 border-[#B8F000]/40 text-[#B8F000]"
+              : "bg-rose-500/10 border-rose-500/40 text-rose-400"
+          }`}
+        >
+          <div className="flex items-center gap-2">
+            {feedbackMessage.type === "success" ? (
+              <CheckCircle2 className="w-4 h-4 shrink-0" />
+            ) : (
+              <AlertCircle className="w-4 h-4 shrink-0" />
+            )}
+            <span>{feedbackMessage.text}</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setFeedbackMessage(null)}
+            className="hover:opacity-75 cursor-pointer ml-2"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      )}
+
+      {/* Search & Branch Toolbar */}
+      <div className="p-4 bg-[#0B0F14] border border-[#1F2937] flex flex-col sm:flex-row gap-3">
+        <div className="relative flex-1">
           <Search className="w-4 h-4 text-[#A8B0BA] absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search coaches by name, specialization, role, branch..."
+            placeholder="Search coaches by name, specialization, role..."
             className="w-full pl-9 pr-4 py-2 bg-[#07090D] border border-[#1F2937] text-white text-xs font-mono focus:outline-none focus:border-[#B8F000]"
           />
+        </div>
+
+        <div className="flex items-center gap-1.5 bg-[#07090D] border border-[#1F2937] p-1 font-mono text-[11px]">
+          <span className="text-[#6B7280] px-2 uppercase">Branch:</span>
+          {["ALL", "Kadavanthra", "Edappally", "Kakkanad"].map((b) => (
+            <button
+              key={b}
+              type="button"
+              onClick={() => setSelectedBranchFilter(b)}
+              className={`px-2 py-1 uppercase transition-colors ${
+                selectedBranchFilter === b
+                  ? "bg-[#B8F000] text-[#07090D] font-bold"
+                  : "text-[#A8B0BA] hover:text-white"
+              }`}
+            >
+              {b}
+            </button>
+          ))}
         </div>
       </div>
 
@@ -251,88 +363,120 @@ export function CoachesManager() {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-          {filteredCoaches.map((coach) => (
-            <div
-              key={coach.id}
-              className="bg-[#0B0F14] border border-[#1F2937] hover:border-[#B8F000]/60 overflow-hidden flex flex-col justify-between group transition-all"
-            >
-              <div>
-                {/* Portrait */}
-                <div className="relative aspect-[3/4] w-full bg-[#07090D] overflow-hidden">
-                  <Image
-                    src={coach.image}
-                    alt={coach.name}
-                    fill
-                    className="object-cover object-top group-hover:scale-105 transition-transform duration-300"
-                    sizes="(max-width: 640px) 100vw, 25vw"
-                  />
-                  <div className="absolute top-2 left-2">
-                    <span className="px-2 py-0.5 bg-[#07090D]/90 backdrop-blur-sm border border-[#1F2937] font-mono text-[9px] text-[#B8F000] uppercase font-bold">
-                      {coach.experienceYears} Years Exp
-                    </span>
-                  </div>
-                  <div className="absolute bottom-2 left-2 right-2">
-                    <span className="px-2 py-0.5 bg-[#07090D]/90 backdrop-blur-sm border border-[#1F2937] font-mono text-[9px] text-white block truncate">
-                      📍 {coach.primaryBranch}
-                    </span>
-                  </div>
-                </div>
+          {filteredCoaches.map((coach) => {
+            const isLive = coach.isPublished !== false && coach.status !== "INACTIVE";
 
-                {/* Info */}
-                <div className="p-4 space-y-2">
-                  <div>
-                    <h3 className="font-bold text-white text-sm group-hover:text-[#B8F000] transition-colors">
-                      {coach.name}
-                    </h3>
-                    <div className="text-[11px] text-[#B8F000] font-mono font-bold">
-                      {coach.role}
+            return (
+              <div
+                key={coach.id}
+                className={`bg-[#0B0F14] border overflow-hidden flex flex-col justify-between group transition-all ${
+                  isLive
+                    ? "border-[#1F2937] hover:border-[#B8F000]/60"
+                    : "border-amber-500/30 opacity-80 hover:opacity-100"
+                }`}
+              >
+                <div>
+                  {/* Portrait */}
+                  <div className="relative aspect-[3/4] w-full bg-[#07090D] overflow-hidden">
+                    <Image
+                      src={coach.image || DEFAULT_AVATAR}
+                      alt={coach.name}
+                      fill
+                      className={`object-cover object-top transition-transform duration-300 ${
+                        isLive ? "group-hover:scale-105" : "grayscale"
+                      }`}
+                      sizes="(max-width: 640px) 100vw, 25vw"
+                    />
+                    <div className="absolute top-2 left-2 flex flex-col gap-1">
+                      <span className="px-2 py-0.5 bg-[#07090D]/90 backdrop-blur-sm border border-[#1F2937] font-mono text-[9px] text-[#B8F000] uppercase font-bold">
+                        {coach.experienceYears}Y Exp
+                      </span>
+                      {isLive ? (
+                        <span className="px-1.5 py-0.5 bg-emerald-950/90 border border-emerald-500/50 font-mono text-[9px] text-emerald-400 font-bold uppercase">
+                          ● Live
+                        </span>
+                      ) : (
+                        <span className="px-1.5 py-0.5 bg-amber-950/90 border border-amber-500/50 font-mono text-[9px] text-amber-400 font-bold uppercase">
+                          ○ Hidden
+                        </span>
+                      )}
+                    </div>
+                    <div className="absolute bottom-2 left-2 right-2">
+                      <span className="px-2 py-0.5 bg-[#07090D]/90 backdrop-blur-sm border border-[#1F2937] font-mono text-[9px] text-white block truncate">
+                        📍 {coach.primaryBranch}
+                      </span>
                     </div>
                   </div>
 
-                  <p className="text-[11px] font-mono text-[#A8B0BA] line-clamp-2 leading-relaxed">
-                    {coach.bio}
-                  </p>
-
-                  {/* Certifications chips */}
-                  <div className="space-y-1 pt-1">
-                    {coach.certifications.slice(0, 2).map((cert, i) => (
-                      <div
-                        key={i}
-                        className="text-[10px] font-mono text-[#6B7280] truncate flex items-center gap-1"
-                      >
-                        <ShieldCheck className="w-3 h-3 text-[#B8F000] shrink-0" />
-                        <span>{cert}</span>
+                  {/* Info */}
+                  <div className="p-4 space-y-2">
+                    <div>
+                      <h3 className="font-bold text-white text-sm group-hover:text-[#B8F000] transition-colors">
+                        {coach.name}
+                      </h3>
+                      <div className="text-[11px] text-[#B8F000] font-mono font-bold">
+                        {coach.role}
                       </div>
-                    ))}
+                    </div>
+
+                    <p className="text-[11px] font-mono text-[#A8B0BA] line-clamp-2 leading-relaxed">
+                      {coach.bio}
+                    </p>
+
+                    {/* Certifications chips */}
+                    <div className="space-y-1 pt-1">
+                      {(coach.certifications || []).slice(0, 2).map((cert, i) => (
+                        <div
+                          key={i}
+                          className="text-[10px] font-mono text-[#6B7280] truncate flex items-center gap-1"
+                        >
+                          <ShieldCheck className="w-3 h-3 text-[#B8F000] shrink-0" />
+                          <span>{cert}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Actions */}
+                <div className="p-3 border-t border-[#1F2937] bg-[#07090D] flex items-center justify-between font-mono text-xs">
+                  <span className="text-[9px] text-[#6B7280]">ID: {coach.id}</span>
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => handleTogglePublish(coach)}
+                      className={`p-1.5 border font-mono text-[10px] flex items-center gap-1 transition-colors cursor-pointer ${
+                        isLive
+                          ? "bg-[#11161D] hover:bg-amber-950/40 border-[#1F2937] text-[#A8B0BA] hover:text-amber-400"
+                          : "bg-[#11161D] hover:bg-emerald-950/40 border-amber-500/40 text-amber-400 hover:text-emerald-400"
+                      }`}
+                      title={isLive ? "Unpublish from public website" : "Publish to live website"}
+                    >
+                      {isLive ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => openEditModal(coach)}
+                      className="p-1.5 bg-[#11161D] hover:bg-[#17212C] border border-[#1F2937] text-[#A8B0BA] hover:text-[#B8F000] transition-colors cursor-pointer"
+                      title="Edit Coach Profile"
+                    >
+                      <Edit3 className="w-3.5 h-3.5" />
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => handleDelete(coach.id, coach.name)}
+                      className="p-1.5 bg-[#11161D] hover:bg-rose-950/40 border border-[#1F2937] hover:border-rose-500/40 text-[#6B7280] hover:text-rose-400 transition-colors cursor-pointer"
+                      title="Delete / Archive Coach"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
                   </div>
                 </div>
               </div>
-
-              {/* Actions */}
-              <div className="p-3 border-t border-[#1F2937] bg-[#07090D] flex items-center justify-between font-mono text-xs">
-                <span className="text-[9px] text-[#6B7280]">ID: {coach.id}</span>
-                <div className="flex items-center gap-1.5">
-                  <button
-                    type="button"
-                    onClick={() => openEditModal(coach)}
-                    className="p-1.5 bg-[#11161D] hover:bg-[#17212C] border border-[#1F2937] text-[#A8B0BA] hover:text-[#B8F000] transition-colors"
-                    title="Edit Coach Profile"
-                  >
-                    <Edit3 className="w-3.5 h-3.5" />
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => handleDelete(coach.id, coach.name)}
-                    className="p-1.5 bg-[#11161D] hover:bg-rose-950/40 border border-[#1F2937] hover:border-rose-500/40 text-[#6B7280] hover:text-rose-400 transition-colors"
-                    title="Delete Coach"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 
@@ -348,7 +492,7 @@ export function CoachesManager() {
               <button
                 type="button"
                 onClick={() => setIsModalOpen(false)}
-                className="text-[#A8B0BA] hover:text-white"
+                className="text-[#A8B0BA] hover:text-white cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -381,9 +525,9 @@ export function CoachesManager() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-[#A8B0BA] uppercase mb-1">Primary Branch / Centre</label>
+              <div className="grid grid-cols-3 gap-3">
+                <div className="col-span-1">
+                  <label className="block text-[#A8B0BA] uppercase mb-1">Primary Branch</label>
                   <select
                     value={form.primaryBranch}
                     onChange={(e) => setForm({ ...form, primaryBranch: e.target.value })}
@@ -398,11 +542,22 @@ export function CoachesManager() {
                 </div>
 
                 <div>
-                  <label className="block text-[#A8B0BA] uppercase mb-1">Coaching Experience (Years)</label>
+                  <label className="block text-[#A8B0BA] uppercase mb-1">Experience (Years)</label>
                   <input
                     type="number"
                     value={form.experienceYears}
                     onChange={(e) => setForm({ ...form, experienceYears: Number(e.target.value) })}
+                    className="w-full px-3 py-2 bg-[#07090D] border border-[#1F2937] text-white focus:outline-none focus:border-[#B8F000]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[#A8B0BA] uppercase mb-1">Display Order</label>
+                  <input
+                    type="number"
+                    value={form.displayOrder}
+                    onChange={(e) => setForm({ ...form, displayOrder: Number(e.target.value) })}
+                    placeholder="0"
                     className="w-full px-3 py-2 bg-[#07090D] border border-[#1F2937] text-white focus:outline-none focus:border-[#B8F000]"
                   />
                 </div>
@@ -422,10 +577,10 @@ export function CoachesManager() {
               <ImageUploadField
                 label="Coach Portrait / Headshot"
                 value={form.image || ""}
-                onChange={(url) => setForm({ ...form, image: url })}
+                onChange={(url) => setForm({ ...form, image: url || DEFAULT_AVATAR })}
                 required
                 aspectRatio="1/1"
-                helpText="Upload a square or portrait photo from your computer or paste an external link."
+                helpText="Upload a photo from your computer, paste an external URL, or keep default academy portrait."
               />
 
               <div>
@@ -462,20 +617,57 @@ export function CoachesManager() {
                 />
               </div>
 
+              {/* Status & Publication Toggles */}
+              <div className="p-3 bg-[#07090D] border border-[#1F2937] flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="isPublishedCheck"
+                    checked={form.isPublished}
+                    onChange={(e) => setForm({ ...form, isPublished: e.target.checked })}
+                    className="w-4 h-4 accent-[#B8F000] cursor-pointer"
+                  />
+                  <label htmlFor="isPublishedCheck" className="text-white uppercase font-bold cursor-pointer">
+                    Publish Live on Website
+                  </label>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <span className="text-[#A8B0BA] uppercase text-[10px]">Status:</span>
+                  <select
+                    value={form.status}
+                    onChange={(e) => setForm({ ...form, status: e.target.value as "ACTIVE" | "INACTIVE" })}
+                    className="px-2 py-1 bg-[#11161D] border border-[#1F2937] text-white text-[11px] focus:outline-none"
+                  >
+                    <option value="ACTIVE">ACTIVE</option>
+                    <option value="INACTIVE">INACTIVE</option>
+                  </select>
+                </div>
+              </div>
+
               <div className="pt-2 flex justify-end gap-2">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 bg-[#11161D] text-[#A8B0BA] hover:text-white uppercase font-bold text-xs"
+                  className="px-4 py-2 bg-[#11161D] text-[#A8B0BA] hover:text-white uppercase font-bold text-xs cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={saving}
-                  className="px-6 py-2 bg-[#B8F000] hover:bg-[#cbf722] text-[#07090D] font-black uppercase text-xs transition-colors cursor-pointer"
+                  className="px-6 py-2 bg-[#B8F000] hover:bg-[#cbf722] text-[#07090D] font-black uppercase text-xs transition-colors cursor-pointer flex items-center gap-1.5"
                 >
-                  {saving ? "Saving to Neon DB..." : editingCoach ? "Update Coach" : "Save Coach"}
+                  {saving ? (
+                    <>
+                      <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                      <span>Saving to PostgreSQL...</span>
+                    </>
+                  ) : editingCoach ? (
+                    "Update Coach"
+                  ) : (
+                    "Save Coach"
+                  )}
                 </button>
               </div>
             </form>
@@ -485,3 +677,4 @@ export function CoachesManager() {
     </div>
   );
 }
+

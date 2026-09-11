@@ -1,11 +1,15 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import {
   ContentSectionKey,
   getContentSection,
   saveContentSection,
+  getCoaches,
+  saveCoachRecord,
+  deleteCoachRecord,
 } from "@/lib/contentDb";
 import { GALLERY_ITEMS } from "@/data/gallery";
-import { COACHES } from "@/data/coaches";
+import { COACHES, Coach } from "@/data/coaches";
 import { ACHIEVEMENTS } from "@/data/achievements";
 import { TESTIMONIALS } from "@/data/testimonials";
 import { BLOG_POSTS } from "@/data/blog";
@@ -51,6 +55,18 @@ export async function GET(
     }
 
     const sectionKey = section as ContentSectionKey;
+
+    if (sectionKey === "coaches") {
+      // Return authoritative coaches including draft/inactive for admin view
+      const coaches = await getCoaches({ includeUnpublished: true });
+      return NextResponse.json({
+        success: true,
+        section: sectionKey,
+        total: coaches.length,
+        items: coaches,
+      });
+    }
+
     const defaults = getDefaultItems(sectionKey);
     const items = await getContentSection(sectionKey, defaults);
 
@@ -87,6 +103,29 @@ export async function POST(
     const sectionKey = section as ContentSectionKey;
     const body = await request.json();
 
+    if (sectionKey === "coaches") {
+      if (!body.name || !body.role) {
+        return NextResponse.json(
+          { success: false, message: "Name and role are required for coach." },
+          { status: 400 }
+        );
+      }
+
+      const savedCoach = await saveCoachRecord(body);
+      const allCoaches = await getCoaches({ includeUnpublished: true });
+
+      // Invalidate cache immediately
+      revalidatePath("/");
+      revalidatePath("/coaches");
+
+      return NextResponse.json({
+        success: true,
+        message: "Coach created successfully.",
+        item: savedCoach,
+        items: allCoaches,
+      });
+    }
+
     const defaults = getDefaultItems(sectionKey);
     const currentItems = await getContentSection<Record<string, unknown>>(sectionKey, defaults as Record<string, unknown>[]);
 
@@ -105,6 +144,9 @@ export async function POST(
 
     const updatedItems = [newItem, ...currentItems];
     await saveContentSection(sectionKey, updatedItems);
+
+    revalidatePath("/");
+    revalidatePath(`/${sectionKey}`);
 
     return NextResponse.json({
       success: true,
@@ -147,6 +189,21 @@ export async function PUT(
       );
     }
 
+    if (sectionKey === "coaches") {
+      const savedCoach = await saveCoachRecord(body);
+      const allCoaches = await getCoaches({ includeUnpublished: true });
+
+      revalidatePath("/");
+      revalidatePath("/coaches");
+
+      return NextResponse.json({
+        success: true,
+        message: "Coach updated successfully.",
+        item: savedCoach,
+        items: allCoaches,
+      });
+    }
+
     const defaults = getDefaultItems(sectionKey);
     const currentItems = await getContentSection<Record<string, unknown>>(sectionKey, defaults as Record<string, unknown>[]);
 
@@ -168,6 +225,9 @@ export async function PUT(
 
     currentItems[itemIndex] = updatedItem;
     await saveContentSection(sectionKey, currentItems);
+
+    revalidatePath("/");
+    revalidatePath(`/${sectionKey}`);
 
     return NextResponse.json({
       success: true,
@@ -210,6 +270,20 @@ export async function DELETE(
       );
     }
 
+    if (sectionKey === "coaches") {
+      const result = await deleteCoachRecord(identifier, true);
+      const allCoaches = await getCoaches({ includeUnpublished: true });
+
+      revalidatePath("/");
+      revalidatePath("/coaches");
+
+      return NextResponse.json({
+        success: true,
+        message: result.message,
+        items: allCoaches,
+      });
+    }
+
     const defaults = getDefaultItems(sectionKey);
     const currentItems = await getContentSection<Record<string, unknown>>(sectionKey, defaults as Record<string, unknown>[]);
 
@@ -218,6 +292,9 @@ export async function DELETE(
     );
 
     await saveContentSection(sectionKey, filteredItems);
+
+    revalidatePath("/");
+    revalidatePath(`/${sectionKey}`);
 
     return NextResponse.json({
       success: true,

@@ -99,6 +99,7 @@ async function handleUpdate(
 
     const savedCoach = await saveCoachRecord({
       id,
+      slug: body.slug || current.slug,
       name: (body.name || current.name).trim(),
       role: (body.role || current.role).trim(),
       experienceYears: Number(body.experienceYears ?? body.experience_years ?? current.experience_years),
@@ -109,6 +110,7 @@ async function handleUpdate(
       achievements: Array.isArray(body.achievements) ? body.achievements : current.achievements,
       bio: body.bio || current.bio,
       image: body.image ?? body.image_url ?? current.image_url,
+      whatsappNumber: body.whatsappNumber !== undefined ? body.whatsappNumber : body.whatsapp_number !== undefined ? body.whatsapp_number : current.whatsapp_number,
       status: body.status !== undefined ? body.status : current.status,
       isPublished: body.isPublished !== undefined ? body.isPublished : body.is_published !== undefined ? body.is_published : current.is_published,
       displayOrder: Number(body.displayOrder ?? body.display_order ?? current.display_order),

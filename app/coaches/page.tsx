@@ -1,7 +1,8 @@
 import React from "react";
 import type { Metadata } from "next";
 import Image from "next/image";
-import { Award, ShieldCheck, MapPin } from "lucide-react";
+import Link from "next/link";
+import { Award, ShieldCheck, MapPin, ArrowRight } from "lucide-react";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { createMetadata } from "@/lib/seo";
 import { COACHES } from "@/data/coaches";
@@ -64,27 +65,32 @@ export default async function CoachesPage() {
               <div className="space-y-6">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
                   {/* Portrait */}
-                  <div className="relative w-28 h-36 sm:w-32 sm:h-40 overflow-hidden bg-[#07090D] shrink-0 border border-[#1F2937]">
+                  <Link
+                    href={`/coaches/${coach.slug || coach.id}`}
+                    className="relative w-28 h-36 sm:w-32 sm:h-40 overflow-hidden bg-[#07090D] shrink-0 border border-[#1F2937] group/img block"
+                  >
                     <Image
                       src={coach.image || "/images/training-coach.jpg"}
                       alt={coach.name}
                       fill
-                      className="object-cover object-top filter grayscale contrast-125 group-hover:grayscale-0 transition-all duration-300"
+                      className="object-cover object-top filter grayscale contrast-125 group-hover:grayscale-0 group-hover/img:scale-105 transition-all duration-300"
                       sizes="130px"
                     />
                     <div className="absolute top-1 left-1 px-1.5 py-0.2 bg-[#07090D]/90 font-mono text-[9px] text-[#B8F000] font-bold">
                       0{idx + 1}
                     </div>
-                  </div>
+                  </Link>
 
                   {/* Identification */}
                   <div className="space-y-1.5 text-left">
                     <div className="font-mono text-[10px] text-[#B8F000] uppercase tracking-wider font-bold">
                       {coach.experienceYears}+ YEARS EXPERIENCE
                     </div>
-                    <h2 className="text-2xl font-black uppercase tracking-tight text-white group-hover:text-[#B8F000] transition-colors">
-                      {coach.name}
-                    </h2>
+                    <Link href={`/coaches/${coach.slug || coach.id}`} className="block">
+                      <h2 className="text-2xl font-black uppercase tracking-tight text-white group-hover:text-[#B8F000] transition-colors">
+                        {coach.name}
+                      </h2>
+                    </Link>
                     <div className="text-xs font-mono text-[#A8B0BA] uppercase">
                       {coach.role}
                     </div>
@@ -130,9 +136,18 @@ export default async function CoachesPage() {
                 </div>
               </div>
 
-              {/* Specialization Footer */}
-              <div className="pt-4 mt-6 border-t border-[#1F2937] font-mono text-[11px] text-left text-[#A8B0BA] uppercase">
-                SPECIALIZATION: <span className="text-white font-bold">{coach.specialization}</span>
+              {/* Specialization & Profile Link Footer */}
+              <div className="pt-4 mt-6 border-t border-[#1F2937] flex flex-col sm:flex-row sm:items-center justify-between gap-3 font-mono text-[11px]">
+                <div className="text-left text-[#A8B0BA] uppercase">
+                  SPECIALIZATION: <span className="text-white font-bold">{coach.specialization}</span>
+                </div>
+                <Link
+                  href={`/coaches/${coach.slug || coach.id}`}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#B8F000] text-[#07090D] font-bold uppercase tracking-wider text-[11px] hover:bg-[#cbf722] transition-colors shrink-0 self-start sm:self-auto"
+                >
+                  <span>View Profile</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
               </div>
             </div>
           ))}

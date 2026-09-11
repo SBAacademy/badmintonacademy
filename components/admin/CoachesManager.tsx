@@ -16,8 +16,11 @@ import {
   EyeOff,
   AlertCircle,
   CheckCircle2,
+  Phone,
+  MessageSquare,
+  Globe,
 } from "lucide-react";
-import { Coach } from "@/data/coaches";
+import { Coach, normalizeWhatsAppNumber, formatWhatsAppDisplay } from "@/data/coaches";
 import { ImageUploadField } from "./ImageUploadField";
 
 const BRANCHES = [
@@ -43,6 +46,8 @@ export function CoachesManager() {
   const [saving, setSaving] = useState(false);
   const [form, setForm] = useState({
     name: "",
+    slug: "",
+    whatsappNumber: "",
     role: "",
     experienceYears: 10,
     primaryBranch: "Kadavanthra (Headquarters)",
@@ -86,6 +91,8 @@ export function CoachesManager() {
     setEditingCoach(null);
     setForm({
       name: "",
+      slug: "",
+      whatsappNumber: "",
       role: "Senior Badminton Coach",
       experienceYears: 8,
       primaryBranch: "Kadavanthra (Headquarters)",
@@ -105,6 +112,8 @@ export function CoachesManager() {
     setEditingCoach(coach);
     setForm({
       name: coach.name,
+      slug: coach.slug || coach.id,
+      whatsappNumber: coach.whatsappNumber || "",
       role: coach.role,
       experienceYears: coach.experienceYears,
       primaryBranch: coach.primaryBranch,
@@ -126,14 +135,16 @@ export function CoachesManager() {
     setSaving(true);
     setFeedbackMessage(null);
 
-    const cleanId = editingCoach
-      ? editingCoach.id
-      : form.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+    const rawSlug = form.slug.trim() || form.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+    const cleanSlug = rawSlug.toLowerCase().replace(/[^a-z0-9-]+/g, "-").replace(/(^-|-$)/g, "");
+    const cleanId = editingCoach ? editingCoach.id : cleanSlug;
 
     const payload = {
       id: cleanId,
+      slug: cleanSlug,
       name: form.name.trim(),
       role: form.role.trim(),
+      whatsappNumber: form.whatsappNumber.trim() ? normalizeWhatsAppNumber(form.whatsappNumber) : null,
       experienceYears: Number(form.experienceYears) || 5,
       primaryBranch: form.primaryBranch,
       specialization: form.specialization.trim(),
@@ -462,6 +473,21 @@ export function CoachesManager() {
                       {coach.bio}
                     </p>
 
+                    {/* WhatsApp Status Indicator */}
+                    <div className="pt-1">
+                      {coach.whatsappNumber ? (
+                        <div className="flex items-center gap-1.5 text-[10px] font-mono text-emerald-400 bg-emerald-950/40 border border-emerald-500/30 px-2 py-1">
+                          <MessageSquare className="w-3 h-3 shrink-0" />
+                          <span className="truncate">WA: {formatWhatsAppDisplay(coach.whatsappNumber)}</span>
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-1.5 text-[10px] font-mono text-amber-400 bg-amber-950/40 border border-amber-500/30 px-2 py-1">
+                          <AlertCircle className="w-3 h-3 shrink-0" />
+                          <span>⚠ WhatsApp not configured</span>
+                        </div>
+                      )}
+                    </div>
+
                     {/* Certifications chips */}
                     <div className="space-y-1 pt-1">
                       {(coach.certifications || []).slice(0, 2).map((cert, i) => (
@@ -479,7 +505,16 @@ export function CoachesManager() {
 
                 {/* Actions */}
                 <div className="p-3 border-t border-[#1F2937] bg-[#07090D] flex items-center justify-between font-mono text-xs">
-                  <span className="text-[9px] text-[#6B7280]">ID: {coach.id}</span>
+                  <a
+                    href={`/coaches/${coach.slug || coach.id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[10px] text-[#B8F000] hover:underline flex items-center gap-1 font-mono font-bold"
+                    title="Preview public coach profile"
+                  >
+                    <span>View Profile</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
                   <div className="flex items-center gap-1.5">
                     <button
                       type="button"
@@ -545,7 +580,16 @@ export function CoachesManager() {
                     type="text"
                     required
                     value={form.name}
-                    onChange={(e) => setForm({ ...form, name: e.target.value })}
+                    onChange={(e) => {
+                      const newName = e.target.value;
+                      setForm((prev) => ({
+                        ...prev,
+                        name: newName,
+                        slug: !editingCoach
+                          ? newName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")
+                          : prev.slug,
+                      }));
+                    }}
                     placeholder="e.g. Coach Anand Varma"
                     className="w-full px-3 py-2 bg-[#07090D] border border-[#1F2937] text-white focus:outline-none focus:border-[#B8F000]"
                   />
@@ -561,6 +605,64 @@ export function CoachesManager() {
                     placeholder="e.g. Head Coach & Technical Director"
                     className="w-full px-3 py-2 bg-[#07090D] border border-[#1F2937] text-white focus:outline-none focus:border-[#B8F000]"
                   />
+                </div>
+              </div>
+
+              {/* WhatsApp Number & Dynamic URL Slug */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3 bg-[#07090D] border border-[#1F2937]">
+                <div>
+                  <label className="block text-[#A8B0BA] uppercase mb-1 flex items-center justify-between">
+                    <span className="flex items-center gap-1.5 font-bold text-white">
+                      <Phone className="w-3.5 h-3.5 text-[#B8F000]" />
+                      <span>WhatsApp Number</span>
+                    </span>
+                    <span className="text-[9px] text-[#6B7280]">International format</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={form.whatsappNumber}
+                    onChange={(e) => setForm({ ...form, whatsappNumber: e.target.value })}
+                    placeholder="+91 98765 43210"
+                    className="w-full px-3 py-2 bg-[#0B0F14] border border-[#1F2937] text-white focus:outline-none focus:border-[#B8F000]"
+                  />
+                  {form.whatsappNumber.trim() ? (
+                    <div className="mt-1.5 text-[10px] text-emerald-400 flex items-center gap-1.5 font-mono">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                      <span>
+                        ✓ Stored as: <strong>{normalizeWhatsAppNumber(form.whatsappNumber)}</strong>
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="mt-1 text-[10px] text-[#6B7280]">
+                      Optional. Leave blank to disable WhatsApp enquiry CTA.
+                    </div>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-[#A8B0BA] uppercase mb-1 flex items-center justify-between">
+                    <span className="flex items-center gap-1.5 font-bold text-white">
+                      <Globe className="w-3.5 h-3.5 text-[#B8F000]" />
+                      <span>Public Profile Slug</span>
+                    </span>
+                    <span className="text-[9px] text-[#6B7280]">URL identifier</span>
+                  </label>
+                  <div className="flex items-center">
+                    <span className="px-2.5 py-2 bg-[#11161D] border border-r-0 border-[#1F2937] text-[#6B7280] text-[11px] select-none">
+                      /coaches/
+                    </span>
+                    <input
+                      type="text"
+                      required
+                      value={form.slug}
+                      onChange={(e) => setForm({ ...form, slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, "-") })}
+                      placeholder="sooraj-m-s"
+                      className="w-full px-3 py-2 bg-[#0B0F14] border border-[#1F2937] text-white focus:outline-none focus:border-[#B8F000]"
+                    />
+                  </div>
+                  <div className="mt-1 text-[10px] text-[#A8B0BA] truncate">
+                    Preview: <span className="text-[#B8F000]">/coaches/{form.slug || "coach-slug"}</span>
+                  </div>
                 </div>
               </div>
 

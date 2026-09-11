@@ -67,6 +67,7 @@ export async function POST(request: Request) {
     }
 
     const savedCoach = await saveCoachRecord({
+      slug: body.slug,
       name: body.name.trim(),
       role: body.role.trim(),
       experienceYears: Number(body.experienceYears ?? body.experience_years) || 5,
@@ -77,6 +78,7 @@ export async function POST(request: Request) {
       achievements: Array.isArray(body.achievements) ? body.achievements : [],
       bio: body.bio || "Dedicated badminton coach at S&A Badminton Academy.",
       image: body.image ?? body.image_url,
+      whatsappNumber: body.whatsappNumber ?? body.whatsapp_number,
       status: body.status === "INACTIVE" ? "INACTIVE" : "ACTIVE",
       isPublished: body.isPublished !== false && body.is_published !== false,
       displayOrder: Number(body.displayOrder ?? body.display_order) || 0,

@@ -1,5 +1,6 @@
 export interface Coach {
   id: string;
+  slug?: string;
   name: string;
   role: string;
   certifications: string[];
@@ -10,11 +11,46 @@ export interface Coach {
   primaryCentre?: string;
   achievements: string[];
   image: string;
+  whatsappNumber?: string | null;
   status?: "ACTIVE" | "INACTIVE";
   isPublished?: boolean;
   displayOrder?: number;
   createdAt?: string;
   updatedAt?: string;
+}
+
+/**
+ * Normalizes phone/WhatsApp numbers to standard international format without +, spaces, or dashes.
+ * e.g., "+91 98460 12345" -> "919846012345"
+ * e.g., "9846012345" (10 digits) -> "919846012345"
+ */
+export function normalizeWhatsAppNumber(input?: string | null): string {
+  if (!input || typeof input !== "string") return "";
+  const digits = input.replace(/\D/g, "");
+  if (!digits) return "";
+  if (digits.length === 10) {
+    return `91${digits}`;
+  }
+  if (digits.length === 11 && digits.startsWith("0")) {
+    return `91${digits.slice(1)}`;
+  }
+  return digits;
+}
+
+/**
+ * Formats a normalized international number for human-friendly display.
+ * e.g., "919846012345" -> "+91 98460 12345"
+ */
+export function formatWhatsAppDisplay(number?: string | null): string {
+  if (!number || typeof number !== "string") return "";
+  const cleaned = number.replace(/\D/g, "");
+  if (cleaned.length === 12 && cleaned.startsWith("91")) {
+    return `+91 ${cleaned.slice(2, 7)} ${cleaned.slice(7)}`;
+  }
+  if (cleaned.length === 10) {
+    return `+91 ${cleaned.slice(0, 5)} ${cleaned.slice(5)}`;
+  }
+  return number;
 }
 
 export const COACHES: Coach[] = [

@@ -3,7 +3,7 @@ import fs from "fs/promises";
 import path from "path";
 
 import { GALLERY_ITEMS, GalleryItem } from "@/data/gallery";
-import { COACHES, Coach } from "@/data/coaches";
+import { COACHES, Coach, normalizeWhatsAppNumber } from "@/data/coaches";
 import { ACHIEVEMENTS, Achievement } from "@/data/achievements";
 import { TESTIMONIALS, Testimonial } from "@/data/testimonials";
 import { BLOG_POSTS, BlogPost } from "@/data/blog";
@@ -83,6 +83,8 @@ export async function initContentDb(): Promise<void> {
     await sql`ALTER TABLE coaches ADD COLUMN IF NOT EXISTS achievements TEXT[] DEFAULT '{}';`;
     await sql`ALTER TABLE coaches ADD COLUMN IF NOT EXISTS is_published BOOLEAN DEFAULT TRUE;`;
     await sql`ALTER TABLE coaches ADD COLUMN IF NOT EXISTS display_order INTEGER DEFAULT 0;`;
+    await sql`ALTER TABLE coaches ADD COLUMN IF NOT EXISTS whatsapp_number VARCHAR(32);`;
+    await sql`ALTER TABLE coaches ADD COLUMN IF NOT EXISTS slug VARCHAR(128);`;
     await sql`ALTER TABLE coaches ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT NOW();`;
 
     isInitialized = true;
@@ -198,18 +200,23 @@ export async function saveContentSection<T>(
             const status = rawItem.status === "INACTIVE" ? "INACTIVE" : "ACTIVE";
             const isPub = rawItem.isPublished !== false;
 
+            const rawSlug = (rawItem.slug || rawItem.id || rawItem.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")).replace(/(^-|-$)/g, "");
+            const slug = rawSlug || cleanId;
+            const whatsappNum = rawItem.whatsappNumber ? normalizeWhatsAppNumber(rawItem.whatsappNumber) : null;
+
             await sql`
               INSERT INTO coaches (
-                id, name, role, bio, certifications, achievements,
+                id, slug, name, role, bio, certifications, achievements,
                 experience_years, specialization, primary_centre,
-                image_url, status, is_published, display_order, created_at, updated_at
+                image_url, whatsapp_number, status, is_published, display_order, created_at, updated_at
               ) VALUES (
-                ${cleanId}, ${rawItem.name.trim()}, ${rawItem.role.trim()},
+                ${cleanId}, ${slug}, ${rawItem.name.trim()}, ${rawItem.role.trim()},
                 ${rawItem.bio || "Dedicated badminton coach at S&A Badminton Academy."},
                 ${certs}, ${achs}, ${exp}, ${rawItem.specialization || "Badminton Coaching"},
-                ${centreSlug}, ${img}, ${status}, ${isPub},
+                ${centreSlug}, ${img}, ${whatsappNum}, ${status}, ${isPub},
                 ${Number(rawItem.displayOrder) || 0}, NOW(), NOW()
               ) ON CONFLICT (id) DO UPDATE SET
+                slug = COALESCE(EXCLUDED.slug, coaches.slug),
                 name = EXCLUDED.name,
                 role = EXCLUDED.role,
                 bio = EXCLUDED.bio,
@@ -219,6 +226,7 @@ export async function saveContentSection<T>(
                 specialization = EXCLUDED.specialization,
                 primary_centre = EXCLUDED.primary_centre,
                 image_url = COALESCE(EXCLUDED.image_url, coaches.image_url),
+                whatsapp_number = EXCLUDED.whatsapp_number,
                 status = EXCLUDED.status,
                 is_published = EXCLUDED.is_published,
                 updated_at = NOW();
@@ -251,6 +259,7 @@ export async function getCoaches(options: { includeUnpublished?: boolean } = {})
       const rows = (await sql`
         SELECT 
           c.id,
+          c.slug,
           c.name,
           c.role,
           c.bio,
@@ -261,6 +270,7 @@ export async function getCoaches(options: { includeUnpublished?: boolean } = {})
           c.primary_centre as "primaryCentre",
           cen.name as "centreName",
           c.image_url as "image",
+          c.whatsapp_number as "whatsappNumber",
           c.status,
           c.is_published as "isPublished",
           c.display_order as "displayOrder",
@@ -275,6 +285,7 @@ export async function getCoaches(options: { includeUnpublished?: boolean } = {})
       if (Array.isArray(rows)) {
         return rows.map((r) => ({
           id: String(r.id),
+          slug: r.slug ? String(r.slug) : String(r.id),
           name: String(r.name),
           role: String(r.role),
           bio: String(r.bio || ""),
@@ -285,6 +296,7 @@ export async function getCoaches(options: { includeUnpublished?: boolean } = {})
           primaryCentre: r.primaryCentre ? String(r.primaryCentre) : undefined,
           primaryBranch: r.centreName ? String(r.centreName) : mapCentreSlugToBranch(r.primaryCentre as string),
           image: ensureCoachImage(r.image as string),
+          whatsappNumber: r.whatsappNumber ? String(r.whatsappNumber) : null,
           status: (r.status as "ACTIVE" | "INACTIVE") || "ACTIVE",
           isPublished: r.isPublished !== false,
           displayOrder: Number(r.displayOrder) || 0,
@@ -304,6 +316,7 @@ export async function getCoaches(options: { includeUnpublished?: boolean } = {})
   if (fallback.coaches && Array.isArray(fallback.coaches)) {
     const list = (fallback.coaches as Coach[]).map((c) => ({
       ...c,
+      slug: c.slug || c.id,
       image: ensureCoachImage(c.image),
       isPublished: c.isPublished !== false,
       status: c.status || "ACTIVE",
@@ -313,6 +326,74 @@ export async function getCoaches(options: { includeUnpublished?: boolean } = {})
       : list.filter((c) => c.status === "ACTIVE" && c.isPublished !== false);
   }
   return [];
+}
+
+export async function getCoachBySlug(slug: string): Promise<Coach | null> {
+  const cleanSlug = decodeURIComponent(slug).toLowerCase().trim();
+  const sql = getSql();
+
+  if (sql) {
+    try {
+      await initContentDb();
+      const rows = (await sql`
+        SELECT 
+          c.id,
+          c.slug,
+          c.name,
+          c.role,
+          c.bio,
+          c.certifications,
+          c.achievements,
+          c.experience_years as "experienceYears",
+          c.specialization,
+          c.primary_centre as "primaryCentre",
+          cen.name as "centreName",
+          c.image_url as "image",
+          c.whatsapp_number as "whatsappNumber",
+          c.status,
+          c.is_published as "isPublished",
+          c.display_order as "displayOrder",
+          c.created_at as "createdAt",
+          c.updated_at as "updatedAt"
+        FROM coaches c
+        LEFT JOIN centres cen ON c.primary_centre = cen.slug
+        WHERE (c.slug = ${cleanSlug} OR c.id = ${cleanSlug})
+          AND c.status = 'ACTIVE'
+          AND c.is_published = TRUE
+        LIMIT 1;
+      `) as unknown as Record<string, unknown>[];
+
+      if (Array.isArray(rows) && rows.length > 0) {
+        const r = rows[0];
+        return {
+          id: String(r.id),
+          slug: r.slug ? String(r.slug) : String(r.id),
+          name: String(r.name),
+          role: String(r.role),
+          bio: String(r.bio || ""),
+          certifications: Array.isArray(r.certifications) ? (r.certifications as string[]) : [],
+          achievements: Array.isArray(r.achievements) ? (r.achievements as string[]) : [],
+          experienceYears: Number(r.experienceYears) || 5,
+          specialization: String(r.specialization || "Badminton Coaching & Conditioning"),
+          primaryCentre: r.primaryCentre ? String(r.primaryCentre) : undefined,
+          primaryBranch: r.centreName ? String(r.centreName) : mapCentreSlugToBranch(r.primaryCentre as string),
+          image: ensureCoachImage(r.image as string),
+          whatsappNumber: r.whatsappNumber ? String(r.whatsappNumber) : null,
+          status: (r.status as "ACTIVE" | "INACTIVE") || "ACTIVE",
+          isPublished: r.isPublished !== false,
+          displayOrder: Number(r.displayOrder) || 0,
+          createdAt: r.createdAt ? String(r.createdAt) : undefined,
+          updatedAt: r.updatedAt ? String(r.updatedAt) : undefined,
+        };
+      }
+    } catch (err) {
+      console.error(`Failed to query coach by slug "${cleanSlug}":`, err);
+    }
+  }
+
+  // Fallback to in-memory/CMS cache
+  const all = await getCoaches();
+  return all.find((c) => (c.slug || c.id) === cleanSlug) || null;
 }
 
 export async function saveCoachRecord(coachData: Partial<Coach>): Promise<Coach> {
@@ -333,6 +414,7 @@ export async function saveCoachRecord(coachData: Partial<Coach>): Promise<Coach>
       const existing = (await sql`SELECT * FROM coaches WHERE id = ${cleanId} LIMIT 1;`) as unknown as Array<Record<string, unknown>>;
       if (existing.length > 0) {
         current = {
+          slug: existing[0].slug ? String(existing[0].slug) : cleanId,
           name: String(existing[0].name),
           role: String(existing[0].role),
           bio: String(existing[0].bio || ""),
@@ -340,6 +422,7 @@ export async function saveCoachRecord(coachData: Partial<Coach>): Promise<Coach>
           specialization: String(existing[0].specialization || ""),
           primaryCentre: String(existing[0].primary_centre || "kadavanthra"),
           image: existing[0].image_url ? String(existing[0].image_url) : undefined,
+          whatsappNumber: existing[0].whatsapp_number ? String(existing[0].whatsapp_number) : null,
           certifications: Array.isArray(existing[0].certifications) ? (existing[0].certifications as string[]) : [],
           achievements: Array.isArray(existing[0].achievements) ? (existing[0].achievements as string[]) : [],
           status: (existing[0].status as "ACTIVE" | "INACTIVE") || "ACTIVE",
@@ -370,19 +453,25 @@ export async function saveCoachRecord(coachData: Partial<Coach>): Promise<Coach>
   const order = Number(coachData.displayOrder ?? current?.displayOrder) || 0;
   const now = new Date().toISOString();
 
+  const rawSlug = (coachData.slug || current?.slug || cleanId).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+  const slug = rawSlug || cleanId;
+  const rawWhatsApp = coachData.whatsappNumber !== undefined ? coachData.whatsappNumber : current?.whatsappNumber;
+  const whatsappNumber = rawWhatsApp ? normalizeWhatsAppNumber(rawWhatsApp) : null;
+
   if (sql) {
     await initContentDb();
     await sql`
       INSERT INTO coaches (
-        id, name, role, bio, certifications, achievements,
+        id, slug, name, role, bio, certifications, achievements,
         experience_years, specialization, primary_centre,
-        image_url, status, is_published, display_order, created_at, updated_at
+        image_url, whatsapp_number, status, is_published, display_order, created_at, updated_at
       ) VALUES (
-        ${cleanId}, ${name}, ${role},
+        ${cleanId}, ${slug}, ${name}, ${role},
         ${bio},
         ${certs}, ${achs}, ${exp}, ${coachData.specialization || current?.specialization || "Badminton Coaching"},
-        ${centreSlug}, ${img}, ${status}, ${isPub}, ${order}, NOW(), NOW()
+        ${centreSlug}, ${img}, ${whatsappNumber}, ${status}, ${isPub}, ${order}, NOW(), NOW()
       ) ON CONFLICT (id) DO UPDATE SET
+        slug = COALESCE(EXCLUDED.slug, coaches.slug),
         name = EXCLUDED.name,
         role = EXCLUDED.role,
         bio = EXCLUDED.bio,
@@ -392,6 +481,7 @@ export async function saveCoachRecord(coachData: Partial<Coach>): Promise<Coach>
         specialization = EXCLUDED.specialization,
         primary_centre = EXCLUDED.primary_centre,
         image_url = EXCLUDED.image_url,
+        whatsapp_number = EXCLUDED.whatsapp_number,
         status = EXCLUDED.status,
         is_published = EXCLUDED.is_published,
         display_order = EXCLUDED.display_order,
@@ -401,6 +491,7 @@ export async function saveCoachRecord(coachData: Partial<Coach>): Promise<Coach>
 
   const savedCoach: Coach = {
     id: cleanId,
+    slug,
     name,
     role,
     bio,
@@ -411,6 +502,7 @@ export async function saveCoachRecord(coachData: Partial<Coach>): Promise<Coach>
     primaryCentre: centreSlug,
     primaryBranch: coachData.primaryBranch || mapCentreSlugToBranch(centreSlug),
     image: ensureCoachImage(img),
+    whatsappNumber,
     status,
     isPublished: isPub,
     displayOrder: order,

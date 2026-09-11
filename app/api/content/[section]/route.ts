@@ -117,6 +117,8 @@ export async function POST(
       // Invalidate cache immediately
       revalidatePath("/");
       revalidatePath("/coaches");
+      if (savedCoach.slug) revalidatePath(`/coaches/${savedCoach.slug}`);
+      if (savedCoach.id) revalidatePath(`/coaches/${savedCoach.id}`);
 
       return NextResponse.json({
         success: true,
@@ -195,6 +197,8 @@ export async function PUT(
 
       revalidatePath("/");
       revalidatePath("/coaches");
+      if (savedCoach.slug) revalidatePath(`/coaches/${savedCoach.slug}`);
+      if (savedCoach.id) revalidatePath(`/coaches/${savedCoach.id}`);
 
       return NextResponse.json({
         success: true,

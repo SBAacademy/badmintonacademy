@@ -68,6 +68,7 @@
   "coaches": [
     {
       "id": "saniya-george-maijo",
+      "slug": "saniya-george-maijo",
       "name": "Saniya George Maijo",
       "role": "Sports Nutritionist & Assistant Coach",
       "bio": "Dedicated badminton trainer with extensive experience mentoring junior and adult athletes in Kochi.",
@@ -80,14 +81,16 @@
       "primaryCentre": "kadavanthra",
       "primaryBranch": "S & A Badminton Academy – Kadavanthra",
       "image": "/images/training-coach.jpg",
+      "whatsappNumber": "919400334242",
       "status": "ACTIVE",
       "isPublished": true,
       "displayOrder": 10,
       "createdAt": "Thu Sep 10 2026 15:09:26 GMT+0530 (India Standard Time)",
-      "updatedAt": "Thu Sep 10 2026 15:09:26 GMT+0530 (India Standard Time)"
+      "updatedAt": "Fri Sep 11 2026 17:44:18 GMT+0530 (India Standard Time)"
     },
     {
       "id": "robin-biju",
+      "slug": "robin-biju",
       "name": "Robin Biju",
       "role": "Assistant Coach",
       "bio": "Dedicated badminton trainer with extensive experience mentoring junior and adult athletes in Kochi.",
@@ -98,6 +101,7 @@
       "primaryCentre": "kadavanthra",
       "primaryBranch": "S & A Badminton Academy – Kadavanthra",
       "image": "/images/training-coach.jpg",
+      "whatsappNumber": null,
       "status": "ACTIVE",
       "isPublished": true,
       "displayOrder": 11,
@@ -106,6 +110,7 @@
     },
     {
       "id": "adithyan-s",
+      "slug": "adithyan-s",
       "name": "Adithyan S",
       "role": "Assistant Coach",
       "bio": "Dedicated badminton trainer with extensive experience mentoring junior and adult athletes in Kochi.",
@@ -119,6 +124,7 @@
       "primaryCentre": "kadavanthra",
       "primaryBranch": "S & A Badminton Academy – Kadavanthra",
       "image": "/images/training-coach.jpg",
+      "whatsappNumber": null,
       "status": "ACTIVE",
       "isPublished": true,
       "displayOrder": 12,
@@ -127,6 +133,7 @@
     },
     {
       "id": "fayis",
+      "slug": "fayis",
       "name": "Fayis",
       "role": "Assistant Coach",
       "bio": "Dedicated badminton trainer with extensive experience mentoring junior and adult athletes in Kochi.",
@@ -139,6 +146,7 @@
       "primaryCentre": "kadavanthra",
       "primaryBranch": "S & A Badminton Academy – Kadavanthra",
       "image": "/images/training-coach.jpg",
+      "whatsappNumber": null,
       "status": "ACTIVE",
       "isPublished": true,
       "displayOrder": 13,
@@ -147,6 +155,7 @@
     },
     {
       "id": "sooraj-m-s",
+      "slug": "sooraj-m-s",
       "name": "Sooraj M S",
       "role": "Senior Badminton Coach",
       "bio": "Dedicated badminton trainer with extensive experience mentoring junior and adult athletes in Kochi.",
@@ -164,6 +173,7 @@
       "primaryCentre": "kadavanthra",
       "primaryBranch": "S & A Badminton Academy – Kadavanthra",
       "image": "/images/training-coach.jpg",
+      "whatsappNumber": null,
       "status": "ACTIVE",
       "isPublished": true,
       "displayOrder": 14,

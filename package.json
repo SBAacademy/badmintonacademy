@@ -8,6 +8,8 @@
     "build": "next build",
     "start": "next start",
     "generate:pdf": "node generate-pdf.mjs",
+    "generate-blog": "node scripts/generate-and-seed-blog.mjs",
+    "validate-blog": "node scripts/validate-blog.mjs",
     "test": "node generate-pdf.mjs"
   },
   "dependencies": {

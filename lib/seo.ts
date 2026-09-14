@@ -24,9 +24,15 @@ export function createMetadata({
 }: MetadataOptions): Metadata {
   const cleanPath = path.startsWith("/") ? path : `/${path}`;
   const canonicalUrl = `${SITE_URL}${cleanPath === "/" ? "" : cleanPath}`;
+  // Avoid duplicate academy branding suffix
+  const cleanTitle = title
+    .replace(/\s*\|\s*S\s*&\s*A\s*Badminton\s*Academy/gi, "")
+    .replace(/\s*\|\s*S\s*&\s*A\s*BADMINTON\s*ACADEMY/gi, "")
+    .trim();
+
   const fullTitle = path === "" || path === "/" 
-    ? `${ACADEMY_DATA.name} | ${title}`
-    : `${title} | ${ACADEMY_DATA.name}`;
+    ? `${ACADEMY_DATA.name} | ${cleanTitle}`
+    : `${cleanTitle} | ${ACADEMY_DATA.name}`;
 
   const defaultKeywords = [
     "badminton academy in Kochi",
@@ -44,7 +50,9 @@ export function createMetadata({
   const mergedKeywords = Array.from(new Set([...keywords, ...defaultKeywords]));
 
   return {
-    title: fullTitle,
+    title: {
+      absolute: fullTitle,
+    },
     description,
     keywords: mergedKeywords,
     alternates: {

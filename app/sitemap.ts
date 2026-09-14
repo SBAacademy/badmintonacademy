@@ -1,7 +1,6 @@
 import { MetadataRoute } from "next";
 import { PROGRAMS } from "@/data/programs";
-import { getCentres, getCoaches } from "@/lib/contentDb";
-import { BLOG_POSTS } from "@/data/blog";
+import { getCentres, getCoaches, getBlogPosts } from "@/lib/contentDb";
 import { SITE_URL } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
@@ -51,10 +50,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.85,
   }));
 
-  // 5. Blog Posts Dynamic Pages
-  const blogRoutes: MetadataRoute.Sitemap = BLOG_POSTS.map((post) => ({
+  // 5. Blog Posts Dynamic Pages (Retrieved dynamically from Content DB)
+  const dynamicBlogPosts = await getBlogPosts();
+  const blogRoutes: MetadataRoute.Sitemap = dynamicBlogPosts.map((post) => ({
     url: `${SITE_URL}/blog/${post.slug}`,
-    lastModified: post.publishDate ? new Date(post.publishDate) : undefined,
+    lastModified: (post as any).updatedAt
+      ? new Date((post as any).updatedAt)
+      : post.publishDate
+      ? new Date(post.publishDate)
+      : undefined,
     changeFrequency: "monthly",
     priority: 0.75,
   }));

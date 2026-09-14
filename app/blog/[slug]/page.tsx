@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   }
 
   return createMetadata({
-    title: `${post.title} | S & A Badminton Academy`,
+    title: post.title,
     description: post.excerpt,
     path: `/blog/${post.slug}`,
     keywords: post.tags,
@@ -53,6 +53,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     ? new Date(post.publishDate).toISOString()
     : "2024-10-14T08:00:00+05:30";
 
+  const modifiedDateIso = (post as any).updatedAt
+    ? new Date((post as any).updatedAt).toISOString()
+    : publishedDateIso;
+
   const articleSchema = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
@@ -60,6 +64,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     description: post.excerpt,
     image: post.image,
     datePublished: publishedDateIso,
+    dateModified: modifiedDateIso,
     author: {
       "@type": "Person",
       name: post.author,
@@ -73,7 +78,43 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     mainEntityOfPage: `${SITE_URL}/blog/${post.slug}`,
   };
 
-  const otherPosts = BLOG_POSTS.filter((p) => p.slug !== post.slug).slice(0, 2);
+  // Find related posts matching same category first, or recent posts
+  const sameCategory = posts.filter(
+    (p) => p.slug !== post.slug && p.category === post.category
+  );
+  const otherCategory = posts.filter(
+    (p) => p.slug !== post.slug && p.category !== post.category
+  );
+  const otherPosts = [...sameCategory, ...otherCategory].slice(0, 2);
+
+  // Helper to parse inline markdown links [Label](/url) and bold text
+  const renderInlineText = (text: string) => {
+    const parts: React.ReactNode[] = [];
+    let lastIndex = 0;
+    const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+    let match;
+
+    while ((match = linkRegex.exec(text)) !== null) {
+      if (match.index > lastIndex) {
+        parts.push(text.substring(lastIndex, match.index));
+      }
+      const [, label, href] = match;
+      parts.push(
+        <Link
+          key={match.index}
+          href={href}
+          className="text-emerald-400 hover:text-emerald-300 underline underline-offset-2 font-semibold transition-colors"
+        >
+          {label}
+        </Link>
+      );
+      lastIndex = linkRegex.lastIndex;
+    }
+    if (lastIndex < text.length) {
+      parts.push(text.substring(lastIndex));
+    }
+    return parts.length > 0 ? parts : text;
+  };
 
   return (
     <div className="py-8 sm:py-12 bg-[#090D16]">
@@ -145,61 +186,91 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               return (
                 <h2
                   key={idx}
-                  className="text-xl sm:text-2xl font-bold text-white pt-4 pb-1 border-b border-slate-800"
+                  className="text-xl sm:text-2xl font-bold text-white pt-6 pb-2 border-b border-slate-800 tracking-tight"
                 >
                   {paragraph.replace("### ", "")}
                 </h2>
               );
             }
-            return <p key={idx}>{paragraph}</p>;
+            if (paragraph.startsWith("- ") || paragraph.startsWith("* ")) {
+              return (
+                <div key={idx} className="flex items-start gap-3 pl-2 py-0.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-2 flex-shrink-0" />
+                  <span className="text-slate-300">
+                    {renderInlineText(paragraph.replace(/^[-*]\s+/, ""))}
+                  </span>
+                </div>
+              );
+            }
+            if (/^\d+\.\s+/.test(paragraph)) {
+              return (
+                <div key={idx} className="flex items-start gap-3 pl-2 py-0.5">
+                  <span className="text-emerald-400 font-bold font-mono text-sm flex-shrink-0">
+                    {paragraph.match(/^\d+\./)?.[0]}
+                  </span>
+                  <span className="text-slate-300">
+                    {renderInlineText(paragraph.replace(/^\d+\.\s+/, ""))}
+                  </span>
+                </div>
+              );
+            }
+            return (
+              <p key={idx} className="leading-relaxed">
+                {renderInlineText(paragraph)}
+              </p>
+            );
           })}
         </div>
 
         {/* Tags */}
-        <div className="p-6 rounded-2xl bg-[#111827] border border-slate-800 flex flex-wrap items-center gap-2 mb-16">
-          <span className="text-xs font-bold text-slate-400 flex items-center gap-1 mr-2">
-            <Tag className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Article Tags:</span>
-          </span>
-          {post.tags.map((tag) => (
-            <span
-              key={tag}
-              className="text-xs px-3 py-1 rounded-lg bg-slate-900 border border-slate-800 text-slate-300"
-            >
-              #{tag}
+        {post.tags && post.tags.length > 0 && (
+          <div className="p-6 rounded-2xl bg-[#111827] border border-slate-800 flex flex-wrap items-center gap-2 mb-16">
+            <span className="text-xs font-bold text-slate-400 flex items-center gap-1 mr-2">
+              <Tag className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Article Tags:</span>
             </span>
-          ))}
-        </div>
-
-        {/* Related Articles */}
-        <div className="pt-12 border-t border-slate-800 mb-16">
-          <h3 className="text-xl font-bold text-white mb-6">Related Training Guides</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {otherPosts.map((other) => (
-              <Link
-                key={other.slug}
-                href={`/blog/${other.slug}`}
-                className="group p-5 rounded-2xl bg-[#111827] border border-slate-800 hover:border-emerald-500/40 transition-all flex flex-col justify-between"
+            {post.tags.map((tag) => (
+              <span
+                key={tag}
+                className="text-xs px-3 py-1 rounded-lg bg-slate-900 border border-slate-800 text-slate-300"
               >
-                <div>
-                  <span className="text-[11px] font-bold text-emerald-400 uppercase tracking-wider">
-                    {other.category}
-                  </span>
-                  <h4 className="text-base font-bold text-white mt-1 group-hover:text-emerald-300 transition-colors">
-                    {other.title}
-                  </h4>
-                  <p className="text-xs text-slate-400 mt-2 line-clamp-2">
-                    {other.excerpt}
-                  </p>
-                </div>
-                <div className="mt-4 pt-3 border-t border-slate-800 flex items-center gap-1 text-xs font-semibold text-emerald-400">
-                  <span>Read Guide</span>
-                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                </div>
-              </Link>
+                #{tag}
+              </span>
             ))}
           </div>
-        </div>
+        )}
+
+        {/* Related Articles */}
+        {otherPosts.length > 0 && (
+          <div className="pt-12 border-t border-slate-800 mb-16">
+            <h3 className="text-xl font-bold text-white mb-6">Related Training Guides</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              {otherPosts.map((other) => (
+                <Link
+                  key={other.slug}
+                  href={`/blog/${other.slug}`}
+                  className="group p-5 rounded-2xl bg-[#111827] border border-slate-800 hover:border-emerald-500/40 transition-all flex flex-col justify-between"
+                >
+                  <div>
+                    <span className="text-[11px] font-bold text-emerald-400 uppercase tracking-wider">
+                      {other.category}
+                    </span>
+                    <h4 className="text-base font-bold text-white mt-1 group-hover:text-emerald-300 transition-colors">
+                      {other.title}
+                    </h4>
+                    <p className="text-xs text-slate-400 mt-2 line-clamp-2">
+                      {other.excerpt}
+                    </p>
+                  </div>
+                  <div className="mt-4 pt-3 border-t border-slate-800 flex items-center gap-1 text-xs font-semibold text-emerald-400">
+                    <span>Read Guide</span>
+                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
 
       </div>
 

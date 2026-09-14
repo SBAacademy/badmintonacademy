@@ -3,7 +3,7 @@ import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { AppLayoutWrapper } from "@/components/layout/AppLayoutWrapper";
 import { SEOJsonLd } from "@/components/seo/SEOJsonLd";
-import { getOrganizationSchema } from "@/lib/seo";
+import { getOrganizationSchema, SITE_URL } from "@/lib/seo";
 import { ACADEMY_DATA } from "@/data/academy";
 
 const jakarta = Plus_Jakarta_Sans({
@@ -12,8 +12,10 @@ const jakarta = Plus_Jakarta_Sans({
   variable: "--font-jakarta",
 });
 
+const googleVerification = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION?.trim();
+
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://sabadmintonacademy.com"),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: `${ACADEMY_DATA.name} | Badminton Coaching in Kochi`,
     template: `%s | ${ACADEMY_DATA.name}`,
@@ -33,16 +35,17 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: ACADEMY_DATA.name }],
   creator: ACADEMY_DATA.name,
+  ...(googleVerification ? { verification: { google: googleVerification } } : {}),
   openGraph: {
     type: "website",
     locale: "en_IN",
-    url: "https://sabadmintonacademy.com",
+    url: SITE_URL,
     siteName: ACADEMY_DATA.name,
     title: `${ACADEMY_DATA.name} — Premier Badminton Coaching in Kochi`,
     description: ACADEMY_DATA.description,
     images: [
       {
-        url: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?q=80&w=1200&auto=format&fit=crop",
+        url: `${SITE_URL}/images/hero-athlete.jpg`,
         width: 1200,
         height: 630,
         alt: `${ACADEMY_DATA.name} Badminton Arena`,

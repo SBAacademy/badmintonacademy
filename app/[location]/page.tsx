@@ -25,6 +25,7 @@ import { getCentreBySlug, getCentres } from "@/lib/contentDb";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { CentreGallerySection } from "@/components/sections/CentreGallerySection";
+import { SITE_URL } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
@@ -54,8 +55,7 @@ export async function generateMetadata({ params }: LocationPageProps): Promise<M
     };
   }
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://soorajbadmintonacademy.vercel.app";
-  const canonicalUrl = `${siteUrl}/${location.slug}`;
+  const canonicalUrl = `${SITE_URL}/${location.slug}`;
 
   const title = dynamicCentre?.seo?.title || staticLocation?.seo?.title || `${location.name} | S & A Badminton Academy`;
   const description = dynamicCentre?.seo?.description || staticLocation?.seo?.description || dynamicCentre?.description || "";
@@ -79,7 +79,7 @@ export async function generateMetadata({ params }: LocationPageProps): Promise<M
       type: "website",
       images: [
         {
-          url: dynamicCentre?.image || `${siteUrl}/images/hero-athlete.jpg`,
+          url: dynamicCentre?.image || `${SITE_URL}/images/hero-athlete.jpg`,
           width: 1200,
           height: 630,
           alt: `${location.name} - Badminton Court & Coaching in Kochi`,
@@ -90,7 +90,7 @@ export async function generateMetadata({ params }: LocationPageProps): Promise<M
       card: "summary_large_image",
       title,
       description,
-      images: [dynamicCentre?.image || `${siteUrl}/images/hero-athlete.jpg`],
+      images: [dynamicCentre?.image || `${SITE_URL}/images/hero-athlete.jpg`],
     },
   };
 }
@@ -187,8 +187,7 @@ export default async function LocationPage({ params }: LocationPageProps) {
     },
   };
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://soorajbadmintonacademy.vercel.app";
-  const canonicalUrl = `${siteUrl}/${location.slug}`;
+  const canonicalUrl = `${SITE_URL}/${location.slug}`;
 
   // Other active centres for internal linking
   const activeCentres = await getCentres({ includeInactive: false });
@@ -198,13 +197,13 @@ export default async function LocationPage({ params }: LocationPageProps) {
   const locationSchema = {
     "@context": "https://schema.org",
     "@type": ["SportsActivityLocation", "LocalBusiness"],
-    "@id": `${canonicalUrl}#location`,
+    "@id": `${canonicalUrl}#centre`,
     name: location.name,
     description: location.seo.description,
     url: canonicalUrl,
     telephone: location.phone,
     email: location.email,
-    image: `${siteUrl}/images/hero-athlete.jpg`,
+    image: `${SITE_URL}/images/hero-athlete.jpg`,
     priceRange: "₹₹",
     address: {
       "@type": "PostalAddress",
@@ -226,8 +225,8 @@ export default async function LocationPage({ params }: LocationPageProps) {
     parentOrganization: {
       "@type": "SportsClub",
       name: ACADEMY_DATA.name,
-      url: siteUrl,
-      logo: `${siteUrl}/images/hero-athlete.jpg`,
+      url: SITE_URL,
+      logo: `${SITE_URL}/images/hero-athlete.jpg`,
       telephone: ACADEMY_DATA.phone,
     },
     openingHoursSpecification: [
@@ -249,13 +248,13 @@ export default async function LocationPage({ params }: LocationPageProps) {
         "@type": "ListItem",
         position: 1,
         name: "Home",
-        item: siteUrl,
+        item: SITE_URL,
       },
       {
         "@type": "ListItem",
         position: 2,
         name: "Centres",
-        item: `${siteUrl}/branches`,
+        item: `${SITE_URL}/branches`,
       },
       {
         "@type": "ListItem",

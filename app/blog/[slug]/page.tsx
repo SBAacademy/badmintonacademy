@@ -9,6 +9,7 @@ import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { SEOJsonLd } from "@/components/seo/SEOJsonLd";
 import { createMetadata, SITE_URL } from "@/lib/seo";
 import { FinalCTA } from "@/components/sections/FinalCTA";
+import { ACADEMY_DATA } from "@/data/academy";
 
 import { getBlogPosts } from "@/lib/contentDb";
 
@@ -48,13 +49,17 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     notFound();
   }
 
+  const publishedDateIso = post.publishDate
+    ? new Date(post.publishDate).toISOString()
+    : "2024-10-14T08:00:00+05:30";
+
   const articleSchema = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     headline: post.title,
     description: post.excerpt,
     image: post.image,
-    datePublished: "2024-10-14T08:00:00+05:30",
+    datePublished: publishedDateIso,
     author: {
       "@type": "Person",
       name: post.author,
@@ -62,7 +67,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     },
     publisher: {
       "@type": "Organization",
-      name: "S & A BADMINTON ACADEMY",
+      name: ACADEMY_DATA.name,
       url: SITE_URL,
     },
     mainEntityOfPage: `${SITE_URL}/blog/${post.slug}`,

@@ -61,8 +61,11 @@ export function HeroSection() {
             </span>
           </div>
 
-          {/* 02. Colossal Asymmetric Editorial Typography */}
+          {/* 02. Natural H1 Structure with Colossal Editorial Typography */}
           <h1 className="text-[clamp(2.8rem,7.5vw,6.5rem)] font-black tracking-[-0.04em] text-white leading-[0.92] uppercase select-none">
+            <span className="block text-xs sm:text-sm font-mono tracking-[0.2em] text-[#B8F000] mb-2 font-bold normal-case">
+              Badminton Coaching &amp; Training in Kochi
+            </span>
             <span className="block text-white">TRAIN HARD.</span>
             <span className="block text-[#B8F000] my-1 sm:my-2">SMASH HARDER.</span>
             <span className="block text-white/95">MASTER THE COURT.</span>

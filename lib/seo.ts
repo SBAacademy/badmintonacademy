@@ -1,7 +1,9 @@
 import { Metadata } from "next";
 import { ACADEMY_DATA } from "@/data/academy";
 
-export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://sabadmintonacademy.com";
+export const SITE_URL = (
+  process.env.NEXT_PUBLIC_SITE_URL || "https://www.soorajbadmintonacademy.in"
+).replace(/\/+$/, "");
 
 interface MetadataOptions {
   title: string;
@@ -137,10 +139,10 @@ export function getBranchLocalBusinessSchema(branch: {
   return {
     "@context": "https://schema.org",
     "@type": ["SportsActivityLocation", "LocalBusiness"],
-    "@id": `${SITE_URL}/branches/${branch.slug}#branch`,
+    "@id": `${SITE_URL}/${branch.slug}#centre`,
     name: branch.name,
     description: branch.description,
-    url: `${SITE_URL}/branches/${branch.slug}`,
+    url: `${SITE_URL}/${branch.slug}`,
     telephone: branch.phone,
     email: branch.email,
     image: branch.image,

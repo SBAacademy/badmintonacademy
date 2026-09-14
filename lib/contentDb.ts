@@ -1251,6 +1251,15 @@ export async function saveCentreRecord(centreData: Partial<Centre>): Promise<Cen
   const sql = getSql();
   const rawSlug = (centreData.slug || centreData.id || centreData.name || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
   const slug = rawSlug || `centre-${Date.now()}`;
+
+  const RESERVED_SLUGS = new Set([
+    "admin", "api", "blog", "coaches", "programs", "contact", "about",
+    "branches", "gallery", "achievements", "testimonials", "private", "auth", "login"
+  ]);
+  if (RESERVED_SLUGS.has(slug)) {
+    throw new Error(`The slug "${slug}" is a reserved system route and cannot be used for a centre.`);
+  }
+
   const cleanId = slug;
 
   // Check existing

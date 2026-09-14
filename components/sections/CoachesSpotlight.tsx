@@ -45,9 +45,10 @@ export async function CoachesSpotlight({ initialCoaches }: { initialCoaches?: Co
         {/* Editorial Coaches Grid: Large Portraits + Asymmetric Meta */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pt-12">
           {coaches.slice(0, 4).map((coach, idx) => (
-            <div
+            <Link
               key={coach.id}
-              className="bg-[#0B0F14] border border-[#1F2937] flex flex-col justify-between group transition-colors hover:border-[#B8F000]/50"
+              href={`/coaches/${coach.slug || coach.id}`}
+              className="bg-[#0B0F14] border border-[#1F2937] flex flex-col justify-between group transition-colors hover:border-[#B8F000]/50 block cursor-pointer"
             >
               <div>
                 {/* Large Editorial Portrait */}
@@ -108,10 +109,11 @@ export async function CoachesSpotlight({ initialCoaches }: { initialCoaches?: Co
               </div>
 
               {/* Bottom Specialization Line */}
-              <div className="p-4 bg-[#07090D] border-t border-[#1F2937] text-left font-mono text-[10px] text-[#A8B0BA] tracking-wider uppercase truncate">
-                FOCUS: <span className="text-white">{coach.specialization}</span>
+              <div className="p-4 bg-[#07090D] border-t border-[#1F2937] text-left font-mono text-[10px] text-[#A8B0BA] tracking-wider uppercase truncate flex items-center justify-between">
+                <span>FOCUS: <span className="text-white">{coach.specialization}</span></span>
+                <span className="text-[#B8F000] group-hover:translate-x-1 transition-transform">&rarr;</span>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
 

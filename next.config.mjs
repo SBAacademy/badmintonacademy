@@ -36,6 +36,11 @@ const nextConfig = {
         destination: '/fourth-centre',
         permanent: true,
       },
+      {
+        source: '/branches/:slug',
+        destination: '/:slug',
+        permanent: true,
+      },
     ];
   },
 };

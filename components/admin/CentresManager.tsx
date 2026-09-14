@@ -721,245 +721,298 @@ export function CentresManager() {
 
       {/* Add / Edit Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-[#0D111A] border border-slate-800 rounded-3xl max-w-2xl w-full p-6 sm:p-8 space-y-6 shadow-2xl my-8 relative">
-            <div className="flex items-center justify-between pb-4 border-b border-slate-800">
-              <div className="flex items-center gap-2.5">
-                <span className="p-2 rounded-xl bg-[#B8F000]/10 text-[#B8F000]">
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-sm flex items-start justify-center p-3 sm:p-6">
+          <div className="bg-[#0D111A] border border-slate-800 rounded-3xl max-w-3xl w-full shadow-2xl overflow-hidden my-4 sm:my-8 relative flex flex-col max-h-[calc(100vh-2rem)] sm:max-h-[calc(100vh-4rem)]">
+            {/* Modal Header */}
+            <div className="shrink-0 bg-[#0D111A] border-b border-slate-800 px-6 py-4 flex items-center justify-between z-10">
+              <div className="flex items-center gap-3">
+                <span className="p-2.5 rounded-xl bg-[#B8F000]/10 border border-[#B8F000]/30 text-[#B8F000]">
                   <Building2 className="w-5 h-5" />
                 </span>
                 <div>
-                  <h3 className="text-lg font-black text-white uppercase tracking-tight">
+                  <h3 className="text-base sm:text-lg font-black text-white uppercase tracking-tight font-mono">
                     {editingCentre ? `Edit Centre: ${editingCentre.shortName || editingCentre.name}` : "Add New Training Centre"}
                   </h3>
-                  <p className="text-xs text-slate-400 font-mono">
+                  <p className="text-[11px] text-slate-400 font-mono">
                     Dynamic SBA facility configuration &amp; public routing
                   </p>
                 </div>
               </div>
               <button
+                type="button"
                 onClick={() => setIsModalOpen(false)}
-                className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 cursor-pointer"
+                className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
+                aria-label="Close modal"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-5 text-xs font-mono">
-              {/* Basic Information */}
-              <div className="space-y-3">
-                <h4 className="text-[11px] font-bold text-[#B8F000] uppercase tracking-wider">1. Basic Information</h4>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div className="sm:col-span-2">
-                    <label className="block text-slate-300 mb-1 font-semibold">Centre Full Name *</label>
-                    <input
-                      type="text"
-                      required
-                      value={form.name}
-                      onChange={(e) => handleNameChange(e.target.value)}
-                      placeholder="e.g. S & A Badminton Academy — Palarivattom"
-                      className="w-full px-3.5 py-2.5 bg-[#07090D] border border-slate-800 rounded-xl text-white focus:outline-none focus:border-[#B8F000]"
-                    />
+            {/* Modal Form */}
+            <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0 overflow-hidden">
+              <div className="flex-1 overflow-y-auto px-6 py-5 space-y-5 font-mono text-xs">
+                {/* 1. Basic Information Card */}
+                <div className="bg-[#07090D] border border-slate-800/90 rounded-2xl p-4 sm:p-5 space-y-4 shadow-sm">
+                  <div className="flex items-center justify-between pb-3 border-b border-slate-800/80">
+                    <div className="flex items-center gap-2.5 text-[#B8F000] font-bold text-xs uppercase tracking-wider">
+                      <span className="w-2 h-2 rounded-full bg-[#B8F000] shadow-[0_0_8px_rgba(184,240,0,0.6)]" />
+                      <span>1. Basic Information</span>
+                    </div>
+                    <span className="text-[10px] text-slate-500 uppercase tracking-widest font-mono">Core Identity</span>
                   </div>
 
-                  <div>
-                    <label className="block text-slate-300 mb-1 font-semibold">Short Name *</label>
-                    <input
-                      type="text"
-                      required
-                      value={form.shortName}
-                      onChange={(e) => setForm({ ...form, shortName: e.target.value })}
-                      placeholder="e.g. Palarivattom Centre"
-                      className="w-full px-3.5 py-2.5 bg-[#07090D] border border-slate-800 rounded-xl text-white focus:outline-none focus:border-[#B8F000]"
-                    />
+                  <div className="space-y-3.5">
+                    <div>
+                      <label className="block text-slate-300 mb-1.5 font-semibold text-[11px]">Centre Full Name *</label>
+                      <input
+                        type="text"
+                        required
+                        value={form.name}
+                        onChange={(e) => handleNameChange(e.target.value)}
+                        placeholder="e.g. S & A Badminton Academy — Edappally"
+                        className="w-full px-3.5 h-10 bg-[#0D111A] border border-slate-800 rounded-xl text-white text-xs placeholder-slate-500 focus:outline-none focus:border-[#B8F000] focus:ring-1 focus:ring-[#B8F000]/30 transition-all font-mono"
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                      <div>
+                        <label className="block text-slate-300 mb-1.5 font-semibold text-[11px]">Short Name *</label>
+                        <input
+                          type="text"
+                          required
+                          value={form.shortName}
+                          onChange={(e) => setForm({ ...form, shortName: e.target.value })}
+                          placeholder="e.g. Edappally Centre"
+                          className="w-full px-3.5 h-10 bg-[#0D111A] border border-slate-800 rounded-xl text-white text-xs placeholder-slate-500 focus:outline-none focus:border-[#B8F000] focus:ring-1 focus:ring-[#B8F000]/30 transition-all font-mono"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-slate-300 mb-1.5 font-semibold text-[11px]">URL Slug *</label>
+                        <input
+                          type="text"
+                          required
+                          value={form.slug}
+                          onChange={(e) => setForm({ ...form, slug: e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, "-") })}
+                          placeholder="e.g. edappally"
+                          className="w-full px-3.5 h-10 bg-[#0D111A] border border-slate-800 rounded-xl text-white text-xs placeholder-slate-500 focus:outline-none focus:border-[#B8F000] focus:ring-1 focus:ring-[#B8F000]/30 transition-all font-mono"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-slate-300 mb-1.5 font-semibold text-[11px]">Centre Overview / Bio</label>
+                      <textarea
+                        rows={2}
+                        value={form.description}
+                        onChange={(e) => setForm({ ...form, description: e.target.value })}
+                        placeholder="Key training facilities, accessibility, and coaching focus..."
+                        className="w-full px-3.5 py-2.5 bg-[#0D111A] border border-slate-800 rounded-xl text-white text-xs placeholder-slate-500 focus:outline-none focus:border-[#B8F000] focus:ring-1 focus:ring-[#B8F000]/30 transition-all resize-y font-mono min-h-[64px]"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* 2. Location & Navigation Card */}
+                <div className="bg-[#07090D] border border-slate-800/90 rounded-2xl p-4 sm:p-5 space-y-4 shadow-sm">
+                  <div className="flex items-center justify-between pb-3 border-b border-slate-800/80">
+                    <div className="flex items-center gap-2.5 text-[#B8F000] font-bold text-xs uppercase tracking-wider">
+                      <span className="w-2 h-2 rounded-full bg-[#B8F000] shadow-[0_0_8px_rgba(184,240,0,0.6)]" />
+                      <span>2. Location &amp; Navigation</span>
+                    </div>
+                    <span className="text-[10px] text-slate-500 uppercase tracking-widest font-mono">Geo &amp; Maps</span>
                   </div>
 
-                  <div>
-                    <label className="block text-slate-300 mb-1 font-semibold">URL Slug *</label>
-                    <input
-                      type="text"
-                      required
-                      value={form.slug}
-                      onChange={(e) => setForm({ ...form, slug: e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, "-") })}
-                      placeholder="e.g. palarivattom"
-                      className="w-full px-3.5 py-2.5 bg-[#07090D] border border-slate-800 rounded-xl text-white focus:outline-none focus:border-[#B8F000]"
-                    />
+                  <div className="space-y-3.5">
+                    <div>
+                      <label className="block text-slate-300 mb-1.5 font-semibold text-[11px]">Address *</label>
+                      <input
+                        type="text"
+                        required
+                        value={form.address}
+                        onChange={(e) => setForm({ ...form, address: e.target.value })}
+                        placeholder="e.g. Metro Pillar 412, Near Toll Junction, Edappally, Kochi 682024"
+                        className="w-full px-3.5 h-10 bg-[#0D111A] border border-slate-800 rounded-xl text-white text-xs placeholder-slate-500 focus:outline-none focus:border-[#B8F000] focus:ring-1 focus:ring-[#B8F000]/30 transition-all font-mono"
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                      <div>
+                        <label className="block text-slate-300 mb-1.5 font-semibold text-[11px]">Area / Locality *</label>
+                        <input
+                          type="text"
+                          required
+                          value={form.area}
+                          onChange={(e) => setForm({ ...form, area: e.target.value })}
+                          placeholder="e.g. Edappally"
+                          className="w-full px-3.5 h-10 bg-[#0D111A] border border-slate-800 rounded-xl text-white text-xs placeholder-slate-500 focus:outline-none focus:border-[#B8F000] focus:ring-1 focus:ring-[#B8F000]/30 transition-all font-mono"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-slate-300 mb-1.5 font-semibold text-[11px]">City *</label>
+                        <input
+                          type="text"
+                          required
+                          value={form.city}
+                          onChange={(e) => setForm({ ...form, city: e.target.value })}
+                          placeholder="e.g. Kochi"
+                          className="w-full px-3.5 h-10 bg-[#0D111A] border border-slate-800 rounded-xl text-white text-xs placeholder-slate-500 focus:outline-none focus:border-[#B8F000] focus:ring-1 focus:ring-[#B8F000]/30 transition-all font-mono"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-slate-300 mb-1.5 font-semibold text-[11px]">Pincode / Postal</label>
+                        <input
+                          type="text"
+                          value={form.pincode}
+                          onChange={(e) => setForm({ ...form, pincode: e.target.value })}
+                          placeholder="e.g. 682024"
+                          className="w-full px-3.5 h-10 bg-[#0D111A] border border-slate-800 rounded-xl text-white text-xs placeholder-slate-500 focus:outline-none focus:border-[#B8F000] focus:ring-1 focus:ring-[#B8F000]/30 transition-all font-mono"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-slate-300 mb-1.5 font-semibold text-[11px]">Google Maps Directions URL</label>
+                      <input
+                        type="url"
+                        value={form.googleMapsUrl}
+                        onChange={(e) => setForm({ ...form, googleMapsUrl: e.target.value })}
+                        placeholder="https://maps.google.com/?q=..."
+                        className="w-full px-3.5 h-10 bg-[#0D111A] border border-slate-800 rounded-xl text-white text-xs placeholder-slate-500 focus:outline-none focus:border-[#B8F000] focus:ring-1 focus:ring-[#B8F000]/30 transition-all font-mono"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* 3. Contact & WhatsApp Card */}
+                <div className="bg-[#07090D] border border-slate-800/90 rounded-2xl p-4 sm:p-5 space-y-4 shadow-sm">
+                  <div className="flex items-center justify-between pb-3 border-b border-slate-800/80">
+                    <div className="flex items-center gap-2.5 text-[#B8F000] font-bold text-xs uppercase tracking-wider">
+                      <span className="w-2 h-2 rounded-full bg-[#B8F000] shadow-[0_0_8px_rgba(184,240,0,0.6)]" />
+                      <span>3. Contact &amp; WhatsApp</span>
+                    </div>
+                    <span className="text-[10px] text-slate-500 uppercase tracking-widest font-mono">Direct Channels</span>
                   </div>
 
-                  <div className="sm:col-span-2">
-                    <label className="block text-slate-300 mb-1 font-semibold">Centre Overview / Bio</label>
-                    <textarea
-                      rows={2}
-                      value={form.description}
-                      onChange={(e) => setForm({ ...form, description: e.target.value })}
-                      placeholder="Key training facilities, accessibility, and coaching focus..."
-                      className="w-full px-3.5 py-2.5 bg-[#07090D] border border-slate-800 rounded-xl text-white focus:outline-none focus:border-[#B8F000]"
-                    />
+                  <div className="space-y-3.5">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                      <div>
+                        <label className="block text-slate-300 mb-1.5 font-semibold text-[11px]">Phone Number *</label>
+                        <input
+                          type="text"
+                          required
+                          value={form.phone}
+                          onChange={(e) => setForm({ ...form, phone: e.target.value, phoneDisplay: e.target.value })}
+                          placeholder="+91 94006 35548"
+                          className="w-full px-3.5 h-10 bg-[#0D111A] border border-slate-800 rounded-xl text-white text-xs placeholder-slate-500 focus:outline-none focus:border-[#B8F000] focus:ring-1 focus:ring-[#B8F000]/30 transition-all font-mono"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-slate-300 mb-1.5 font-semibold text-[11px]">WhatsApp Number *</label>
+                        <input
+                          type="text"
+                          required
+                          value={form.whatsapp}
+                          onChange={(e) => setForm({ ...form, whatsapp: e.target.value.replace(/\D/g, "") })}
+                          placeholder="919400635548"
+                          className="w-full px-3.5 h-10 bg-[#0D111A] border border-slate-800 rounded-xl text-white text-xs placeholder-slate-500 focus:outline-none focus:border-[#B8F000] focus:ring-1 focus:ring-[#B8F000]/30 transition-all font-mono"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-slate-300 mb-1.5 font-semibold text-[11px]">Email Address</label>
+                      <input
+                        type="email"
+                        value={form.email}
+                        onChange={(e) => setForm({ ...form, email: e.target.value })}
+                        placeholder="edappally@sabadminton.com"
+                        className="w-full px-3.5 h-10 bg-[#0D111A] border border-slate-800 rounded-xl text-white text-xs placeholder-slate-500 focus:outline-none focus:border-[#B8F000] focus:ring-1 focus:ring-[#B8F000]/30 transition-all font-mono"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* 4. Facilities & Visibility Card */}
+                <div className="bg-[#07090D] border border-slate-800/90 rounded-2xl p-4 sm:p-5 space-y-4 shadow-sm">
+                  <div className="flex items-center justify-between pb-3 border-b border-slate-800/80">
+                    <div className="flex items-center gap-2.5 text-[#B8F000] font-bold text-xs uppercase tracking-wider">
+                      <span className="w-2 h-2 rounded-full bg-[#B8F000] shadow-[0_0_8px_rgba(184,240,0,0.6)]" />
+                      <span>4. Facilities &amp; Visibility</span>
+                    </div>
+                    <span className="text-[10px] text-slate-500 uppercase tracking-widest font-mono">Specs &amp; Status</span>
+                  </div>
+
+                  <div className="space-y-3.5">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                      <div>
+                        <label className="block text-slate-300 mb-1.5 font-semibold text-[11px]">Court Count *</label>
+                        <input
+                          type="number"
+                          min="1"
+                          max="20"
+                          required
+                          value={form.courtCount}
+                          onChange={(e) => setForm({ ...form, courtCount: Number(e.target.value) })}
+                          className="w-full px-3.5 h-10 bg-[#0D111A] border border-slate-800 rounded-xl text-white text-xs focus:outline-none focus:border-[#B8F000] focus:ring-1 focus:ring-[#B8F000]/30 transition-all font-mono"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-slate-300 mb-1.5 font-semibold text-[11px]">Display Order *</label>
+                        <input
+                          type="number"
+                          min="1"
+                          required
+                          value={form.displayOrder}
+                          onChange={(e) => setForm({ ...form, displayOrder: Number(e.target.value) })}
+                          className="w-full px-3.5 h-10 bg-[#0D111A] border border-slate-800 rounded-xl text-white text-xs focus:outline-none focus:border-[#B8F000] focus:ring-1 focus:ring-[#B8F000]/30 transition-all font-mono"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-slate-300 mb-1.5 font-semibold text-[11px]">Status *</label>
+                        <select
+                          value={form.status}
+                          onChange={(e) => setForm({ ...form, status: e.target.value as "ACTIVE" | "INACTIVE" })}
+                          className="w-full px-3.5 h-10 bg-[#0D111A] border border-slate-800 rounded-xl text-white text-xs focus:outline-none focus:border-[#B8F000] focus:ring-1 focus:ring-[#B8F000]/30 transition-all font-mono cursor-pointer"
+                        >
+                          <option value="ACTIVE">ACTIVE (Published)</option>
+                          <option value="INACTIVE">INACTIVE (Hidden)</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-slate-300 mb-1.5 font-semibold text-[11px]">Surface Specification</label>
+                      <input
+                        type="text"
+                        value={form.surfaceType}
+                        onChange={(e) => setForm({ ...form, surfaceType: e.target.value })}
+                        placeholder="BWF Grade-1 Certified Synthetic Cushion Mats"
+                        className="w-full px-3.5 h-10 bg-[#0D111A] border border-slate-800 rounded-xl text-white text-xs placeholder-slate-500 focus:outline-none focus:border-[#B8F000] focus:ring-1 focus:ring-[#B8F000]/30 transition-all font-mono"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
 
-              {/* Location & Maps */}
-              <div className="space-y-3 pt-2 border-t border-slate-800">
-                <h4 className="text-[11px] font-bold text-[#B8F000] uppercase tracking-wider">2. Location &amp; Navigation</h4>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div className="sm:col-span-2">
-                    <label className="block text-slate-300 mb-1 font-semibold">Address *</label>
-                    <input
-                      type="text"
-                      required
-                      value={form.address}
-                      onChange={(e) => setForm({ ...form, address: e.target.value })}
-                      placeholder="e.g. S&A Sports Arena, Pipeline Road, Palarivattom, Kochi 682025"
-                      className="w-full px-3.5 py-2.5 bg-[#07090D] border border-slate-800 rounded-xl text-white focus:outline-none focus:border-[#B8F000]"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-slate-300 mb-1 font-semibold">Area / Locality *</label>
-                    <input
-                      type="text"
-                      required
-                      value={form.area}
-                      onChange={(e) => setForm({ ...form, area: e.target.value })}
-                      placeholder="e.g. Palarivattom"
-                      className="w-full px-3.5 py-2.5 bg-[#07090D] border border-slate-800 rounded-xl text-white focus:outline-none focus:border-[#B8F000]"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-slate-300 mb-1 font-semibold">City *</label>
-                    <input
-                      type="text"
-                      required
-                      value={form.city}
-                      onChange={(e) => setForm({ ...form, city: e.target.value })}
-                      placeholder="e.g. Kochi"
-                      className="w-full px-3.5 py-2.5 bg-[#07090D] border border-slate-800 rounded-xl text-white focus:outline-none focus:border-[#B8F000]"
-                    />
-                  </div>
-
-                  <div className="sm:col-span-2">
-                    <label className="block text-slate-300 mb-1 font-semibold">Google Maps Directions URL</label>
-                    <input
-                      type="url"
-                      value={form.googleMapsUrl}
-                      onChange={(e) => setForm({ ...form, googleMapsUrl: e.target.value })}
-                      placeholder="https://maps.google.com/?q=..."
-                      className="w-full px-3.5 py-2.5 bg-[#07090D] border border-slate-800 rounded-xl text-white focus:outline-none focus:border-[#B8F000]"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Contact Information */}
-              <div className="space-y-3 pt-2 border-t border-slate-800">
-                <h4 className="text-[11px] font-bold text-[#B8F000] uppercase tracking-wider">3. Contact &amp; WhatsApp</h4>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-slate-300 mb-1 font-semibold">Phone Number *</label>
-                    <input
-                      type="text"
-                      required
-                      value={form.phone}
-                      onChange={(e) => setForm({ ...form, phone: e.target.value, phoneDisplay: e.target.value })}
-                      placeholder="+91 94006 35548"
-                      className="w-full px-3.5 py-2.5 bg-[#07090D] border border-slate-800 rounded-xl text-white focus:outline-none focus:border-[#B8F000]"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-slate-300 mb-1 font-semibold">WhatsApp Number (e.g. 919400635548) *</label>
-                    <input
-                      type="text"
-                      required
-                      value={form.whatsapp}
-                      onChange={(e) => setForm({ ...form, whatsapp: e.target.value.replace(/\D/g, "") })}
-                      placeholder="919400635548"
-                      className="w-full px-3.5 py-2.5 bg-[#07090D] border border-slate-800 rounded-xl text-white focus:outline-none focus:border-[#B8F000]"
-                    />
-                  </div>
-
-                  <div className="sm:col-span-2">
-                    <label className="block text-slate-300 mb-1 font-semibold">Email Address</label>
-                    <input
-                      type="email"
-                      value={form.email}
-                      onChange={(e) => setForm({ ...form, email: e.target.value })}
-                      placeholder="palarivattom@sabadminton.com"
-                      className="w-full px-3.5 py-2.5 bg-[#07090D] border border-slate-800 rounded-xl text-white focus:outline-none focus:border-[#B8F000]"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Courts & Status */}
-              <div className="space-y-3 pt-2 border-t border-slate-800">
-                <h4 className="text-[11px] font-bold text-[#B8F000] uppercase tracking-wider">4. Facilities &amp; Visibility</h4>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  <div>
-                    <label className="block text-slate-300 mb-1 font-semibold">Court Count *</label>
-                    <input
-                      type="number"
-                      min="1"
-                      max="20"
-                      required
-                      value={form.courtCount}
-                      onChange={(e) => setForm({ ...form, courtCount: Number(e.target.value) })}
-                      className="w-full px-3.5 py-2.5 bg-[#07090D] border border-slate-800 rounded-xl text-white focus:outline-none focus:border-[#B8F000]"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-slate-300 mb-1 font-semibold">Display Order *</label>
-                    <input
-                      type="number"
-                      min="1"
-                      required
-                      value={form.displayOrder}
-                      onChange={(e) => setForm({ ...form, displayOrder: Number(e.target.value) })}
-                      className="w-full px-3.5 py-2.5 bg-[#07090D] border border-slate-800 rounded-xl text-white focus:outline-none focus:border-[#B8F000]"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-slate-300 mb-1 font-semibold">Status *</label>
-                    <select
-                      value={form.status}
-                      onChange={(e) => setForm({ ...form, status: e.target.value as "ACTIVE" | "INACTIVE" })}
-                      className="w-full px-3.5 py-2.5 bg-[#07090D] border border-slate-800 rounded-xl text-white focus:outline-none focus:border-[#B8F000]"
-                    >
-                      <option value="ACTIVE">ACTIVE (Published)</option>
-                      <option value="INACTIVE">INACTIVE (Hidden)</option>
-                    </select>
-                  </div>
-
-                  <div className="sm:col-span-3">
-                    <label className="block text-slate-300 mb-1 font-semibold">Surface Specification</label>
-                    <input
-                      type="text"
-                      value={form.surfaceType}
-                      onChange={(e) => setForm({ ...form, surfaceType: e.target.value })}
-                      placeholder="BWF Grade-1 Certified Synthetic Cushion Mats"
-                      className="w-full px-3.5 py-2.5 bg-[#07090D] border border-slate-800 rounded-xl text-white focus:outline-none focus:border-[#B8F000]"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Submit Buttons */}
-              <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-800">
+              {/* Modal Footer */}
+              <div className="shrink-0 bg-[#0D111A] border-t border-slate-800 px-6 py-4 flex items-center justify-end gap-3 z-10">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-5 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
+                  className="px-5 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer text-xs font-mono font-medium"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={saving}
-                  className="px-6 py-2.5 rounded-xl bg-[#B8F000] hover:bg-[#cbf722] text-[#07090D] font-bold uppercase tracking-wider transition-all cursor-pointer shadow-lg shadow-[#B8F000]/10 flex items-center gap-2"
+                  className="px-6 py-2.5 rounded-xl bg-[#B8F000] hover:bg-[#cbf722] text-[#07090D] font-bold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-lg shadow-[#B8F000]/10 flex items-center gap-2"
                 >
                   {saving && <Loader2 className="w-4 h-4 animate-spin" />}
                   <span>{editingCentre ? "Save Changes" : "Create Centre"}</span>
@@ -973,34 +1026,43 @@ export function CentresManager() {
       {/* Delete / Deactivate Confirmation Modal */}
       {deleteTarget && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#0D111A] border border-rose-500/30 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+          <div className="bg-[#0D111A] border border-rose-500/30 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl font-mono">
             <div className="flex items-center gap-3 text-rose-400">
-              <div className="p-2 rounded-xl bg-rose-500/10">
+              <div className="p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/20">
                 <AlertCircle className="w-6 h-6" />
               </div>
-              <h3 className="text-base font-black text-white uppercase tracking-tight">
-                Remove / Deactivate Centre
-              </h3>
+              <div>
+                <h3 className="text-base font-black text-white uppercase tracking-tight">
+                  Remove / Deactivate Centre
+                </h3>
+                <p className="text-[11px] text-slate-400">
+                  Data integrity &amp; historical records protection
+                </p>
+              </div>
             </div>
 
-            <p className="text-xs text-slate-300 leading-relaxed font-mono">
-              Are you sure you want to remove <strong>{deleteTarget.name}</strong>?
-            </p>
-            <p className="text-[11px] text-slate-400 leading-relaxed font-mono">
-              If this centre is linked to existing coaches, batches, or leads, it will be safely <strong>deactivated</strong> instead of deleted to protect historical records.
-            </p>
+            <div className="bg-[#07090D] border border-slate-800 rounded-2xl p-4 space-y-2 text-xs">
+              <p className="text-slate-200">
+                Are you sure you want to remove <strong className="text-[#B8F000]">{deleteTarget.name}</strong>?
+              </p>
+              <p className="text-[11px] text-slate-400 leading-relaxed">
+                If this centre is linked to existing students, coaches, batches, or leads, it will be safely <strong className="text-amber-300">deactivated</strong> (hidden from public website and forms) rather than deleted to avoid data loss.
+              </p>
+            </div>
 
-            <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
+            <div className="flex items-center justify-end gap-3 pt-2 border-t border-slate-800">
               <button
+                type="button"
                 onClick={() => setDeleteTarget(null)}
-                className="px-4 py-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 text-xs font-mono cursor-pointer"
+                className="px-4 py-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 text-xs transition-colors cursor-pointer"
               >
                 Cancel
               </button>
               <button
+                type="button"
                 onClick={handleDelete}
                 disabled={isDeleting}
-                className="px-5 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs font-mono uppercase tracking-wider transition-colors cursor-pointer flex items-center gap-2"
+                className="px-5 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs uppercase tracking-wider transition-colors cursor-pointer flex items-center gap-2 shadow-lg shadow-rose-600/20"
               >
                 {isDeleting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                 <span>Confirm Removal</span>

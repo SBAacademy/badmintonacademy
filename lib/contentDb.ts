@@ -1482,8 +1482,16 @@ export async function deleteCentreRecord(
       const coachRef = (await sql`SELECT id FROM coaches WHERE primary_centre = ${slug} LIMIT 1;`) as unknown as unknown[];
       const batchRef = (await sql`SELECT id FROM batches WHERE centre_slug = ${slug} LIMIT 1;`) as unknown as unknown[];
       const leadRef = (await sql`SELECT id FROM leads WHERE branch = ${slug} LIMIT 1;`) as unknown as unknown[];
+      const studentRef = (await sql`SELECT id FROM students WHERE primary_centre = ${slug} LIMIT 1;`) as unknown as unknown[];
+      const trialRef = (await sql`SELECT id FROM free_trials WHERE centre_slug = ${slug} LIMIT 1;`) as unknown as unknown[];
 
-      if ((Array.isArray(coachRef) && coachRef.length > 0) || (Array.isArray(batchRef) && batchRef.length > 0) || (Array.isArray(leadRef) && leadRef.length > 0)) {
+      if (
+        (Array.isArray(coachRef) && coachRef.length > 0) ||
+        (Array.isArray(batchRef) && batchRef.length > 0) ||
+        (Array.isArray(leadRef) && leadRef.length > 0) ||
+        (Array.isArray(studentRef) && studentRef.length > 0) ||
+        (Array.isArray(trialRef) && trialRef.length > 0)
+      ) {
         isReferenced = true;
       }
     } catch (e) {

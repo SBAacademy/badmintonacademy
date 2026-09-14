@@ -852,7 +852,7 @@
         ]
       },
       "createdAt": "2026-09-14T12:44:45.993Z",
-      "updatedAt": "2026-09-14T13:23:19.138Z"
+      "updatedAt": "2026-09-14T13:34:55.872Z"
     },
     {
       "id": "kakkanad",
@@ -1024,7 +1024,6 @@
       "slug": "fourth-centre",
       "name": "S & A Badminton Academy — Upcoming Fourth Centre",
       "shortName": "Upcoming Fourth Centre",
-      "cityArea": "Greater Kochi",
       "area": "Greater Kochi",
       "city": "Kochi",
       "district": "Ernakulam",
@@ -1043,140 +1042,146 @@
       "googleMapsEmbedUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d125745.74828770425!2d76.2239462!3d9.9826798!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b080d514abec6bf%3A0xbd582caa5844192!2sKochi%2C%20Kerala!5e0!3m2!1sen!2sin!4v1700000000000",
       "latitude": null,
       "longitude": null,
-      "description": "S & A Badminton Academy is preparing to launch our fourth dedicated coaching arena at [AREA], Kochi. This upcoming facility will deliver international-standard synthetic court infrastructure, certified coaching faculty, and comprehensive age-specific developmental pathways.",
+      "description": "S & A Badminton Academy is preparing to launch our fourth dedicated coaching arena in Kochi.",
+      "displayOrder": 4,
+      "status": "INACTIVE",
+      "isActive": false,
+      "seoTitle": "Badminton Academy in Kochi | S & A Badminton Academy Kochi",
+      "seoDescription": "New upcoming badminton arena expanding our footprint across Greater Kochi.",
+      "image": "/images/badminton-arena.jpg",
+      "courtImage": "/images/badminton-arena.jpg",
+      "isPlaceholder": true,
+      "programs": [],
+      "coaches": [],
+      "gallery": [],
+      "testimonials": [],
+      "achievements": [],
+      "localFAQs": [],
+      "seo": {
+        "title": "Badminton Academy in Kochi | S & A Badminton Academy Kochi",
+        "description": "New upcoming badminton arena expanding our footprint across Greater Kochi.",
+        "primaryKeyword": "badminton coaching Greater Kochi",
+        "secondaryKeywords": [
+          "badminton academy Greater Kochi",
+          "badminton courts Kochi"
+        ],
+        "relatedKeywords": [
+          "training academy Greater Kochi",
+          "badminton near me"
+        ]
+      },
+      "createdAt": "2026-09-14T13:08:17.257Z",
+      "updatedAt": "2026-09-14T13:28:34.423Z"
+    },
+    {
+      "id": "maradu",
+      "slug": "maradu",
+      "name": "S & A Badminton Academy — Maradu",
+      "shortName": "Maradu",
+      "area": "Greater Kochi",
+      "city": "Kochi",
+      "district": "Ernakulam",
+      "state": "Kerala",
+      "pincode": "[PINCODE]",
+      "postalCode": "[PINCODE]",
+      "address": "ProSmash Badminton Academy, Society Road, near Vadakke Cheruvaram, Maradu, Kerala",
+      "phone": "+919400635548",
+      "phoneDisplay": "+91 94006 35548",
+      "whatsapp": "919400635548",
+      "whatsappDisplay": "+91 94006 35548",
+      "email": "info@sabadminton.com",
+      "courtCount": 4,
+      "surfaceType": "BWF-Grade Multi-Layer Synthetic Cushion Surface",
+      "googleMapsUrl": "https://maps.app.goo.gl/TBFKhXZ4B1FTzNgu5",
+      "googleMapsEmbedUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d125745.74828770425!2d76.2239462!3d9.9826798!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b080d514abec6bf%3A0xbd582caa5844192!2sKochi%2C%20Kerala!5e0!3m2!1sen!2sin!4v1700000000000",
+      "latitude": null,
+      "longitude": null,
+      "description": "Beginner, intermediate, and advanced coaching for kids (ages 5+) and adults, including specialized morning and evening batches, summer camps, and fitness training.",
       "displayOrder": 4,
       "status": "ACTIVE",
       "isActive": true,
-      "seoTitle": "Badminton Academy in [AREA] | S & A Badminton Academy Kochi",
-      "seoDescription": "Upcoming premier badminton academy in [AREA], Kochi by S & A Badminton Academy. Structured badminton coaching programs for kids, juniors, and adults.",
-      "image": "/images/training-coach.jpg",
-      "courtImage": "/images/hero-athlete.jpg",
-      "isPlaceholder": true,
-      "facilities": [
-        "BWF-Standard Synthetic Badminton Courts",
-        "Overhead Anti-Glare Sports LED Lighting",
-        "Dedicated Agility and Fitness Zone",
-        "Player Hydration and Rest Area",
-        "Separate Men & Women Changing Facilities",
-        "Secure On-Site Parking"
-      ],
-      "openingHours": {
-        "days": "Monday – Sunday (Schedule to be confirmed upon launch)",
-        "morning": "05:30 AM – 10:00 AM",
-        "evening": "04:00 PM – 10:00 PM"
-      },
-      "intro": {
-        "heading": "New S & A Badminton Academy Centre Coming Soon to [AREA]",
-        "subheading": "Expanding professional badminton coaching excellence across Greater Ernakulam",
-        "description": "S & A Badminton Academy is preparing to launch our fourth dedicated coaching arena at [AREA], Kochi. This upcoming facility will deliver international-standard synthetic court infrastructure, certified coaching faculty, and comprehensive age-specific developmental pathways.",
-        "neighbourhoodsServed": [
-          "[AREA]",
-          "Adjoining residential sectors",
-          "Greater Kochi metropolitan area"
-        ],
-        "connectivity": "Prime arterial road connectivity with dedicated parking. Exact address and landmark directions to be finalized upon official launch."
-      },
-      "courtInformation": {
-        "courtCount": null,
-        "surfaceType": "BWF-Grade Multi-Layer Synthetic Cushion Surface",
-        "subfloor": "Shock-Absorbent Resilient Subflooring",
-        "lightingStandard": "Professional Anti-Glare Sports LED Lighting",
-        "ceilingClearance": "Tournament Standard Ceiling Height"
-      },
-      "programs": [
-        {
-          "name": "Kids Foundation Badminton",
-          "slug": "kids-badminton-coaching",
-          "targetAge": "Ages 5 – 9",
-          "level": "Beginner",
-          "schedule": "Timings to be announced upon opening",
-          "description": "Fun, structured coaching developing fundamental hand-eye motor skills, racket handling, and movement."
-        },
-        {
-          "name": "Junior Player Development",
-          "slug": "junior-badminton-coaching",
-          "targetAge": "Ages 10 – 16",
-          "level": "Intermediate",
-          "schedule": "Timings to be announced upon opening",
-          "description": "Technical shot consistency, tactical match awareness, footwork split-steps, and competitive readiness."
-        },
-        {
-          "name": "Adult Fitness & Coaching",
-          "slug": "adult-badminton-coaching",
-          "targetAge": "Ages 18+",
-          "level": "All Adult Levels",
-          "schedule": "Morning and evening batches to be announced",
-          "description": "Cardiovascular stamina, correct biomechanics, injury prevention, and enjoyable doubles play."
-        }
-      ],
-      "coaches": [
-        {
-          "name": "S & A Certified Coaching Faculty",
-          "role": "Coaching Team – [AREA]",
-          "specialization": "Structured Player Progression & Technical Mastery",
-          "bio": "Faculty details and coach appointments will be officially published prior to the launch of the [AREA] arena."
-        }
-      ],
-      "gallery": [
-        {
-          "url": "/images/training-coach.jpg",
-          "caption": "S & A coaching drill demonstration and court mechanics"
-        },
-        {
-          "url": "/images/hero-athlete.jpg",
-          "caption": "Professional jump smash training"
-        }
-      ],
-      "testimonials": [
-        {
-          "quote": "S & A Badminton Academy's coaching framework is second to none in Kochi. We are eagerly looking forward to their upcoming centre in [AREA].",
-          "author": "Parent Representative",
-          "role": "Kochi Badminton Community",
-          "rating": 5
-        }
-      ],
-      "achievements": [
-        "Part of the S & A Badminton Academy training network across Ernakulam.",
-        "Standardized multi-tier coaching curriculum overseen by senior academy mentors."
-      ],
-      "localFAQs": [
-        {
-          "question": "When will the S & A Badminton Academy centre in [AREA] open for admissions?",
-          "answer": "Admissions and trial registration will commence shortly. You can pre-register your interest via WhatsApp at +91 94006 35548 to secure early priority slot access."
-        },
-        {
-          "question": "Where will the new fourth centre be located?",
-          "answer": "The fourth centre is being set up in [AREA], Kochi. The verified address and map link will be published as soon as final facility preparations conclude."
-        },
-        {
-          "question": "What coaching programs will be available at this centre?",
-          "answer": "Like all S & A centres, it will host Kids Foundation (Ages 5–9), Junior Development (Ages 10–16), Adult Coaching, and Seasonal Badminton Camps."
-        },
-        {
-          "question": "How can I register my interest or inquire about the upcoming batch?",
-          "answer": "Send a message to our academy admissions line via WhatsApp at +91 94006 35548 with your name and preferred location to receive launch batch updates."
-        }
-      ],
+      "seoTitle": "Badminton Academy in Kochi | S & A Badminton Academy Kochi",
+      "seoDescription": "New upcoming badminton arena expanding our footprint across Greater Kochi.",
+      "image": "/images/badminton-arena.jpg",
+      "courtImage": "/images/badminton-arena.jpg",
+      "isPlaceholder": false,
+      "facilities": [],
+      "programs": [],
+      "coaches": [],
+      "gallery": [],
+      "testimonials": [],
+      "achievements": [],
+      "localFAQs": [],
       "seo": {
-        "title": "Badminton Academy in [AREA] | S & A Badminton Academy Kochi",
-        "description": "Upcoming premier badminton academy in [AREA], Kochi by S & A Badminton Academy. Structured badminton coaching programs for kids, juniors, and adults.",
-        "primaryKeyword": "badminton academy in [AREA]",
+        "title": "Badminton Academy in Kochi | S & A Badminton Academy Kochi",
+        "description": "New upcoming badminton arena expanding our footprint across Greater Kochi.",
+        "primaryKeyword": "badminton coaching Greater Kochi",
         "secondaryKeywords": [
-          "badminton coaching in [AREA]",
-          "badminton classes in [AREA]",
-          "badminton training in [AREA]",
-          "badminton academy [AREA]"
+          "badminton academy Greater Kochi",
+          "badminton courts Kochi"
         ],
         "relatedKeywords": [
-          "kids badminton coaching [AREA]",
-          "junior badminton coaching [AREA]",
-          "adult badminton classes [AREA]",
-          "competitive badminton coaching [AREA]",
-          "badminton academy near [AREA]"
+          "training academy Greater Kochi",
+          "badminton near me"
         ]
       },
-      "createdAt": "2026-09-14T12:44:45.993Z",
-      "updatedAt": "2026-09-14T12:44:45.993Z"
+      "createdAt": "2026-09-14T13:26:11.852Z",
+      "updatedAt": "2026-09-14T13:26:11.852Z"
+    },
+    {
+      "id": "chullikal",
+      "slug": "chullikal",
+      "name": "S & A Badminton Academy — Chullikal",
+      "shortName": "Chullikal",
+      "area": "Greater Kochi",
+      "city": "Kochi",
+      "district": "Ernakulam",
+      "state": "Kerala",
+      "pincode": "[PINCODE]",
+      "postalCode": "[PINCODE]",
+      "address": "[FACILITY_ADDRESS], [AREA], Kochi, Kerala [PINCODE]",
+      "phone": "+919400635548",
+      "phoneDisplay": "+91 94006 35548",
+      "whatsapp": "919400635548",
+      "whatsappDisplay": "+91 94006 35548",
+      "email": "info@sabadminton.com",
+      "courtCount": 4,
+      "surfaceType": "BWF-Grade Multi-Layer Synthetic Cushion Surface",
+      "googleMapsUrl": "https://maps.google.com/?q=Kochi+Kerala",
+      "googleMapsEmbedUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d125745.74828770425!2d76.2239462!3d9.9826798!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b080d514abec6bf%3A0xbd582caa5844192!2sKochi%2C%20Kerala!5e0!3m2!1sen!2sin!4v1700000000000",
+      "latitude": null,
+      "longitude": null,
+      "description": "Professional coaching for kids and adults, ranging from beginner to advanced/professional levels.",
+      "displayOrder": 4,
+      "status": "INACTIVE",
+      "isActive": false,
+      "seoTitle": "Badminton Academy in Kochi | S & A Badminton Academy Kochi",
+      "seoDescription": "New upcoming badminton arena expanding our footprint across Greater Kochi.",
+      "image": "/images/badminton-arena.jpg",
+      "courtImage": "/images/badminton-arena.jpg",
+      "isPlaceholder": false,
+      "facilities": [],
+      "programs": [],
+      "coaches": [],
+      "gallery": [],
+      "testimonials": [],
+      "achievements": [],
+      "localFAQs": [],
+      "seo": {
+        "title": "Badminton Academy in Kochi | S & A Badminton Academy Kochi",
+        "description": "New upcoming badminton arena expanding our footprint across Greater Kochi.",
+        "primaryKeyword": "badminton coaching Greater Kochi",
+        "secondaryKeywords": [
+          "badminton academy Greater Kochi",
+          "badminton courts Kochi"
+        ],
+        "relatedKeywords": [
+          "training academy Greater Kochi",
+          "badminton near me"
+        ]
+      },
+      "createdAt": "2026-09-14T13:29:20.321Z",
+      "updatedAt": "2026-09-14T13:29:20.321Z"
     }
   ]
 }

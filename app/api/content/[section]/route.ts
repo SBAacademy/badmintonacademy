@@ -7,6 +7,7 @@ import {
   getCoaches,
   saveCoachRecord,
   deleteCoachRecord,
+  reorderCoaches,
 } from "@/lib/contentDb";
 import { GALLERY_ITEMS } from "@/data/gallery";
 import { COACHES, Coach } from "@/data/coaches";
@@ -182,7 +183,22 @@ export async function PUT(
 
     const sectionKey = section as ContentSectionKey;
     const body = await request.json();
-    const identifier = body.id || body.slug;
+
+    // Dedicated batch reordering for coaches
+    if (sectionKey === "coaches" && (body.action === "reorder" || Array.isArray(body.orders))) {
+      const orders = Array.isArray(body.orders) ? body.orders : [];
+      const updatedCoaches = await reorderCoaches(orders);
+      revalidatePath("/");
+      revalidatePath("/coaches");
+      return NextResponse.json({
+        success: true,
+        message: "Coaches display order updated successfully.",
+        items: updatedCoaches,
+      });
+    }
+
+    const itemData = (body && typeof body === "object" && body.item && typeof body.item === "object") ? body.item : body;
+    const identifier = itemData.id || itemData.slug;
 
     if (!identifier) {
       return NextResponse.json(
@@ -192,7 +208,7 @@ export async function PUT(
     }
 
     if (sectionKey === "coaches") {
-      const savedCoach = await saveCoachRecord(body);
+      const savedCoach = await saveCoachRecord(itemData);
       const allCoaches = await getCoaches({ includeUnpublished: true });
 
       revalidatePath("/");

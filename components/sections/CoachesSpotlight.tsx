@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, ShieldCheck } from "lucide-react";
+import { ArrowRight, ShieldCheck, Camera } from "lucide-react";
 import { COACHES, Coach } from "@/data/coaches";
 import { getCoaches } from "@/lib/contentDb";
 
@@ -63,8 +63,16 @@ export async function CoachesSpotlight({ initialCoaches }: { initialCoaches?: Co
                   
                   {/* Monospace Index Overlay */}
                   <div className="absolute top-3 left-3 px-2 py-0.5 bg-[#07090D]/90 border border-[#1F2937] font-mono text-[10px] font-bold text-[#B8F000]">
-                    0{idx + 1} // {coach.experienceYears}Y EXP
+                    0{coach.displayOrder || idx + 1} // {coach.experienceYears}Y EXP
                   </div>
+
+                  {/* Multi-Photo Indicator */}
+                  {coach.photos && coach.photos.length > 1 && (
+                    <div className="absolute top-3 right-3 px-2 py-0.5 bg-[#07090D]/90 border border-[#1F2937] font-mono text-[9px] text-[#B8F000] font-bold flex items-center gap-1">
+                      <Camera className="w-2.5 h-2.5" />
+                      <span>{coach.photos.length}</span>
+                    </div>
+                  )}
 
                   {/* Branch Tag */}
                   <div className="absolute bottom-3 left-4 right-4 text-left font-mono text-[10px] uppercase text-[#B8F000] tracking-wider truncate">

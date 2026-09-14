@@ -67,93 +67,6 @@
   ],
   "coaches": [
     {
-      "id": "saniya-george-maijo",
-      "slug": "saniya-george-maijo",
-      "name": "Saniya George Maijo",
-      "role": "Sports Nutritionist & Assistant Coach",
-      "bio": "Dedicated badminton trainer with extensive experience mentoring junior and adult athletes in Kochi.",
-      "certifications": [],
-      "achievements": [
-        "All India National Championship Kerala Team representative"
-      ],
-      "experienceYears": 4,
-      "specialization": "Singles Tactical Footwork & Match Conditioning",
-      "primaryCentre": "kadavanthra",
-      "primaryBranch": "S & A Badminton Academy – Kadavanthra",
-      "image": "/images/training-coach.jpg",
-      "whatsappNumber": "919400334242",
-      "status": "ACTIVE",
-      "isPublished": true,
-      "displayOrder": 10,
-      "createdAt": "Thu Sep 10 2026 15:09:26 GMT+0530 (India Standard Time)",
-      "updatedAt": "Fri Sep 11 2026 17:44:18 GMT+0530 (India Standard Time)"
-    },
-    {
-      "id": "robin-biju",
-      "slug": "robin-biju",
-      "name": "Robin Biju",
-      "role": "Assistant Coach",
-      "bio": "Dedicated badminton trainer with extensive experience mentoring junior and adult athletes in Kochi.",
-      "certifications": [],
-      "achievements": [],
-      "experienceYears": 4,
-      "specialization": "Singles Tactical Footwork & Match Conditioning",
-      "primaryCentre": "kadavanthra",
-      "primaryBranch": "S & A Badminton Academy – Kadavanthra",
-      "image": "/images/training-coach.jpg",
-      "whatsappNumber": null,
-      "status": "ACTIVE",
-      "isPublished": true,
-      "displayOrder": 11,
-      "createdAt": "Thu Sep 10 2026 15:09:26 GMT+0530 (India Standard Time)",
-      "updatedAt": "Thu Sep 10 2026 15:09:26 GMT+0530 (India Standard Time)"
-    },
-    {
-      "id": "adithyan-s",
-      "slug": "adithyan-s",
-      "name": "Adithyan S",
-      "role": "Assistant Coach",
-      "bio": "Dedicated badminton trainer with extensive experience mentoring junior and adult athletes in Kochi.",
-      "certifications": [],
-      "achievements": [
-        "Former State Senior Medalist",
-        "Coached Ernakulam District Squad"
-      ],
-      "experienceYears": 3,
-      "specialization": "Singles Tactical Footwork & Match Conditioning",
-      "primaryCentre": "kadavanthra",
-      "primaryBranch": "S & A Badminton Academy – Kadavanthra",
-      "image": "/images/training-coach.jpg",
-      "whatsappNumber": null,
-      "status": "ACTIVE",
-      "isPublished": true,
-      "displayOrder": 12,
-      "createdAt": "Thu Sep 10 2026 15:09:26 GMT+0530 (India Standard Time)",
-      "updatedAt": "Thu Sep 10 2026 15:09:26 GMT+0530 (India Standard Time)"
-    },
-    {
-      "id": "fayis",
-      "slug": "fayis",
-      "name": "Fayis",
-      "role": "Assistant Coach",
-      "bio": "Dedicated badminton trainer with extensive experience mentoring junior and adult athletes in Kochi.",
-      "certifications": [
-        "BWF Level 1 Certified Coach"
-      ],
-      "achievements": [],
-      "experienceYears": 5,
-      "specialization": "Singles Tactical Footwork & Match Conditioning",
-      "primaryCentre": "kadavanthra",
-      "primaryBranch": "S & A Badminton Academy – Kadavanthra",
-      "image": "/images/training-coach.jpg",
-      "whatsappNumber": null,
-      "status": "ACTIVE",
-      "isPublished": true,
-      "displayOrder": 13,
-      "createdAt": "Thu Sep 10 2026 15:09:27 GMT+0530 (India Standard Time)",
-      "updatedAt": "Thu Sep 10 2026 15:09:27 GMT+0530 (India Standard Time)"
-    },
-    {
       "id": "sooraj-m-s",
       "slug": "sooraj-m-s",
       "name": "Sooraj M S",
@@ -172,13 +85,180 @@
       "specialization": "Singles Tactical Footwork & Match Conditioning",
       "primaryCentre": "kadavanthra",
       "primaryBranch": "S & A Badminton Academy – Kadavanthra",
-      "image": "/images/training-coach.jpg",
+      "image": "/api/images/whatsapp_image_2026-09-13_at_1_1789383820075.jpeg",
+      "images": [
+        "/api/images/whatsapp_image_2026-09-13_at_1_1789383820075.jpeg",
+        "/api/images/whatsapp_image_2026-09-13_at_1_1789383912492.jpeg"
+      ],
+      "photos": [
+        {
+          "id": "photo_1",
+          "coachId": "sooraj-m-s",
+          "imageUrl": "/api/images/whatsapp_image_2026-09-13_at_1_1789383820075.jpeg",
+          "sortOrder": 1,
+          "isPrimary": true,
+          "createdAt": "2026-09-14T12:12:56.732468+00:00",
+          "updatedAt": "2026-09-14T12:12:56.732468+00:00"
+        },
+        {
+          "id": "photo_2",
+          "coachId": "sooraj-m-s",
+          "imageUrl": "/api/images/whatsapp_image_2026-09-13_at_1_1789383912492.jpeg",
+          "sortOrder": 2,
+          "isPrimary": false,
+          "createdAt": "2026-09-14T12:12:57.077255+00:00",
+          "updatedAt": "2026-09-14T12:12:57.077255+00:00"
+        }
+      ],
       "whatsappNumber": null,
       "status": "ACTIVE",
       "isPublished": true,
-      "displayOrder": 14,
+      "displayOrder": 1,
       "createdAt": "Thu Sep 10 2026 15:09:27 GMT+0530 (India Standard Time)",
-      "updatedAt": "Thu Sep 10 2026 15:09:27 GMT+0530 (India Standard Time)"
+      "updatedAt": "Mon Sep 14 2026 17:42:55 GMT+0530 (India Standard Time)"
+    },
+    {
+      "id": "saniya-george-maijo",
+      "slug": "saniya-george-maijo",
+      "name": "Saniya George Maijo",
+      "role": "Sports Nutritionist & Assistant Coach",
+      "bio": "Dedicated badminton trainer with extensive experience mentoring junior and adult athletes in Kochi.",
+      "certifications": [],
+      "achievements": [
+        "All India National Championship Kerala Team representative"
+      ],
+      "experienceYears": 4,
+      "specialization": "Singles Tactical Footwork & Match Conditioning",
+      "primaryCentre": "kadavanthra",
+      "primaryBranch": "S & A Badminton Academy – Kadavanthra",
+      "image": "/api/images/whatsapp_image_2026-09-13_at_1_1789383912492.jpeg",
+      "images": [
+        "/api/images/whatsapp_image_2026-09-13_at_1_1789383912492.jpeg"
+      ],
+      "photos": [
+        {
+          "id": "photo_saniya-george-maijo_primary",
+          "coachId": "saniya-george-maijo",
+          "imageUrl": "/api/images/whatsapp_image_2026-09-13_at_1_1789383912492.jpeg",
+          "sortOrder": 1,
+          "isPrimary": true,
+          "createdAt": "2026-09-14T11:21:17.709483+00:00",
+          "updatedAt": "2026-09-14T11:21:17.709483+00:00"
+        }
+      ],
+      "whatsappNumber": "919400334242",
+      "status": "ACTIVE",
+      "isPublished": true,
+      "displayOrder": 2,
+      "createdAt": "Thu Sep 10 2026 15:09:26 GMT+0530 (India Standard Time)",
+      "updatedAt": "Mon Sep 14 2026 17:42:06 GMT+0530 (India Standard Time)"
+    },
+    {
+      "id": "robin-biju",
+      "slug": "robin-biju",
+      "name": "Robin Biju",
+      "role": "Assistant Coach",
+      "bio": "Dedicated badminton trainer with extensive experience mentoring junior and adult athletes in Kochi.",
+      "certifications": [],
+      "achievements": [],
+      "experienceYears": 4,
+      "specialization": "Singles Tactical Footwork & Match Conditioning",
+      "primaryCentre": "kadavanthra",
+      "primaryBranch": "S & A Badminton Academy – Kadavanthra",
+      "image": "/api/images/whatsapp_image_2026-09-13_at_1_1789383880660.jpeg",
+      "images": [
+        "/api/images/whatsapp_image_2026-09-13_at_1_1789383880660.jpeg"
+      ],
+      "photos": [
+        {
+          "id": "photo_robin-biju_primary",
+          "coachId": "robin-biju",
+          "imageUrl": "/api/images/whatsapp_image_2026-09-13_at_1_1789383880660.jpeg",
+          "sortOrder": 1,
+          "isPrimary": true,
+          "createdAt": "2026-09-14T11:21:17.709483+00:00",
+          "updatedAt": "2026-09-14T11:21:17.709483+00:00"
+        }
+      ],
+      "whatsappNumber": null,
+      "status": "ACTIVE",
+      "isPublished": true,
+      "displayOrder": 3,
+      "createdAt": "Thu Sep 10 2026 15:09:26 GMT+0530 (India Standard Time)",
+      "updatedAt": "Mon Sep 14 2026 17:42:07 GMT+0530 (India Standard Time)"
+    },
+    {
+      "id": "adithyan-s",
+      "slug": "adithyan-s",
+      "name": "Adithyan S",
+      "role": "Assistant Coach",
+      "bio": "Dedicated badminton trainer with extensive experience mentoring junior and adult athletes in Kochi.",
+      "certifications": [],
+      "achievements": [
+        "Former State Senior Medalist",
+        "Coached Ernakulam District Squad"
+      ],
+      "experienceYears": 3,
+      "specialization": "Singles Tactical Footwork & Match Conditioning",
+      "primaryCentre": "kadavanthra",
+      "primaryBranch": "S & A Badminton Academy – Kadavanthra",
+      "image": "/api/images/whatsapp_image_2026-09-13_at_1_1789383859006.jpeg",
+      "images": [
+        "/api/images/whatsapp_image_2026-09-13_at_1_1789383859006.jpeg"
+      ],
+      "photos": [
+        {
+          "id": "photo_adithyan-s_primary",
+          "coachId": "adithyan-s",
+          "imageUrl": "/api/images/whatsapp_image_2026-09-13_at_1_1789383859006.jpeg",
+          "sortOrder": 1,
+          "isPrimary": true,
+          "createdAt": "2026-09-14T11:21:17.709483+00:00",
+          "updatedAt": "2026-09-14T11:21:17.709483+00:00"
+        }
+      ],
+      "whatsappNumber": null,
+      "status": "ACTIVE",
+      "isPublished": true,
+      "displayOrder": 4,
+      "createdAt": "Thu Sep 10 2026 15:09:26 GMT+0530 (India Standard Time)",
+      "updatedAt": "Mon Sep 14 2026 17:42:07 GMT+0530 (India Standard Time)"
+    },
+    {
+      "id": "fayis",
+      "slug": "fayis",
+      "name": "Fayis",
+      "role": "Assistant Coach",
+      "bio": "Dedicated badminton trainer with extensive experience mentoring junior and adult athletes in Kochi.",
+      "certifications": [
+        "BWF Level 1 Certified Coach"
+      ],
+      "achievements": [],
+      "experienceYears": 5,
+      "specialization": "Singles Tactical Footwork & Match Conditioning",
+      "primaryCentre": "kadavanthra",
+      "primaryBranch": "S & A Badminton Academy – Kadavanthra",
+      "image": "/api/images/whatsapp_image_2026-09-13_at_1_1789383898031.jpeg",
+      "images": [
+        "/api/images/whatsapp_image_2026-09-13_at_1_1789383898031.jpeg"
+      ],
+      "photos": [
+        {
+          "id": "photo_fayis_primary",
+          "coachId": "fayis",
+          "imageUrl": "/api/images/whatsapp_image_2026-09-13_at_1_1789383898031.jpeg",
+          "sortOrder": 1,
+          "isPrimary": true,
+          "createdAt": "2026-09-14T11:21:17.709483+00:00",
+          "updatedAt": "2026-09-14T11:21:17.709483+00:00"
+        }
+      ],
+      "whatsappNumber": null,
+      "status": "ACTIVE",
+      "isPublished": true,
+      "displayOrder": 5,
+      "createdAt": "Thu Sep 10 2026 15:09:27 GMT+0530 (India Standard Time)",
+      "updatedAt": "Mon Sep 14 2026 17:42:07 GMT+0530 (India Standard Time)"
     }
   ],
   "achievements": [

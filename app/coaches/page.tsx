@@ -2,7 +2,7 @@ import React from "react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { Award, ShieldCheck, MapPin, ArrowRight } from "lucide-react";
+import { Award, ShieldCheck, MapPin, ArrowRight, Camera } from "lucide-react";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { createMetadata } from "@/lib/seo";
 import { COACHES } from "@/data/coaches";
@@ -77,8 +77,14 @@ export default async function CoachesPage() {
                       sizes="130px"
                     />
                     <div className="absolute top-1 left-1 px-1.5 py-0.2 bg-[#07090D]/90 font-mono text-[9px] text-[#B8F000] font-bold">
-                      0{idx + 1}
+                      0{coach.displayOrder || idx + 1}
                     </div>
+                    {coach.photos && coach.photos.length > 1 && (
+                      <div className="absolute bottom-1 right-1 px-1.5 py-0.5 bg-[#07090D]/90 border border-[#1F2937] font-mono text-[8px] text-[#B8F000] font-bold flex items-center gap-1">
+                        <Camera className="w-2.5 h-2.5" />
+                        <span>{coach.photos.length}</span>
+                      </div>
+                    )}
                   </Link>
 
                   {/* Identification */}

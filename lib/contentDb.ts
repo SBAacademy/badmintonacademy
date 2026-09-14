@@ -3,7 +3,7 @@ import fs from "fs/promises";
 import path from "path";
 
 import { GALLERY_ITEMS, GalleryItem } from "@/data/gallery";
-import { COACHES, Coach, normalizeWhatsAppNumber } from "@/data/coaches";
+import { COACHES, Coach, CoachPhoto, normalizeWhatsAppNumber } from "@/data/coaches";
 import { ACHIEVEMENTS, Achievement } from "@/data/achievements";
 import { TESTIMONIALS, Testimonial } from "@/data/testimonials";
 import { BLOG_POSTS, BlogPost } from "@/data/blog";
@@ -80,12 +80,76 @@ export async function initContentDb(): Promise<void> {
     }
 
     // Ensure coaches table has modern columns
-    await sql`ALTER TABLE coaches ADD COLUMN IF NOT EXISTS achievements TEXT[] DEFAULT '{}';`;
-    await sql`ALTER TABLE coaches ADD COLUMN IF NOT EXISTS is_published BOOLEAN DEFAULT TRUE;`;
-    await sql`ALTER TABLE coaches ADD COLUMN IF NOT EXISTS display_order INTEGER DEFAULT 0;`;
-    await sql`ALTER TABLE coaches ADD COLUMN IF NOT EXISTS whatsapp_number VARCHAR(32);`;
-    await sql`ALTER TABLE coaches ADD COLUMN IF NOT EXISTS slug VARCHAR(128);`;
-    await sql`ALTER TABLE coaches ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT NOW();`;
+    try {
+      await sql`ALTER TABLE coaches ADD COLUMN IF NOT EXISTS achievements TEXT[] DEFAULT '{}';`;
+      await sql`ALTER TABLE coaches ADD COLUMN IF NOT EXISTS is_published BOOLEAN DEFAULT TRUE;`;
+      await sql`ALTER TABLE coaches ADD COLUMN IF NOT EXISTS display_order INTEGER DEFAULT 0;`;
+      await sql`ALTER TABLE coaches ADD COLUMN IF NOT EXISTS whatsapp_number VARCHAR(32);`;
+      await sql`ALTER TABLE coaches ADD COLUMN IF NOT EXISTS slug VARCHAR(128);`;
+      await sql`ALTER TABLE coaches ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT NOW();`;
+    } catch {
+      // Ignored for concurrent workers
+    }
+
+    // 1. Create dedicated relational coach_photos table
+    try {
+      await sql`
+        CREATE TABLE IF NOT EXISTS coach_photos (
+          id VARCHAR(64) PRIMARY KEY,
+          coach_id VARCHAR(64) NOT NULL REFERENCES coaches(id) ON DELETE CASCADE,
+          image_url TEXT NOT NULL,
+          sort_order INTEGER NOT NULL DEFAULT 1,
+          is_primary BOOLEAN NOT NULL DEFAULT FALSE,
+          created_at TIMESTAMPTZ DEFAULT NOW(),
+          updated_at TIMESTAMPTZ DEFAULT NOW()
+        );
+      `;
+      await sql`CREATE INDEX IF NOT EXISTS idx_coach_photos_coach_id ON coach_photos(coach_id);`;
+      await sql`CREATE INDEX IF NOT EXISTS idx_coach_photos_sort_order ON coach_photos(coach_id, sort_order ASC);`;
+    } catch {
+      // Ignored if created by concurrent worker
+    }
+
+    // 2. Safe Data Migration: Migrate existing coach image_url into coach_photos
+    try {
+      await sql`
+        INSERT INTO coach_photos (id, coach_id, image_url, sort_order, is_primary, created_at, updated_at)
+        SELECT 
+          'photo_' || c.id || '_primary',
+          c.id,
+          c.image_url,
+          1,
+          TRUE,
+          NOW(),
+          NOW()
+        FROM coaches c
+        WHERE c.image_url IS NOT NULL 
+          AND TRIM(c.image_url) != ''
+          AND NOT EXISTS (
+            SELECT 1 FROM coach_photos cp WHERE cp.coach_id = c.id
+          )
+        ON CONFLICT (id) DO NOTHING;
+      `;
+    } catch {
+      // Ignored
+    }
+
+    // 3. Ensure sequential default display_order for existing coaches
+    try {
+      await sql`
+        WITH ordered_coaches AS (
+          SELECT id, ROW_NUMBER() OVER (ORDER BY COALESCE(display_order, 999) ASC, created_at ASC) as new_order
+          FROM coaches
+          WHERE display_order IS NULL OR display_order = 0
+        )
+        UPDATE coaches c
+        SET display_order = oc.new_order
+        FROM ordered_coaches oc
+        WHERE c.id = oc.id AND (c.display_order IS NULL OR c.display_order = 0);
+      `;
+    } catch {
+      // Ignored
+    }
 
     isInitialized = true;
   } catch (err) {
@@ -275,7 +339,25 @@ export async function getCoaches(options: { includeUnpublished?: boolean } = {})
           c.is_published as "isPublished",
           c.display_order as "displayOrder",
           c.created_at as "createdAt",
-          c.updated_at as "updatedAt"
+          c.updated_at as "updatedAt",
+          COALESCE(
+            (
+              SELECT json_agg(
+                json_build_object(
+                  'id', cp.id,
+                  'coachId', cp.coach_id,
+                  'imageUrl', cp.image_url,
+                  'sortOrder', cp.sort_order,
+                  'isPrimary', cp.is_primary,
+                  'createdAt', cp.created_at,
+                  'updatedAt', cp.updated_at
+                ) ORDER BY cp.sort_order ASC, cp.created_at ASC
+              )
+              FROM coach_photos cp
+              WHERE cp.coach_id = c.id
+            ),
+            '[]'::json
+          ) as photos
         FROM coaches c
         LEFT JOIN centres cen ON c.primary_centre = cen.slug
         ${includeUnpublished ? sql`WHERE c.status != 'INACTIVE'` : sql`WHERE c.status = 'ACTIVE' AND c.is_published = TRUE`}
@@ -283,26 +365,56 @@ export async function getCoaches(options: { includeUnpublished?: boolean } = {})
       `) as unknown as Record<string, unknown>[];
 
       if (Array.isArray(rows)) {
-        return rows.map((r) => ({
-          id: String(r.id),
-          slug: r.slug ? String(r.slug) : String(r.id),
-          name: String(r.name),
-          role: String(r.role),
-          bio: String(r.bio || ""),
-          certifications: Array.isArray(r.certifications) ? (r.certifications as string[]) : [],
-          achievements: Array.isArray(r.achievements) ? (r.achievements as string[]) : [],
-          experienceYears: Number(r.experienceYears) || 5,
-          specialization: String(r.specialization || "Badminton Coaching & Conditioning"),
-          primaryCentre: r.primaryCentre ? String(r.primaryCentre) : undefined,
-          primaryBranch: r.centreName ? String(r.centreName) : mapCentreSlugToBranch(r.primaryCentre as string),
-          image: ensureCoachImage(r.image as string),
-          whatsappNumber: r.whatsappNumber ? String(r.whatsappNumber) : null,
-          status: (r.status as "ACTIVE" | "INACTIVE") || "ACTIVE",
-          isPublished: r.isPublished !== false,
-          displayOrder: Number(r.displayOrder) || 0,
-          createdAt: r.createdAt ? String(r.createdAt) : undefined,
-          updatedAt: r.updatedAt ? String(r.updatedAt) : undefined,
-        }));
+        return rows.map((r) => {
+          const rawPhotos = Array.isArray(r.photos) ? (r.photos as CoachPhoto[]) : [];
+          const photos: CoachPhoto[] = rawPhotos.map((p, idx) => ({
+            id: String(p.id),
+            coachId: String(p.coachId || r.id),
+            imageUrl: ensureCoachImage(p.imageUrl),
+            sortOrder: Number(p.sortOrder) || idx + 1,
+            isPrimary: Boolean(p.isPrimary),
+            createdAt: p.createdAt ? String(p.createdAt) : undefined,
+            updatedAt: p.updatedAt ? String(p.updatedAt) : undefined,
+          }));
+
+          // Fallback if no photos in coach_photos table yet but r.image exists
+          if (photos.length === 0 && r.image) {
+            photos.push({
+              id: `photo_${r.id}_1`,
+              coachId: String(r.id),
+              imageUrl: ensureCoachImage(r.image as string),
+              sortOrder: 1,
+              isPrimary: true,
+            });
+          }
+
+          // Identify primary photo
+          const primary = photos.find((p) => p.isPrimary)?.imageUrl || photos[0]?.imageUrl || ensureCoachImage(r.image as string);
+          const images = photos.map((p) => p.imageUrl);
+
+          return {
+            id: String(r.id),
+            slug: r.slug ? String(r.slug) : String(r.id),
+            name: String(r.name),
+            role: String(r.role),
+            bio: String(r.bio || ""),
+            certifications: Array.isArray(r.certifications) ? (r.certifications as string[]) : [],
+            achievements: Array.isArray(r.achievements) ? (r.achievements as string[]) : [],
+            experienceYears: Number(r.experienceYears) || 5,
+            specialization: String(r.specialization || "Badminton Coaching & Conditioning"),
+            primaryCentre: r.primaryCentre ? String(r.primaryCentre) : undefined,
+            primaryBranch: r.centreName ? String(r.centreName) : mapCentreSlugToBranch(r.primaryCentre as string),
+            image: primary,
+            images,
+            photos,
+            whatsappNumber: r.whatsappNumber ? String(r.whatsappNumber) : null,
+            status: (r.status as "ACTIVE" | "INACTIVE") || "ACTIVE",
+            isPublished: r.isPublished !== false,
+            displayOrder: Number(r.displayOrder) || 1,
+            createdAt: r.createdAt ? String(r.createdAt) : undefined,
+            updatedAt: r.updatedAt ? String(r.updatedAt) : undefined,
+          };
+        });
       }
       return [];
     } catch (err) {
@@ -314,13 +426,50 @@ export async function getCoaches(options: { includeUnpublished?: boolean } = {})
   // Fallback to local file ONLY if DATABASE_URL is not configured at all (local offline dev)
   const fallback = await readFallbackContent();
   if (fallback.coaches && Array.isArray(fallback.coaches)) {
-    const list = (fallback.coaches as Coach[]).map((c) => ({
-      ...c,
-      slug: c.slug || c.id,
-      image: ensureCoachImage(c.image),
-      isPublished: c.isPublished !== false,
-      status: c.status || "ACTIVE",
-    }));
+    const list = (fallback.coaches as Coach[]).map((c, idx) => {
+      const photos: CoachPhoto[] = Array.isArray(c.photos) && c.photos.length > 0
+        ? c.photos.map((p, pIdx) => ({
+            id: p.id || `photo_${c.id}_${pIdx + 1}`,
+            coachId: c.id,
+            imageUrl: ensureCoachImage(p.imageUrl),
+            sortOrder: p.sortOrder || pIdx + 1,
+            isPrimary: Boolean(p.isPrimary),
+          }))
+        : Array.isArray(c.images) && c.images.length > 0
+        ? c.images.map((img, iIdx) => ({
+            id: `photo_${c.id}_${iIdx + 1}`,
+            coachId: c.id,
+            imageUrl: ensureCoachImage(img),
+            sortOrder: iIdx + 1,
+            isPrimary: iIdx === 0,
+          }))
+        : [
+            {
+              id: `photo_${c.id}_1`,
+              coachId: c.id,
+              imageUrl: ensureCoachImage(c.image),
+              sortOrder: 1,
+              isPrimary: true,
+            },
+          ];
+
+      const primary = photos.find((p) => p.isPrimary)?.imageUrl || photos[0]?.imageUrl || ensureCoachImage(c.image);
+      const images = photos.map((p) => p.imageUrl);
+
+      return {
+        ...c,
+        slug: c.slug || c.id,
+        image: primary,
+        images,
+        photos,
+        displayOrder: Number(c.displayOrder) || (idx + 1),
+        isPublished: c.isPublished !== false,
+        status: c.status || "ACTIVE",
+      };
+    });
+
+    list.sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
+
     return includeUnpublished
       ? list.filter((c) => c.status !== "INACTIVE")
       : list.filter((c) => c.status === "ACTIVE" && c.isPublished !== false);
@@ -354,7 +503,25 @@ export async function getCoachBySlug(slug: string): Promise<Coach | null> {
           c.is_published as "isPublished",
           c.display_order as "displayOrder",
           c.created_at as "createdAt",
-          c.updated_at as "updatedAt"
+          c.updated_at as "updatedAt",
+          COALESCE(
+            (
+              SELECT json_agg(
+                json_build_object(
+                  'id', cp.id,
+                  'coachId', cp.coach_id,
+                  'imageUrl', cp.image_url,
+                  'sortOrder', cp.sort_order,
+                  'isPrimary', cp.is_primary,
+                  'createdAt', cp.created_at,
+                  'updatedAt', cp.updated_at
+                ) ORDER BY cp.sort_order ASC, cp.created_at ASC
+              )
+              FROM coach_photos cp
+              WHERE cp.coach_id = c.id
+            ),
+            '[]'::json
+          ) as photos
         FROM coaches c
         LEFT JOIN centres cen ON c.primary_centre = cen.slug
         WHERE (c.slug = ${cleanSlug} OR c.id = ${cleanSlug})
@@ -365,6 +532,30 @@ export async function getCoachBySlug(slug: string): Promise<Coach | null> {
 
       if (Array.isArray(rows) && rows.length > 0) {
         const r = rows[0];
+        const rawPhotos = Array.isArray(r.photos) ? (r.photos as CoachPhoto[]) : [];
+        const photos: CoachPhoto[] = rawPhotos.map((p, idx) => ({
+          id: String(p.id),
+          coachId: String(p.coachId || r.id),
+          imageUrl: ensureCoachImage(p.imageUrl),
+          sortOrder: Number(p.sortOrder) || idx + 1,
+          isPrimary: Boolean(p.isPrimary),
+          createdAt: p.createdAt ? String(p.createdAt) : undefined,
+          updatedAt: p.updatedAt ? String(p.updatedAt) : undefined,
+        }));
+
+        if (photos.length === 0 && r.image) {
+          photos.push({
+            id: `photo_${r.id}_1`,
+            coachId: String(r.id),
+            imageUrl: ensureCoachImage(r.image as string),
+            sortOrder: 1,
+            isPrimary: true,
+          });
+        }
+
+        const primary = photos.find((p) => p.isPrimary)?.imageUrl || photos[0]?.imageUrl || ensureCoachImage(r.image as string);
+        const images = photos.map((p) => p.imageUrl);
+
         return {
           id: String(r.id),
           slug: r.slug ? String(r.slug) : String(r.id),
@@ -377,11 +568,13 @@ export async function getCoachBySlug(slug: string): Promise<Coach | null> {
           specialization: String(r.specialization || "Badminton Coaching & Conditioning"),
           primaryCentre: r.primaryCentre ? String(r.primaryCentre) : undefined,
           primaryBranch: r.centreName ? String(r.centreName) : mapCentreSlugToBranch(r.primaryCentre as string),
-          image: ensureCoachImage(r.image as string),
+          image: primary,
+          images,
+          photos,
           whatsappNumber: r.whatsappNumber ? String(r.whatsappNumber) : null,
           status: (r.status as "ACTIVE" | "INACTIVE") || "ACTIVE",
           isPublished: r.isPublished !== false,
-          displayOrder: Number(r.displayOrder) || 0,
+          displayOrder: Number(r.displayOrder) || 1,
           createdAt: r.createdAt ? String(r.createdAt) : undefined,
           updatedAt: r.updatedAt ? String(r.updatedAt) : undefined,
         };
@@ -446,12 +639,70 @@ export async function saveCoachRecord(coachData: Partial<Coach>): Promise<Coach>
     ? coachData.achievements.filter(Boolean)
     : current?.achievements || [];
   const exp = Number(coachData.experienceYears ?? current?.experienceYears) || 5;
-  const rawImg = coachData.image !== undefined ? coachData.image : current?.image;
-  const img = rawImg && rawImg.trim() ? rawImg.trim() : null;
   const status = coachData.status || current?.status || "ACTIVE";
   const isPub = coachData.isPublished !== undefined ? coachData.isPublished : (current?.isPublished !== false);
-  const order = Number(coachData.displayOrder ?? current?.displayOrder) || 0;
+  const order = Number(coachData.displayOrder ?? current?.displayOrder) || 1;
   const now = new Date().toISOString();
+
+  // Normalize multi-photos
+  let normalizedPhotos: CoachPhoto[] = [];
+  if (Array.isArray(coachData.photos) && coachData.photos.length > 0) {
+    normalizedPhotos = coachData.photos
+      .filter((p) => Boolean(p && p.imageUrl && p.imageUrl.trim()))
+      .map((p, idx) => ({
+        id: p.id && !p.id.startsWith("temp_") ? String(p.id) : `photo_${cleanId}_${Date.now()}_${idx + 1}`,
+        coachId: cleanId,
+        imageUrl: ensureCoachImage(p.imageUrl),
+        sortOrder: typeof p.sortOrder === "number" ? p.sortOrder : idx + 1,
+        isPrimary: Boolean(p.isPrimary),
+      }));
+  } else if (Array.isArray(coachData.images) && coachData.images.length > 0) {
+    normalizedPhotos = coachData.images
+      .filter((img) => Boolean(img && img.trim()))
+      .map((img, idx) => ({
+        id: `photo_${cleanId}_${Date.now()}_${idx + 1}`,
+        coachId: cleanId,
+        imageUrl: ensureCoachImage(img),
+        sortOrder: idx + 1,
+        isPrimary: idx === 0,
+      }));
+  } else {
+    const fallbackImg = coachData.image !== undefined ? coachData.image : current?.image;
+    if (fallbackImg && fallbackImg.trim()) {
+      normalizedPhotos = [
+        {
+          id: `photo_${cleanId}_1`,
+          coachId: cleanId,
+          imageUrl: ensureCoachImage(fallbackImg),
+          sortOrder: 1,
+          isPrimary: true,
+        },
+      ];
+    }
+  }
+
+  // Exactly one primary photo rule
+  if (normalizedPhotos.length > 0) {
+    const hasPrimary = normalizedPhotos.some((p) => p.isPrimary);
+    if (!hasPrimary) {
+      normalizedPhotos[0].isPrimary = true;
+    } else {
+      let foundFirstPrimary = false;
+      for (const p of normalizedPhotos) {
+        if (p.isPrimary) {
+          if (!foundFirstPrimary) {
+            foundFirstPrimary = true;
+          } else {
+            p.isPrimary = false; // Only one primary photo allowed
+          }
+        }
+      }
+    }
+  }
+
+  // Primary photo is authoritative cover image
+  const primaryPhoto = normalizedPhotos.find((p) => p.isPrimary) || normalizedPhotos[0];
+  const primaryImgToSave = primaryPhoto ? primaryPhoto.imageUrl : (coachData.image?.trim() || null);
 
   const rawSlug = (coachData.slug || current?.slug || cleanId).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
   const slug = rawSlug || cleanId;
@@ -469,7 +720,7 @@ export async function saveCoachRecord(coachData: Partial<Coach>): Promise<Coach>
         ${cleanId}, ${slug}, ${name}, ${role},
         ${bio},
         ${certs}, ${achs}, ${exp}, ${coachData.specialization || current?.specialization || "Badminton Coaching"},
-        ${centreSlug}, ${img}, ${whatsappNumber}, ${status}, ${isPub}, ${order}, NOW(), NOW()
+        ${centreSlug}, ${primaryImgToSave}, ${whatsappNumber}, ${status}, ${isPub}, ${order}, NOW(), NOW()
       ) ON CONFLICT (id) DO UPDATE SET
         slug = COALESCE(EXCLUDED.slug, coaches.slug),
         name = EXCLUDED.name,
@@ -487,6 +738,23 @@ export async function saveCoachRecord(coachData: Partial<Coach>): Promise<Coach>
         display_order = EXCLUDED.display_order,
         updated_at = NOW();
     `;
+
+    // Synchronize coach_photos table for this coach
+    if (normalizedPhotos.length > 0) {
+      // Re-sync photos in exact sort_order and primary status
+      await sql`DELETE FROM coach_photos WHERE coach_id = ${cleanId};`;
+      for (let i = 0; i < normalizedPhotos.length; i++) {
+        const p = normalizedPhotos[i];
+        const photoId = p.id || `photo_${cleanId}_${i + 1}`;
+        await sql`
+          INSERT INTO coach_photos (
+            id, coach_id, image_url, sort_order, is_primary, created_at, updated_at
+          ) VALUES (
+            ${photoId}, ${cleanId}, ${p.imageUrl}, ${p.sortOrder || i + 1}, ${p.isPrimary}, NOW(), NOW()
+          );
+        `;
+      }
+    }
   }
 
   const savedCoach: Coach = {
@@ -501,7 +769,9 @@ export async function saveCoachRecord(coachData: Partial<Coach>): Promise<Coach>
     specialization: coachData.specialization || current?.specialization || "Badminton Coaching",
     primaryCentre: centreSlug,
     primaryBranch: coachData.primaryBranch || mapCentreSlugToBranch(centreSlug),
-    image: ensureCoachImage(img),
+    image: ensureCoachImage(primaryImgToSave),
+    images: normalizedPhotos.map((p) => p.imageUrl),
+    photos: normalizedPhotos,
     whatsappNumber,
     status,
     isPublished: isPub,
@@ -528,6 +798,47 @@ export async function saveCoachRecord(coachData: Partial<Coach>): Promise<Coach>
   }
 
   return savedCoach;
+}
+
+/**
+ * Reorders coaches by displayOrder in batch
+ */
+export async function reorderCoaches(
+  orderMap: Array<{ id: string; displayOrder: number }>
+): Promise<Coach[]> {
+  const sql = getSql();
+  if (sql && orderMap.length > 0) {
+    try {
+      await initContentDb();
+      for (const item of orderMap) {
+        const order = Number(item.displayOrder) || 1;
+        await sql`
+          UPDATE coaches 
+          SET display_order = ${order}, updated_at = NOW() 
+          WHERE id = ${item.id} OR slug = ${item.id};
+        `;
+      }
+    } catch (err) {
+      console.error("Failed to reorder coaches in Neon DB:", err);
+    }
+  }
+
+  // Update fallback
+  const fallback = await readFallbackContent();
+  if (fallback.coaches && Array.isArray(fallback.coaches)) {
+    const orderDict = new Map(orderMap.map((o) => [o.id, Number(o.displayOrder) || 1]));
+    const coachList = (fallback.coaches as Coach[]).map((c) => {
+      if (orderDict.has(c.id)) {
+        return { ...c, displayOrder: orderDict.get(c.id) };
+      }
+      return c;
+    });
+    coachList.sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
+    fallback.coaches = coachList;
+    await writeFallbackContent(fallback);
+  }
+
+  return await getCoaches({ includeUnpublished: true });
 }
 
 export async function deleteCoachRecord(

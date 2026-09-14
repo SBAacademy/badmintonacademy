@@ -18,8 +18,9 @@ import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { createMetadata, SITE_URL } from "@/lib/seo";
 import { getCoachBySlug, getCoaches } from "@/lib/contentDb";
 import { CoachEnquiryForm } from "@/components/coaches/CoachEnquiryForm";
+import { CoachPhotoGallery } from "@/components/coaches/CoachPhotoGallery";
 import { FinalCTA } from "@/components/sections/FinalCTA";
-import { formatWhatsAppDisplay } from "@/data/coaches";
+import { formatWhatsAppDisplay, getCoachPrimaryPhoto } from "@/data/coaches";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -139,34 +140,27 @@ export default async function CoachProfilePage({ params }: PageProps) {
 
         {/* Coach Hero Banner */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start border-b border-[#1F2937] pb-16">
-          {/* Portrait Column */}
+          {/* Portrait & Multi-Photo Gallery Column */}
           <div className="lg:col-span-5">
-            <div className="relative aspect-[3/4] w-full max-w-md mx-auto bg-[#0B0F14] border-2 border-[#1F2937] overflow-hidden group shadow-2xl">
-              <Image
-                src={coach.image || "/images/training-coach.jpg"}
-                alt={coach.name}
-                fill
-                priority
-                className="object-cover object-top filter grayscale contrast-125 group-hover:grayscale-0 transition-all duration-500"
-                sizes="(max-width: 1024px) 100vw, 40vw"
-              />
-
-              {/* Athletic Badges */}
-              <div className="absolute top-3 left-3 flex flex-col gap-1.5">
-                <span className="px-2.5 py-1 bg-[#07090D]/90 backdrop-blur-md border border-[#1F2937] font-mono text-[10px] text-[#B8F000] uppercase font-bold tracking-wider">
-                  {coach.experienceYears}+ YEARS EXPERIENCE
-                </span>
-                <span className="px-2.5 py-1 bg-emerald-950/90 border border-emerald-500/50 font-mono text-[10px] text-emerald-400 font-bold uppercase tracking-wider flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3 h-3 text-emerald-400" />
-                  <span>Verified Faculty</span>
-                </span>
-              </div>
-
-              <div className="absolute bottom-3 left-3 right-3">
-                <div className="px-3 py-1.5 bg-[#07090D]/95 backdrop-blur-md border border-[#1F2937] font-mono text-xs text-white flex items-center gap-2">
+            <CoachPhotoGallery
+              photos={coach.photos}
+              images={coach.images}
+              fallbackImage={coach.image}
+              name={coach.name}
+              role={coach.role}
+              experienceYears={coach.experienceYears}
+            />
+            <div className="mt-3 max-w-md mx-auto">
+              <div className="px-3 py-2 bg-[#0B0F14] border border-[#1F2937] font-mono text-xs text-white flex items-center justify-between">
+                <div className="flex items-center gap-2">
                   <MapPin className="w-3.5 h-3.5 text-[#B8F000] shrink-0" />
-                  <span className="truncate">{coach.primaryBranch}</span>
+                  <span className="truncate text-[11px] text-[#A8B0BA]">{coach.primaryBranch}</span>
                 </div>
+                {coach.photos && coach.photos.length > 1 && (
+                  <span className="text-[10px] text-[#B8F000] font-bold">
+                    {coach.photos.length} Court Photos
+                  </span>
+                )}
               </div>
             </div>
           </div>

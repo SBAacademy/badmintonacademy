@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { createMetadata, SITE_URL } from "@/lib/seo";
-import { getCoachBySlug, getCoaches } from "@/lib/contentDb";
+import { getCoachBySlug, getCoaches, getCentres } from "@/lib/contentDb";
 import { CoachEnquiryForm } from "@/components/coaches/CoachEnquiryForm";
 import { CoachPhotoGallery } from "@/components/coaches/CoachPhotoGallery";
 import { FinalCTA } from "@/components/sections/FinalCTA";
@@ -86,6 +86,7 @@ export default async function CoachProfilePage({ params }: PageProps) {
     notFound();
   }
 
+  const allCentres = await getCentres({ includeInactive: false });
   const coachUrl = `${SITE_URL}/coaches/${coach.slug || coach.id}`;
   const hasWhatsApp = Boolean(coach.whatsappNumber && coach.whatsappNumber.trim());
 
@@ -289,7 +290,14 @@ export default async function CoachProfilePage({ params }: PageProps) {
 
         {/* Coach-Specific WhatsApp Enquiry Section */}
         <section id="enquiry-section" className="scroll-mt-24">
-          <CoachEnquiryForm coach={coach} />
+          <CoachEnquiryForm
+            coach={coach}
+            initialCentres={allCentres.map((c) => ({
+              slug: c.slug,
+              name: c.name,
+              shortName: c.shortName,
+            }))}
+          />
         </section>
       </div>
 

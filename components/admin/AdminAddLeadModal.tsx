@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { X, UserPlus, Phone, MapPin, Award, Clock } from "lucide-react";
 import { LeadItem } from "@/lib/db";
-import { LOCATIONS } from "@/data/locations";
+import { Centre } from "@/data/centres";
 import { PROGRAMS } from "@/data/programs";
 
 interface AdminAddLeadModalProps {
@@ -21,23 +21,55 @@ interface AdminAddLeadModalProps {
     notes?: string;
     message?: string;
   }) => Promise<boolean>;
+  centres?: Centre[];
 }
 
 export function AdminAddLeadModal({
   isOpen,
   onClose,
   onAddLead,
+  centres: initialCentres,
 }: AdminAddLeadModalProps) {
+  const [centres, setCentres] = useState<Centre[]>(initialCentres || []);
+  const [loadingCentres, setLoadingCentres] = useState(!initialCentres || initialCentres.length === 0);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
-  const [branch, setBranch] = useState("kadavanthra");
+  const [branch, setBranch] = useState("");
   const [program, setProgram] = useState("junior-badminton-coaching");
   const [ageCategory, setAgeCategory] = useState("Junior (Ages 10-16)");
   const [slot, setSlot] = useState("Evening (04:30 PM - 07:30 PM)");
   const [status, setStatus] = useState<LeadItem["status"]>("NEW");
   const [notes, setNotes] = useState("");
   const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (initialCentres && initialCentres.length > 0) {
+      setCentres(initialCentres);
+      setLoadingCentres(false);
+      if (!branch) setBranch(initialCentres[0].slug);
+      return;
+    }
+
+    const fetchCentres = async () => {
+      try {
+        const res = await fetch("/api/centres");
+        const data = await res.json();
+        if (data.success && Array.isArray(data.items)) {
+          setCentres(data.items);
+          if (data.items.length > 0 && !branch) {
+            setBranch(data.items[0].slug);
+          }
+        }
+      } catch (err) {
+        console.error("Failed to load centres in AdminAddLeadModal:", err);
+      } finally {
+        setLoadingCentres(false);
+      }
+    };
+
+    fetchCentres();
+  }, [initialCentres]);
 
   if (!isOpen) return null;
 
@@ -141,13 +173,20 @@ export function AdminAddLeadModal({
               <select
                 value={branch}
                 onChange={(e) => setBranch(e.target.value)}
-                className="w-full px-3 py-2 bg-[#090C12] border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-[#B8F000]"
+                disabled={loadingCentres || centres.length === 0}
+                className="w-full px-3 py-2 bg-[#090C12] border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-[#B8F000] disabled:opacity-50"
               >
-                {Object.values(LOCATIONS).map((loc) => (
-                  <option key={loc.slug} value={loc.slug}>
-                    {loc.shortName || loc.name}
-                  </option>
-                ))}
+                {loadingCentres ? (
+                  <option value="">Loading centres...</option>
+                ) : centres.length === 0 ? (
+                  <option value="">No active centres found</option>
+                ) : (
+                  centres.map((loc) => (
+                    <option key={loc.slug} value={loc.slug}>
+                      {loc.shortName || loc.name}
+                    </option>
+                  ))
+                )}
               </select>
             </div>
 

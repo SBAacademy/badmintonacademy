@@ -28,18 +28,13 @@ import {
 } from "lucide-react";
 import { Coach, CoachPhoto, normalizeWhatsAppNumber, formatWhatsAppDisplay, DEFAULT_COACH_IMAGE, getCoachPrimaryPhoto } from "@/data/coaches";
 import { CoachMultiPhotoUpload } from "./CoachMultiPhotoUpload";
-
-const BRANCHES = [
-  "Kadavanthra (Headquarters)",
-  "Edappally Branch",
-  "Kakkanad Branch",
-  "All Centres",
-];
+import { Centre } from "@/data/centres";
 
 const DEFAULT_AVATAR = "/images/training-coach.jpg";
 
 export function CoachesManager() {
   const [coaches, setCoaches] = useState<Coach[]>([]);
+  const [centres, setCentres] = useState<Centre[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -58,7 +53,7 @@ export function CoachesManager() {
     whatsappNumber: "",
     role: "",
     experienceYears: 10,
-    primaryBranch: "Kadavanthra (Headquarters)",
+    primaryBranch: "",
     specialization: "",
     certifications: "",
     achievements: "",
@@ -69,6 +64,18 @@ export function CoachesManager() {
     status: "ACTIVE" as "ACTIVE" | "INACTIVE",
     displayOrder: 1,
   });
+
+  const fetchCentres = async () => {
+    try {
+      const res = await fetch("/api/centres");
+      const data = await res.json();
+      if (data.success && Array.isArray(data.items)) {
+        setCentres(data.items);
+      }
+    } catch (err) {
+      console.error("Failed to load centres in CoachesManager:", err);
+    }
+  };
 
   const fetchCoaches = async () => {
     setLoading(true);
@@ -97,6 +104,7 @@ export function CoachesManager() {
 
   useEffect(() => {
     fetchCoaches();
+    fetchCentres();
   }, []);
 
   const openAddModal = () => {
@@ -105,13 +113,15 @@ export function CoachesManager() {
       ? Math.max(...coaches.map((c) => c.displayOrder || 0)) + 1
       : 1;
 
+    const defaultBranch = centres[0]?.name || "All Centres";
+
     setForm({
       name: "",
       slug: "",
       whatsappNumber: "",
       role: "Senior Badminton Coach",
       experienceYears: 8,
-      primaryBranch: "Kadavanthra (Headquarters)",
+      primaryBranch: defaultBranch,
       specialization: "Singles Tactical Footwork & Match Conditioning",
       certifications: "BWF Level 1 Certified Coach\nNIS Sports Coaching Diploma",
       achievements: "Former State Senior Medalist\nCoached Ernakulam District Squad",
@@ -379,7 +389,8 @@ export function CoachesManager() {
 
     const matchesBranch =
       selectedBranchFilter === "ALL" ||
-      coach.primaryBranch.toLowerCase().includes(selectedBranchFilter.toLowerCase());
+      coach.primaryBranch?.toLowerCase().includes(selectedBranchFilter.toLowerCase()) ||
+      selectedBranchFilter.toLowerCase().includes(coach.primaryBranch?.toLowerCase() || "");
 
     return matchesSearch && matchesBranch;
   });
@@ -483,22 +494,37 @@ export function CoachesManager() {
 
         <div className="flex flex-wrap items-center gap-2">
           {/* Branch Filter */}
-          <div className="flex items-center gap-1.5 bg-[#07090D] border border-[#1F2937] p-1 font-mono text-[11px]">
-            <span className="text-[#6B7280] px-1.5 uppercase">Branch:</span>
-            {["ALL", "Kadavanthra", "Edappally", "Kakkanad"].map((b) => (
-              <button
-                key={b}
-                type="button"
-                onClick={() => setSelectedBranchFilter(b)}
-                className={`px-2 py-1 uppercase transition-colors cursor-pointer ${
-                  selectedBranchFilter === b
-                    ? "bg-[#B8F000] text-[#07090D] font-bold"
-                    : "text-[#A8B0BA] hover:text-white"
-                }`}
-              >
-                {b}
-              </button>
-            ))}
+          <div className="flex items-center gap-1.5 bg-[#07090D] border border-[#1F2937] p-1 font-mono text-[11px] overflow-x-auto max-w-full">
+            <span className="text-[#6B7280] px-1.5 uppercase shrink-0">Branch:</span>
+            <button
+              type="button"
+              onClick={() => setSelectedBranchFilter("ALL")}
+              className={`px-2 py-1 uppercase transition-colors cursor-pointer shrink-0 ${
+                selectedBranchFilter === "ALL"
+                  ? "bg-[#B8F000] text-[#07090D] font-bold"
+                  : "text-[#A8B0BA] hover:text-white"
+              }`}
+            >
+              ALL
+            </button>
+            {centres.map((c) => {
+              const filterLabel = c.shortName || c.name.replace(/ Branch| \(Headquarters\)/i, "");
+              const isSelected = selectedBranchFilter === c.name || selectedBranchFilter === filterLabel;
+              return (
+                <button
+                  key={c.slug}
+                  type="button"
+                  onClick={() => setSelectedBranchFilter(filterLabel)}
+                  className={`px-2 py-1 uppercase transition-colors cursor-pointer shrink-0 ${
+                    isSelected
+                      ? "bg-[#B8F000] text-[#07090D] font-bold"
+                      : "text-[#A8B0BA] hover:text-white"
+                  }`}
+                >
+                  {filterLabel}
+                </button>
+              );
+            })}
           </div>
 
           {/* View Mode Toggle: Cards vs Reorder Table */}
@@ -1076,11 +1102,18 @@ export function CoachesManager() {
                     onChange={(e) => setForm({ ...form, primaryBranch: e.target.value })}
                     className="w-full px-3 py-2 bg-[#07090D] border border-[#1F2937] text-white focus:outline-none focus:border-[#B8F000]"
                   >
-                    {BRANCHES.map((b) => (
-                      <option key={b} value={b}>
-                        {b}
+                    {/* Preserve existing branch if historical/deactivated */}
+                    {form.primaryBranch && !centres.some((c) => c.name === form.primaryBranch) && form.primaryBranch !== "All Centres" && (
+                      <option value={form.primaryBranch}>
+                        {form.primaryBranch} (Historical)
+                      </option>
+                    )}
+                    {centres.map((c) => (
+                      <option key={c.slug} value={c.name}>
+                        {c.name}
                       </option>
                     ))}
+                    <option value="All Centres">All Centres</option>
                   </select>
                 </div>
 

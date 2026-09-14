@@ -1,30 +1,68 @@
 "use client";
 
-import React, { useState } from "react";
-import { Send, MessageSquare, CheckCircle2, AlertCircle } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Send, MessageSquare, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
 import { Coach, formatWhatsAppDisplay } from "@/data/coaches";
 
 interface CoachEnquiryFormProps {
   coach: Coach;
+  initialCentres?: Array<{ slug: string; name: string; shortName?: string }>;
 }
 
-const CENTRES = [
-  "Kadavanthra (Headquarters)",
-  "Edappally Branch",
-  "Kakkanad Branch",
-];
-
-export function CoachEnquiryForm({ coach }: CoachEnquiryFormProps) {
+export function CoachEnquiryForm({ coach, initialCentres }: CoachEnquiryFormProps) {
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
   const [phone, setPhone] = useState("");
-  const [preferredCentre, setPreferredCentre] = useState(
-    coach.primaryBranch || "Kadavanthra (Headquarters)"
-  );
+  const [preferredCentre, setPreferredCentre] = useState(coach.primaryBranch || "");
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  // Dynamic Centres
+  const [centres, setCentres] = useState<Array<{ slug: string; name: string; shortName?: string }>>(initialCentres || []);
+  const [loadingCentres, setLoadingCentres] = useState(!initialCentres || initialCentres.length === 0);
+  const [centresError, setCentresError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+    async function loadCentres() {
+      try {
+        setLoadingCentres(true);
+        setCentresError(null);
+        const res = await fetch("/api/centres");
+        const data = await res.json();
+        if (isMounted) {
+          if (data.success && Array.isArray(data.centres) && data.centres.length > 0) {
+            setCentres(data.centres);
+            if (!preferredCentre) {
+              const matched = data.centres.find(
+                (c: any) =>
+                  c.slug === coach.primaryCentre ||
+                  c.name === coach.primaryBranch ||
+                  c.shortName === coach.primaryBranch
+              );
+              setPreferredCentre(matched ? (matched.shortName || matched.name) : (data.centres[0].shortName || data.centres[0].name));
+            }
+          } else {
+            setCentresError("No active academy centres available.");
+          }
+        }
+      } catch (err) {
+        if (isMounted) {
+          console.error("Failed to load centres in CoachEnquiryForm:", err);
+          setCentresError("Unable to load academy centres. Please check connection.");
+        }
+      } finally {
+        if (isMounted) setLoadingCentres(false);
+      }
+    }
+
+    loadCentres();
+    return () => {
+      isMounted = false;
+    };
+  }, [coach.primaryCentre, coach.primaryBranch]);
 
   const hasWhatsApp = Boolean(coach.whatsappNumber && coach.whatsappNumber.trim());
 
@@ -176,20 +214,35 @@ export function CoachEnquiryForm({ coach }: CoachEnquiryFormProps) {
 
             <div>
               <label htmlFor="enquiry-centre" className="block text-[#A8B0BA] uppercase text-[10px] font-bold tracking-wider mb-1">
-                Preferred Academy Centre
+                Preferred Academy Centre *
               </label>
-              <select
-                id="enquiry-centre"
-                value={preferredCentre}
-                onChange={(e) => setPreferredCentre(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-[#07090D] border border-[#1F2937] text-white focus:outline-none focus:border-[#B8F000] text-xs transition-colors"
-              >
-                {CENTRES.map((c) => (
-                  <option key={c} value={c}>
-                    {c}
-                  </option>
-                ))}
-              </select>
+              {loadingCentres ? (
+                <div className="w-full px-3.5 py-2.5 bg-[#07090D] border border-[#1F2937] text-slate-400 text-xs flex items-center gap-2 font-mono">
+                  <Loader2 className="w-3.5 h-3.5 animate-spin text-[#B8F000]" />
+                  <span>Loading centres...</span>
+                </div>
+              ) : centresError ? (
+                <div className="w-full px-3.5 py-2 bg-rose-950/20 border border-rose-500/40 text-rose-300 text-[11px] font-mono">
+                  {centresError}
+                </div>
+              ) : (
+                <select
+                  id="enquiry-centre"
+                  required
+                  value={preferredCentre}
+                  onChange={(e) => setPreferredCentre(e.target.value)}
+                  className="w-full px-3.5 py-2.5 bg-[#07090D] border border-[#1F2937] text-white focus:outline-none focus:border-[#B8F000] text-xs transition-colors"
+                >
+                  {centres.map((c) => {
+                    const label = c.shortName || c.name;
+                    return (
+                      <option key={c.slug} value={label}>
+                        {label}
+                      </option>
+                    );
+                  })}
+                </select>
+              )}
             </div>
           </div>
 

@@ -1,23 +1,29 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   Users,
-  Sparkles,
-  Calendar,
-  Award,
-  Phone,
-  MessageCircle,
-  ArrowRight,
-  UserPlus,
-  Download,
+  CalendarCheck,
+  TrendingUp,
   MapPin,
   Clock,
+  Sparkles,
+  Award,
+  ArrowRight,
+  Phone,
+  MessageCircle,
+  AlertCircle,
+  Plus,
   CheckCircle2,
+  ChevronRight,
+  Download,
+  UserPlus,
+  Calendar,
   Image as ImageIcon,
 } from "lucide-react";
 import { LeadItem } from "@/lib/db";
 import { AdminTab } from "./AdminSidebar";
+import { Centre } from "@/data/centres";
 
 interface AdminOverviewProps {
   leads: LeadItem[];
@@ -34,23 +40,38 @@ export function AdminOverview({
   onExportCSV,
   onNavigateTab,
 }: AdminOverviewProps) {
+  const [activeCentres, setActiveCentres] = useState<Centre[]>([]);
+
+  useEffect(() => {
+    fetch("/api/centres")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.items)) {
+          setActiveCentres(data.items);
+        }
+      })
+      .catch((err) => console.error("Failed to load centres in AdminOverview:", err));
+  }, []);
+
   const newLeads = leads.filter((l) => l.status === "NEW");
   const contactedLeads = leads.filter((l) => l.status === "CONTACTED");
   const trialLeads = leads.filter((l) => l.status === "TRIAL_SCHEDULED");
   const enrolledLeads = leads.filter((l) => l.status === "ENROLLED");
 
-  // Centres count
-  const centres: Record<string, number> = {
-    kadavanthra: 0,
-    edappally: 0,
-    kakkanad: 0,
-  };
-  leads.forEach((l) => {
-    const key = l.branch?.toLowerCase();
-    if (key && key in centres) {
-      centres[key]++;
-    }
-  });
+  // Dynamic Centres inquiries count
+  const centreCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    activeCentres.forEach((c) => {
+      counts[c.slug] = 0;
+    });
+    leads.forEach((l) => {
+      const key = l.branch?.toLowerCase();
+      if (key) {
+        counts[key] = (counts[key] || 0) + 1;
+      }
+    });
+    return counts;
+  }, [leads, activeCentres]);
 
   // Recent 5 leads that need attention (NEW first, then CONTACTED)
   const urgentLeads = [...newLeads, ...contactedLeads].slice(0, 5);
@@ -298,50 +319,28 @@ export function AdminOverview({
             </h3>
 
             <div className="space-y-3">
-              <div>
-                <div className="flex items-center justify-between text-xs font-semibold text-slate-200 mb-1">
-                  <span>Kadavanthra (Central)</span>
-                  <span className="font-bold text-[#B8F000]">{centres.kadavanthra}</span>
-                </div>
-                <div className="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
-                  <div
-                    className="h-full bg-[#B8F000] rounded-full"
-                    style={{
-                      width: `${leads.length ? Math.min(100, Math.round((centres.kadavanthra / leads.length) * 100)) : 0}%`,
-                    }}
-                  />
-                </div>
-              </div>
-
-              <div>
-                <div className="flex items-center justify-between text-xs font-semibold text-slate-200 mb-1">
-                  <span>Edappally Centre</span>
-                  <span className="font-bold text-sky-400">{centres.edappally}</span>
-                </div>
-                <div className="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
-                  <div
-                    className="h-full bg-sky-400 rounded-full"
-                    style={{
-                      width: `${leads.length ? Math.min(100, Math.round((centres.edappally / leads.length) * 100)) : 0}%`,
-                    }}
-                  />
-                </div>
-              </div>
-
-              <div>
-                <div className="flex items-center justify-between text-xs font-semibold text-slate-200 mb-1">
-                  <span>Kakkanad (InfoPark)</span>
-                  <span className="font-bold text-purple-400">{centres.kakkanad}</span>
-                </div>
-                <div className="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
-                  <div
-                    className="h-full bg-purple-400 rounded-full"
-                    style={{
-                      width: `${leads.length ? Math.min(100, Math.round((centres.kakkanad / leads.length) * 100)) : 0}%`,
-                    }}
-                  />
-                </div>
-              </div>
+              {activeCentres.map((c, i) => {
+                const count = centreCounts[c.slug] || 0;
+                const colors = ["bg-[#B8F000]", "bg-sky-400", "bg-purple-400", "bg-emerald-400", "bg-amber-400"];
+                const textColors = ["text-[#B8F000]", "text-sky-400", "text-purple-400", "text-emerald-400", "text-amber-400"];
+                const color = colors[i % colors.length];
+                const textColor = textColors[i % textColors.length];
+                const pct = leads.length ? Math.min(100, Math.round((count / leads.length) * 100)) : 0;
+                return (
+                  <div key={c.slug}>
+                    <div className="flex items-center justify-between text-xs font-semibold text-slate-200 mb-1">
+                      <span>{c.shortName || c.name}</span>
+                      <span className={`font-bold ${textColor}`}>{count}</span>
+                    </div>
+                    <div className="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
+                      <div
+                        className={`h-full ${color} rounded-full`}
+                        style={{ width: `${pct}%` }}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
 

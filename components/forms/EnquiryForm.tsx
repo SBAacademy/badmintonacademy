@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import confetti from "canvas-confetti";
 import { CheckCircle2, AlertCircle, Send, MessageCircle, Loader2 } from "lucide-react";
-import { LOCATIONS } from "@/data/locations";
+import { Centre } from "@/data/centres";
 import { PROGRAMS } from "@/data/programs";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { trackEvent } from "@/lib/analytics";
@@ -11,15 +11,24 @@ import { trackEvent } from "@/lib/analytics";
 interface EnquiryFormProps {
   initialBranch?: string;
   initialProgram?: string;
+  initialCentres?: Centre[];
 }
 
-export function EnquiryForm({ initialBranch = "", initialProgram = "" }: EnquiryFormProps) {
+export function EnquiryForm({
+  initialBranch = "",
+  initialProgram = "",
+  initialCentres,
+}: EnquiryFormProps) {
+  const [centres, setCentres] = useState<Centre[]>(initialCentres || []);
+  const [loadingCentres, setLoadingCentres] = useState(!initialCentres || initialCentres.length === 0);
+  const [centreError, setCentreError] = useState<string | null>(null);
+
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
     email: "",
     ageCategory: "Junior (Ages 10-16)",
-    preferredBranch: initialBranch || "kadavanthra",
+    preferredBranch: initialBranch || "",
     preferredProgram: initialProgram || "junior-badminton-coaching",
     preferredSlot: "Evening (04:30 PM - 07:30 PM)",
     message: "",
@@ -35,6 +44,45 @@ export function EnquiryForm({ initialBranch = "", initialProgram = "" }: Enquiry
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (initialCentres && initialCentres.length > 0) {
+      setCentres(initialCentres);
+      setLoadingCentres(false);
+      setFormData((prev) => ({
+        ...prev,
+        preferredBranch: prev.preferredBranch || initialCentres[0].slug,
+      }));
+      return;
+    }
+
+    const fetchCentres = async () => {
+      setLoadingCentres(true);
+      try {
+        const res = await fetch("/api/centres");
+        const data = await res.json();
+        if (data.success && Array.isArray(data.items) && data.items.length > 0) {
+          setCentres(data.items);
+          setCentreError(null);
+          setFormData((prev) => ({
+            ...prev,
+            preferredBranch: prev.preferredBranch || data.items[0].slug,
+          }));
+        } else {
+          setCentres([]);
+          setCentreError("No active training centres currently available.");
+        }
+      } catch (err) {
+        console.error("Failed to load centres in EnquiryForm:", err);
+        setCentres([]);
+        setCentreError("Unable to load training centres. Please refresh or try again.");
+      } finally {
+        setLoadingCentres(false);
+      }
+    };
+
+    fetchCentres();
+  }, [initialCentres]);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -132,10 +180,10 @@ export function EnquiryForm({ initialBranch = "", initialProgram = "" }: Enquiry
   };
 
   if (success) {
-    const selectedBranchObj = Object.values(LOCATIONS).find((b) => b.slug === formData.preferredBranch);
+    const selectedBranchObj = centres.find((b) => b.slug === formData.preferredBranch);
     const selectedProgramObj = PROGRAMS.find((p) => p.slug === formData.preferredProgram);
     const targetUrl = whatsappRedirectUrl || buildWhatsAppUrl({
-      branchName: selectedBranchObj?.shortName,
+      branchName: selectedBranchObj?.shortName || selectedBranchObj?.name,
       programName: selectedProgramObj?.shortName,
     });
 
@@ -303,18 +351,31 @@ export function EnquiryForm({ initialBranch = "", initialProgram = "" }: Enquiry
             <label className="block text-xs font-mono font-bold text-[#A8B0BA] uppercase tracking-wider mb-1.5">
               Preferred Kochi Centre <span className="text-[#B8F000]">*</span>
             </label>
-            <select
-              name="preferredBranch"
-              value={formData.preferredBranch}
-              onChange={handleChange}
-              className="w-full px-4 py-3 bg-[#07090D] border border-[#1F2937] text-white text-sm focus:outline-none focus:border-[#B8F000] transition-colors font-mono"
-            >
-              {Object.values(LOCATIONS).map((b) => (
-                <option key={b.slug} value={b.slug}>
-                  {b.name}
-                </option>
-              ))}
-            </select>
+            {loadingCentres ? (
+              <div className="w-full px-4 py-3 bg-[#07090D] border border-[#1F2937] text-white/50 text-xs font-mono flex items-center gap-2">
+                <Loader2 className="w-3.5 h-3.5 animate-spin text-[#B8F000]" />
+                <span>Loading active centres...</span>
+              </div>
+            ) : centreError ? (
+              <div className="w-full px-4 py-3 bg-[#160B0B] border border-red-500/30 text-red-400 text-xs font-mono flex items-center gap-2">
+                <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                <span>{centreError}</span>
+              </div>
+            ) : (
+              <select
+                name="preferredBranch"
+                value={formData.preferredBranch}
+                onChange={handleChange}
+                disabled={centres.length === 0}
+                className="w-full px-4 py-3 bg-[#07090D] border border-[#1F2937] text-white text-sm focus:outline-none focus:border-[#B8F000] transition-colors font-mono"
+              >
+                {centres.map((b) => (
+                  <option key={b.slug} value={b.slug}>
+                    {b.name}
+                  </option>
+                ))}
+              </select>
+            )}
           </div>
 
           <div>

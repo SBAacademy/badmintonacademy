@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { MapPin, Phone, Mail, Clock, Shield, Sparkles, MessageCircle } from "lucide-react";
 import { ACADEMY_DATA } from "@/data/academy";
@@ -7,6 +9,18 @@ import { PROGRAMS } from "@/data/programs";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 
 export function Footer() {
+  const [centres, setCentres] = useState<any[]>(Object.values(LOCATIONS));
+
+  useEffect(() => {
+    fetch("/api/centres")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.items) && data.items.length > 0) {
+          setCentres(data.items);
+        }
+      })
+      .catch((err) => console.error("Failed to load centres in Footer:", err));
+  }, []);
   return (
     <footer className="bg-[#07090D] border-t border-[#1F2937] text-[#A8B0BA] text-sm relative z-10 pb-32 lg:pb-12 select-none">
       {/* Top Athletic Lime Rule */}
@@ -124,19 +138,19 @@ export function Footer() {
               Physical Centres
             </h4>
             <ul className="space-y-3 text-xs">
-              {Object.values(LOCATIONS).map((centre) => (
+              {centres.map((centre) => (
                 <li key={centre.slug} className="border-b border-[#1F2937] pb-2 last:border-0">
                   <Link
                     href={`/${centre.slug}`}
                     className="font-bold text-white hover:text-[#B8F000] transition-colors block"
                   >
-                    {centre.shortName}
+                    {centre.shortName || centre.name}
                   </Link>
                   <p className="text-[11px] text-[#A8B0BA] truncate mt-0.5">
-                    {centre.address.split(",")[1]?.trim() || centre.city}
+                    {centre.address?.split(",")[1]?.trim() || centre.district || centre.city || "Kochi"}
                   </p>
                   <a
-                    href={centre.googleMapsUrl}
+                    href={centre.googleMapsUrl || "#"}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-[10px] text-[#B8F000] hover:underline inline-flex items-center gap-1 mt-0.5 font-mono"

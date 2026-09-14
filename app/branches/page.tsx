@@ -5,10 +5,12 @@ import Image from "next/image";
 import { MapPin, Clock, ArrowRight, MessageCircle, Navigation, ShieldCheck } from "lucide-react";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { createMetadata } from "@/lib/seo";
-import { LOCATIONS } from "@/data/locations";
+import { getCentres } from "@/lib/contentDb";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { FinalCTA } from "@/components/sections/FinalCTA";
 import { CentreGallerySection } from "@/components/sections/CentreGallerySection";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = createMetadata({
   title: "Badminton Academy Centres in Kochi | Kadavanthra, Edappally, Kakkanad",
@@ -23,8 +25,8 @@ export const metadata: Metadata = createMetadata({
   ],
 });
 
-export default function BranchesPage() {
-  const centres = Object.values(LOCATIONS);
+export default async function BranchesPage() {
+  const centres = await getCentres({ includeInactive: false });
 
   return (
     <div className="bg-[#07090D] min-h-screen text-white select-none">
@@ -65,14 +67,14 @@ export default function BranchesPage() {
               <div className={`lg:col-span-5 relative ${idx % 2 === 1 ? "lg:order-2" : ""}`}>
                 <div className="relative aspect-[16/10] overflow-hidden bg-[#0B0F14] border border-[#1F2937]">
                   <Image
-                    src={centre.gallery[0]?.url || "/images/badminton-arena.jpg"}
+                    src={centre.gallery?.[0]?.url || centre.image || "/images/badminton-arena.jpg"}
                     alt={`${centre.name} badminton courts Kochi`}
                     fill
                     className="object-cover filter contrast-115 group-hover:scale-105 transition-transform duration-500"
                     sizes="(max-width: 1024px) 100vw, 500px"
                   />
                   <div className="absolute top-3 left-3 px-2.5 py-1 bg-[#07090D]/90 border border-[#1F2937] font-mono text-[10px] font-bold text-[#B8F000] uppercase">
-                    {centre.courtInformation.courtCount ? `${centre.courtInformation.courtCount} COURTS` : "EXPANSION"}
+                    {centre.courtInformation?.courtCount ? `${centre.courtInformation.courtCount} COURTS` : "EXPANSION"}
                   </div>
                   {centre.slug === "kadavanthra" && (
                     <div className="absolute top-3 right-3 px-2 py-0.5 bg-[#B8F000] text-[#07090D] font-mono text-[9px] font-black uppercase">
@@ -86,7 +88,7 @@ export default function BranchesPage() {
               <div className={`lg:col-span-7 space-y-5 ${idx % 2 === 1 ? "lg:order-1" : ""}`}>
                 <div className="space-y-1.5">
                   <div className="font-mono text-xs text-[#B8F000] uppercase tracking-wider">
-                    0{idx + 1} // {centre.district}
+                    0{idx + 1} // {centre.district || "Kochi"}
                   </div>
                   <h2 className="text-2xl sm:text-4xl font-black uppercase tracking-tight text-white group-hover:text-[#B8F000] transition-colors">
                     {centre.name}
@@ -94,7 +96,7 @@ export default function BranchesPage() {
                 </div>
 
                 <p className="text-xs sm:text-sm text-[#A8B0BA] leading-relaxed">
-                  {centre.intro.description}
+                  {centre.intro?.description || centre.description || ""}
                 </p>
 
                 {/* Address & Timings */}
@@ -107,7 +109,7 @@ export default function BranchesPage() {
                     <div className="font-mono text-[10px] text-[#A8B0BA] uppercase">SURFACE</div>
                     <div className="text-white font-medium flex items-center gap-1.5">
                       <ShieldCheck className="w-3.5 h-3.5 text-[#B8F000]" />
-                      <span>{centre.courtInformation.surfaceType}</span>
+                      <span>{centre.courtInformation?.surfaceType || "BWF Standard Wooden Subfloor"}</span>
                     </div>
                   </div>
                 </div>
@@ -118,12 +120,12 @@ export default function BranchesPage() {
                     href={`/${centre.slug}`}
                     className="inline-flex items-center gap-2.5 px-6 py-3.5 bg-[#B8F000] hover:bg-[#cbf722] text-[#07090D] font-black text-xs uppercase tracking-wider transition-all"
                   >
-                    <span>EXPLORE {centre.shortName.toUpperCase()} CENTRE</span>
+                    <span>EXPLORE {(centre.shortName || centre.name).toUpperCase()} CENTRE</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
 
                   <a
-                    href={centre.googleMapsUrl}
+                    href={centre.googleMapsUrl || "#"}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 px-5 py-3.5 bg-[#11161D] hover:bg-[#17212C] text-white font-bold text-xs uppercase tracking-wider border border-[#1F2937] transition-colors"

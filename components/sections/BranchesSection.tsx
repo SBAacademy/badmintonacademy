@@ -1,16 +1,88 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { MapPin, Navigation, MessageCircle, ArrowRight, ShieldCheck, Check } from "lucide-react";
 import { LOCATIONS, LocationData } from "@/data/locations";
+import { Centre } from "@/data/centres";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { trackEvent } from "@/lib/analytics";
 
 export function BranchesSection() {
-  const locationsList: LocationData[] = Object.values(LOCATIONS);
-  const [selectedSlug, setSelectedSlug] = useState<string>(locationsList[0].slug);
+  const [dynamicCentres, setDynamicCentres] = useState<Centre[]>([]);
+
+  useEffect(() => {
+    fetch("/api/centres")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.items) && data.items.length > 0) {
+          setDynamicCentres(data.items);
+        }
+      })
+      .catch((err) => console.error("Failed to load centres in BranchesSection:", err));
+  }, []);
+
+  const locationsList: LocationData[] =
+    dynamicCentres.length > 0
+      ? dynamicCentres.map((c) => {
+          const staticLoc = LOCATIONS[c.slug as keyof typeof LOCATIONS];
+          return {
+            ...(staticLoc || {}),
+            ...c,
+            slug: c.slug,
+            name: c.name,
+            shortName: c.shortName || c.name,
+            district: c.district || "Kochi",
+            address: c.address || "",
+            phone: c.phone || "",
+            email: c.email || "",
+            whatsapp: (c as any).whatsapp || (c as any).whatsappNumber || staticLoc?.whatsapp || "",
+            whatsappDisplay: (c as any).whatsappDisplay || staticLoc?.whatsappDisplay || "",
+            phoneDisplay: (c as any).phoneDisplay || staticLoc?.phoneDisplay || "",
+            courtInformation: {
+              courtCount: c.courtInformation?.courtCount ?? staticLoc?.courtInformation?.courtCount ?? 4,
+              surfaceType: c.courtInformation?.surfaceType || staticLoc?.courtInformation?.surfaceType || "BWF Standard Sprung Wooden Subfloor",
+              subfloor: (c.courtInformation as any)?.subfloor || staticLoc?.courtInformation?.subfloor || "Sprung Wooden Subfloor",
+              lightingStandard: (c.courtInformation as any)?.lightingStandard || staticLoc?.courtInformation?.lightingStandard || "Glare-Free High Bay LED (500+ Lux)",
+              ceilingClearance: (c.courtInformation as any)?.ceilingClearance || staticLoc?.courtInformation?.ceilingClearance || "30 Feet International Clear Height",
+            },
+            openingHours: {
+              days: (c.openingHours as any)?.days || staticLoc?.openingHours?.days || "Monday - Sunday (7 Days Open)",
+              morning: (c.openingHours as any)?.morning || staticLoc?.openingHours?.morning || "05:30 AM - 08:30 AM",
+              evening: (c.openingHours as any)?.evening || staticLoc?.openingHours?.evening || "04:30 PM - 07:30 PM",
+            },
+            intro: {
+              heading: (c.intro as any)?.heading || staticLoc?.intro?.heading || `${c.name} in Kochi`,
+              subheading: (c.intro as any)?.subheading || staticLoc?.intro?.subheading || "Premier Badminton Arena",
+              description: c.intro?.description || c.description || staticLoc?.intro?.description || "",
+              neighbourhoodsServed: (c.intro as any)?.neighbourhoodsServed || staticLoc?.intro?.neighbourhoodsServed || [c.district || "Kochi"],
+              connectivity: (c.intro as any)?.connectivity || staticLoc?.intro?.connectivity || "Easily accessible from major transit hubs in Kochi",
+            },
+            facilities: (c.facilities && c.facilities.length > 0) ? c.facilities : (staticLoc?.facilities || []),
+            coaches: (c.coaches && c.coaches.length > 0) ? c.coaches : (staticLoc?.coaches || []),
+            programs: staticLoc?.programs || [],
+            testimonials: (c.testimonials && c.testimonials.length > 0) ? c.testimonials : (staticLoc?.testimonials || []),
+            achievements: staticLoc?.achievements || [],
+            localFAQs: staticLoc?.localFAQs || [],
+            seo: {
+              title: c.seo?.title || staticLoc?.seo?.title || `${c.name} | S & A Badminton Academy`,
+              description: c.seo?.description || staticLoc?.seo?.description || c.description || "",
+              primaryKeyword: c.seo?.primaryKeyword || staticLoc?.seo?.primaryKeyword || "badminton academy",
+              secondaryKeywords: c.seo?.secondaryKeywords || staticLoc?.seo?.secondaryKeywords || [],
+              relatedKeywords: c.seo?.relatedKeywords || staticLoc?.seo?.relatedKeywords || [],
+            },
+          } as LocationData;
+        })
+      : Object.values(LOCATIONS);
+
+  const [selectedSlug, setSelectedSlug] = useState<string>(locationsList[0]?.slug || "kadavanthra");
+
+  useEffect(() => {
+    if (!locationsList.some((l) => l.slug === selectedSlug) && locationsList[0]) {
+      setSelectedSlug(locationsList[0].slug);
+    }
+  }, [locationsList, selectedSlug]);
 
   const activeCentre: LocationData =
     locationsList.find((l) => l.slug === selectedSlug) || locationsList[0];
@@ -26,7 +98,7 @@ export function BranchesSection() {
   return (
     <section 
       className="py-24 lg:py-36 bg-[#07090D] relative border-b border-[#1F2937] select-none"
-      aria-label="Four-Centre Arena Selector"
+      aria-label="Multi-Centre Arena Selector"
     >
       <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
         
@@ -42,7 +114,7 @@ export function BranchesSection() {
               </span>
             </div>
             <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-[-0.03em] uppercase leading-[0.95]">
-              TRAIN AT 4 STRATEGIC <br />
+              TRAIN AT {locationsList.length} STRATEGIC <br />
               <span className="text-[#B8F000]">KOCHI CENTRES.</span>
             </h2>
           </div>

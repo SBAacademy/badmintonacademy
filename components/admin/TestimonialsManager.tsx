@@ -15,16 +15,11 @@ import {
   MessageSquareQuote,
 } from "lucide-react";
 import { Testimonial, TESTIMONIALS } from "@/data/testimonials";
-
-const BRANCHES = [
-  "Kadavanthra Branch",
-  "Edappally Branch",
-  "Kakkanad Branch",
-  "All Centres",
-];
+import { Centre } from "@/data/centres";
 
 export function TestimonialsManager() {
   const [items, setItems] = useState<Testimonial[]>([]);
+  const [centres, setCentres] = useState<Centre[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -35,7 +30,7 @@ export function TestimonialsManager() {
   const [form, setForm] = useState<Partial<Testimonial>>({
     name: "",
     role: "",
-    branch: "Kadavanthra Branch",
+    branch: "",
     rating: 5,
     highlight: "",
     content: "",
@@ -61,14 +56,27 @@ export function TestimonialsManager() {
 
   useEffect(() => {
     fetchTestimonials();
+    const fetchCentres = async () => {
+      try {
+        const res = await fetch("/api/centres");
+        const data = await res.json();
+        if (data.success && Array.isArray(data.items)) {
+          setCentres(data.items);
+        }
+      } catch (err) {
+        console.error("Failed to load centres in TestimonialsManager:", err);
+      }
+    };
+    fetchCentres();
   }, []);
 
   const openAddModal = () => {
     setEditingItem(null);
+    const defaultBranch = centres[0]?.name || "All Centres";
     setForm({
       name: "",
       role: "Parent of Junior Player",
-      branch: "Kadavanthra Branch",
+      branch: defaultBranch,
       rating: 5,
       highlight: "Exceptional individual attention and footwork improvement",
       content: "My child has shown tremendous growth in agility and court discipline since joining S&A Badminton Academy.",
@@ -361,11 +369,15 @@ export function TestimonialsManager() {
                     onChange={(e) => setForm({ ...form, branch: e.target.value })}
                     className="w-full px-3 py-2 bg-[#07090D] border border-[#1F2937] text-white focus:outline-none focus:border-[#B8F000]"
                   >
-                    {BRANCHES.map((b) => (
-                      <option key={b} value={b}>
-                        {b}
+                    {form.branch && !centres.some((c) => c.name === form.branch) && form.branch !== "All Centres" && (
+                      <option value={form.branch}>{form.branch} (Historical)</option>
+                    )}
+                    {centres.map((c) => (
+                      <option key={c.slug} value={c.name}>
+                        {c.name}
                       </option>
                     ))}
+                    <option value="All Centres">All Centres</option>
                   </select>
                 </div>
 

@@ -8,6 +8,10 @@ import {
   saveCoachRecord,
   deleteCoachRecord,
   reorderCoaches,
+  getCentres,
+  saveCentreRecord,
+  deleteCentreRecord,
+  reorderCentres,
 } from "@/lib/contentDb";
 import { GALLERY_ITEMS } from "@/data/gallery";
 import { COACHES, Coach } from "@/data/coaches";
@@ -21,6 +25,7 @@ const VALID_SECTIONS: ContentSectionKey[] = [
   "achievements",
   "testimonials",
   "blog",
+  "centres",
 ];
 
 function getDefaultItems(section: ContentSectionKey): unknown[] {
@@ -65,6 +70,17 @@ export async function GET(
         section: sectionKey,
         total: coaches.length,
         items: coaches,
+      });
+    }
+
+    if (sectionKey === "centres") {
+      // Return authoritative centres including inactive for admin view
+      const centres = await getCentres({ includeInactive: true });
+      return NextResponse.json({
+        success: true,
+        section: sectionKey,
+        total: centres.length,
+        items: centres,
       });
     }
 
@@ -129,6 +145,35 @@ export async function POST(
       });
     }
 
+    if (sectionKey === "centres") {
+      if (!body.name) {
+        return NextResponse.json(
+          { success: false, message: "Centre name is required." },
+          { status: 400 }
+        );
+      }
+
+      const savedCentre = await saveCentreRecord(body);
+      const allCentres = await getCentres({ includeInactive: true });
+
+      // Invalidate cache immediately
+      revalidatePath("/");
+      revalidatePath("/branches");
+      revalidatePath("/contact");
+      revalidatePath("/coaches");
+      if (savedCentre.slug) {
+        revalidatePath(`/${savedCentre.slug}`);
+        revalidatePath(`/branches/${savedCentre.slug}`);
+      }
+
+      return NextResponse.json({
+        success: true,
+        message: "Centre created successfully.",
+        item: savedCentre,
+        items: allCentres,
+      });
+    }
+
     const defaults = getDefaultItems(sectionKey);
     const currentItems = await getContentSection<Record<string, unknown>>(sectionKey, defaults as Record<string, unknown>[]);
 
@@ -186,7 +231,11 @@ export async function PUT(
 
     // Dedicated batch reordering for coaches
     if (sectionKey === "coaches" && (body.action === "reorder" || Array.isArray(body.orders))) {
-      const orders = Array.isArray(body.orders) ? body.orders : [];
+      const orders = Array.isArray(body.orders)
+        ? body.orders
+        : Array.isArray(body.orderMap)
+        ? body.orderMap
+        : [];
       const updatedCoaches = await reorderCoaches(orders);
       revalidatePath("/");
       revalidatePath("/coaches");
@@ -194,6 +243,23 @@ export async function PUT(
         success: true,
         message: "Coaches display order updated successfully.",
         items: updatedCoaches,
+      });
+    }
+
+    if (sectionKey === "centres" && (body.action === "reorder" || Array.isArray(body.orders))) {
+      const orders = Array.isArray(body.orders)
+        ? body.orders
+        : Array.isArray(body.orderMap)
+        ? body.orderMap
+        : [];
+      const updatedCentres = await reorderCentres(orders);
+      revalidatePath("/");
+      revalidatePath("/branches");
+      revalidatePath("/contact");
+      return NextResponse.json({
+        success: true,
+        message: "Centres display order updated successfully.",
+        items: updatedCentres,
       });
     }
 
@@ -221,6 +287,27 @@ export async function PUT(
         message: "Coach updated successfully.",
         item: savedCoach,
         items: allCoaches,
+      });
+    }
+
+    if (sectionKey === "centres") {
+      const savedCentre = await saveCentreRecord(itemData);
+      const allCentres = await getCentres({ includeInactive: true });
+
+      revalidatePath("/");
+      revalidatePath("/branches");
+      revalidatePath("/contact");
+      revalidatePath("/coaches");
+      if (savedCentre.slug) {
+        revalidatePath(`/${savedCentre.slug}`);
+        revalidatePath(`/branches/${savedCentre.slug}`);
+      }
+
+      return NextResponse.json({
+        success: true,
+        message: "Centre updated successfully.",
+        item: savedCentre,
+        items: allCentres,
       });
     }
 
@@ -301,6 +388,26 @@ export async function DELETE(
         success: true,
         message: result.message,
         items: allCoaches,
+      });
+    }
+
+    if (sectionKey === "centres") {
+      const softDelete = searchParams.get("softDelete") === "true";
+      const result = await deleteCentreRecord(identifier, { softDelete });
+      const allCentres = await getCentres({ includeInactive: true });
+
+      revalidatePath("/");
+      revalidatePath("/branches");
+      revalidatePath("/contact");
+      revalidatePath("/coaches");
+      revalidatePath(`/${identifier}`);
+      revalidatePath(`/branches/${identifier}`);
+
+      return NextResponse.json({
+        success: true,
+        message: result.message,
+        softDeleted: result.softDeleted,
+        items: allCentres,
       });
     }
 

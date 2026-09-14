@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
   Search,
   Filter,
@@ -20,10 +20,11 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { LeadItem } from "@/lib/db";
-import { LOCATIONS } from "@/data/locations";
+import { Centre } from "@/data/centres";
 
 interface AdminLeadsManagerProps {
   leads: LeadItem[];
+  centres?: Centre[];
   onSelectLead: (lead: LeadItem) => void;
   onOpenAddModal: () => void;
   onStatusChange: (id: string, status: LeadItem["status"]) => Promise<void>;
@@ -41,15 +42,38 @@ const STAGES: { id: string; label: string; stageKey?: LeadItem["status"]; color:
 
 export function AdminLeadsManager({
   leads,
+  centres: initialCentres,
   onSelectLead,
   onOpenAddModal,
   onStatusChange,
   onExportCSV,
 }: AdminLeadsManagerProps) {
+  const [centres, setCentres] = useState<Centre[]>(initialCentres || []);
   const [activeStage, setActiveStage] = useState<string>("ALL");
   const [centreFilter, setCentreFilter] = useState<string>("ALL");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [viewMode, setViewMode] = useState<"cards" | "list">("cards");
+
+  useEffect(() => {
+    if (initialCentres && initialCentres.length > 0) {
+      setCentres(initialCentres);
+      return;
+    }
+
+    const fetchCentres = async () => {
+      try {
+        const res = await fetch("/api/centres");
+        const data = await res.json();
+        if (data.success && Array.isArray(data.items)) {
+          setCentres(data.items);
+        }
+      } catch (err) {
+        console.error("Failed to load centres in AdminLeadsManager:", err);
+      }
+    };
+
+    fetchCentres();
+  }, [initialCentres]);
 
   // Filtered Leads
   const filteredLeads = useMemo(() => {
@@ -184,7 +208,7 @@ export function AdminLeadsManager({
             className="px-3 py-2 bg-[#090C12] border border-slate-800 rounded-xl text-xs text-slate-200 focus:outline-none focus:border-[#B8F000]"
           >
             <option value="ALL">All Centres</option>
-            {Object.values(LOCATIONS).map((loc) => (
+            {centres.map((loc) => (
               <option key={loc.slug} value={loc.slug}>
                 {loc.shortName || loc.name}
               </option>

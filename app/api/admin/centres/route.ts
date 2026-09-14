@@ -1,38 +1,17 @@
 import { NextResponse } from "next/server";
-import { neon } from "@neondatabase/serverless";
-import { requireAuth } from "@/lib/auth";
-
-function getSql() {
-  const url = process.env.DATABASE_URL;
-  if (!url) return null;
-  return neon(url);
-}
+import { revalidatePath } from "next/cache";
+import { getCentres, saveCentreRecord } from "@/lib/contentDb";
 
 export async function GET(request: Request) {
   try {
-    const auth = await requireAuth(request);
-    if (!auth.authorized || !auth.user) {
-      return NextResponse.json({ success: false, error: auth.error }, { status: auth.status });
-    }
-
-    const sql = getSql();
-    if (!sql) return NextResponse.json({ success: false, error: "Database unavailable" }, { status: 500 });
-
-    const centres = await sql`
-      SELECT 
-        c.*,
-        COUNT(DISTINCT b.id)::int as active_batches_count,
-        COUNT(DISTINCT bs.student_id)::int as enrolled_students_count
-      FROM centres c
-      LEFT JOIN batches b ON c.slug = b.centre_slug AND b.status = 'ACTIVE'
-      LEFT JOIN batch_students bs ON b.id = bs.batch_id AND bs.status = 'ACTIVE'
-      WHERE c.status = 'ACTIVE'
-      GROUP BY c.slug
-      ORDER BY c.name ASC;
-    `;
+    const { searchParams } = new URL(request.url);
+    const includeInactive = searchParams.get("includeInactive") !== "false";
+    const centres = await getCentres({ includeInactive });
 
     return NextResponse.json({
       success: true,
+      total: centres.length,
+      centres,
       data: {
         total: centres.length,
         centres,
@@ -40,6 +19,47 @@ export async function GET(request: Request) {
     });
   } catch (error) {
     console.error("GET /api/admin/centres error:", error);
-    return NextResponse.json({ success: false, error: "Failed to fetch centres." }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: "Failed to fetch centres." },
+      { status: 500 }
+    );
+  }
+}
+
+export async function POST(request: Request) {
+  try {
+    const body = await request.json();
+
+    if (!body.name || !body.name.trim()) {
+      return NextResponse.json(
+        { success: false, message: "Centre name is required." },
+        { status: 400 }
+      );
+    }
+
+    const saved = await saveCentreRecord(body);
+    const allCentres = await getCentres({ includeInactive: true });
+
+    revalidatePath("/");
+    revalidatePath("/branches");
+    revalidatePath("/contact");
+    revalidatePath("/coaches");
+    if (saved.slug) {
+      revalidatePath(`/${saved.slug}`);
+      revalidatePath(`/branches/${saved.slug}`);
+    }
+
+    return NextResponse.json({
+      success: true,
+      message: "Centre created successfully.",
+      centre: saved,
+      centres: allCentres,
+    });
+  } catch (error) {
+    console.error("POST /api/admin/centres error:", error);
+    return NextResponse.json(
+      { success: false, message: "Failed to create centre." },
+      { status: 500 }
+    );
   }
 }

@@ -14,11 +14,13 @@ import {
   LogOut,
   X,
   Sparkles,
+  MapPin,
 } from "lucide-react";
 
 export type AdminTab =
   | "overview"
   | "leads"
+  | "centres"
   | "gallery"
   | "blog"
   | "coaches"
@@ -80,6 +82,11 @@ export function AdminSidebar({
                 {totalLeadsCount}
               </span>
             ),
+        },
+        {
+          id: "centres",
+          label: "Centres & Hubs",
+          icon: MapPin,
         },
       ],
     },

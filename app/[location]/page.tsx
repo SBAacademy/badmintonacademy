@@ -20,10 +20,13 @@ import {
   Navigation
 } from "lucide-react";
 import { ACADEMY_DATA } from "@/data/academy";
-import { LOCATIONS, LOCATION_SLUGS, getLocationBySlug } from "@/data/locations";
+import { LOCATIONS, LOCATION_SLUGS, getLocationBySlug, LocationData } from "@/data/locations";
+import { getCentreBySlug, getCentres } from "@/lib/contentDb";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { CentreGallerySection } from "@/components/sections/CentreGallerySection";
+
+export const dynamic = "force-dynamic";
 
 interface LocationPageProps {
   params: Promise<{
@@ -31,15 +34,19 @@ interface LocationPageProps {
   }>;
 }
 
-export function generateStaticParams() {
-  return LOCATION_SLUGS.map((slug) => ({
+export async function generateStaticParams() {
+  const dynamicCentres = await getCentres({ includeInactive: false });
+  const slugs = new Set<string>([...LOCATION_SLUGS, ...dynamicCentres.map((c) => c.slug)]);
+  return Array.from(slugs).map((slug) => ({
     location: slug,
   }));
 }
 
 export async function generateMetadata({ params }: LocationPageProps): Promise<Metadata> {
   const resolvedParams = await params;
-  const location = getLocationBySlug(resolvedParams.location);
+  const dynamicCentre = await getCentreBySlug(resolvedParams.location);
+  const staticLocation = getLocationBySlug(resolvedParams.location);
+  const location = dynamicCentre || staticLocation;
 
   if (!location) {
     return {
@@ -50,23 +57,29 @@ export async function generateMetadata({ params }: LocationPageProps): Promise<M
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://soorajbadmintonacademy.vercel.app";
   const canonicalUrl = `${siteUrl}/${location.slug}`;
 
+  const title = dynamicCentre?.seo?.title || staticLocation?.seo?.title || `${location.name} | S & A Badminton Academy`;
+  const description = dynamicCentre?.seo?.description || staticLocation?.seo?.description || dynamicCentre?.description || "";
+  const primaryKeyword = dynamicCentre?.seo?.primaryKeyword || staticLocation?.seo?.primaryKeyword || "badminton coaching";
+  const secondaryKeywords = dynamicCentre?.seo?.secondaryKeywords || staticLocation?.seo?.secondaryKeywords || [];
+  const relatedKeywords = dynamicCentre?.seo?.relatedKeywords || staticLocation?.seo?.relatedKeywords || [];
+
   return {
-    title: location.seo.title,
-    description: location.seo.description,
-    keywords: [location.seo.primaryKeyword, ...location.seo.secondaryKeywords, ...location.seo.relatedKeywords],
+    title,
+    description,
+    keywords: [primaryKeyword, ...secondaryKeywords, ...relatedKeywords],
     alternates: {
       canonical: canonicalUrl,
     },
     openGraph: {
-      title: location.seo.title,
-      description: location.seo.description,
+      title,
+      description,
       url: canonicalUrl,
       siteName: ACADEMY_DATA.name,
       locale: "en_IN",
       type: "website",
       images: [
         {
-          url: `${siteUrl}/images/hero-athlete.jpg`,
+          url: dynamicCentre?.image || `${siteUrl}/images/hero-athlete.jpg`,
           width: 1200,
           height: 630,
           alt: `${location.name} - Badminton Court & Coaching in Kochi`,
@@ -75,26 +88,111 @@ export async function generateMetadata({ params }: LocationPageProps): Promise<M
     },
     twitter: {
       card: "summary_large_image",
-      title: location.seo.title,
-      description: location.seo.description,
-      images: [`${siteUrl}/images/hero-athlete.jpg`],
+      title,
+      description,
+      images: [dynamicCentre?.image || `${siteUrl}/images/hero-athlete.jpg`],
     },
   };
 }
 
 export default async function LocationPage({ params }: LocationPageProps) {
   const resolvedParams = await params;
-  const location = getLocationBySlug(resolvedParams.location);
+  const dynamicCentre = await getCentreBySlug(resolvedParams.location);
+  const staticLocation = getLocationBySlug(resolvedParams.location);
 
-  if (!location) {
+  if (!dynamicCentre && !staticLocation) {
     notFound();
   }
+
+  if (dynamicCentre && dynamicCentre.status === "INACTIVE" && !staticLocation) {
+    notFound();
+  }
+
+  // Merge dynamic record over static record so all 4 existing centres retain full richness
+  // while any changes from the Admin Panel take immediate effect!
+  const location: LocationData = {
+    ...(staticLocation || {}),
+    ...(dynamicCentre || {}),
+    slug: dynamicCentre?.slug || staticLocation?.slug || resolvedParams.location,
+    name: dynamicCentre?.name || staticLocation?.name || "",
+    shortName: dynamicCentre?.shortName || staticLocation?.shortName || dynamicCentre?.name || "",
+    city: dynamicCentre?.city || staticLocation?.city || "Kochi",
+    district: dynamicCentre?.district || staticLocation?.district || "Kochi",
+    state: dynamicCentre?.state || staticLocation?.state || "Kerala",
+    country: (dynamicCentre as any)?.country || staticLocation?.country || "India",
+    address: dynamicCentre?.address || staticLocation?.address || "",
+    postalCode: (dynamicCentre as any)?.postalCode || staticLocation?.postalCode || "682020",
+    phone: dynamicCentre?.phone || staticLocation?.phone || "",
+    phoneDisplay: (dynamicCentre as any)?.phoneDisplay || dynamicCentre?.phone || staticLocation?.phoneDisplay || "",
+    whatsapp: (dynamicCentre as any)?.whatsapp || (dynamicCentre as any)?.whatsappNumber || staticLocation?.whatsapp || "",
+    whatsappDisplay: (dynamicCentre as any)?.whatsappDisplay || (dynamicCentre as any)?.whatsappNumber || staticLocation?.whatsappDisplay || "",
+    email: dynamicCentre?.email || staticLocation?.email || "",
+    latitude: dynamicCentre?.latitude ?? staticLocation?.latitude ?? null,
+    longitude: dynamicCentre?.longitude ?? staticLocation?.longitude ?? null,
+    googleMapsUrl: dynamicCentre?.googleMapsUrl || staticLocation?.googleMapsUrl || "#",
+    googleMapsEmbedUrl: dynamicCentre?.googleMapsEmbedUrl || staticLocation?.googleMapsEmbedUrl || "",
+    googleBusinessProfileUrl: (dynamicCentre as any)?.googleBusinessProfileUrl || staticLocation?.googleBusinessProfileUrl || null,
+    gallery: (dynamicCentre?.gallery && dynamicCentre.gallery.length > 0)
+      ? dynamicCentre.gallery
+      : (staticLocation?.gallery || [
+          {
+            url: dynamicCentre?.image || "/images/badminton-arena.jpg",
+            caption: dynamicCentre?.name || "Badminton Training Centre",
+          },
+        ]),
+    courtInformation: {
+      courtCount: dynamicCentre?.courtInformation?.courtCount ?? staticLocation?.courtInformation?.courtCount ?? 4,
+      surfaceType: dynamicCentre?.courtInformation?.surfaceType || staticLocation?.courtInformation?.surfaceType || "BWF Approved Sprung Wooden Subfloor",
+      subfloor: (dynamicCentre?.courtInformation as any)?.subfloor || staticLocation?.courtInformation?.subfloor || "Sprung Wooden Subfloor",
+      lightingStandard: (dynamicCentre?.courtInformation as any)?.lightingStandard || staticLocation?.courtInformation?.lightingStandard || "Glare-Free High Bay LED (500+ Lux)",
+      ceilingClearance: (dynamicCentre?.courtInformation as any)?.ceilingClearance || staticLocation?.courtInformation?.ceilingClearance || "30 Feet International Clear Height",
+    },
+    openingHours: {
+      days: (dynamicCentre?.openingHours as any)?.days || staticLocation?.openingHours?.days || "Monday - Sunday (7 Days Open)",
+      morning: (dynamicCentre?.openingHours as any)?.morning || staticLocation?.openingHours?.morning || "05:30 AM - 08:30 AM",
+      evening: (dynamicCentre?.openingHours as any)?.evening || staticLocation?.openingHours?.evening || "04:30 PM - 07:30 PM",
+    },
+    intro: {
+      heading: (dynamicCentre?.intro as any)?.heading || staticLocation?.intro?.heading || `${dynamicCentre?.name || "Badminton Training"} in Kochi`,
+      subheading: (dynamicCentre?.intro as any)?.subheading || staticLocation?.intro?.subheading || "World-Class Badminton Infrastructure & Coaching",
+      description: dynamicCentre?.intro?.description || dynamicCentre?.description || staticLocation?.intro?.description || "",
+      neighbourhoodsServed: (dynamicCentre?.intro as any)?.neighbourhoodsServed || staticLocation?.intro?.neighbourhoodsServed || [dynamicCentre?.district || "Kochi"],
+      connectivity: (dynamicCentre?.intro as any)?.connectivity || staticLocation?.intro?.connectivity || "Easily accessible via major transport networks in Kochi.",
+    },
+    facilities: (dynamicCentre?.facilities && dynamicCentre.facilities.length > 0)
+      ? dynamicCentre.facilities
+      : (staticLocation?.facilities || [
+          "BWF Standard Wooden Subfloor Courts",
+          "Specialized Anti-Glare High Lux LED Lighting",
+          "Dedicated Player Warm-Up & Physical Conditioning Zone",
+          "Player Changing Rooms & Clean Restroom Facilities",
+          "Filtered Drinking Water & Hydration Stations",
+          "Dedicated Visitor & Parent Viewing Gallery",
+          "Convenient On-Site Two-Wheeler & Four-Wheeler Parking",
+          "Professional Racket Restringing & Gear Locker",
+        ]),
+    coaches: staticLocation?.coaches || [],
+    programs: staticLocation?.programs || [],
+    testimonials: staticLocation?.testimonials || [],
+    achievements: staticLocation?.achievements || [],
+    localFAQs: (dynamicCentre?.localFAQs && dynamicCentre.localFAQs.length > 0)
+      ? dynamicCentre.localFAQs
+      : (staticLocation?.localFAQs || []),
+    seo: {
+      title: dynamicCentre?.seo?.title || staticLocation?.seo?.title || `${dynamicCentre?.name || "Centre"} | S & A Badminton Academy`,
+      description: dynamicCentre?.seo?.description || staticLocation?.seo?.description || dynamicCentre?.description || "",
+      primaryKeyword: dynamicCentre?.seo?.primaryKeyword || staticLocation?.seo?.primaryKeyword || "badminton academy",
+      secondaryKeywords: dynamicCentre?.seo?.secondaryKeywords || staticLocation?.seo?.secondaryKeywords || [],
+      relatedKeywords: dynamicCentre?.seo?.relatedKeywords || staticLocation?.seo?.relatedKeywords || [],
+    },
+  };
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://soorajbadmintonacademy.vercel.app";
   const canonicalUrl = `${siteUrl}/${location.slug}`;
 
-  // Other 3 centres for internal linking
-  const otherCentres = Object.values(LOCATIONS).filter((l) => l.slug !== location.slug);
+  // Other active centres for internal linking
+  const activeCentres = await getCentres({ includeInactive: false });
+  const otherCentres = activeCentres.filter((l) => l.slug !== location.slug);
 
   // LocalBusiness & SportsActivityLocation JSON-LD Schema
   const locationSchema = {
@@ -708,13 +806,13 @@ export default async function LocationPage({ params }: LocationPageProps) {
                 className="p-5 rounded-2xl bg-[#121A23] border border-[#26313D] hover:border-[#B8F000]/60 transition-all group block"
               >
                 <div className="text-xs font-bold text-[#B8F000] uppercase tracking-wider mb-1">
-                  {c.shortName}
+                  {c.shortName || c.name}
                 </div>
                 <h3 className="text-base font-bold text-[#F8FAFC] group-hover:text-white transition-colors mb-2">
                   {c.name}
                 </h3>
                 <p className="text-xs text-[#A7B0BC] line-clamp-2 mb-4">
-                  {c.intro.description}
+                  {c.intro?.description || c.description || ""}
                 </p>
                 <div className="inline-flex items-center gap-1 text-xs font-bold text-[#B8F000]">
                   <span>Explore Centre</span>

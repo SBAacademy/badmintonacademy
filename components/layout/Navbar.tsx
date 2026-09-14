@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X, MessageCircle, ChevronDown, ArrowRight, Phone } from "lucide-react";
@@ -43,6 +43,39 @@ export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [openMobileMenu, setOpenMobileMenu] = useState<string | null>(null);
+  const [dynamicCentres, setDynamicCentres] = useState<{ name: string; href: string; desc: string }[]>(
+    Object.values(LOCATIONS).map(l => ({
+      name: l.shortName,
+      href: `/${l.slug}`,
+      desc: l.city,
+    }))
+  );
+
+  useEffect(() => {
+    fetch("/api/centres")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.items) && data.items.length > 0) {
+          setDynamicCentres(
+            data.items.map((c: any) => ({
+              name: c.shortName || c.name,
+              href: `/${c.slug}`,
+              desc: c.district || "Kochi",
+            }))
+          );
+        }
+      })
+      .catch((err) => console.error("Failed to load centres for Navbar:", err));
+  }, []);
+
+  const navLinks = useMemo(() => {
+    return NAV_LINKS.map((link) => {
+      if (link.name === "Centres") {
+        return { ...link, dropdown: dynamicCentres };
+      }
+      return link;
+    });
+  }, [dynamicCentres]);
   
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const headerRef = useRef<HTMLElement | null>(null);
@@ -170,7 +203,7 @@ export function Navbar() {
 
           {/* Desktop Navigation Links with Generous Spacing */}
           <nav className="hidden lg:flex items-center gap-1 xl:gap-1.5 2xl:gap-2.5" aria-label="Main Navigation">
-            {NAV_LINKS.map((link) => {
+            {navLinks.map((link) => {
               const isActive = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href));
               const hasDropdown = !!link.dropdown;
 
@@ -374,7 +407,7 @@ export function Navbar() {
               Academy Navigation
             </div>
 
-            {NAV_LINKS.map((link) => {
+            {navLinks.map((link) => {
               const isActive = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href));
               const hasDropdown = !!link.dropdown;
               const menuKey = link.name.toLowerCase();

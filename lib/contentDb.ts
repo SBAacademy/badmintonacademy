@@ -7,8 +7,9 @@ import { COACHES, Coach, CoachPhoto, normalizeWhatsAppNumber } from "@/data/coac
 import { ACHIEVEMENTS, Achievement } from "@/data/achievements";
 import { TESTIMONIALS, Testimonial } from "@/data/testimonials";
 import { BLOG_POSTS, BlogPost } from "@/data/blog";
+import { Centre, CentreOpeningHours } from "@/data/centres";
 
-export type ContentSectionKey = "gallery" | "coaches" | "achievements" | "testimonials" | "blog";
+export type ContentSectionKey = "gallery" | "coaches" | "achievements" | "testimonials" | "blog" | "centres";
 
 const CONTENT_FILE_PATH = path.join(process.cwd(), "data", "site_content.json");
 
@@ -30,6 +31,7 @@ async function readFallbackContent(): Promise<Record<string, unknown[]>> {
       achievements: ACHIEVEMENTS,
       testimonials: TESTIMONIALS,
       blog: BLOG_POSTS,
+      centres: [],
     };
   }
 }
@@ -67,6 +69,7 @@ export async function initContentDb(): Promise<void> {
       achievements: ACHIEVEMENTS,
       testimonials: TESTIMONIALS,
       blog: BLOG_POSTS,
+      centres: [],
     };
 
     for (const [sectionKey, defaultItems] of Object.entries(defaults)) {
@@ -77,6 +80,195 @@ export async function initContentDb(): Promise<void> {
           ON CONFLICT (section) DO NOTHING;
         `;
       }
+    }
+
+    // Ensure centres table has modern schema
+    try {
+      await sql`
+        CREATE TABLE IF NOT EXISTS centres (
+          slug VARCHAR(64) PRIMARY KEY,
+          name VARCHAR(128) NOT NULL,
+          short_name VARCHAR(64) NOT NULL,
+          address TEXT NOT NULL,
+          phone VARCHAR(32) NOT NULL,
+          whatsapp VARCHAR(32) NOT NULL,
+          email VARCHAR(128) NOT NULL,
+          court_count INTEGER NOT NULL DEFAULT 3,
+          surface_type VARCHAR(128) DEFAULT 'BWF Wooden Cushion & Synthetic Mat',
+          google_maps_url TEXT,
+          status VARCHAR(32) DEFAULT 'ACTIVE',
+          created_at TIMESTAMPTZ DEFAULT NOW()
+        );
+      `;
+      await sql`ALTER TABLE centres ADD COLUMN IF NOT EXISTS area VARCHAR(128);`;
+      await sql`ALTER TABLE centres ADD COLUMN IF NOT EXISTS city VARCHAR(64) DEFAULT 'Kochi';`;
+      await sql`ALTER TABLE centres ADD COLUMN IF NOT EXISTS district VARCHAR(64) DEFAULT 'Ernakulam';`;
+      await sql`ALTER TABLE centres ADD COLUMN IF NOT EXISTS state VARCHAR(64) DEFAULT 'Kerala';`;
+      await sql`ALTER TABLE centres ADD COLUMN IF NOT EXISTS pincode VARCHAR(32);`;
+      await sql`ALTER TABLE centres ADD COLUMN IF NOT EXISTS postal_code VARCHAR(32);`;
+      await sql`ALTER TABLE centres ADD COLUMN IF NOT EXISTS phone_display VARCHAR(64);`;
+      await sql`ALTER TABLE centres ADD COLUMN IF NOT EXISTS whatsapp_display VARCHAR(64);`;
+      await sql`ALTER TABLE centres ADD COLUMN IF NOT EXISTS google_maps_embed_url TEXT;`;
+      await sql`ALTER TABLE centres ADD COLUMN IF NOT EXISTS latitude NUMERIC(10, 6);`;
+      await sql`ALTER TABLE centres ADD COLUMN IF NOT EXISTS longitude NUMERIC(10, 6);`;
+      await sql`ALTER TABLE centres ADD COLUMN IF NOT EXISTS display_order INTEGER DEFAULT 1;`;
+      await sql`ALTER TABLE centres ADD COLUMN IF NOT EXISTS is_active BOOLEAN DEFAULT TRUE;`;
+      await sql`ALTER TABLE centres ADD COLUMN IF NOT EXISTS description TEXT;`;
+      await sql`ALTER TABLE centres ADD COLUMN IF NOT EXISTS image TEXT;`;
+      await sql`ALTER TABLE centres ADD COLUMN IF NOT EXISTS court_image TEXT;`;
+      await sql`ALTER TABLE centres ADD COLUMN IF NOT EXISTS seo_title VARCHAR(255);`;
+      await sql`ALTER TABLE centres ADD COLUMN IF NOT EXISTS seo_description TEXT;`;
+      await sql`ALTER TABLE centres ADD COLUMN IF NOT EXISTS is_placeholder BOOLEAN DEFAULT FALSE;`;
+      await sql`ALTER TABLE centres ADD COLUMN IF NOT EXISTS data JSONB DEFAULT '{}'::jsonb;`;
+      await sql`ALTER TABLE centres ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT NOW();`;
+
+      // Ensure all 4 canonical centres exist in Neon DB
+      const canonicalCentres = [
+        {
+          slug: "kadavanthra",
+          name: "S & A Badminton Academy – Kadavanthra (Headquarters)",
+          short_name: "Kadavanthra HQ",
+          area: "Kadavanthra Central",
+          city: "Kochi",
+          district: "Ernakulam",
+          state: "Kerala",
+          pincode: "682020",
+          postal_code: "682020",
+          address: "S&A Sports Arena, Near Rajiv Gandhi Indoor Stadium, Kadavanthra, Kochi 682020",
+          phone: "+919400635548",
+          phone_display: "+91 94006 35548",
+          whatsapp: "919400635548",
+          whatsapp_display: "+91 94006 35548",
+          email: "kadavanthra@sabadminton.com",
+          court_count: 4,
+          surface_type: "BWF-Grade Sprung Wooden Subfloor with Synthetic Mat",
+          google_maps_url: "https://maps.google.com/?q=Kadavanthra+Kochi",
+          google_maps_embed_url: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3929.620315481711!2d76.2991054!3d9.9654855!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b0872c6b4124991%3A0x7707ebbbdc94f71a!2sKadavanthra%2C%20Kochi%2C%20Kerala!5e0!3m2!1sen!2sin!4v1700000000000",
+          description: "Our premier flagship badminton training arena in Kadavanthra, Central Kochi.",
+          display_order: 1,
+          status: "ACTIVE",
+          is_active: true,
+          image: "/images/badminton-arena.jpg",
+          court_image: "/images/badminton-arena.jpg",
+          seo_title: "Badminton Academy in Kadavanthra | S & A Badminton Academy Kochi",
+          seo_description: "Professional badminton coaching and court booking in Kadavanthra, Central Kochi.",
+          is_placeholder: false,
+        },
+        {
+          slug: "edappally",
+          name: "S & A Badminton Academy – Edappally Branch",
+          short_name: "Edappally Centre",
+          area: "Edappally North",
+          city: "Kochi",
+          district: "Ernakulam",
+          state: "Kerala",
+          pincode: "682024",
+          postal_code: "682024",
+          address: "Metro Pillar 412, Near Toll Junction, Edappally, Kochi 682024",
+          phone: "+919400635548",
+          phone_display: "+91 94006 35548",
+          whatsapp: "919400635548",
+          whatsapp_display: "+91 94006 35548",
+          email: "edappally@sabadminton.com",
+          court_count: 3,
+          surface_type: "BWF Approved Sprung Subfloor with Pro Synthetic Mat",
+          google_maps_url: "https://maps.google.com/?q=Edappally+Toll+Kochi",
+          google_maps_embed_url: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3928.7423970220267!2d76.3079944!3d10.0247659!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b080c354714b2d5%3A0xc621b1b75ff6f9f9!2sEdappally%20Toll%2C%20Edappally%2C%20Kochi%2C%20Kerala!5e0!3m2!1sen!2sin!4v1700000000000",
+          description: "High-performance badminton training facility in Edappally, North Kochi.",
+          display_order: 2,
+          status: "ACTIVE",
+          is_active: true,
+          image: "/images/badminton-arena.jpg",
+          court_image: "/images/badminton-arena.jpg",
+          seo_title: "Badminton Academy in Edappally | S & A Badminton Academy Kochi",
+          seo_description: "Premier badminton training centre near Lulu Mall, Edappally Toll Junction, Kochi.",
+          is_placeholder: false,
+        },
+        {
+          slug: "kakkanad",
+          name: "S & A Badminton Academy – Kakkanad Branch",
+          short_name: "Kakkanad Centre",
+          area: "InfoPark Corridor",
+          city: "Kochi",
+          district: "Ernakulam",
+          state: "Kerala",
+          pincode: "682030",
+          postal_code: "682030",
+          address: "Near Infopark Expressway, SmartCity Hub, Kakkanad, Kochi 682030",
+          phone: "+919400635548",
+          phone_display: "+91 94006 35548",
+          whatsapp: "919400635548",
+          whatsapp_display: "+91 94006 35548",
+          email: "kakkanad@sabadminton.com",
+          court_count: 3,
+          surface_type: "BWF Standard Cushioned Wooden Subfloor Arena",
+          google_maps_url: "https://maps.google.com/?q=Infopark+Kakkanad+Kochi",
+          google_maps_embed_url: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3929.073456187766!2d76.3571234!3d10.0098765!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b080c920150d18d%3A0x6e9f291e0a290d29!2sInfopark%20Kochi!5e0!3m2!1sen!2sin!4v1700000000000",
+          description: "Dedicated badminton arena for IT corridor professionals and junior talent in Kakkanad.",
+          display_order: 3,
+          status: "ACTIVE",
+          is_active: true,
+          image: "/images/badminton-arena.jpg",
+          court_image: "/images/badminton-arena.jpg",
+          seo_title: "Badminton Academy in Kakkanad | S & A Badminton Academy Kochi",
+          seo_description: "World-class badminton coaching near Infopark and SmartCity in Kakkanad, Kochi.",
+          is_placeholder: false,
+        },
+        {
+          slug: "fourth-centre",
+          name: "S & A Badminton Academy — Upcoming Fourth Centre",
+          short_name: "Upcoming Fourth Centre",
+          area: "Greater Kochi",
+          city: "Kochi",
+          district: "Ernakulam",
+          state: "Kerala",
+          pincode: "[PINCODE]",
+          postal_code: "[PINCODE]",
+          address: "[FACILITY_ADDRESS], [AREA], Kochi, Kerala [PINCODE]",
+          phone: "+919400635548",
+          phone_display: "+91 94006 35548",
+          whatsapp: "919400635548",
+          whatsapp_display: "+91 94006 35548",
+          email: "info@sabadminton.com",
+          court_count: 4,
+          surface_type: "BWF-Grade Multi-Layer Synthetic Cushion Surface",
+          google_maps_url: "https://maps.google.com/?q=Kochi+Kerala",
+          google_maps_embed_url: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d125745.74828770425!2d76.2239462!3d9.9826798!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b080d514abec6bf%3A0xbd582caa5844192!2sKochi%2C%20Kerala!5e0!3m2!1sen!2sin!4v1700000000000",
+          description: "S & A Badminton Academy is preparing to launch our fourth dedicated coaching arena in Kochi.",
+          display_order: 4,
+          status: "ACTIVE",
+          is_active: true,
+          image: "/images/badminton-arena.jpg",
+          court_image: "/images/badminton-arena.jpg",
+          seo_title: "Badminton Academy in Kochi | S & A Badminton Academy Kochi",
+          seo_description: "New upcoming badminton arena expanding our footprint across Greater Kochi.",
+          is_placeholder: true,
+        },
+      ];
+
+      for (const c of canonicalCentres) {
+        await sql`
+          INSERT INTO centres (
+            slug, name, short_name, area, city, district, state, pincode, postal_code,
+            address, phone, phone_display, whatsapp, whatsapp_display, email,
+            court_count, surface_type, google_maps_url, google_maps_embed_url,
+            description, display_order, status, is_active, image, court_image,
+            seo_title, seo_description, is_placeholder, created_at, updated_at
+          ) VALUES (
+            ${c.slug}, ${c.name}, ${c.short_name}, ${c.area}, ${c.city}, ${c.district}, ${c.state}, ${c.pincode}, ${c.postal_code},
+            ${c.address}, ${c.phone}, ${c.phone_display}, ${c.whatsapp}, ${c.whatsapp_display}, ${c.email},
+            ${c.court_count}, ${c.surface_type}, ${c.google_maps_url}, ${c.google_maps_embed_url},
+            ${c.description}, ${c.display_order}, ${c.status}, ${c.is_active}, ${c.image}, ${c.court_image},
+            ${c.seo_title}, ${c.seo_description}, ${c.is_placeholder}, NOW(), NOW()
+          )
+          ON CONFLICT (slug) DO UPDATE
+          SET
+            display_order = COALESCE(centres.display_order, EXCLUDED.display_order),
+            updated_at = NOW();
+        `;
+      }
+    } catch {
+      // Ignored for concurrent workers
     }
 
     // Ensure coaches table has modern columns
@@ -173,10 +365,12 @@ export function ensureCoachImage(image?: string | null): string {
 
 export function mapBranchToCentreSlug(branch?: string | null): string {
   if (!branch) return "kadavanthra";
-  const b = branch.toLowerCase();
+  const b = branch.toLowerCase().trim();
+  if (!b.includes(" ") && !b.includes("(")) return b;
   if (b.includes("edappally")) return "edappally";
   if (b.includes("kakkanad")) return "kakkanad";
-  return "kadavanthra";
+  if (b.includes("kadavanthra")) return "kadavanthra";
+  return b.replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 }
 
 export function mapCentreSlugToBranch(slug?: string | null): string {
@@ -184,7 +378,8 @@ export function mapCentreSlugToBranch(slug?: string | null): string {
   const s = slug.toLowerCase();
   if (s.includes("edappally")) return "Edappally Branch";
   if (s.includes("kakkanad")) return "Kakkanad Branch";
-  return "Kadavanthra (Headquarters)";
+  if (s.includes("kadavanthra")) return "Kadavanthra (Headquarters)";
+  return slug;
 }
 
 function sanitizeItemImageUrls<T>(item: T): T {
@@ -926,4 +1121,437 @@ export async function getTestimonials(): Promise<Testimonial[]> {
 export async function getBlogPosts(): Promise<BlogPost[]> {
   return getContentSection<BlogPost>("blog", BLOG_POSTS);
 }
+
+// ============================================================================
+// AUTHORITATIVE CENTRES DATA LAYER (PostgreSQL centres is single source of truth)
+// ============================================================================
+
+export async function getCentres(options: { includeInactive?: boolean } = {}): Promise<Centre[]> {
+  const { includeInactive = false } = options;
+  const sql = getSql();
+
+  if (sql) {
+    try {
+      await initContentDb();
+      const rows = (await sql`
+        SELECT 
+          c.slug as id,
+          c.slug,
+          c.name,
+          c.short_name as "shortName",
+          c.area,
+          c.city,
+          c.district,
+          c.state,
+          c.pincode,
+          c.postal_code as "postalCode",
+          c.address,
+          c.phone,
+          c.phone_display as "phoneDisplay",
+          c.whatsapp,
+          c.whatsapp_display as "whatsappDisplay",
+          c.email,
+          c.court_count as "courtCount",
+          c.surface_type as "surfaceType",
+          c.google_maps_url as "googleMapsUrl",
+          c.google_maps_embed_url as "googleMapsEmbedUrl",
+          c.latitude,
+          c.longitude,
+          c.description,
+          c.display_order as "displayOrder",
+          c.status,
+          c.is_active as "isActive",
+          c.seo_title as "seoTitle",
+          c.seo_description as "seoDescription",
+          c.image,
+          c.court_image as "courtImage",
+          c.is_placeholder as "isPlaceholder",
+          c.data,
+          c.created_at as "createdAt",
+          c.updated_at as "updatedAt"
+        FROM centres c
+        ${includeInactive ? sql`` : sql`WHERE (c.status = 'ACTIVE' OR c.status IS NULL) AND (c.is_active = TRUE OR c.is_active IS NULL)`}
+        ORDER BY c.display_order ASC, c.created_at ASC;
+      `) as unknown as Record<string, unknown>[];
+
+      if (Array.isArray(rows) && rows.length > 0) {
+        return rows.map((r) => {
+          const rawData = (r.data && typeof r.data === "object" ? r.data : {}) as Record<string, unknown>;
+          return {
+            id: String(r.slug || r.id),
+            slug: String(r.slug || r.id),
+            name: String(r.name || ""),
+            shortName: String(r.shortName || r.name || ""),
+            area: r.area ? String(r.area) : undefined,
+            city: String(r.city || "Kochi"),
+            district: r.district ? String(r.district) : undefined,
+            state: r.state ? String(r.state) : undefined,
+            pincode: r.pincode ? String(r.pincode) : r.postalCode ? String(r.postalCode) : undefined,
+            postalCode: r.postalCode ? String(r.postalCode) : r.pincode ? String(r.pincode) : undefined,
+            address: String(r.address || ""),
+            phone: String(r.phone || ""),
+            phoneDisplay: r.phoneDisplay ? String(r.phoneDisplay) : String(r.phone || ""),
+            whatsapp: String(r.whatsapp || ""),
+            whatsappDisplay: r.whatsappDisplay ? String(r.whatsappDisplay) : String(r.whatsapp || ""),
+            email: String(r.email || ""),
+            courtCount: Number(r.courtCount) || 3,
+            surfaceType: String(r.surfaceType || "BWF Grade-1 Certified Synthetic Surface"),
+            googleMapsUrl: String(r.googleMapsUrl || ""),
+            googleMapsEmbedUrl: r.googleMapsEmbedUrl ? String(r.googleMapsEmbedUrl) : undefined,
+            latitude: r.latitude !== null && r.latitude !== undefined ? Number(r.latitude) : null,
+            longitude: r.longitude !== null && r.longitude !== undefined ? Number(r.longitude) : null,
+            description: String(r.description || ""),
+            displayOrder: Number(r.displayOrder) || 1,
+            status: (r.status === "INACTIVE" ? "INACTIVE" : "ACTIVE") as "ACTIVE" | "INACTIVE",
+            isActive: r.isActive !== false && r.status !== "INACTIVE",
+            seoTitle: r.seoTitle ? String(r.seoTitle) : undefined,
+            seoDescription: r.seoDescription ? String(r.seoDescription) : undefined,
+            image: r.image ? String(r.image) : "/images/badminton-arena.jpg",
+            courtImage: r.courtImage ? String(r.courtImage) : undefined,
+            isPlaceholder: Boolean(r.isPlaceholder),
+            facilities: Array.isArray(rawData.facilities) ? (rawData.facilities as string[]) : undefined,
+            openingHours: rawData.openingHours as CentreOpeningHours | undefined,
+            intro: rawData.intro as any,
+            courtInformation: rawData.courtInformation as any,
+            programs: Array.isArray(rawData.programs) ? rawData.programs : undefined,
+            coaches: Array.isArray(rawData.coaches) ? rawData.coaches : undefined,
+            gallery: Array.isArray(rawData.gallery) ? rawData.gallery : undefined,
+            testimonials: Array.isArray(rawData.testimonials) ? rawData.testimonials : undefined,
+            achievements: Array.isArray(rawData.achievements) ? rawData.achievements : undefined,
+            localFAQs: Array.isArray(rawData.localFAQs) ? rawData.localFAQs : undefined,
+            seo: rawData.seo as any,
+            createdAt: r.createdAt ? new Date(r.createdAt as string).toISOString() : undefined,
+            updatedAt: r.updatedAt ? new Date(r.updatedAt as string).toISOString() : undefined,
+          };
+        });
+      }
+    } catch (err) {
+      console.warn("Error querying centres table from Neon DB, reading fallback:", err);
+    }
+  }
+
+  // Fallback to local JSON store
+  const fallback = await readFallbackContent();
+  const rawList = Array.isArray(fallback.centres) ? (fallback.centres as unknown as Centre[]) : [];
+  const filtered = includeInactive
+    ? rawList
+    : rawList.filter((c) => (c.status === "ACTIVE" || !c.status) && c.isActive !== false);
+
+  return [...filtered].sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
+}
+
+export async function getCentreBySlug(slug: string): Promise<Centre | null> {
+  if (!slug) return null;
+  const centres = await getCentres({ includeInactive: true });
+  const clean = slug.toLowerCase().trim();
+  return centres.find((c) => c.slug.toLowerCase() === clean || c.id?.toLowerCase() === clean) || null;
+}
+
+export async function saveCentreRecord(centreData: Partial<Centre>): Promise<Centre> {
+  const sql = getSql();
+  const rawSlug = (centreData.slug || centreData.id || centreData.name || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+  const slug = rawSlug || `centre-${Date.now()}`;
+  const cleanId = slug;
+
+  // Check existing
+  const current = await getCentreBySlug(slug);
+
+  const name = (centreData.name || current?.name || "S & A Badminton Academy Centre").trim();
+  const shortName = (centreData.shortName || current?.shortName || name).trim();
+  const area = (centreData.area || current?.area || shortName.replace(/centre|branch/gi, "").trim() || "Kochi").trim();
+  const city = (centreData.city || current?.city || "Kochi").trim();
+  const district = (centreData.district || current?.district || "Ernakulam").trim();
+  const state = (centreData.state || current?.state || "Kerala").trim();
+  const pincode = (centreData.pincode || centreData.postalCode || current?.pincode || current?.postalCode || "682020").trim();
+  const address = (centreData.address || current?.address || `${area}, ${city}`).trim();
+  const phone = (centreData.phone || current?.phone || "+919400635548").trim();
+  const phoneDisplay = (centreData.phoneDisplay || current?.phoneDisplay || phone).trim();
+  const whatsapp = (centreData.whatsapp || current?.whatsapp || "919400635548").replace(/\D/g, "");
+  const whatsappDisplay = (centreData.whatsappDisplay || current?.whatsappDisplay || phoneDisplay).trim();
+  const email = (centreData.email || current?.email || `${slug}@sabadminton.com`).trim();
+  const courtCount = Number(centreData.courtCount ?? current?.courtCount) || 3;
+  const surfaceType = (centreData.surfaceType || current?.surfaceType || "BWF Grade-1 Certified Synthetic Cushion Mats").trim();
+  const googleMapsUrl = (centreData.googleMapsUrl || current?.googleMapsUrl || `https://maps.google.com/?q=${encodeURIComponent(name)}`).trim();
+  const googleMapsEmbedUrl = centreData.googleMapsEmbedUrl || current?.googleMapsEmbedUrl || "";
+  const latitude = centreData.latitude !== undefined ? centreData.latitude : (current?.latitude ?? null);
+  const longitude = centreData.longitude !== undefined ? centreData.longitude : (current?.longitude ?? null);
+  const description = (centreData.description || current?.description || "").trim();
+  const order = Number(centreData.displayOrder ?? current?.displayOrder) || 1;
+  const status = (centreData.status || (centreData.isActive === false ? "INACTIVE" : current?.status) || "ACTIVE") as "ACTIVE" | "INACTIVE";
+  const isActive = status === "ACTIVE";
+  const seoTitle = (centreData.seoTitle || current?.seoTitle || `${name} | S&A Badminton Academy`).trim();
+  const seoDescription = (centreData.seoDescription || current?.seoDescription || description || `${name} premier badminton training facility in Kochi.`).trim();
+  const image = centreData.image || current?.image || "/images/badminton-arena.jpg";
+  const courtImage = centreData.courtImage || current?.courtImage || image;
+  const isPlaceholder = Boolean(centreData.isPlaceholder ?? current?.isPlaceholder);
+
+  // Merge rich data sub-objects
+  const richData = {
+    ...(current?.intro ? { intro: current.intro } : {}),
+    ...(current?.courtInformation ? { courtInformation: current.courtInformation } : {}),
+    ...(current?.facilities ? { facilities: current.facilities } : {}),
+    ...(current?.openingHours ? { openingHours: current.openingHours } : {}),
+    ...(current?.programs ? { programs: current.programs } : {}),
+    ...(current?.coaches ? { coaches: current.coaches } : {}),
+    ...(current?.gallery ? { gallery: current.gallery } : {}),
+    ...(current?.testimonials ? { testimonials: current.testimonials } : {}),
+    ...(current?.achievements ? { achievements: current.achievements } : {}),
+    ...(current?.localFAQs ? { localFAQs: current.localFAQs } : {}),
+    ...(current?.seo ? { seo: current.seo } : {}),
+    ...(centreData.facilities ? { facilities: centreData.facilities } : {}),
+    ...(centreData.openingHours ? { openingHours: centreData.openingHours } : {}),
+    ...(centreData.intro ? { intro: centreData.intro } : {}),
+    ...(centreData.courtInformation ? { courtInformation: centreData.courtInformation } : {}),
+  };
+
+  const now = new Date().toISOString();
+
+  const savedCentre: Centre = {
+    id: cleanId,
+    slug,
+    name,
+    shortName,
+    area,
+    city,
+    district,
+    state,
+    pincode,
+    postalCode: pincode,
+    address,
+    phone,
+    phoneDisplay,
+    whatsapp,
+    whatsappDisplay,
+    email,
+    courtCount,
+    surfaceType,
+    googleMapsUrl,
+    googleMapsEmbedUrl,
+    latitude,
+    longitude,
+    description,
+    displayOrder: order,
+    status,
+    isActive,
+    seoTitle,
+    seoDescription,
+    image,
+    courtImage,
+    isPlaceholder,
+    facilities: richData.facilities,
+    openingHours: richData.openingHours,
+    intro: richData.intro,
+    courtInformation: richData.courtInformation,
+    programs: current?.programs || [],
+    coaches: current?.coaches || [],
+    gallery: current?.gallery || [],
+    testimonials: current?.testimonials || [],
+    achievements: current?.achievements || [],
+    localFAQs: current?.localFAQs || [],
+    seo: {
+      title: seoTitle,
+      description: seoDescription,
+      primaryKeyword: `badminton coaching ${area}`,
+      secondaryKeywords: [`badminton academy ${area}`, `badminton courts ${city}`],
+      relatedKeywords: [`training academy ${area}`, `badminton near me`],
+    },
+    createdAt: current?.createdAt || now,
+    updatedAt: now,
+  };
+
+  if (sql) {
+    try {
+      await initContentDb();
+      await sql`
+        INSERT INTO centres (
+          slug, name, short_name, area, city, district, state,
+          pincode, postal_code, address, phone, phone_display,
+          whatsapp, whatsapp_display, email, court_count, surface_type,
+          google_maps_url, google_maps_embed_url, latitude, longitude,
+          description, display_order, status, is_active,
+          seo_title, seo_description, image, court_image, is_placeholder,
+          data, created_at, updated_at
+        ) VALUES (
+          ${slug}, ${name}, ${shortName}, ${area}, ${city}, ${district}, ${state},
+          ${pincode}, ${pincode}, ${address}, ${phone}, ${phoneDisplay},
+          ${whatsapp}, ${whatsappDisplay}, ${email}, ${courtCount}, ${surfaceType},
+          ${googleMapsUrl}, ${googleMapsEmbedUrl}, ${latitude}, ${longitude},
+          ${description}, ${order}, ${status}, ${isActive},
+          ${seoTitle}, ${seoDescription}, ${image}, ${courtImage}, ${isPlaceholder},
+          ${JSON.stringify(richData)}, ${savedCentre.createdAt}, ${now}
+        )
+        ON CONFLICT (slug) DO UPDATE SET
+          name = EXCLUDED.name,
+          short_name = EXCLUDED.short_name,
+          area = EXCLUDED.area,
+          city = EXCLUDED.city,
+          district = EXCLUDED.district,
+          state = EXCLUDED.state,
+          pincode = EXCLUDED.pincode,
+          postal_code = EXCLUDED.postal_code,
+          address = EXCLUDED.address,
+          phone = EXCLUDED.phone,
+          phone_display = EXCLUDED.phone_display,
+          whatsapp = EXCLUDED.whatsapp,
+          whatsapp_display = EXCLUDED.whatsapp_display,
+          email = EXCLUDED.email,
+          court_count = EXCLUDED.court_count,
+          surface_type = EXCLUDED.surface_type,
+          google_maps_url = EXCLUDED.google_maps_url,
+          google_maps_embed_url = EXCLUDED.google_maps_embed_url,
+          latitude = EXCLUDED.latitude,
+          longitude = EXCLUDED.longitude,
+          description = EXCLUDED.description,
+          display_order = EXCLUDED.display_order,
+          status = EXCLUDED.status,
+          is_active = EXCLUDED.is_active,
+          seo_title = EXCLUDED.seo_title,
+          seo_description = EXCLUDED.seo_description,
+          image = EXCLUDED.image,
+          court_image = EXCLUDED.court_image,
+          is_placeholder = EXCLUDED.is_placeholder,
+          data = EXCLUDED.data,
+          updated_at = EXCLUDED.updated_at;
+      `;
+    } catch (sqlErr) {
+      console.warn("SQL upsert centre warning:", sqlErr);
+    }
+  }
+
+  // Update fallback file
+  const fallback = await readFallbackContent();
+  const currentCentres = Array.isArray(fallback.centres) ? (fallback.centres as unknown as Centre[]) : [];
+  const existingIdx = currentCentres.findIndex((c) => c.slug === slug || c.id === slug);
+
+  if (existingIdx !== -1) {
+    currentCentres[existingIdx] = savedCentre;
+  } else {
+    currentCentres.push(savedCentre);
+  }
+  fallback.centres = currentCentres.sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
+  await writeFallbackContent(fallback);
+
+  return savedCentre;
+}
+
+export async function reorderCentres(
+  orderMap: Array<{ id: string; displayOrder: number }>
+): Promise<Centre[]> {
+  const sql = getSql();
+  if (sql && orderMap.length > 0) {
+    try {
+      await initContentDb();
+      for (const item of orderMap) {
+        const order = Number(item.displayOrder) || 1;
+        await sql`
+          UPDATE centres 
+          SET display_order = ${order}, updated_at = NOW() 
+          WHERE slug = ${item.id};
+        `;
+      }
+    } catch (e) {
+      console.warn("Failed updating centres display_order in Neon:", e);
+    }
+  }
+
+  const fallback = await readFallbackContent();
+  const currentCentres = Array.isArray(fallback.centres) ? (fallback.centres as unknown as Centre[]) : [];
+  for (const item of orderMap) {
+    const found = currentCentres.find((c) => c.slug === item.id || c.id === item.id);
+    if (found) {
+      found.displayOrder = Number(item.displayOrder) || 1;
+    }
+  }
+  fallback.centres = currentCentres.sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
+  await writeFallbackContent(fallback);
+
+  return getCentres({ includeInactive: true });
+}
+
+export async function deleteCentreRecord(
+  slug: string,
+  options: { softDelete?: boolean } = {}
+): Promise<{ success: boolean; softDeleted: boolean; message: string }> {
+  const { softDelete = false } = options;
+  const sql = getSql();
+
+  let isReferenced = false;
+  if (sql) {
+    try {
+      await initContentDb();
+      const coachRef = (await sql`SELECT id FROM coaches WHERE primary_centre = ${slug} LIMIT 1;`) as unknown as unknown[];
+      const batchRef = (await sql`SELECT id FROM batches WHERE centre_slug = ${slug} LIMIT 1;`) as unknown as unknown[];
+      const leadRef = (await sql`SELECT id FROM leads WHERE branch = ${slug} LIMIT 1;`) as unknown as unknown[];
+
+      if ((Array.isArray(coachRef) && coachRef.length > 0) || (Array.isArray(batchRef) && batchRef.length > 0) || (Array.isArray(leadRef) && leadRef.length > 0)) {
+        isReferenced = true;
+      }
+    } catch (e) {
+      console.warn("Could not check foreign keys before centre deletion:", e);
+    }
+  }
+
+  // Also check coaches in fallback
+  try {
+    const fallback = await readFallbackContent();
+    const coaches = Array.isArray(fallback.coaches) ? (fallback.coaches as unknown as Coach[]) : [];
+    if (coaches.some((c) => c.primaryCentre === slug || c.primaryBranch?.toLowerCase().includes(slug))) {
+      isReferenced = true;
+    }
+  } catch (e) {
+    // ignore
+  }
+
+  if (isReferenced || softDelete) {
+    // Safely deactivate
+    if (sql) {
+      try {
+        await sql`
+          UPDATE centres 
+          SET status = 'INACTIVE', is_active = FALSE, updated_at = NOW() 
+          WHERE slug = ${slug};
+        `;
+      } catch (e) {
+        console.warn("Could not deactivate centre in Neon:", e);
+      }
+    }
+    const fallback = await readFallbackContent();
+    const currentCentres = Array.isArray(fallback.centres) ? (fallback.centres as unknown as Centre[]) : [];
+    const target = currentCentres.find((c) => c.slug === slug || c.id === slug);
+    if (target) {
+      target.status = "INACTIVE";
+      target.isActive = false;
+      target.updatedAt = new Date().toISOString();
+      await writeFallbackContent(fallback);
+    }
+    return {
+      success: true,
+      softDeleted: true,
+      message: isReferenced
+        ? "Centre is associated with existing coaches or records and has been safely deactivated instead of deleted."
+        : "Centre deactivated successfully.",
+    };
+  }
+
+  // Permanent Delete
+  if (sql) {
+    try {
+      await sql`DELETE FROM centres WHERE slug = ${slug};`;
+    } catch (e) {
+      console.warn("Failed hard delete from Neon centres table:", e);
+    }
+  }
+
+  const fallback = await readFallbackContent();
+  const currentCentres = Array.isArray(fallback.centres) ? (fallback.centres as unknown as Centre[]) : [];
+  fallback.centres = currentCentres.filter((c) => c.slug !== slug && c.id !== slug);
+  await writeFallbackContent(fallback);
+
+  return {
+    success: true,
+    softDeleted: false,
+    message: "Centre permanently deleted.",
+  };
+}
+
 

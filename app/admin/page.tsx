@@ -16,6 +16,7 @@ import { BlogManager } from "@/components/admin/BlogManager";
 import { CoachesManager } from "@/components/admin/CoachesManager";
 import { AchievementsManager } from "@/components/admin/AchievementsManager";
 import { TestimonialsManager } from "@/components/admin/TestimonialsManager";
+import { CentresManager } from "@/components/admin/CentresManager";
 
 export default function AdminDashboardPage() {
   // Authentication State
@@ -350,6 +351,7 @@ export default function AdminDashboardPage() {
             />
           )}
 
+          {activeTab === "centres" && <CentresManager />}
           {activeTab === "gallery" && <GalleryManager />}
           {activeTab === "coaches" && <CoachesManager />}
           {activeTab === "achievements" && <AchievementsManager />}

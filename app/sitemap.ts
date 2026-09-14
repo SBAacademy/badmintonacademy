@@ -1,10 +1,11 @@
 import { MetadataRoute } from "next";
 import { PROGRAMS } from "@/data/programs";
 import { LOCATIONS } from "@/data/locations";
+import { getCentres } from "@/lib/contentDb";
 import { BLOG_POSTS } from "@/data/blog";
 import { SITE_URL } from "@/lib/seo";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
 
   // Core Static Pages
@@ -26,8 +27,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: route === "" ? 1.0 : 0.8,
   }));
 
-  // Primary 4 Centre Local SEO Pages
-  const locationRoutes = Object.values(LOCATIONS).map((loc) => ({
+  // Dynamic Active Centre Local SEO Pages
+  const dynamicCentres = await getCentres({ includeInactive: false });
+  const centresList = dynamicCentres.length > 0 ? dynamicCentres : Object.values(LOCATIONS);
+  const locationRoutes = centresList.map((loc) => ({
     url: `${SITE_URL}/${loc.slug}`,
     lastModified: now,
     changeFrequency: "weekly" as const,

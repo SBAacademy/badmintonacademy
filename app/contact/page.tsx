@@ -4,10 +4,12 @@ import { MapPin, Phone, Mail, Clock, MessageCircle } from "lucide-react";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { createMetadata } from "@/lib/seo";
 import { ACADEMY_DATA } from "@/data/academy";
-import { LOCATIONS } from "@/data/locations";
+import { getCentres } from "@/lib/contentDb";
 import { EnquiryForm } from "@/components/forms/EnquiryForm";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { FAQSection } from "@/components/sections/FAQSection";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = createMetadata({
   title: "Contact & Book Free Trial | S & A Badminton Academy Kochi",
@@ -21,8 +23,8 @@ export const metadata: Metadata = createMetadata({
   ],
 });
 
-export default function ContactPage() {
-  const centres = Object.values(LOCATIONS);
+export default async function ContactPage() {
+  const centres = await getCentres({ includeInactive: false });
 
   return (
     <div className="bg-[#07090D] min-h-screen text-white select-none">
@@ -127,11 +129,11 @@ export default function ContactPage() {
                 {centres.map((b) => (
                   <div key={b.slug} className="p-3 bg-[#07090D] border border-[#1F2937] flex items-center justify-between">
                     <div>
-                      <div className="font-bold text-white">{b.shortName}</div>
-                      <div className="text-[11px] text-[#A8B0BA] font-mono truncate max-w-[220px]">{b.address}</div>
+                      <div className="font-bold text-white">{b.shortName || b.name}</div>
+                      <div className="text-[11px] text-[#A8B0BA] font-mono truncate max-w-[220px]">{b.address || ""}</div>
                     </div>
                     <a
-                      href={b.googleMapsUrl}
+                      href={b.googleMapsUrl || "#"}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="font-mono text-[10px] text-[#B8F000] hover:underline"
@@ -147,7 +149,7 @@ export default function ContactPage() {
 
           {/* Right Column: Interactive Booking Form */}
           <div className="lg:col-span-7">
-            <EnquiryForm />
+            <EnquiryForm initialCentres={centres} />
           </div>
 
         </div>

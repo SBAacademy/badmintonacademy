@@ -12,8 +12,9 @@ import {
   BookOpen,
   Users2,
   Trophy,
-  Star,
+  MapPin,
   LayoutDashboard,
+  Star,
 } from "lucide-react";
 import { AdminTab } from "./AdminSidebar";
 
@@ -48,6 +49,13 @@ const TAB_INFO: Record<
     subtitle: "Manage parent inquiries, WhatsApp follow-ups, trials, and enrolments",
     icon: Users,
     primaryActionLabel: "+ Add Inquiry",
+  },
+  centres: {
+    title: "Centres & Arena Infrastructure",
+    subtitle: "Manage academy centres, court counts, addresses, map links, and display order",
+    icon: MapPin,
+    publicUrl: "/branches",
+    publicLabel: "View Centres Directory",
   },
   gallery: {
     title: "Court & Training Gallery",

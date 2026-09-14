@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { GalleryItem, GALLERY_ITEMS } from "@/data/gallery";
 import { ImageUploadField } from "./ImageUploadField";
+import { Centre } from "@/data/centres";
 
 const CATEGORIES: GalleryItem["category"][] = [
   "Courts & Arena",
@@ -27,10 +28,9 @@ const CATEGORIES: GalleryItem["category"][] = [
   "Coaching Sessions",
 ];
 
-const BRANCHES = ["Kadavanthra", "Edappally", "Kakkanad", "All Centres"];
-
 export function GalleryManager() {
   const [items, setItems] = useState<GalleryItem[]>([]);
+  const [centres, setCentres] = useState<Centre[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("All");
@@ -42,7 +42,7 @@ export function GalleryManager() {
   const [form, setForm] = useState<Partial<GalleryItem>>({
     title: "",
     category: "Courts & Arena",
-    branch: "Kadavanthra",
+    branch: "",
     image: "",
     caption: "",
   });
@@ -66,14 +66,27 @@ export function GalleryManager() {
 
   useEffect(() => {
     fetchGallery();
+    const fetchCentres = async () => {
+      try {
+        const res = await fetch("/api/centres");
+        const data = await res.json();
+        if (data.success && Array.isArray(data.items)) {
+          setCentres(data.items);
+        }
+      } catch (err) {
+        console.error("Failed to load centres in GalleryManager:", err);
+      }
+    };
+    fetchCentres();
   }, []);
 
   const openAddModal = () => {
     setEditingItem(null);
+    const defaultBranch = centres[0]?.shortName || centres[0]?.name || "All Centres";
     setForm({
       title: "",
       category: "Courts & Arena",
-      branch: "Kadavanthra",
+      branch: defaultBranch,
       image: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?q=80&w=1200&auto=format&fit=crop",
       caption: "",
     });
@@ -373,11 +386,18 @@ export function GalleryManager() {
                     onChange={(e) => setForm({ ...form, branch: e.target.value })}
                     className="w-full px-3 py-2 bg-[#07090D] border border-[#1F2937] text-white focus:outline-none focus:border-[#B8F000]"
                   >
-                    {BRANCHES.map((b) => (
-                      <option key={b} value={b}>
-                        {b}
-                      </option>
-                    ))}
+                    {form.branch && !centres.some((c) => (c.shortName || c.name) === form.branch) && form.branch !== "All Centres" && (
+                      <option value={form.branch}>{form.branch} (Historical)</option>
+                    )}
+                    {centres.map((c) => {
+                      const val = c.shortName || c.name;
+                      return (
+                        <option key={c.slug} value={val}>
+                          {c.name}
+                        </option>
+                      );
+                    })}
+                    <option value="All Centres">All Centres</option>
                   </select>
                 </div>
               </div>

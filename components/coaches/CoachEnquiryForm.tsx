@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Send, MessageSquare, CheckCircle2, AlertCircle, PhoneCall, ExternalLink } from "lucide-react";
+import { Send, MessageSquare, CheckCircle2, AlertCircle } from "lucide-react";
 import { Coach, formatWhatsAppDisplay } from "@/data/coaches";
 
 interface CoachEnquiryFormProps {
@@ -44,7 +44,7 @@ export function CoachEnquiryForm({ coach }: CoachEnquiryFormProps) {
     }
 
     if (!hasWhatsApp) {
-      setErrorMessage("Direct WhatsApp is not yet configured for this coach. Please use the academy reception button below.");
+      setErrorMessage("Direct WhatsApp enquiry is unavailable for this coach.");
       return;
     }
 
@@ -101,35 +101,6 @@ export function CoachEnquiryForm({ coach }: CoachEnquiryFormProps) {
           </p>
         </div>
 
-        {/* Missing WhatsApp Notice */}
-        {!hasWhatsApp && (
-          <div className="p-4 bg-amber-500/10 border border-amber-500/30 text-amber-300 font-mono text-xs space-y-3">
-            <div className="flex items-start gap-2.5">
-              <AlertCircle className="w-4 h-4 shrink-0 text-amber-400 mt-0.5" />
-              <div>
-                <p className="font-bold text-amber-200 uppercase tracking-wide">
-                  Direct WhatsApp Enquiry Pending Setup
-                </p>
-                <p className="text-amber-300/80 text-[11px] mt-0.5 leading-relaxed">
-                  Coach {coach.name}’s direct mobile number is currently being configured by academy administration.
-                  You can connect directly with our Head Reception to book trials with this coach.
-                </p>
-              </div>
-            </div>
-            <a
-              href={`https://wa.me/919400635548?text=${encodeURIComponent(
-                `Hello S&A Badminton Academy, I want to enquire about training with Coach ${coach.name} at ${coach.primaryBranch}.`
-              )}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 w-full py-2.5 bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/50 text-emerald-300 font-bold uppercase tracking-wider text-xs transition-colors"
-            >
-              <PhoneCall className="w-4 h-4" />
-              <span>Connect via Academy Main WhatsApp</span>
-              <ExternalLink className="w-3.5 h-3.5" />
-            </a>
-          </div>
-        )}
 
         {/* Success Banner */}
         {submitted && (
@@ -249,7 +220,7 @@ export function CoachEnquiryForm({ coach }: CoachEnquiryFormProps) {
               <Send className="w-4 h-4" />
               <span>
                 {hasWhatsApp
-                  ? `Send WhatsApp Enquiry to ${coach.name}`
+                  ? "Open Direct WhatsApp Enquiry"
                   : "WhatsApp Enquiry Unavailable for this Coach"}
               </span>
             </button>

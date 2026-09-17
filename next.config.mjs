@@ -6,12 +6,12 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'images.unsplash.com',
+        hostname: '**',
       },
       {
-        protocol: 'https',
-        hostname: 'plus.unsplash.com',
-      }
+        protocol: 'http',
+        hostname: '**',
+      },
     ],
   },
   async redirects() {

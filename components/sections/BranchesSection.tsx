@@ -10,71 +10,85 @@ import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { trackEvent } from "@/lib/analytics";
 import { resolveAutomaticNeighborhoods } from "@/lib/constants";
 
-export function BranchesSection() {
-  const [dynamicCentres, setDynamicCentres] = useState<Centre[]>([]);
+export function BranchesSection({ initialCentres }: { initialCentres?: Centre[] }) {
+  const [dynamicCentres, setDynamicCentres] = useState<Centre[]>(initialCentres || []);
 
   useEffect(() => {
     fetch("/api/centres")
       .then((res) => res.json())
       .then((data) => {
-        if (data.success && Array.isArray(data.items) && data.items.length > 0) {
-          setDynamicCentres(data.items);
+        const list = Array.isArray(data.centres)
+          ? data.centres
+          : Array.isArray(data.items)
+          ? data.items
+          : Array.isArray(data.data)
+          ? data.data
+          : Array.isArray(data)
+          ? data
+          : [];
+        if (list.length > 0) {
+          setDynamicCentres(list);
         }
       })
       .catch((err) => console.error("Failed to load centres in BranchesSection:", err));
   }, []);
 
-  const locationsList: LocationData[] =
-    dynamicCentres.length > 0
-      ? dynamicCentres.map((c) => {
-          const staticLoc = LOCATIONS[c.slug as keyof typeof LOCATIONS];
-          const autoNeighborhoods = resolveAutomaticNeighborhoods(c.address, c.name);
-          const morningTiming = c.openingHours?.morning
-            ? `${c.openingHours.morning}${c.openingHours.evening ? ` | ${c.openingHours.evening}` : ""}`
-            : "5:00 AM – 10:00 PM (All 7 Days)";
+  const locationsList: LocationData[] = dynamicCentres.map((c) => {
+    const staticLoc = LOCATIONS[c.slug as keyof typeof LOCATIONS];
+    const autoNeighborhoods = resolveAutomaticNeighborhoods(c.address, c.name);
+    const morningTiming = c.openingHours?.morning
+      ? `${c.openingHours.morning}${c.openingHours.evening ? ` | ${c.openingHours.evening}` : ""}`
+      : "5:00 AM – 10:00 PM (All 7 Days)";
 
-          return {
-            ...(staticLoc || {}),
-            ...c,
-            slug: c.slug,
-            name: c.name,
-            shortName: c.shortName || c.name,
-            district: c.district || "Kochi",
-            address: c.address || "",
-            phone: c.phone || "+91 94006 35548",
-            phoneDisplay: c.phoneDisplay || c.phone || "+91 94006 35548",
-            email: c.email || "",
-            whatsapp: (c as any).whatsapp || "919400635548",
-            whatsappDisplay: (c as any).whatsappDisplay || "+91 94006 35548",
-            image: c.image || "/images/badminton-arena.jpg",
-            openingHours: {
-              days: "Monday - Sunday (7 Days Open)",
-              morning: morningTiming,
-              evening: "",
-            },
-            intro: {
-              heading: c.name,
-              subheading: "Premier Badminton Arena",
-              description: c.description || c.intro?.description || "Dedicated badminton coaching and athletic conditioning arena in Kochi.",
-              neighbourhoodsServed: autoNeighborhoods,
-              connectivity: "Easily accessible from major transit corridors across Kochi",
-            },
-            facilities: c.facilities || [],
-            coaches: c.coaches || [],
-            programs: [],
-            testimonials: c.testimonials || [],
-            achievements: [],
-            localFAQs: [],
-            seo: {
-              title: c.seo?.title || `${c.name} | S & A Badminton Academy`,
-              description: c.seo?.description || c.description || "",
-              primaryKeyword: c.seo?.primaryKeyword || `badminton coaching in ${c.name}`,
-              secondaryKeywords: c.seo?.secondaryKeywords || [],
-              relatedKeywords: c.seo?.relatedKeywords || [],
-            },
-          } as unknown as LocationData;
-        })
-      : Object.values(LOCATIONS);
+    const primaryImage = c.image || c.courtImage || (staticLoc as any)?.image || "/images/badminton-arena.jpg";
+
+    return {
+      ...(staticLoc || {}),
+      ...c,
+      slug: c.slug,
+      name: c.name,
+      shortName: c.shortName || c.name,
+      district: c.district || "Kochi",
+      address: c.address || "",
+      phone: c.phone || "+91 94006 35548",
+      phoneDisplay: c.phoneDisplay || c.phone || "+91 94006 35548",
+      email: c.email || "",
+      whatsapp: (c as any).whatsapp || "919400635548",
+      whatsappDisplay: (c as any).whatsappDisplay || "+91 94006 35548",
+      googleMapsUrl: c.googleMapsUrl || `https://maps.google.com/?q=${encodeURIComponent(c.address || c.name + " Kochi")}`,
+      image: primaryImage,
+      gallery: (c as any).gallery?.length > 0 ? (c as any).gallery : [{ url: primaryImage, caption: c.name }],
+      courtInformation: {
+        courtCount: c.courtCount || 3,
+        surfaceType: c.surfaceType || "BWF Grade-1 Certified Synthetic Surface",
+      },
+      openingHours: {
+        days: "Monday - Sunday (7 Days Open)",
+        morning: morningTiming,
+        evening: "",
+      },
+      intro: {
+        heading: c.name,
+        subheading: c.shortName || "Premier Badminton Arena",
+        description: c.description || (staticLoc as any)?.intro?.description || "Dedicated badminton coaching and athletic conditioning arena in Kochi.",
+        neighbourhoodsServed: autoNeighborhoods,
+        connectivity: "Easily accessible from major transit corridors across Kochi",
+      },
+      facilities: c.facilities || (staticLoc as any)?.facilities || [],
+      coaches: c.coaches || (staticLoc as any)?.coaches || [],
+      programs: [],
+      testimonials: c.testimonials || [],
+      achievements: [],
+      localFAQs: [],
+      seo: {
+        title: c.seoTitle || c.seo?.title || `${c.name} | S & A Badminton Academy`,
+        description: c.seoDescription || c.seo?.description || c.description || "",
+        primaryKeyword: c.seo?.primaryKeyword || `badminton coaching in ${c.name}`,
+        secondaryKeywords: c.seo?.secondaryKeywords || [],
+        relatedKeywords: c.seo?.relatedKeywords || [],
+      },
+    } as unknown as LocationData;
+  });
 
   const [selectedSlug, setSelectedSlug] = useState<string>(locationsList[0]?.slug || "kadavanthra");
 
@@ -94,6 +108,10 @@ export function BranchesSection() {
   const handleDirections = (locName: string, locSlug: string) => {
     trackEvent("map_directions_click", { location: locSlug, source: "rebel_arena_selector" });
   };
+
+  if (locationsList.length === 0) {
+    return null;
+  }
 
   return (
     <section 
@@ -203,11 +221,12 @@ export function BranchesSection() {
               {/* Centre Photography */}
               <div className="relative aspect-[16/9] overflow-hidden bg-[#07090D] border border-[#1F2937]">
                 <Image
-                  src={activeCentre.gallery[0]?.url || "/images/badminton-arena.jpg"}
+                  src={activeCentre.image || activeCentre.gallery?.[0]?.url || "/images/badminton-arena.jpg"}
                   alt={`${activeCentre.name} badminton courts Kochi`}
                   fill
                   className="object-cover filter contrast-110"
                   sizes="(max-width: 1280px) 50vw, 600px"
+                  unoptimized={Boolean(activeCentre.image && (activeCentre.image.startsWith("http") || activeCentre.image.startsWith("data:")))}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F14] via-transparent to-transparent" />
                 <div className="absolute top-4 left-4 px-3 py-1 bg-[#07090D]/90 border border-[#1F2937] font-mono text-[10px] font-bold text-[#B8F000] uppercase tracking-wider">
@@ -339,11 +358,12 @@ export function BranchesSection() {
                   <div className="p-5 border-t border-[#1F2937] space-y-4 bg-[#07090D]">
                     <div className="relative aspect-[16/10] overflow-hidden bg-[#0B0F14] border border-[#1F2937]">
                       <Image
-                        src={loc.gallery[0]?.url || "/images/badminton-arena.jpg"}
+                        src={loc.image || loc.gallery?.[0]?.url || "/images/badminton-arena.jpg"}
                         alt={loc.name}
                         fill
                         className="object-cover"
                         sizes="100vw"
+                        unoptimized={Boolean(loc.image && (loc.image.startsWith("http") || loc.image.startsWith("data:")))}
                       />
                     </div>
 

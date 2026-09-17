@@ -88,6 +88,7 @@ export interface LocationData {
   achievements: string[];
   localFAQs: LocationFAQ[];
   seo: LocationSEO;
+  image?: string;
   isPlaceholder?: boolean;
 }
 

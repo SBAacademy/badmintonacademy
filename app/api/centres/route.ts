@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { getCentres } from "@/lib/contentDb";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 // GET /api/centres - Public active centres in displayOrder ASC
 export async function GET() {

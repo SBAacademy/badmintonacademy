@@ -9,12 +9,14 @@ import { BranchesSection } from "@/components/sections/BranchesSection";
 import { CoachesSpotlight } from "@/components/sections/CoachesSpotlight";
 import { AchievementsSection } from "@/components/sections/AchievementsSection";
 import { GalleryPreview } from "@/components/sections/GalleryPreview";
-import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
 import { FAQSection } from "@/components/sections/FAQSection";
 import { FinalCTA } from "@/components/sections/FinalCTA";
+import { ReviewsSliderSection } from "@/components/sections/ReviewsSliderSection";
 import { createMetadata } from "@/lib/seo";
+import { getCentres, getPrograms, getCoaches, getTestimonials } from "@/lib/contentDb";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export const metadata: Metadata = createMetadata({
   title: "Badminton Coaching & Academy in Kochi | Kadavanthra, Edappally, Kakkanad",
@@ -31,11 +33,18 @@ export const metadata: Metadata = createMetadata({
   ],
 });
 
-export default function HomePage() {
+export default async function HomePage() {
+  const [centres, programs, coaches, testimonials] = await Promise.all([
+    getCentres({ includeInactive: false }),
+    getPrograms(),
+    getCoaches(),
+    getTestimonials({ includePending: false }),
+  ]);
+
   return (
     <>
       {/* 01. Cinematic Athletic Hero */}
-      <HeroSection />
+      <HeroSection initialCentres={centres} />
 
       {/* 02. Performance Ticker Marquee */}
       <PerformanceMarquee />
@@ -44,16 +53,16 @@ export default function HomePage() {
       <WhySA />
 
       {/* 04. Program Experience */}
-      <ProgramsSection />
+      <ProgramsSection initialPrograms={programs} />
 
       {/* 05. 4-Stage Methodology Sequence */}
       <MethodologySection />
 
-      {/* 06. Four-Centre Arena Selector */}
-      <BranchesSection />
+      {/* 06. Multi-Centre Arena Selector */}
+      <BranchesSection initialCentres={centres} />
 
       {/* 07. Editorial Coaches Spotlight */}
-      <CoachesSpotlight />
+      <CoachesSpotlight initialCoaches={coaches} />
 
       {/* 08. Trophy Wall Tournament Archive */}
       <AchievementsSection />
@@ -61,14 +70,14 @@ export default function HomePage() {
       {/* 09. Court Action Visual Gallery */}
       <GalleryPreview />
 
-      {/* 10. Editorial Testimonials */}
-      <TestimonialsSection />
-
-      {/* 11. FAQ Intel Briefing */}
+      {/* 10. FAQ Intel Briefing */}
       <FAQSection limit={6} />
 
-      {/* 12. Final Campaign CTA */}
-      <FinalCTA />
+      {/* 11. Final Campaign CTA */}
+      <FinalCTA initialCount={centres.length} />
+
+      {/* 12. Reviews Section (Directly Before Footer) */}
+      <ReviewsSliderSection initialReviews={testimonials} />
     </>
   );
 }

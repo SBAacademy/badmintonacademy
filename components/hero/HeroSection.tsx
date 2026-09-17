@@ -8,15 +8,24 @@ import { ACADEMY_DATA } from "@/data/academy";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { trackEvent } from "@/lib/analytics";
 
-export function HeroSection() {
-  const [centres, setCentres] = useState<Array<{ shortName?: string; name: string }>>([]);
+export function HeroSection({ initialCentres }: { initialCentres?: Array<{ shortName?: string; name: string }> }) {
+  const [centres, setCentres] = useState<Array<{ shortName?: string; name: string }>>(initialCentres || []);
 
   useEffect(() => {
     fetch("/api/centres")
       .then((res) => res.json())
       .then((data) => {
-        if (data.success && Array.isArray(data.items) && data.items.length > 0) {
-          setCentres(data.items);
+        const list = Array.isArray(data.centres)
+          ? data.centres
+          : Array.isArray(data.items)
+          ? data.items
+          : Array.isArray(data.data)
+          ? data.data
+          : Array.isArray(data)
+          ? data
+          : [];
+        if (list.length > 0) {
+          setCentres(list);
         }
       })
       .catch(() => {});
@@ -26,10 +35,10 @@ export function HeroSection() {
     trackEvent("whatsapp_click", { source: "hero_rebel" });
   };
 
-  const countStr = centres.length > 0 ? (centres.length < 10 ? `0${centres.length}` : `${centres.length}`) : "03";
+  const countStr = centres.length < 10 ? `0${centres.length}` : `${centres.length}`;
   const namesStr = centres.length > 0
     ? centres.map((c) => (c.shortName || c.name).toUpperCase()).join(" • ")
-    : "KADAVANTHRA • EDAPPALLY • KAKKANAD";
+    : "CENTRES ACROSS KOCHI";
 
   return (
     <section className="relative min-h-[90vh] lg:min-h-[95vh] flex items-center justify-center overflow-hidden bg-[#07090D] border-b border-[#1F2937]">

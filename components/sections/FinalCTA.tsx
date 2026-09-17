@@ -7,15 +7,24 @@ import { ACADEMY_DATA } from "@/data/academy";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { trackEvent } from "@/lib/analytics";
 
-export function FinalCTA() {
-  const [centreCount, setCentreCount] = useState<number>(3);
+export function FinalCTA({ initialCount }: { initialCount?: number }) {
+  const [centreCount, setCentreCount] = useState<number>(initialCount !== undefined ? initialCount : 0);
 
   useEffect(() => {
     fetch("/api/centres")
       .then((res) => res.json())
       .then((data) => {
-        if (data.success && Array.isArray(data.items) && data.items.length > 0) {
-          setCentreCount(data.items.length);
+        const list = Array.isArray(data.centres)
+          ? data.centres
+          : Array.isArray(data.items)
+          ? data.items
+          : Array.isArray(data.data)
+          ? data.data
+          : Array.isArray(data)
+          ? data
+          : [];
+        if (list.length > 0 || data.success) {
+          setCentreCount(list.length);
         }
       })
       .catch(() => {});

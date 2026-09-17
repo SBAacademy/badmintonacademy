@@ -310,17 +310,17 @@
   ],
   "testimonials": [
     {
-      "id": "rev-1789680783245",
-      "name": "Test Visitor",
+      "id": "rev-1789681715527",
+      "name": "Rohan Varma",
       "role": "Verified Athlete / Parent",
       "branch": "Kadavanthra",
       "rating": 5,
-      "highlight": "Outstanding training experience and facility!",
-      "content": "Outstanding training experience and facility!",
-      "avatarText": "TV",
+      "highlight": "Superb training quality and coaching attention.",
+      "content": "Superb training quality and coaching attention.",
+      "avatarText": "RV",
       "status": "PENDING",
       "isApproved": false,
-      "createdAt": "2026-09-17T21:33:03.245Z"
+      "createdAt": "2026-09-17T21:48:35.527Z"
     },
     {
       "id": "t-1",

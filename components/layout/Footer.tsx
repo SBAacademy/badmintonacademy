@@ -39,7 +39,12 @@ export function Footer() {
             </div>
           </div>
           <div className="font-mono text-xs text-[#A8B0BA] uppercase tracking-wider">
-            KOCHI &bull; KADAVANTHRA &bull; EDAPPALLY &bull; KAKKANAD
+            {centres.length > 0
+              ? `KOCHI • ${centres
+                  .map((c) => (c.shortName || c.name || "").replace(/\s+(Centre|Branch)$/i, "").toUpperCase())
+                  .filter(Boolean)
+                  .join(" • ")}`
+              : "KOCHI • KADAVANTHRA • EDAPPALLY • KAKKANAD"}
           </div>
         </div>
 

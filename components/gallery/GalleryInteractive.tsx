@@ -6,6 +6,13 @@ import { X, ChevronLeft, ChevronRight, Eye, MapPin } from "lucide-react";
 import { GALLERY_ITEMS, GalleryItem } from "@/data/gallery";
 import { normalizeImageSrc, isInternalImage } from "@/lib/imageUtils";
 
+import { Centre } from "@/data/centres";
+
+interface GalleryInteractiveProps {
+  initialItems?: GalleryItem[];
+  initialCentres?: Centre[];
+}
+
 const CATEGORIES = [
   "All",
   "Courts & Arena",
@@ -15,12 +22,14 @@ const CATEGORIES = [
   "Coaching Sessions",
 ];
 
-const BRANCH_FILTERS = ["All Centres", "Kadavanthra", "Edappally", "Kakkanad"];
-
-export function GalleryInteractive({ initialItems }: { initialItems?: GalleryItem[] }) {
+export function GalleryInteractive({
+  initialItems,
+  initialCentres,
+}: GalleryInteractiveProps) {
   const [items, setItems] = useState<GalleryItem[]>(initialItems || GALLERY_ITEMS);
+  const [centres, setCentres] = useState<Centre[]>(initialCentres || []);
   const [activeCategory, setActiveCategory] = useState("All");
-  const [activeBranch, setActiveBranch] = useState("All Centres");
+  const [activeBranchKey, setActiveBranchKey] = useState("all");
   const [selectedItem, setSelectedItem] = useState<GalleryItem | null>(null);
 
   React.useEffect(() => {
@@ -32,17 +41,124 @@ export function GalleryInteractive({ initialItems }: { initialItems?: GalleryIte
         }
       })
       .catch(() => {});
+
+    fetch("/api/centres")
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.success && Array.isArray(d.items) && d.items.length > 0) {
+          setCentres(d.items);
+        }
+      })
+      .catch(() => {});
   }, []);
+
+  // Dynamically compute unique, clean centre filters from active centres + existing items
+  const branchFilters = React.useMemo(() => {
+    const clean = (s?: string) => (s || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+
+    const getCleanLabel = (name?: string, shortName?: string) => {
+      const raw = (shortName || name || "").trim();
+      return raw
+        .replace(/^S\s*&\s*A\s+Badminton\s+Academy\s*[–—\-:]\s*/i, "")
+        .replace(/\s+(Centre|Branch)$/i, "")
+        .trim();
+    };
+
+    const list: Array<{
+      key: string;
+      label: string;
+      slug?: string;
+      name?: string;
+      shortName?: string;
+    }> = [{ key: "all", label: "All Centres" }];
+
+    // 1. Add active centres from database / API
+    if (Array.isArray(centres) && centres.length > 0) {
+      for (const c of centres) {
+        if (c.status === "INACTIVE" || c.isActive === false) continue;
+        const label = getCleanLabel(c.name, c.shortName);
+        if (!label) continue;
+        const key = c.slug || clean(label);
+        if (!list.some((existing) => existing.key === key)) {
+          list.push({
+            key,
+            label,
+            slug: c.slug,
+            name: c.name,
+            shortName: c.shortName,
+          });
+        }
+      }
+    }
+
+    // 2. Also ensure any specific branch present on gallery items is represented
+    for (const item of items) {
+      if (!item.branch) continue;
+      const b = item.branch.trim();
+      const bClean = clean(b);
+      if (!bClean || bClean === "allcentres" || bClean === "all") continue;
+
+      const alreadyExists = list.some((f) => {
+        if (f.key === "all") return false;
+        const fClean = clean(f.label);
+        const sClean = clean(f.slug);
+        return (
+          fClean === bClean ||
+          sClean === bClean ||
+          (fClean.length > 3 && bClean.includes(fClean)) ||
+          (bClean.length > 3 && fClean.includes(bClean))
+        );
+      });
+
+      if (!alreadyExists) {
+        const label = getCleanLabel(b, b);
+        list.push({
+          key: clean(b),
+          label: label || b,
+          slug: clean(b),
+          name: b,
+        });
+      }
+    }
+
+    return list;
+  }, [centres, items]);
+
+  const currentBranchKey = branchFilters.some((f) => f.key === activeBranchKey)
+    ? activeBranchKey
+    : "all";
 
   const filteredItems = items.filter((item) => {
     const matchesCategory = activeCategory === "All" || item.category === activeCategory;
-    const itemBranchClean = (item.branch || "").toLowerCase();
-    const activeBranchClean = activeBranch.toLowerCase();
-    const matchesBranch =
-      activeBranch === "All Centres" ||
-      itemBranchClean.includes(activeBranchClean) ||
-      itemBranchClean === "all centres";
-    return matchesCategory && matchesBranch;
+    if (!matchesCategory) return false;
+
+    if (currentBranchKey === "all") return true;
+
+    const activeOption = branchFilters.find((f) => f.key === currentBranchKey);
+    if (!activeOption) return true;
+
+    const itemBranch = (item.branch || "").trim();
+    const bClean = itemBranch.toLowerCase().replace(/[^a-z0-9]/g, "");
+    if (!bClean) return false;
+
+    // Photos tagged for All Centres show across every centre
+    if (bClean === "allcentres" || bClean === "all") return true;
+
+    const clean = (s?: string) => (s || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+    const fClean = clean(activeOption.label);
+    const sClean = clean(activeOption.slug);
+    const nClean = clean(activeOption.name);
+    const snClean = clean(activeOption.shortName);
+
+    return (
+      bClean === fClean ||
+      bClean === sClean ||
+      (sClean.length > 0 && bClean.includes(sClean)) ||
+      (fClean.length > 0 && bClean.includes(fClean)) ||
+      (bClean.length > 3 && fClean.includes(bClean)) ||
+      (nClean.length > 0 && (nClean.includes(bClean) || bClean.includes(nClean))) ||
+      (snClean.length > 0 && (snClean.includes(bClean) || bClean.includes(snClean)))
+    );
   });
 
   const handleNext = () => {
@@ -68,20 +184,20 @@ export function GalleryInteractive({ initialItems }: { initialItems?: GalleryIte
           <span>Select Centre:</span>
         </span>
         <div className="flex items-center gap-2 flex-wrap justify-center font-mono text-xs">
-          {BRANCH_FILTERS.map((branch) => {
-            const isActive = activeBranch === branch;
+          {branchFilters.map((option) => {
+            const isActive = currentBranchKey === option.key;
             return (
               <button
-                key={branch}
+                key={option.key}
                 type="button"
-                onClick={() => setActiveBranch(branch)}
+                onClick={() => setActiveBranchKey(option.key)}
                 className={`px-3.5 py-1.5 border uppercase font-bold transition-all cursor-pointer ${
                   isActive
                     ? "bg-[#B8F000] text-[#07090D] border-[#B8F000] shadow-[0_0_12px_rgba(184,240,0,0.2)]"
                     : "bg-[#0B0F14] text-[#A8B0BA] border-[#1F2937] hover:border-[#374151] hover:text-white"
                 }`}
               >
-                {branch}
+                {option.label}
               </button>
             );
           })}
@@ -110,42 +226,64 @@ export function GalleryInteractive({ initialItems }: { initialItems?: GalleryIte
       </div>
 
       {/* Gallery Media Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {filteredItems.map((item) => {
-          const itemImage = normalizeImageSrc(item.image);
-          return (
-            <div
-              key={item.id}
-              onClick={() => setSelectedItem(item)}
-              className="group relative rounded-2xl overflow-hidden aspect-square bg-slate-900 border border-slate-800 hover:border-emerald-500/50 transition-all duration-300 shadow-lg cursor-pointer"
-            >
-              <Image
-                src={itemImage}
-                alt={item.title}
-                fill
-                unoptimized={isInternalImage(itemImage)}
-                className="object-cover group-hover:scale-105 transition-transform duration-500"
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#090D16] via-[#090D16]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-5">
-                <div className="w-9 h-9 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mb-2">
-                  <Eye className="w-4 h-4" />
-                </div>
-                <h3 className="text-sm font-bold text-white leading-snug">
-                  {item.title}
-                </h3>
-                <p className="text-[11px] text-slate-300 mt-1 line-clamp-2">
-                  {item.caption}
-                </p>
-                <div className="flex items-center gap-1 text-[10px] text-emerald-400 font-semibold mt-2">
-                  <MapPin className="w-3 h-3" />
-                  <span>{item.branch} Branch</span>
+      {filteredItems.length === 0 ? (
+        <div className="text-center py-16 px-4 rounded-2xl bg-[#0B0F14] border border-[#1F2937]">
+          <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-[#1F2937] flex items-center justify-center text-[#B8F000]">
+            <MapPin className="w-6 h-6" />
+          </div>
+          <h3 className="text-lg font-bold text-white uppercase tracking-tight">No Photos in This Selection</h3>
+          <p className="text-xs text-[#A8B0BA] font-mono mt-1 max-w-md mx-auto">
+            Visuals for this centre or category will be updated shortly. Switch to &quot;All Centres&quot; or explore other categories.
+          </p>
+          <button
+            type="button"
+            onClick={() => {
+              setActiveBranchKey("all");
+              setActiveCategory("All");
+            }}
+            className="mt-4 px-4 py-2 bg-[#B8F000] text-[#07090D] font-mono text-xs font-black uppercase tracking-wider cursor-pointer hover:bg-[#cbf722] transition-colors"
+          >
+            Reset Filters
+          </button>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {filteredItems.map((item) => {
+            const itemImage = normalizeImageSrc(item.image);
+            return (
+              <div
+                key={item.id}
+                onClick={() => setSelectedItem(item)}
+                className="group relative rounded-2xl overflow-hidden aspect-square bg-slate-900 border border-slate-800 hover:border-emerald-500/50 transition-all duration-300 shadow-lg cursor-pointer"
+              >
+                <Image
+                  src={itemImage}
+                  alt={item.title}
+                  fill
+                  unoptimized={isInternalImage(itemImage)}
+                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#090D16] via-[#090D16]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-5">
+                  <div className="w-9 h-9 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mb-2">
+                    <Eye className="w-4 h-4" />
+                  </div>
+                  <h3 className="text-sm font-bold text-white leading-snug">
+                    {item.title}
+                  </h3>
+                  <p className="text-[11px] text-slate-300 mt-1 line-clamp-2">
+                    {item.caption}
+                  </p>
+                  <div className="flex items-center gap-1 text-[10px] text-emerald-400 font-semibold mt-2">
+                    <MapPin className="w-3 h-3" />
+                    <span>{item.branch} Branch</span>
+                  </div>
                 </div>
               </div>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
+      )}
 
       {/* Fullscreen Lightbox Modal */}
       {selectedItem && (() => {

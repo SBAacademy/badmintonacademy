@@ -34,7 +34,7 @@ class _GalleryScreenState extends ConsumerState<GalleryScreen> {
     {'key': 'DRAFT', 'label': 'Draft'},
   ];
 
-  final List<String> _centres = ['ALL', 'Kadavanthra', 'Edappally', 'Kakkanad'];
+  List<String> _centres = ['ALL', 'Kadavanthra', 'Edappally', 'Kakkanad'];
 
   final List<String> _categories = [
     'ALL',
@@ -67,9 +67,38 @@ class _GalleryScreenState extends ConsumerState<GalleryScreen> {
       final res = await _client.dio.get(ApiEndpoints.cms('gallery'));
       final rawItems = (res.data['items'] ?? res.data['data']?['items'] ?? []) as List<dynamic>;
 
+      List<String> dynamicCentres = List<String>.from(_centres);
+      try {
+        final centresRes = await _client.dio.get(ApiEndpoints.centres);
+        final rawCentres = (centresRes.data['items'] ?? centresRes.data['centres'] ?? []) as List<dynamic>;
+        if (rawCentres.isNotEmpty) {
+          final updated = <String>['ALL'];
+          for (final c in rawCentres) {
+            final name = (c['shortName'] ?? c['short_name'] ?? c['name'] ?? '')
+                .toString()
+                .replaceAll(RegExp(r'\s+(Centre|Branch)$', caseSensitive: false), '')
+                .trim();
+            if (name.isNotEmpty && !updated.contains(name)) {
+              updated.add(name);
+            }
+          }
+          for (final item in rawItems) {
+            final b = (item['branch'] ?? '')
+                .toString()
+                .replaceAll(RegExp(r'\s+(Centre|Branch)$', caseSensitive: false), '')
+                .trim();
+            if (b.isNotEmpty && b.toLowerCase() != 'all centres' && b.toLowerCase() != 'all' && !updated.contains(b)) {
+              updated.add(b);
+            }
+          }
+          dynamicCentres = updated;
+        }
+      } catch (_) {}
+
       if (mounted) {
         setState(() {
           _items = rawItems;
+          _centres = dynamicCentres;
           _applyFilters();
           _isLoading = false;
         });
@@ -267,7 +296,7 @@ class _GalleryScreenState extends ConsumerState<GalleryScreen> {
     bool isUploading = false;
     double uploadProgress = 0.0;
 
-    final modalCentres = ['All Centres', 'Kadavanthra', 'Edappally', 'Kakkanad'];
+    final modalCentres = ['All Centres', ..._centres.where((c) => c != 'ALL' && c.toLowerCase() != 'all centres')];
     final modalCategories = [
       'Courts & Arena',
       'Training Drills',

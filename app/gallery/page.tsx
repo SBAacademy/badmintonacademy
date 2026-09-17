@@ -17,10 +17,15 @@ export const metadata: Metadata = createMetadata({
   ],
 });
 
-import { getGalleryItems } from "@/lib/contentDb";
+import { getGalleryItems, getCentres } from "@/lib/contentDb";
+
+export const dynamic = "force-dynamic";
 
 export default async function GalleryPage() {
-  const galleryItems = await getGalleryItems();
+  const [galleryItems, centres] = await Promise.all([
+    getGalleryItems(),
+    getCentres({ includeInactive: false }),
+  ]);
 
   return (
     <div className="py-8 sm:py-12 bg-[#090D16]">
@@ -43,7 +48,7 @@ export default async function GalleryPage() {
         </div>
 
         {/* Interactive Filterable Gallery */}
-        <GalleryInteractive initialItems={galleryItems} />
+        <GalleryInteractive initialItems={galleryItems} initialCentres={centres} />
 
       </div>
 

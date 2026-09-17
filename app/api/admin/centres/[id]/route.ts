@@ -128,12 +128,20 @@ export async function DELETE(
     const softDelete = searchParams.get("softDelete") === "true";
 
     const result = await deleteCentreRecord(id, { softDelete });
+    if (!result.success) {
+      return NextResponse.json(
+        { success: false, message: result.message },
+        { status: 400 }
+      );
+    }
+
     const allCentres = await getCentres({ includeInactive: true });
 
     revalidatePath("/");
     revalidatePath("/branches");
     revalidatePath("/contact");
     revalidatePath("/coaches");
+    revalidatePath("/gallery");
     revalidatePath(`/${id}`);
     revalidatePath(`/branches/${id}`);
 
@@ -143,10 +151,10 @@ export async function DELETE(
       softDeleted: result.softDeleted,
       centres: allCentres,
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error("DELETE /api/admin/centres/[id] error:", error);
     return NextResponse.json(
-      { success: false, message: "Failed to delete centre." },
+      { success: false, message: error?.message || "Failed to delete centre." },
       { status: 500 }
     );
   }

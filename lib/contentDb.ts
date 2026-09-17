@@ -1484,91 +1484,146 @@ export async function deleteCentreRecord(
   const { softDelete = false } = options;
   const sql = getSql();
 
-  let isReferenced = false;
-  if (sql) {
-    try {
-      await initContentDb();
-      const coachRef = (await sql`SELECT id FROM coaches WHERE primary_centre = ${slug} LIMIT 1;`) as unknown as unknown[];
-      const batchRef = (await sql`SELECT id FROM batches WHERE centre_slug = ${slug} LIMIT 1;`) as unknown as unknown[];
-      const leadRef = (await sql`SELECT id FROM leads WHERE branch = ${slug} LIMIT 1;`) as unknown as unknown[];
-      const studentRef = (await sql`SELECT id FROM students WHERE primary_centre = ${slug} LIMIT 1;`) as unknown as unknown[];
-      const trialRef = (await sql`SELECT id FROM free_trials WHERE centre_slug = ${slug} LIMIT 1;`) as unknown as unknown[];
-
-      if (
-        (Array.isArray(coachRef) && coachRef.length > 0) ||
-        (Array.isArray(batchRef) && batchRef.length > 0) ||
-        (Array.isArray(leadRef) && leadRef.length > 0) ||
-        (Array.isArray(studentRef) && studentRef.length > 0) ||
-        (Array.isArray(trialRef) && trialRef.length > 0)
-      ) {
-        isReferenced = true;
-      }
-    } catch (e) {
-      console.warn("Could not check foreign keys before centre deletion:", e);
-    }
-  }
-
-  // Also check coaches in fallback
   try {
-    const fallback = await readFallbackContent();
-    const coaches = Array.isArray(fallback.coaches) ? (fallback.coaches as unknown as Coach[]) : [];
-    if (coaches.some((c) => c.primaryCentre === slug || c.primaryBranch?.toLowerCase().includes(slug))) {
-      isReferenced = true;
-    }
-  } catch (e) {
-    // ignore
-  }
+    await initContentDb();
 
-  if (isReferenced || softDelete) {
-    // Safely deactivate
+    // 1. Soft-delete branch (only when explicitly requested via softDelete: true)
+    if (softDelete) {
+      if (sql) {
+        try {
+          await sql`
+            UPDATE centres 
+            SET status = 'INACTIVE', is_active = FALSE, updated_at = NOW() 
+            WHERE slug = ${slug};
+          `;
+        } catch (e) {
+          console.warn("Could not deactivate centre in Neon:", e);
+        }
+      }
+
+      const fallback = await readFallbackContent();
+      const currentCentres = Array.isArray(fallback.centres) ? (fallback.centres as unknown as Centre[]) : [];
+      const target = currentCentres.find((c) => c.slug === slug || c.id === slug);
+      if (target) {
+        target.status = "INACTIVE";
+        target.isActive = false;
+        target.updatedAt = new Date().toISOString();
+        await writeFallbackContent(fallback);
+      }
+
+      return {
+        success: true,
+        softDeleted: true,
+        message: "Center deactivated successfully.",
+      };
+    }
+
+    // 2. ACTUAL DELETION: Safely uncouple related records so foreign keys succeed without deleting production records
     if (sql) {
       try {
-        await sql`
-          UPDATE centres 
-          SET status = 'INACTIVE', is_active = FALSE, updated_at = NOW() 
-          WHERE slug = ${slug};
-        `;
+        // Safely unassign coaches pointing to this centre
+        await sql`UPDATE coaches SET primary_centre = NULL WHERE primary_centre = ${slug};`;
       } catch (e) {
-        console.warn("Could not deactivate centre in Neon:", e);
+        console.warn("Could not unassign coaches for centre:", slug, e);
       }
+
+      try {
+        // Safely unassign students pointing to this centre
+        await sql`UPDATE students SET primary_centre = NULL WHERE primary_centre = ${slug};`;
+      } catch (e) {
+        console.warn("Could not unassign students for centre:", slug, e);
+      }
+
+      try {
+        // Safely unassign free trials pointing to this centre
+        await sql`UPDATE free_trials SET centre_slug = NULL WHERE centre_slug = ${slug};`;
+      } catch (e) {
+        console.warn("Could not unassign free_trials for centre:", slug, e);
+      }
+
+      try {
+        // Safely unassign sessions pointing to this centre
+        await sql`UPDATE sessions SET centre_slug = NULL WHERE centre_slug = ${slug};`;
+      } catch (e) {
+        console.warn("Could not unassign sessions for centre:", slug, e);
+      }
+
+      try {
+        // Safely unassign batches pointing to this centre
+        await sql`UPDATE batches SET centre_slug = NULL WHERE centre_slug = ${slug};`;
+      } catch (e) {
+        console.warn("Could not unassign batches for centre:", slug, e);
+      }
+
+      try {
+        // Preserve gallery items in database by re-tagging them to 'All Centres'
+        const galleryRow = (await sql`SELECT data FROM site_content WHERE section = 'gallery';`) as unknown as Array<{ data: any }>;
+        if (galleryRow.length > 0 && Array.isArray(galleryRow[0].data)) {
+          let hasChanges = false;
+          const updatedGallery = galleryRow[0].data.map((item: any) => {
+            const b = (item.branch || "").trim().toLowerCase();
+            if (b === slug.toLowerCase()) {
+              hasChanges = true;
+              return { ...item, branch: "All Centres" };
+            }
+            return item;
+          });
+          if (hasChanges) {
+            await sql`UPDATE site_content SET data = ${JSON.stringify(updatedGallery)}, updated_at = NOW() WHERE section = 'gallery';`;
+          }
+        }
+      } catch (e) {
+        console.warn("Could not update gallery items for centre:", slug, e);
+      }
+
+      // Execute actual DELETE on the centre record from Neon DB
+      await sql`DELETE FROM centres WHERE slug = ${slug};`;
     }
-    const fallback = await readFallbackContent();
-    const currentCentres = Array.isArray(fallback.centres) ? (fallback.centres as unknown as Centre[]) : [];
-    const target = currentCentres.find((c) => c.slug === slug || c.id === slug);
-    if (target) {
-      target.status = "INACTIVE";
-      target.isActive = false;
-      target.updatedAt = new Date().toISOString();
+
+    // 3. Remove centre from fallback content store (data/site_content.json)
+    try {
+      const fallback = await readFallbackContent();
+      const currentCentres = Array.isArray(fallback.centres) ? (fallback.centres as unknown as Centre[]) : [];
+      fallback.centres = currentCentres.filter((c) => c.slug !== slug && c.id !== slug);
+
+      // Unassign coaches in fallback store
+      if (Array.isArray(fallback.coaches)) {
+        fallback.coaches = (fallback.coaches as unknown as Coach[]).map((coach) => {
+          if (coach.primaryCentre === slug) {
+            return { ...coach, primaryCentre: undefined };
+          }
+          return coach;
+        });
+      }
+
+      // Re-tag gallery items in fallback store
+      if (Array.isArray(fallback.gallery)) {
+        fallback.gallery = (fallback.gallery as unknown as GalleryItem[]).map((item) => {
+          if ((item.branch || "").trim().toLowerCase() === slug.toLowerCase()) {
+            return { ...item, branch: "All Centres" };
+          }
+          return item;
+        });
+      }
+
       await writeFallbackContent(fallback);
+    } catch (err) {
+      console.warn("Could not clean up fallback store on centre deletion:", err);
     }
+
     return {
       success: true,
-      softDeleted: true,
-      message: isReferenced
-        ? "Centre is associated with existing coaches or records and has been safely deactivated instead of deleted."
-        : "Centre deactivated successfully.",
+      softDeleted: false,
+      message: "Center deleted successfully.",
+    };
+  } catch (error: any) {
+    console.error("deleteCentreRecord error:", error);
+    return {
+      success: false,
+      softDeleted: false,
+      message: error?.message || "Failed to delete center from database.",
     };
   }
-
-  // Permanent Delete
-  if (sql) {
-    try {
-      await sql`DELETE FROM centres WHERE slug = ${slug};`;
-    } catch (e) {
-      console.warn("Failed hard delete from Neon centres table:", e);
-    }
-  }
-
-  const fallback = await readFallbackContent();
-  const currentCentres = Array.isArray(fallback.centres) ? (fallback.centres as unknown as Centre[]) : [];
-  fallback.centres = currentCentres.filter((c) => c.slug !== slug && c.id !== slug);
-  await writeFallbackContent(fallback);
-
-  return {
-    success: true,
-    softDeleted: false,
-    message: "Centre permanently deleted.",
-  };
 }
 
 

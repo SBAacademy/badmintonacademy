@@ -394,12 +394,19 @@ export async function DELETE(
     if (sectionKey === "centres") {
       const softDelete = searchParams.get("softDelete") === "true";
       const result = await deleteCentreRecord(identifier, { softDelete });
+      if (!result.success) {
+        return NextResponse.json(
+          { success: false, message: result.message },
+          { status: 400 }
+        );
+      }
       const allCentres = await getCentres({ includeInactive: true });
 
       revalidatePath("/");
       revalidatePath("/branches");
       revalidatePath("/contact");
       revalidatePath("/coaches");
+      revalidatePath("/gallery");
       revalidatePath(`/${identifier}`);
       revalidatePath(`/branches/${identifier}`);
 

@@ -286,21 +286,31 @@ export function CentresManager() {
 
   const handleDelete = async () => {
     if (!deleteTarget) return;
+    const targetSlug = deleteTarget.slug;
+    const targetName = deleteTarget.name;
     setIsDeleting(true);
     try {
-      const res = await fetch(`/api/content/centres?slug=${deleteTarget.slug}`, {
+      const res = await fetch(`/api/admin/centres/${encodeURIComponent(targetSlug)}`, {
         method: "DELETE",
       });
       const data = await res.json();
       if (data.success) {
-        setFeedback({ type: "success", text: data.message || "Centre processed successfully." });
+        // Remove immediately from list
+        setCentres((prev) => prev.filter((c) => c.slug !== targetSlug && c.id !== targetSlug));
+        setFeedback({
+          type: "success",
+          text: data.message || `Center "${targetName}" deleted successfully.`,
+        });
         setDeleteTarget(null);
         await fetchCentres();
       } else {
-        setFeedback({ type: "error", text: data.message || "Failed to delete centre." });
+        setFeedback({
+          type: "error",
+          text: data.message || `Failed to delete center "${targetName}".`,
+        });
       }
     } catch {
-      setFeedback({ type: "error", text: "Network error while deleting centre." });
+      setFeedback({ type: "error", text: "Network error while deleting center." });
     } finally {
       setIsDeleting(false);
     }
@@ -1023,30 +1033,38 @@ export function CentresManager() {
         </div>
       )}
 
-      {/* Delete / Deactivate Confirmation Modal */}
+      {/* Delete Confirmation Modal */}
       {deleteTarget && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-[#0D111A] border border-rose-500/30 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl font-mono">
             <div className="flex items-center gap-3 text-rose-400">
               <div className="p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/20">
-                <AlertCircle className="w-6 h-6" />
+                <Trash2 className="w-6 h-6" />
               </div>
               <div>
                 <h3 className="text-base font-black text-white uppercase tracking-tight">
-                  Remove / Deactivate Centre
+                  Delete Center
                 </h3>
                 <p className="text-[11px] text-slate-400">
-                  Data integrity &amp; historical records protection
+                  Permanent removal from database
                 </p>
               </div>
             </div>
 
             <div className="bg-[#07090D] border border-slate-800 rounded-2xl p-4 space-y-2 text-xs">
-              <p className="text-slate-200">
-                Are you sure you want to remove <strong className="text-[#B8F000]">{deleteTarget.name}</strong>?
+              <p className="text-slate-200 font-bold">
+                Are you sure you want to delete this center? This action cannot be undone.
               </p>
+              <div className="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1">
+                <p className="text-[#B8F000] font-black text-sm">
+                  {deleteTarget.name}
+                </p>
+                <p className="text-[10px] text-slate-400">
+                  Slug: /{deleteTarget.slug} &bull; {deleteTarget.area || deleteTarget.city || "Kochi"}
+                </p>
+              </div>
               <p className="text-[11px] text-slate-400 leading-relaxed">
-                If this centre is linked to existing students, coaches, batches, or leads, it will be safely <strong className="text-amber-300">deactivated</strong> (hidden from public website and forms) rather than deleted to avoid data loss.
+                Associated coaches, students, or inquiries will be safely preserved and unassigned without losing their profile data.
               </p>
             </div>
 
@@ -1054,7 +1072,8 @@ export function CentresManager() {
               <button
                 type="button"
                 onClick={() => setDeleteTarget(null)}
-                className="px-4 py-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 text-xs transition-colors cursor-pointer"
+                disabled={isDeleting}
+                className="px-4 py-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 text-xs transition-colors cursor-pointer font-bold"
               >
                 Cancel
               </button>
@@ -1064,8 +1083,17 @@ export function CentresManager() {
                 disabled={isDeleting}
                 className="px-5 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs uppercase tracking-wider transition-colors cursor-pointer flex items-center gap-2 shadow-lg shadow-rose-600/20"
               >
-                {isDeleting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
-                <span>Confirm Removal</span>
+                {isDeleting ? (
+                  <>
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    <span>Deleting...</span>
+                  </>
+                ) : (
+                  <>
+                    <Trash2 className="w-3.5 h-3.5" />
+                    <span>Delete</span>
+                  </>
+                )}
               </button>
             </div>
           </div>

@@ -15,6 +15,7 @@ import {
   MapPin,
   LayoutDashboard,
   Star,
+  Target,
 } from "lucide-react";
 import { AdminTab } from "./AdminSidebar";
 
@@ -56,6 +57,13 @@ const TAB_INFO: Record<
     icon: MapPin,
     publicUrl: "/branches",
     publicLabel: "View Centres Directory",
+  },
+  programs: {
+    title: "Training Programs & Tracks",
+    subtitle: "Manage training tracks, descriptions, and homepage program cards",
+    icon: Target,
+    publicUrl: "/training",
+    publicLabel: "View Training Page",
   },
   gallery: {
     title: "Court & Training Gallery",

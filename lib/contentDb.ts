@@ -8,8 +8,9 @@ import { ACHIEVEMENTS, Achievement } from "@/data/achievements";
 import { TESTIMONIALS, Testimonial } from "@/data/testimonials";
 import { BLOG_POSTS, BlogPost } from "@/data/blog";
 import { Centre, CentreOpeningHours } from "@/data/centres";
+import { PROGRAMS, Program } from "@/data/programs";
 
-export type ContentSectionKey = "gallery" | "coaches" | "achievements" | "testimonials" | "blog" | "centres";
+export type ContentSectionKey = "gallery" | "coaches" | "achievements" | "testimonials" | "blog" | "centres" | "programs";
 
 const CONTENT_FILE_PATH = path.join(process.cwd(), "data", "site_content.json");
 
@@ -70,6 +71,7 @@ export async function initContentDb(): Promise<void> {
       testimonials: TESTIMONIALS,
       blog: BLOG_POSTS,
       centres: [],
+      programs: [],
     };
 
     for (const [sectionKey, defaultItems] of Object.entries(defaults)) {
@@ -1114,8 +1116,132 @@ export async function getAchievements(): Promise<Achievement[]> {
   return getContentSection<Achievement>("achievements", ACHIEVEMENTS);
 }
 
-export async function getTestimonials(): Promise<Testimonial[]> {
-  return getContentSection<Testimonial>("testimonials", TESTIMONIALS);
+export { resolveAutomaticNeighborhoods } from "./constants";
+
+export interface ProgramItem {
+  slug: string;
+  name: string;
+  description: string;
+  displayOrder?: number;
+  status?: string;
+  createdAt?: string;
+}
+
+export async function getPrograms(): Promise<ProgramItem[]> {
+  const sql = getSql();
+  if (sql) {
+    try {
+      await initContentDb();
+      const rows = (await sql`
+        SELECT 
+          slug,
+          name,
+          COALESCE(description, '') as description,
+          display_order as "displayOrder",
+          status,
+          created_at as "createdAt"
+        FROM programs
+        WHERE status = 'ACTIVE' OR status IS NULL
+        ORDER BY display_order ASC, created_at ASC;
+      `) as unknown as ProgramItem[];
+
+      if (rows && rows.length > 0) {
+        return rows;
+      }
+    } catch (err) {
+      console.error("Failed to query programs from PostgreSQL:", err);
+    }
+  }
+
+  // Fallback to static programs
+  return PROGRAMS.map((p, idx) => ({
+    slug: p.slug,
+    name: p.name,
+    description: p.shortDescription || p.fullDescription || "",
+    displayOrder: idx + 1,
+    status: "ACTIVE",
+  }));
+}
+
+export async function saveProgramRecord(data: Partial<ProgramItem>): Promise<ProgramItem> {
+  const sql = getSql();
+  const name = String(data.name || "").trim();
+  const description = String(data.description || "").trim();
+
+  if (!name) {
+    throw new Error("Program name is required.");
+  }
+
+  const rawSlug = data.slug
+    ? String(data.slug).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")
+    : name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+  const slug = rawSlug || `training-${Date.now()}`;
+  const displayOrder = Number(data.displayOrder) || 1;
+  const status = data.status === "INACTIVE" ? "INACTIVE" : "ACTIVE";
+
+  if (sql) {
+    await initContentDb();
+    await sql`
+      INSERT INTO programs (
+        slug, name, description, display_order, status, created_at
+      ) VALUES (
+        ${slug}, ${name}, ${description}, ${displayOrder}, ${status}, NOW()
+      ) ON CONFLICT (slug) DO UPDATE SET
+        name = EXCLUDED.name,
+        description = EXCLUDED.description,
+        display_order = COALESCE(EXCLUDED.display_order, programs.display_order),
+        status = COALESCE(EXCLUDED.status, programs.status);
+    `;
+
+    return {
+      slug,
+      name,
+      description,
+      displayOrder,
+      status,
+    };
+  }
+
+  return {
+    slug,
+    name,
+    description,
+    displayOrder,
+    status,
+  };
+}
+
+export async function deleteProgramRecord(slug: string): Promise<{ success: boolean; message: string }> {
+  const sql = getSql();
+  if (!slug) {
+    return { success: false, message: "Program slug is required." };
+  }
+
+  if (sql) {
+    try {
+      await initContentDb();
+      await sql`UPDATE batches SET program_slug = NULL WHERE program_slug = ${slug};`.catch(() => {});
+      await sql`UPDATE students SET primary_program = NULL WHERE primary_program = ${slug};`.catch(() => {});
+      await sql`UPDATE free_trials SET program_slug = NULL WHERE program_slug = ${slug};`.catch(() => {});
+      
+      await sql`DELETE FROM programs WHERE slug = ${slug};`;
+      return { success: true, message: "Training program deleted successfully." };
+    } catch (err: any) {
+      console.error(`Failed to delete program ${slug}:`, err);
+      return { success: false, message: err?.message || "Failed to delete program." };
+    }
+  }
+
+  return { success: true, message: "Program deleted." };
+}
+
+export async function getTestimonials(options: { includePending?: boolean } = {}): Promise<Testimonial[]> {
+  const items = await getContentSection<Testimonial>("testimonials", TESTIMONIALS);
+  if (options.includePending) {
+    return items;
+  }
+  // Filter only approved reviews for public website
+  return items.filter((t: any) => t.status !== "PENDING" && t.isApproved !== false);
 }
 
 export async function getBlogPosts(): Promise<BlogPost[]> {

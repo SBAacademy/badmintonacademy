@@ -10,6 +10,7 @@ import { buildWhatsAppUrl } from "@/lib/whatsapp";
 
 export function Footer() {
   const [centres, setCentres] = useState<any[]>(Object.values(LOCATIONS));
+  const [programs, setPrograms] = useState<any[]>(PROGRAMS);
 
   useEffect(() => {
     fetch("/api/centres")
@@ -20,6 +21,15 @@ export function Footer() {
         }
       })
       .catch((err) => console.error("Failed to load centres in Footer:", err));
+
+    fetch("/api/content/programs")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.items) && data.items.length > 0) {
+          setPrograms(data.items);
+        }
+      })
+      .catch(() => {});
   }, []);
   return (
     <footer className="bg-[#07090D] border-t border-[#1F2937] text-[#A8B0BA] text-sm relative z-10 pb-32 lg:pb-12 select-none">
@@ -116,10 +126,10 @@ export function Footer() {
               Training Tracks
             </h4>
             <ul className="space-y-2 text-xs">
-              {PROGRAMS.map((program) => (
-                <li key={program.slug}>
+              {programs.slice(0, 5).map((program) => (
+                <li key={program.slug || program.id}>
                   <Link
-                    href={`/programs/${program.slug}`}
+                    href={`/programs#${program.slug || program.id}`}
                     className="hover:text-[#B8F000] transition-colors block py-0.5"
                   >
                     {program.name}

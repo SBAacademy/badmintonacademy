@@ -5,6 +5,7 @@ import { X, UserPlus, Phone, MapPin, Award, Clock } from "lucide-react";
 import { LeadItem } from "@/lib/db";
 import { Centre } from "@/data/centres";
 import { PROGRAMS } from "@/data/programs";
+import { AGE_CATEGORIES } from "@/lib/constants";
 
 interface AdminAddLeadModalProps {
   isOpen: boolean;
@@ -16,10 +17,10 @@ interface AdminAddLeadModalProps {
     branch: string;
     program: string;
     ageCategory: string;
-    slot: string;
-    status: LeadItem["status"];
+    slot?: string;
     notes?: string;
     message?: string;
+    status: LeadItem["status"];
   }) => Promise<boolean>;
   centres?: Centre[];
 }
@@ -37,7 +38,7 @@ export function AdminAddLeadModal({
   const [email, setEmail] = useState("");
   const [branch, setBranch] = useState("");
   const [program, setProgram] = useState("junior-badminton-coaching");
-  const [ageCategory, setAgeCategory] = useState("Junior (Ages 10-16)");
+  const [ageCategory, setAgeCategory] = useState<string>(AGE_CATEGORIES[0]);
   const [slot, setSlot] = useState("Evening (04:30 PM - 07:30 PM)");
   const [status, setStatus] = useState<LeadItem["status"]>("NEW");
   const [notes, setNotes] = useState("");
@@ -218,10 +219,11 @@ export function AdminAddLeadModal({
                 onChange={(e) => setAgeCategory(e.target.value)}
                 className="w-full px-3 py-2 bg-[#090C12] border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-[#B8F000]"
               >
-                <option value="Kids (Ages 5-9)">Kids (Ages 5-9)</option>
-                <option value="Junior (Ages 10-16)">Junior (Ages 10-16)</option>
-                <option value="Adult (Ages 17+)">Adult (Ages 17+)</option>
-                <option value="Senior / Master">Senior / Master</option>
+                {AGE_CATEGORIES.map((cat) => (
+                  <option key={cat} value={cat}>
+                    {cat}
+                  </option>
+                ))}
               </select>
             </div>
 

@@ -903,19 +903,6 @@ export function CoachesManager() {
                         </div>
                       )}
                     </div>
-
-                    {/* Certifications chips */}
-                    <div className="space-y-1 pt-1">
-                      {(coach.certifications || []).slice(0, 2).map((cert, i) => (
-                        <div
-                          key={i}
-                          className="text-[10px] font-mono text-[#6B7280] truncate flex items-center gap-1"
-                        >
-                          <ShieldCheck className="w-3 h-3 text-[#B8F000] shrink-0" />
-                          <span>{cert}</span>
-                        </div>
-                      ))}
-                    </div>
                   </div>
                 </div>
 
@@ -1170,35 +1157,15 @@ export function CoachesManager() {
               />
 
               <div>
-                <label className="block text-[#A8B0BA] uppercase mb-1">Certifications (1 per line)</label>
+                <label className="block text-[#A8B0BA] uppercase mb-1 font-bold">
+                  <span>Coach Description &amp; Bio *</span>
+                </label>
                 <textarea
-                  rows={2}
-                  value={form.certifications}
-                  onChange={(e) => setForm({ ...form, certifications: e.target.value })}
-                  placeholder="BWF Level 2 Certified Coach&#10;NIS Diploma in Sports Coaching"
-                  className="w-full px-3 py-2 bg-[#07090D] border border-[#1F2937] text-white focus:outline-none focus:border-[#B8F000]"
-                />
-              </div>
-
-              <div>
-                <label className="block text-[#A8B0BA] uppercase mb-1">Career Achievements (1 per line)</label>
-                <textarea
-                  rows={2}
-                  value={form.achievements}
-                  onChange={(e) => setForm({ ...form, achievements: e.target.value })}
-                  placeholder="Former Kerala State Senior Men's Singles Champion&#10;Coached 18+ National Championship Qualifiers"
-                  className="w-full px-3 py-2 bg-[#07090D] border border-[#1F2937] text-white focus:outline-none focus:border-[#B8F000]"
-                />
-              </div>
-
-              <div>
-                <label className="block text-[#A8B0BA] uppercase mb-1">Coach Biography *</label>
-                <textarea
-                  rows={3}
+                  rows={4}
                   required
                   value={form.bio}
                   onChange={(e) => setForm({ ...form, bio: e.target.value })}
-                  placeholder="Professional summary, coaching approach, and pedigree..."
+                  placeholder="Professional summary, coaching approach, certifications, and background details..."
                   className="w-full px-3 py-2 bg-[#07090D] border border-[#1F2937] text-white focus:outline-none focus:border-[#B8F000]"
                 />
               </div>

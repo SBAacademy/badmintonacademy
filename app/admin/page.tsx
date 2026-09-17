@@ -17,6 +17,7 @@ import { CoachesManager } from "@/components/admin/CoachesManager";
 import { AchievementsManager } from "@/components/admin/AchievementsManager";
 import { TestimonialsManager } from "@/components/admin/TestimonialsManager";
 import { CentresManager } from "@/components/admin/CentresManager";
+import { ProgramsManager } from "@/components/admin/ProgramsManager";
 
 export default function AdminDashboardPage() {
   // Authentication State
@@ -113,6 +114,27 @@ export default function AdminDashboardPage() {
     }
   };
 
+  // Age Category Change
+  const handleAgeCategoryChange = async (id: string, newAgeCategory: string) => {
+    setLeads((prev) =>
+      prev.map((l) => (l.id === id ? { ...l, ageCategory: newAgeCategory, updatedAt: new Date().toISOString() } : l))
+    );
+    if (selectedLead && selectedLead.id === id) {
+      setSelectedLead((prev) => (prev ? { ...prev, ageCategory: newAgeCategory } : null));
+    }
+
+    try {
+      await fetch("/api/enquiries", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, ageCategory: newAgeCategory }),
+      });
+    } catch (err) {
+      console.error("Failed to update age category:", err);
+      fetchLeads();
+    }
+  };
+
   // Save Drawer Notes
   const handleSaveNotes = async (id: string, notes: string): Promise<boolean> => {
     try {
@@ -163,7 +185,7 @@ export default function AdminDashboardPage() {
     branch: string;
     program: string;
     ageCategory: string;
-    slot: string;
+    slot?: string;
     status: LeadItem["status"];
     notes?: string;
     message?: string;
@@ -352,6 +374,7 @@ export default function AdminDashboardPage() {
           )}
 
           {activeTab === "centres" && <CentresManager />}
+          {activeTab === "programs" && <ProgramsManager />}
           {activeTab === "gallery" && <GalleryManager />}
           {activeTab === "coaches" && <CoachesManager />}
           {activeTab === "achievements" && <AchievementsManager />}
@@ -365,6 +388,7 @@ export default function AdminDashboardPage() {
         lead={selectedLead}
         onClose={() => setSelectedLead(null)}
         onStatusChange={handleStatusChange}
+        onAgeCategoryChange={handleAgeCategoryChange}
         onSaveNotes={handleSaveNotes}
         onDeleteLead={handleDeleteLead}
       />

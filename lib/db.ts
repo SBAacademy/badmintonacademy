@@ -2,13 +2,14 @@ import { neon } from "@neondatabase/serverless";
 
 import fs from "fs/promises";
 import path from "path";
+import { AGE_CATEGORIES, AgeCategory } from "@/lib/constants";
 
 export interface LeadItem {
   id: string;
   name: string;
   phone: string;
   email?: string | null;
-  ageCategory: string;
+  ageCategory?: string | null;
   branch: string;
   program: string;
   slot: string;
@@ -117,7 +118,7 @@ function mapRowToLead(row: Record<string, unknown>): LeadItem {
     name: String(row.name),
     phone: String(row.phone),
     email: row.email ? String(row.email) : null,
-    ageCategory: String(row.age_category || "Junior (Ages 10-16)"),
+    ageCategory: row.age_category ? String(row.age_category) : "",
     branch: String(row.branch),
     program: String(row.program),
     slot: String(row.slot || ""),
@@ -139,6 +140,7 @@ function mapRowToLead(row: Record<string, unknown>): LeadItem {
 export async function getLeads(filters?: {
   status?: string | null;
   branch?: string | null;
+  ageCategory?: string | null;
   search?: string | null;
 }): Promise<LeadItem[]> {
   const sql = getSql();
@@ -158,6 +160,9 @@ export async function getLeads(filters?: {
       }
       if (filters?.branch && filters.branch !== "ALL") {
         leads = leads.filter((l) => l.branch === filters.branch);
+      }
+      if (filters?.ageCategory && filters.ageCategory !== "ALL") {
+        leads = leads.filter((l) => l.ageCategory === filters.ageCategory);
       }
       if (filters?.search) {
         const query = filters.search.toLowerCase();
@@ -182,6 +187,9 @@ export async function getLeads(filters?: {
   }
   if (filters?.branch && filters.branch !== "ALL") {
     leads = leads.filter((l) => l.branch === filters.branch);
+  }
+  if (filters?.ageCategory && filters.ageCategory !== "ALL") {
+    leads = leads.filter((l) => l.ageCategory === filters.ageCategory);
   }
   if (filters?.search) {
     const query = filters.search.toLowerCase();

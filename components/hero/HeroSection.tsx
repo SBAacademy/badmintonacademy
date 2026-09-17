@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, MessageCircle, ChevronDown } from "lucide-react";
@@ -9,9 +9,27 @@ import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { trackEvent } from "@/lib/analytics";
 
 export function HeroSection() {
+  const [centres, setCentres] = useState<Array<{ shortName?: string; name: string }>>([]);
+
+  useEffect(() => {
+    fetch("/api/centres")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.items) && data.items.length > 0) {
+          setCentres(data.items);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   const handleWhatsApp = () => {
     trackEvent("whatsapp_click", { source: "hero_rebel" });
   };
+
+  const countStr = centres.length > 0 ? (centres.length < 10 ? `0${centres.length}` : `${centres.length}`) : "03";
+  const namesStr = centres.length > 0
+    ? centres.map((c) => (c.shortName || c.name).toUpperCase()).join(" • ")
+    : "KADAVANTHRA • EDAPPALLY • KAKKANAD";
 
   return (
     <section className="relative min-h-[90vh] lg:min-h-[95vh] flex items-center justify-center overflow-hidden bg-[#07090D] border-b border-[#1F2937]">
@@ -123,10 +141,12 @@ export function HeroSection() {
         <div className="flex items-center gap-3">
           <span className="w-2 h-2 bg-[#B8F000] rounded-none animate-pulse" />
           <span className="tracking-widest uppercase text-white font-bold">
-            01 / 04 CENTRES ACROSS KOCHI
+            01 / {countStr} CENTRES ACROSS KOCHI
           </span>
           <span className="text-[#1F2937]">|</span>
-          <span className="text-[#A8B0BA]">KADAVANTHRA • EDAPPALLY • KAKKANAD</span>
+          <span className="text-[#A8B0BA] uppercase">
+            {namesStr}
+          </span>
         </div>
 
         <div className="flex items-center gap-2 text-[#A8B0BA] opacity-70">

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { ArrowRight, MessageCircle, Phone } from "lucide-react";
 import { ACADEMY_DATA } from "@/data/academy";
@@ -8,6 +8,19 @@ import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { trackEvent } from "@/lib/analytics";
 
 export function FinalCTA() {
+  const [centreCount, setCentreCount] = useState<number>(3);
+
+  useEffect(() => {
+    fetch("/api/centres")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.items) && data.items.length > 0) {
+          setCentreCount(data.items.length);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   const handleWhatsApp = () => {
     trackEvent("whatsapp_click", { source: "rebel_final_cta" });
   };
@@ -42,7 +55,7 @@ export function FinalCTA() {
 
         {/* Supporting Copy */}
         <p className="text-base sm:text-lg lg:text-xl text-[#A8B0BA] max-w-2xl font-normal leading-relaxed">
-          Whether you’re enrolling your child for foundational agility or stepping back onto the court after work, our certified coaches across <strong className="text-white">Kadavanthra</strong>, <strong className="text-white">Edappally</strong>, and <strong className="text-white">Kakkanad</strong> are ready to put you on court.
+          Whether you’re enrolling your child for foundational agility or stepping back onto the court after work, our certified coaches across our strategic Kochi training facilities are ready to put you on court.
         </p>
 
         {/* Tactile Conversion CTAs */}
@@ -88,7 +101,7 @@ export function FinalCTA() {
           </div>
           <div className="flex items-center gap-2">
             <span className="w-1.5 h-1.5 bg-[#B8F000]" />
-            <span>3 CENTRAL KOCHI FACILITIES</span>
+            <span>{centreCount} CENTRAL KOCHI FACILITIES</span>
           </div>
         </div>
 

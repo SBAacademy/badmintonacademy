@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { neon } from "@neondatabase/serverless";
 import { requireAuth } from "@/lib/auth";
 import { logAuditEvent } from "@/lib/audit";
+import { AGE_CATEGORIES, isValidAgeCategory } from "@/lib/constants";
 
 function getSql() {
   const url = process.env.DATABASE_URL;
@@ -23,6 +24,7 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const status = searchParams.get("status");
     const centre = searchParams.get("centre");
+    const ageCategory = searchParams.get("ageCategory");
     const search = searchParams.get("search");
 
     let query = `SELECT * FROM leads WHERE 1=1`;
@@ -36,6 +38,11 @@ export async function GET(request: Request) {
     if (centre && centre !== "ALL") {
       params.push(centre);
       query += ` AND branch = $${params.length}`;
+    }
+
+    if (ageCategory && ageCategory !== "ALL") {
+      params.push(ageCategory);
+      query += ` AND age_category = $${params.length}`;
     }
 
     if (search && search.trim() !== "") {
@@ -81,6 +88,13 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: false, error: "Name and Phone are mandatory." }, { status: 400 });
     }
 
+    if (ageCategory && !isValidAgeCategory(ageCategory)) {
+      return NextResponse.json(
+        { success: false, error: `Invalid age category. Must be one of: ${AGE_CATEGORIES.join(", ")}` },
+        { status: 400 }
+      );
+    }
+
     const cleanPhone = String(phone).replace(/[^0-9+]/g, "");
     const leadId = `LEAD-${Date.now()}`;
 
@@ -94,7 +108,7 @@ export async function POST(request: Request) {
         ${String(name).trim()},
         ${cleanPhone},
         ${email ? String(email).trim() : null},
-        ${ageCategory || "Junior (Ages 10-16)"},
+        ${ageCategory || null},
         ${branch || "kadavanthra"},
         ${program || "junior-badminton-coaching"},
         ${slot || "Evening (04:30 PM - 07:30 PM)"},

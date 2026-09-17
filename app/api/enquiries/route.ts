@@ -10,6 +10,7 @@ import {
   updateLead,
   deleteLead,
 } from "@/lib/db";
+import { AGE_CATEGORIES, isValidAgeCategory } from "@/lib/constants";
 
 export type { LeadItem };
 
@@ -39,6 +40,17 @@ export async function POST(request: Request) {
       );
     }
 
+    // Validate Age Category
+    if (data.ageCategory && !isValidAgeCategory(data.ageCategory)) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: `Invalid age category. Must be one of: ${AGE_CATEGORIES.join(", ")}`,
+        },
+        { status: 400 }
+      );
+    }
+
     const dynamicCentre = await getCentreBySlug(data.preferredBranch);
     const branchObj = dynamicCentre || Object.values(LOCATIONS).find((b) => b.slug === data.preferredBranch);
     const programObj = PROGRAMS.find((p) => p.slug === data.preferredProgram);
@@ -52,7 +64,7 @@ export async function POST(request: Request) {
       name: String(data.name).trim(),
       phone: cleanPhone,
       email: data.email ? String(data.email).trim() : null,
-      ageCategory: data.ageCategory || "Junior (Ages 10-16)",
+      ageCategory: data.ageCategory ? String(data.ageCategory).trim() : null,
       branch: data.preferredBranch || "kadavanthra",
       program: data.preferredProgram || "junior-badminton-coaching",
       slot: data.preferredSlot || "Evening (04:30 PM - 07:30 PM)",
@@ -96,24 +108,23 @@ export async function POST(request: Request) {
       name: savedLead.name,
       phone: savedLead.phone,
       email: savedLead.email || undefined,
-      ageCategory: savedLead.ageCategory,
+      ageCategory: savedLead.ageCategory || undefined,
       preferredBranchName: branchDisplayName,
       preferredProgramName: programDisplayName,
-      preferredSlot: savedLead.slot,
-      message: savedLead.message,
+      slot: savedLead.slot,
+      message: savedLead.message || undefined,
     });
 
     return NextResponse.json({
       success: true,
-      message: "Lead recorded in CRM. Opening WhatsApp...",
-      enquiryId: savedLead.id,
+      leadId: savedLead.id,
       whatsappUrl,
-      lead: savedLead,
+      message: "Your badminton coaching enquiry has been logged successfully.",
     });
   } catch (error) {
-    console.error("Enquiry API POST error:", error);
+    console.error("Enquiry submission error:", error);
     return NextResponse.json(
-      { success: false, message: "Internal server error." },
+      { success: false, message: "Internal server error. Please try again or WhatsApp directly." },
       { status: 500 }
     );
   }
@@ -125,9 +136,10 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const status = searchParams.get("status");
     const branch = searchParams.get("branch");
+    const ageCategory = searchParams.get("ageCategory");
     const search = searchParams.get("search");
 
-    const leads = await getLeads({ status, branch, search });
+    const leads = await getLeads({ status, branch, ageCategory, search });
 
     return NextResponse.json({
       success: true,
@@ -152,6 +164,16 @@ export async function PATCH(request: Request) {
     if (!id) {
       return NextResponse.json(
         { success: false, message: "Lead ID is required." },
+        { status: 400 }
+      );
+    }
+
+    if (updates.ageCategory && !isValidAgeCategory(updates.ageCategory)) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: `Invalid age category. Must be one of: ${AGE_CATEGORIES.join(", ")}`,
+        },
         { status: 400 }
       );
     }

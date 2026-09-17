@@ -34,12 +34,13 @@ export function buildWhatsAppUrl(options: WhatsAppOptions = {}): string {
 export interface FormSubmissionData {
   name: string;
   phone: string;
-  email?: string;
-  ageCategory: string;
+  email?: string | null | undefined;
+  ageCategory?: string | null | undefined;
   preferredBranchName: string;
   preferredProgramName: string;
-  preferredSlot: string;
-  message?: string;
+  preferredSlot?: string | null | undefined;
+  slot?: string | null | undefined;
+  message?: string | null | undefined;
 }
 
 export function buildEnquiryWhatsAppUrl(data: FormSubmissionData): string {
@@ -49,10 +50,10 @@ export function buildEnquiryWhatsAppUrl(data: FormSubmissionData): string {
     `👤 *Name:* ${data.name}`,
     `📞 *Phone:* ${data.phone}`,
     data.email ? `✉️ *Email:* ${data.email}` : null,
-    `🎯 *Age Group:* ${data.ageCategory}`,
+    data.ageCategory ? `🎯 *Age Group:* ${data.ageCategory}` : null,
     `📍 *Preferred Centre:* ${data.preferredBranchName}`,
     `🏆 *Training Track:* ${data.preferredProgramName}`,
-    `⏰ *Preferred Slot:* ${data.preferredSlot}`,
+    (data.preferredSlot || data.slot) ? `⏰ *Preferred Slot:* ${data.preferredSlot || data.slot}` : null,
     data.message ? `💬 *Goal/Level:* ${data.message}` : null,
     "--------------------------------------------------",
     "_Please confirm available trial slots for this week._",

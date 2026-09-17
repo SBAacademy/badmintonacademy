@@ -12,6 +12,10 @@ import {
   saveCentreRecord,
   deleteCentreRecord,
   reorderCentres,
+  getPrograms,
+  saveProgramRecord,
+  deleteProgramRecord,
+  getTestimonials,
 } from "@/lib/contentDb";
 import { GALLERY_ITEMS } from "@/data/gallery";
 import { COACHES, Coach } from "@/data/coaches";
@@ -26,6 +30,7 @@ const VALID_SECTIONS: ContentSectionKey[] = [
   "testimonials",
   "blog",
   "centres",
+  "programs",
 ];
 
 function getDefaultItems(section: ContentSectionKey): unknown[] {
@@ -81,6 +86,28 @@ export async function GET(
         section: sectionKey,
         total: centres.length,
         items: centres,
+      });
+    }
+
+    if (sectionKey === "programs") {
+      const programs = await getPrograms();
+      return NextResponse.json({
+        success: true,
+        section: sectionKey,
+        total: programs.length,
+        items: programs,
+      });
+    }
+
+    if (sectionKey === "testimonials") {
+      const { searchParams } = new URL(request.url);
+      const includePending = searchParams.get("includePending") === "true";
+      const testimonials = await getTestimonials({ includePending });
+      return NextResponse.json({
+        success: true,
+        section: sectionKey,
+        total: testimonials.length,
+        items: testimonials,
       });
     }
 
@@ -171,6 +198,28 @@ export async function POST(
         message: "Centre created successfully.",
         item: savedCentre,
         items: allCentres,
+      });
+    }
+
+    if (sectionKey === "programs") {
+      if (!body.name || !body.description) {
+        return NextResponse.json(
+          { success: false, message: "Name and description are required for training program." },
+          { status: 400 }
+        );
+      }
+
+      const savedProgram = await saveProgramRecord(body);
+      const allPrograms = await getPrograms();
+
+      revalidatePath("/");
+      revalidatePath("/programs");
+
+      return NextResponse.json({
+        success: true,
+        message: "Training program created successfully.",
+        item: savedProgram,
+        items: allPrograms,
       });
     }
 
@@ -311,6 +360,21 @@ export async function PUT(
       });
     }
 
+    if (sectionKey === "programs") {
+      const savedProgram = await saveProgramRecord(itemData);
+      const allPrograms = await getPrograms();
+
+      revalidatePath("/");
+      revalidatePath("/programs");
+
+      return NextResponse.json({
+        success: true,
+        message: "Training program updated successfully.",
+        item: savedProgram,
+        items: allPrograms,
+      });
+    }
+
     const defaults = getDefaultItems(sectionKey);
     const currentItems = await getContentSection<Record<string, unknown>>(sectionKey, defaults as Record<string, unknown>[]);
 
@@ -415,6 +479,26 @@ export async function DELETE(
         message: result.message,
         softDeleted: result.softDeleted,
         items: allCentres,
+      });
+    }
+
+    if (sectionKey === "programs") {
+      const result = await deleteProgramRecord(identifier);
+      if (!result.success) {
+        return NextResponse.json(
+          { success: false, message: result.message },
+          { status: 400 }
+        );
+      }
+      const allPrograms = await getPrograms();
+
+      revalidatePath("/");
+      revalidatePath("/programs");
+
+      return NextResponse.json({
+        success: true,
+        message: result.message,
+        items: allPrograms,
       });
     }
 

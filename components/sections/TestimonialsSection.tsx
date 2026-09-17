@@ -59,7 +59,7 @@ export function TestimonialsSection({ initialTestimonials }: { initialTestimonia
               <ChevronLeft className="w-4 h-4" />
             </button>
             <span className="font-mono text-xs text-[#A8B0BA] px-2">
-              0{currentIndex + 1} / 0{TESTIMONIALS.length}
+              {String(currentIndex + 1).padStart(2, "0")} / {String(items.length || 1).padStart(2, "0")}
             </span>
             <button
               type="button"
@@ -77,10 +77,6 @@ export function TestimonialsSection({ initialTestimonials }: { initialTestimonia
           
           {/* Left: Colossal Magazine Quote */}
           <div className="lg:col-span-8 space-y-6 text-left">
-            <div className="font-mono text-xs text-[#B8F000] uppercase tracking-widest">
-              &ldquo; {currentItem.highlight.toUpperCase()} &rdquo;
-            </div>
-
             <blockquote className="text-2xl sm:text-3xl lg:text-4xl font-black text-white uppercase tracking-tight leading-tight">
               &ldquo;{currentItem.content}&rdquo;
             </blockquote>
@@ -89,25 +85,15 @@ export function TestimonialsSection({ initialTestimonials }: { initialTestimonia
           {/* Right: Attribution Card */}
           <div className="lg:col-span-4 bg-[#0B0F14] border border-[#1F2937] p-6 sm:p-8 space-y-4 text-left">
             <div className="space-y-1 border-b border-[#1F2937] pb-4">
-              <div className="font-mono text-[10px] text-[#B8F000] uppercase tracking-wider">
-                VERIFIED REVIEW
-              </div>
               <h3 className="text-xl font-black text-white uppercase tracking-tight">
                 {currentItem.name}
               </h3>
-              <div className="text-xs text-[#A8B0BA] font-mono">
-                {currentItem.role}
-              </div>
             </div>
 
             <div className="space-y-2 text-xs font-mono">
               <div className="flex items-center justify-between text-[#A8B0BA]">
                 <span>CENTRE:</span>
                 <span className="text-white font-bold">{currentItem.branch}</span>
-              </div>
-              <div className="flex items-center justify-between text-[#A8B0BA]">
-                <span>EVALUATION:</span>
-                <span className="text-[#B8F000] font-bold">5.0 / 5.0 VERIFIED</span>
               </div>
             </div>
 

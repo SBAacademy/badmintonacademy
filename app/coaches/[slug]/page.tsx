@@ -105,7 +105,7 @@ export default async function CoachProfilePage({ params }: PageProps) {
     },
     url: coachUrl,
     knowsAbout: [coach.specialization, "Badminton Coaching", "Athletic Conditioning"],
-    hasCredential: coach.certifications.map((cert) => ({
+    hasCredential: (coach.certifications || []).map((cert) => ({
       "@type": "EducationalOccupationalCredential",
       credentialCategory: "degree",
       name: cert,
@@ -248,7 +248,7 @@ export default async function CoachProfilePage({ params }: PageProps) {
               </h3>
             </div>
             <div className="space-y-2.5 pt-2">
-              {coach.certifications.length > 0 ? (
+              {Array.isArray(coach.certifications) && coach.certifications.length > 0 ? (
                 coach.certifications.map((cert, idx) => (
                   <div key={idx} className="flex items-start gap-3 text-xs sm:text-sm text-[#D1D5DB]">
                     <span className="w-1.5 h-1.5 bg-[#B8F000] rounded-full mt-2 shrink-0" />

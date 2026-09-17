@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Send, MessageSquare, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
 import { Coach, formatWhatsAppDisplay } from "@/data/coaches";
+import { AGE_CATEGORIES } from "@/lib/constants";
 
 interface CoachEnquiryFormProps {
   coach: Coach;
@@ -11,7 +12,7 @@ interface CoachEnquiryFormProps {
 
 export function CoachEnquiryForm({ coach, initialCentres }: CoachEnquiryFormProps) {
   const [name, setName] = useState("");
-  const [age, setAge] = useState("");
+  const [ageCategory, setAgeCategory] = useState<string>(AGE_CATEGORIES[0]);
   const [phone, setPhone] = useState("");
   const [preferredCentre, setPreferredCentre] = useState(coach.primaryBranch || "");
   const [message, setMessage] = useState("");
@@ -98,7 +99,7 @@ export function CoachEnquiryForm({ coach, initialCentres }: CoachEnquiryFormProp
       `I am interested in training with Coach ${coach.name}.`,
       ``,
       `Name: ${name.trim()}`,
-      age.trim() ? `Age: ${age.trim()}` : null,
+      `Age Category: ${ageCategory}`,
       `Phone: ${cleanPhone}`,
       `Preferred Centre: ${preferredCentre}`,
       ``,
@@ -181,18 +182,20 @@ export function CoachEnquiryForm({ coach, initialCentres }: CoachEnquiryFormProp
 
             <div>
               <label htmlFor="enquiry-age" className="block text-[#A8B0BA] uppercase text-[10px] font-bold tracking-wider mb-1">
-                Player Age (Years)
+                Age Category *
               </label>
-              <input
+              <select
                 id="enquiry-age"
-                type="number"
-                min="4"
-                max="80"
-                value={age}
-                onChange={(e) => setAge(e.target.value)}
-                placeholder="e.g. 14 (or Adult)"
+                value={ageCategory}
+                onChange={(e) => setAgeCategory(e.target.value)}
                 className="w-full px-3.5 py-2.5 bg-[#07090D] border border-[#1F2937] text-white focus:outline-none focus:border-[#B8F000] text-xs transition-colors"
-              />
+              >
+                {AGE_CATEGORIES.map((cat) => (
+                  <option key={cat} value={cat}>
+                    {cat}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
 

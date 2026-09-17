@@ -1,14 +1,21 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, MessageCircle, Check, Users, Clock, Target } from "lucide-react";
+import { ArrowRight, MessageCircle } from "lucide-react";
 import { PROGRAMS, Program } from "@/data/programs";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { trackEvent } from "@/lib/analytics";
 
-// Map each program index to an authentic sports visual asset
+export interface DynamicProgram {
+  slug: string;
+  name: string;
+  description: string;
+  displayOrder?: number;
+}
+
+// Visual fallback mapping
 const PROGRAM_IMAGES: Record<string, string> = {
   "kids-badminton-coaching": "/images/training-coach.jpg",
   "junior-badminton-coaching": "/images/badminton-junior.jpg",
@@ -17,11 +24,42 @@ const PROGRAM_IMAGES: Record<string, string> = {
   "summer-weekend-badminton-camp": "/images/badminton-arena.jpg",
 };
 
-export function ProgramsSection() {
-  const [activeSlug, setActiveSlug] = useState<string>(PROGRAMS[0].slug);
+export function ProgramsSection({ initialPrograms }: { initialPrograms?: DynamicProgram[] }) {
+  const [programsList, setProgramsList] = useState<DynamicProgram[]>(
+    initialPrograms && initialPrograms.length > 0
+      ? initialPrograms
+      : PROGRAMS.map((p, idx) => ({
+          slug: p.slug,
+          name: p.name,
+          description: p.fullDescription || (p as any).description || "",
+          displayOrder: idx + 1,
+        }))
+  );
 
-  const selectedProgram: Program =
-    PROGRAMS.find((p) => p.slug === activeSlug) || PROGRAMS[0];
+  const [activeSlug, setActiveSlug] = useState<string>(
+    programsList[0]?.slug || "kids-badminton-coaching"
+  );
+
+  useEffect(() => {
+    fetch("/api/content/programs")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.items) && data.items.length > 0) {
+          setProgramsList(data.items);
+          if (!data.items.some((p: DynamicProgram) => p.slug === activeSlug)) {
+            setActiveSlug(data.items[0].slug);
+          }
+        }
+      })
+      .catch(() => {});
+  }, [activeSlug]);
+
+  const selectedProgram =
+    programsList.find((p) => p.slug === activeSlug) || programsList[0] || {
+      slug: "kids-badminton-coaching",
+      name: "Kids Foundation Program",
+      description: "Beginner badminton training designed for young athletes.",
+    };
 
   const handleProgramWhatsApp = (name: string) => {
     trackEvent("program_enquiry", { program: name, source: "rebel_programs" });
@@ -53,10 +91,10 @@ export function ProgramsSection() {
 
           <div className="flex flex-col sm:flex-row sm:items-center gap-4">
             <Link
-              href="/programs"
+              href="/training"
               className="inline-flex items-center gap-2 text-xs font-mono font-bold tracking-widest text-[#B8F000] hover:text-white uppercase transition-colors"
             >
-              <span>VIEW ALL 5 TRACKS</span>
+              <span>VIEW ALL {programsList.length} TRACKS</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -67,9 +105,9 @@ export function ProgramsSection() {
           
           {/* Left Column: Interactive Program Selector */}
           <div className="lg:col-span-5 flex flex-col divide-y divide-[#1F2937] border-y border-[#1F2937]">
-            {PROGRAMS.map((program, idx) => {
+            {programsList.map((program, idx) => {
               const isActive = program.slug === selectedProgram.slug;
-              const numStr = `0${idx + 1}`;
+              const numStr = String(idx + 1).padStart(2, "0");
               return (
                 <button
                   key={program.slug}
@@ -77,7 +115,7 @@ export function ProgramsSection() {
                   onMouseEnter={() => setActiveSlug(program.slug)}
                   onFocus={() => setActiveSlug(program.slug)}
                   onClick={() => setActiveSlug(program.slug)}
-                  className={`py-6 px-4 text-left transition-all duration-200 flex items-center justify-between group ${
+                  className={`py-6 px-4 text-left transition-all duration-200 flex items-center justify-between group cursor-pointer ${
                     isActive
                       ? "bg-[#11161D] border-l-4 border-l-[#B8F000] pl-6"
                       : "hover:bg-[#0B0F14] hover:pl-6"
@@ -91,15 +129,12 @@ export function ProgramsSection() {
                       }`}>
                         {numStr}
                       </span>
-                      <span className="text-[10px] font-mono tracking-wider text-[#A8B0BA] uppercase">
-                        {program.skillLevel}
-                      </span>
                     </div>
 
                     <h3 className={`text-xl font-black uppercase tracking-tight transition-colors ${
                       isActive ? "text-white" : "text-[#A8B0BA] group-hover:text-white"
                     }`}>
-                      {program.shortName}
+                      {program.name}
                     </h3>
                   </div>
 
@@ -132,67 +167,16 @@ export function ProgramsSection() {
                   sizes="(max-width: 1280px) 50vw, 600px"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F14] via-transparent to-transparent" />
-                <div className="absolute top-4 left-4 px-3 py-1 bg-[#07090D]/90 border border-[#1F2937] font-mono text-[10px] font-bold text-[#B8F000] uppercase tracking-wider">
-                  {selectedProgram.badge}
-                </div>
               </div>
 
-              {/* Title & Objective */}
-              <div className="space-y-2">
+              {/* Title & Description strictly */}
+              <div className="space-y-3">
                 <h3 className="text-2xl sm:text-3xl font-black text-white uppercase tracking-tight">
                   {selectedProgram.name}
                 </h3>
-                <p className="text-sm text-[#A8B0BA] leading-relaxed">
-                  {selectedProgram.fullDescription}
+                <p className="text-sm text-[#A8B0BA] leading-relaxed whitespace-pre-line">
+                  {selectedProgram.description}
                 </p>
-              </div>
-
-              {/* Technical Specifications Grid */}
-              <div className="grid grid-cols-3 gap-3 border-y border-[#1F2937] py-4">
-                <div>
-                  <div className="flex items-center gap-1.5 text-[11px] font-mono text-[#A8B0BA] uppercase">
-                    <Target className="w-3.5 h-3.5 text-[#B8F000]" />
-                    <span>LEVEL</span>
-                  </div>
-                  <div className="text-xs font-bold text-white mt-1 uppercase">
-                    {selectedProgram.skillLevel}
-                  </div>
-                </div>
-
-                <div>
-                  <div className="flex items-center gap-1.5 text-[11px] font-mono text-[#A8B0BA] uppercase">
-                    <Clock className="w-3.5 h-3.5 text-[#B8F000]" />
-                    <span>TIMING</span>
-                  </div>
-                  <div className="text-xs font-bold text-white mt-1 uppercase">
-                    {selectedProgram.duration}
-                  </div>
-                </div>
-
-                <div>
-                  <div className="flex items-center gap-1.5 text-[11px] font-mono text-[#A8B0BA] uppercase">
-                    <Users className="w-3.5 h-3.5 text-[#B8F000]" />
-                    <span>COACH RATIO</span>
-                  </div>
-                  <div className="text-xs font-bold text-white mt-1 uppercase">
-                    {selectedProgram.batchRatio}
-                  </div>
-                </div>
-              </div>
-
-              {/* Core Outcomes */}
-              <div className="space-y-2">
-                <span className="text-[11px] font-mono font-bold text-[#A8B0BA] uppercase tracking-wider">
-                  TACTICAL OUTCOMES:
-                </span>
-                <div className="grid grid-cols-2 gap-2 text-xs text-[#A8B0BA]">
-                  {selectedProgram.benefits.slice(0, 4).map((b, i) => (
-                    <div key={i} className="flex items-start gap-2">
-                      <Check className="w-3.5 h-3.5 text-[#B8F000] shrink-0 mt-0.5" />
-                      <span>{b}</span>
-                    </div>
-                  ))}
-                </div>
               </div>
 
             </div>
@@ -203,7 +187,7 @@ export function ProgramsSection() {
                 href={`/programs/${selectedProgram.slug}`}
                 className="inline-flex items-center gap-3 px-6 py-3.5 bg-[#B8F000] hover:bg-[#cbf722] text-[#07090D] font-black text-xs uppercase tracking-wider transition-all"
               >
-                <span>EXPLORE {selectedProgram.shortName} →</span>
+                <span>EXPLORE {selectedProgram.name} →</span>
               </Link>
 
               <a
@@ -221,10 +205,10 @@ export function ProgramsSection() {
           </div>
         </div>
 
-        {/* Mobile Dedicated Horizontal Snap Carousel (No hover dependency, 48px touch targets) */}
+        {/* Mobile Dedicated Horizontal Snap Carousel */}
         <div className="lg:hidden pt-8">
           <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-6 no-scrollbar -mx-4 px-4">
-            {PROGRAMS.map((program, idx) => (
+            {programsList.map((program, idx) => (
               <div
                 key={program.slug}
                 className="snap-center shrink-0 w-[85vw] max-w-[340px] bg-[#0B0F14] border border-[#1F2937] p-5 flex flex-col justify-between"
@@ -240,25 +224,17 @@ export function ProgramsSection() {
                       sizes="340px"
                     />
                     <div className="absolute top-2 left-2 px-2 py-0.5 bg-[#07090D]/90 font-mono text-[9px] font-bold text-[#B8F000]">
-                      0{idx + 1} // {program.badge}
+                      {String(idx + 1).padStart(2, "0")} // TRACK
                     </div>
                   </div>
 
-                  <div className="space-y-1">
-                    <span className="text-[10px] font-mono uppercase text-[#A8B0BA]">
-                      {program.skillLevel}
-                    </span>
+                  <div className="space-y-1.5">
                     <h3 className="text-xl font-black text-white uppercase tracking-tight">
-                      {program.shortName}
+                      {program.name}
                     </h3>
-                    <p className="text-xs text-[#A8B0BA] line-clamp-2 leading-relaxed">
-                      {program.fullDescription}
+                    <p className="text-xs text-[#A8B0BA] line-clamp-3 leading-relaxed whitespace-pre-line">
+                      {program.description}
                     </p>
-                  </div>
-
-                  <div className="py-2 border-y border-[#1F2937] flex items-center justify-between text-[11px] font-mono text-[#A8B0BA]">
-                    <span>RATIO: {program.batchRatio}</span>
-                    <span>{program.duration}</span>
                   </div>
                 </div>
 
@@ -281,7 +257,7 @@ export function ProgramsSection() {
             ))}
           </div>
           <div className="text-center font-mono text-[10px] text-[#A8B0BA] tracking-widest uppercase pt-1">
-            ← SWIPE TO EXPLORE 5 PROGRAMS →
+            ← SWIPE TO EXPLORE {programsList.length} PROGRAMS →
           </div>
         </div>
 

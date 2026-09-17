@@ -21,8 +21,11 @@ import {
   Loader2,
   Building2,
   Navigation,
+  Clock,
+  Image as ImageIcon,
 } from "lucide-react";
 import { Centre } from "@/data/centres";
+import { resolveAutomaticNeighborhoods } from "@/lib/constants";
 
 export function CentresManager() {
   const [centres, setCentres] = useState<Centre[]>([]);
@@ -38,11 +41,14 @@ export function CentresManager() {
   const [deleteTarget, setDeleteTarget] = useState<Centre | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  // Form State
+  // Form State strictly: Photo, Description, Timing, Location, Contact Number (+ Identity/Status)
   const [form, setForm] = useState({
     name: "",
     shortName: "",
     slug: "",
+    image: "/images/badminton-arena.jpg",
+    timing: "5:00 AM – 10:00 PM (All 7 Days)",
+    description: "",
     area: "",
     city: "Kochi",
     pincode: "682020",
@@ -52,16 +58,15 @@ export function CentresManager() {
     whatsapp: "919400635548",
     whatsappDisplay: "+91 94006 35548",
     email: "",
-    courtCount: 4,
-    surfaceType: "BWF Grade-1 Certified Synthetic Cushion Surface",
     googleMapsUrl: "",
     googleMapsEmbedUrl: "",
     latitude: "",
     longitude: "",
-    description: "",
-    facilities: "",
     displayOrder: 1,
     status: "ACTIVE" as "ACTIVE" | "INACTIVE",
+    courtCount: 4,
+    surfaceType: "BWF Grade-1 Certified Synthetic Cushion Surface",
+    facilities: "",
     seoTitle: "",
     seoDescription: "",
   });
@@ -98,6 +103,9 @@ export function CentresManager() {
       name: "",
       shortName: "",
       slug: "",
+      image: "/images/badminton-arena.jpg",
+      timing: "5:00 AM – 10:00 PM (All 7 Days)",
+      description: "",
       area: "",
       city: "Kochi",
       pincode: "682020",
@@ -107,16 +115,15 @@ export function CentresManager() {
       whatsapp: "919400635548",
       whatsappDisplay: "+91 94006 35548",
       email: "",
-      courtCount: 4,
-      surfaceType: "BWF Grade-1 Certified Synthetic Cushion Surface",
       googleMapsUrl: "",
       googleMapsEmbedUrl: "",
       latitude: "",
       longitude: "",
-      description: "",
-      facilities: "International BWF Synthetic Courts\nOverhead Glare-Free LED Floodlighting\nAir-Conditioned Parent Viewing Area\nSeparate Dressing Rooms & Hot Showers\nDedicated Parking",
       displayOrder: nextOrder,
       status: "ACTIVE",
+      courtCount: 4,
+      surfaceType: "BWF Grade-1 Certified Synthetic Cushion Surface",
+      facilities: "",
       seoTitle: "",
       seoDescription: "",
     });
@@ -125,10 +132,17 @@ export function CentresManager() {
 
   const openEditModal = (centre: Centre) => {
     setEditingCentre(centre);
+    const timingVal = centre.openingHours?.morning
+      ? (centre.openingHours.evening ? `${centre.openingHours.morning} | ${centre.openingHours.evening}` : centre.openingHours.morning)
+      : "5:00 AM – 10:00 PM (All 7 Days)";
+
     setForm({
       name: centre.name,
       shortName: centre.shortName || centre.name,
       slug: centre.slug,
+      image: centre.image || "/images/badminton-arena.jpg",
+      timing: timingVal,
+      description: centre.description || "",
       area: centre.area || "",
       city: centre.city || "Kochi",
       pincode: centre.pincode || centre.postalCode || "682020",
@@ -138,16 +152,15 @@ export function CentresManager() {
       whatsapp: centre.whatsapp || "919400635548",
       whatsappDisplay: centre.whatsappDisplay || centre.whatsapp || "+91 94006 35548",
       email: centre.email || "",
-      courtCount: centre.courtCount || 4,
-      surfaceType: centre.surfaceType || "BWF Grade-1 Certified Synthetic Cushion Surface",
       googleMapsUrl: centre.googleMapsUrl || "",
       googleMapsEmbedUrl: centre.googleMapsEmbedUrl || "",
       latitude: centre.latitude !== null && centre.latitude !== undefined ? String(centre.latitude) : "",
       longitude: centre.longitude !== null && centre.longitude !== undefined ? String(centre.longitude) : "",
-      description: centre.description || "",
-      facilities: Array.isArray(centre.facilities) ? centre.facilities.join("\n") : "",
       displayOrder: centre.displayOrder || 1,
       status: centre.status || "ACTIVE",
+      courtCount: centre.courtCount || 4,
+      surfaceType: centre.surfaceType || "BWF Grade-1 Certified Synthetic Cushion Surface",
+      facilities: Array.isArray(centre.facilities) ? centre.facilities.join("\n") : "",
       seoTitle: centre.seoTitle || centre.seo?.title || "",
       seoDescription: centre.seoDescription || centre.seo?.description || "",
     });
@@ -182,19 +195,16 @@ export function CentresManager() {
     setSaving(true);
     setFeedback(null);
 
-    const facilitiesArray = form.facilities
-      .split("\n")
-      .map((s) => s.trim())
-      .filter(Boolean);
-
     const payload = {
       ...form,
       slug: (form.slug || form.name).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, ""),
-      courtCount: Number(form.courtCount) || 3,
+      courtCount: Number(form.courtCount) || 4,
+      surfaceType: form.surfaceType || "BWF Grade-1 Certified Synthetic Cushion Surface",
+      image: form.image || "/images/badminton-arena.jpg",
+      openingHours: { days: "All 7 Days", morning: form.timing, evening: "" },
       latitude: form.latitude.trim() ? Number(form.latitude) : null,
       longitude: form.longitude.trim() ? Number(form.longitude) : null,
       displayOrder: Number(form.displayOrder) || 1,
-      facilities: facilitiesArray,
       isActive: form.status === "ACTIVE",
     };
 
@@ -431,11 +441,10 @@ export function CentresManager() {
           <div className="hidden md:block overflow-x-auto">
             <div className="min-w-[1050px]">
               {/* Table Header */}
-              <div className="grid grid-cols-[72px_minmax(230px,1.4fr)_minmax(210px,1.3fr)_minmax(155px,0.9fr)_minmax(155px,0.85fr)_100px_90px] items-center gap-4 px-4 py-3 bg-[#07090D] text-slate-400 uppercase text-[10px] font-mono tracking-wider border-b border-slate-800 select-none">
+              <div className="grid grid-cols-[64px_minmax(250px,1.5fr)_minmax(280px,1.6fr)_minmax(180px,1fr)_90px_80px] items-center gap-4 px-4 py-3 bg-[#07090D] text-slate-400 uppercase text-[10px] font-mono tracking-wider border-b border-slate-800 select-none">
                 <div className="text-center font-bold">Order</div>
-                <div className="text-left font-bold">Centre Details</div>
-                <div className="text-left font-bold">Location / Area</div>
-                <div className="text-left font-bold">Courts &amp; Specs</div>
+                <div className="text-left font-bold">Centre &amp; Photo</div>
+                <div className="text-left font-bold">Location &amp; Neighborhoods</div>
                 <div className="text-left font-bold">Contact</div>
                 <div className="text-center font-bold">Status</div>
                 <div className="text-right font-bold">Actions</div>
@@ -443,112 +452,141 @@ export function CentresManager() {
 
               {/* Table Rows */}
               <div className="divide-y divide-slate-800/60 font-mono text-xs">
-                {filteredCentres.map((c, index) => (
-                  <div
-                    key={c.slug}
-                    className="grid grid-cols-[72px_minmax(230px,1.4fr)_minmax(210px,1.3fr)_minmax(155px,0.9fr)_minmax(155px,0.85fr)_100px_90px] items-center gap-4 px-4 py-4 min-h-[110px] hover:bg-slate-900/40 transition-colors group"
-                  >
-                    {/* 1. Order Column */}
-                    <div className="flex flex-col items-center justify-center gap-1 select-none">
-                      <button
-                        type="button"
-                        onClick={() => handleMoveOrder(c.slug, "up")}
-                        disabled={index === 0}
-                        aria-label="Move centre up"
-                        title={index === 0 ? "Already at top" : "Move Up"}
-                        className="w-5 h-4 flex items-center justify-center text-slate-500 hover:text-white disabled:opacity-20 disabled:pointer-events-none transition-colors cursor-pointer"
-                      >
-                        <ArrowUp className="w-3 h-3" />
-                      </button>
-                      <span className="w-7 h-7 rounded-lg bg-[#07090D] border border-slate-800 flex items-center justify-center font-bold text-[#B8F000] text-xs shadow-inner">
-                        {c.displayOrder || index + 1}
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() => handleMoveOrder(c.slug, "down")}
-                        disabled={index === filteredCentres.length - 1}
-                        aria-label="Move centre down"
-                        title={index === filteredCentres.length - 1 ? "Already at bottom" : "Move Down"}
-                        className="w-5 h-4 flex items-center justify-center text-slate-500 hover:text-white disabled:opacity-20 disabled:pointer-events-none transition-colors cursor-pointer"
-                      >
-                        <ArrowDown className="w-3 h-3" />
-                      </button>
-                    </div>
-
-                    {/* 2. Centre Details Column */}
-                    <div className="flex flex-col justify-center min-w-0 pr-2">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className="font-semibold text-white text-[13px] sm:text-sm tracking-tight leading-[1.3] group-hover:text-[#B8F000] transition-colors">
-                          {c.name}
-                        </span>
-                        {c.slug === "kadavanthra" && (
-                          <span className="px-1.5 py-0.5 bg-[#B8F000]/10 border border-[#B8F000]/40 text-[#B8F000] text-[9px] font-bold rounded tracking-wider uppercase shrink-0">
-                            HQ
-                          </span>
-                        )}
-                        {c.isPlaceholder && (
-                          <span className="px-1.5 py-0.5 bg-blue-500/10 border border-blue-500/40 text-blue-400 text-[9px] font-bold rounded tracking-wider uppercase shrink-0">
-                            UPCOMING
-                          </span>
-                        )}
-                      </div>
-                      <div className="text-[11px] text-slate-400 flex items-center gap-2 mt-1.5 font-mono">
-                        <span>Slug: <code className="text-[#B8F000]">/{c.slug}</code></span>
-                        <span className="text-slate-600">&bull;</span>
-                        <span className="truncate">Short: {c.shortName || c.name}</span>
-                      </div>
-                    </div>
-
-                    {/* 3. Location / Area Column */}
-                    <div className="flex flex-col justify-center min-w-0 pr-2">
-                      <div className="font-bold text-slate-200 text-xs flex items-center gap-1.5">
-                        <MapPin className="w-3.5 h-3.5 text-[#B8F000] shrink-0" />
-                        <span className="truncate">{c.area || c.city || "Kochi"}</span>
-                      </div>
-                      <p
-                        className="text-[11px] text-slate-400 leading-snug line-clamp-2 mt-1 font-mono"
-                        title={c.address || undefined}
-                      >
-                        {c.address || "Address not configured"}
-                      </p>
-                      {c.googleMapsUrl && (
-                        <a
-                          href={c.googleMapsUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 text-[10px] text-[#B8F000] hover:underline font-mono mt-1 w-fit"
+                {filteredCentres.map((c, index) => {
+                  const autoNeighborhoods = resolveAutomaticNeighborhoods(c.address, c.name);
+                  return (
+                    <div
+                      key={c.slug}
+                      className="grid grid-cols-[64px_minmax(250px,1.5fr)_minmax(280px,1.6fr)_minmax(180px,1fr)_90px_80px] items-center gap-4 px-4 py-4 min-h-[110px] hover:bg-slate-900/40 transition-colors group"
+                    >
+                      {/* 1. Order Column */}
+                      <div className="flex flex-col items-center justify-center gap-1 select-none">
+                        <button
+                          type="button"
+                          onClick={() => handleMoveOrder(c.slug, "up")}
+                          disabled={index === 0}
+                          aria-label="Move centre up"
+                          title={index === 0 ? "Already at top" : "Move Up"}
+                          className="w-5 h-4 flex items-center justify-center text-slate-500 hover:text-white disabled:opacity-20 disabled:pointer-events-none transition-colors cursor-pointer"
                         >
-                          <span>Google Maps</span>
-                          <ExternalLink className="w-2.5 h-2.5" />
-                        </a>
-                      )}
-                    </div>
+                          <ArrowUp className="w-3 h-3" />
+                        </button>
+                        <span className="w-7 h-7 rounded-lg bg-[#07090D] border border-slate-800 flex items-center justify-center font-bold text-[#B8F000] text-xs shadow-inner">
+                          {c.displayOrder || index + 1}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => handleMoveOrder(c.slug, "down")}
+                          disabled={index === filteredCentres.length - 1}
+                          aria-label="Move centre down"
+                          title={index === filteredCentres.length - 1 ? "Already at bottom" : "Move Down"}
+                          className="w-5 h-4 flex items-center justify-center text-slate-500 hover:text-white disabled:opacity-20 disabled:pointer-events-none transition-colors cursor-pointer"
+                        >
+                          <ArrowDown className="w-3 h-3" />
+                        </button>
+                      </div>
 
-                    {/* 4. Courts & Specs Column */}
-                    <div className="flex flex-col justify-center min-w-0 pr-2">
-                      <div className="flex items-center gap-1.5 text-white font-bold text-xs">
-                        <ShieldCheck className="w-3.5 h-3.5 text-[#B8F000] shrink-0" />
-                        <span>{c.courtCount || 4} Courts</span>
+                      {/* 2. Centre Details & Photo Column */}
+                      <div className="flex items-start gap-3 min-w-0 pr-2">
+                        {c.image ? (
+                          <div className="w-12 h-12 rounded-xl bg-slate-900 border border-slate-800 overflow-hidden shrink-0 mt-0.5 relative">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                              src={c.image}
+                              alt={c.name}
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                (e.target as HTMLImageElement).src = "/images/badminton-arena.jpg";
+                              }}
+                            />
+                          </div>
+                        ) : (
+                          <div className="w-12 h-12 rounded-xl bg-[#07090D] border border-slate-800 flex items-center justify-center text-slate-600 shrink-0 mt-0.5">
+                            <Building2 className="w-5 h-5 text-slate-500" />
+                          </div>
+                        )}
+                        <div className="flex flex-col min-w-0">
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            <span className="font-semibold text-white text-[13px] tracking-tight leading-[1.3] group-hover:text-[#B8F000] transition-colors">
+                              {c.name}
+                            </span>
+                            {c.slug === "kadavanthra" && (
+                              <span className="px-1.5 py-0.5 bg-[#B8F000]/10 border border-[#B8F000]/40 text-[#B8F000] text-[9px] font-bold rounded tracking-wider uppercase shrink-0">
+                                HQ
+                              </span>
+                            )}
+                            {c.isPlaceholder && (
+                              <span className="px-1.5 py-0.5 bg-blue-500/10 border border-blue-500/40 text-blue-400 text-[9px] font-bold rounded tracking-wider uppercase shrink-0">
+                                UPCOMING
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-[11px] text-slate-400 line-clamp-2 mt-1 leading-snug font-sans">
+                            {c.description || "Dedicated badminton coaching arena in Kochi."}
+                          </p>
+                          <div className="text-[10px] text-slate-500 flex items-center gap-2 mt-1 font-mono">
+                            <span>Slug: <code className="text-[#B8F000]">/{c.slug}</code></span>
+                            {c.openingHours?.morning && (
+                              <>
+                                <span>&bull;</span>
+                                <span className="text-slate-400 flex items-center gap-1">
+                                  <Clock className="w-2.5 h-2.5 text-[#B8F000]" />
+                                  {c.openingHours.morning}
+                                </span>
+                              </>
+                            )}
+                          </div>
+                        </div>
                       </div>
-                      <p
-                        className="text-[11px] text-slate-400 line-clamp-2 leading-snug mt-1 font-mono"
-                        title={c.surfaceType || undefined}
-                      >
-                        {c.surfaceType || "BWF Standard Synthetic Cushion Mat"}
-                      </p>
-                    </div>
 
-                    {/* 5. Contact Column */}
-                    <div className="flex flex-col justify-center min-w-0 font-mono text-[11px] space-y-1.5">
-                      <div className="flex items-center gap-1.5 text-slate-300 whitespace-nowrap">
-                        <Phone className="w-3.5 h-3.5 text-slate-500 shrink-0" />
-                        <span className="whitespace-nowrap">{c.phoneDisplay || c.phone}</span>
+                      {/* 3. Location & Automatic Neighborhoods Column */}
+                      <div className="flex flex-col justify-center min-w-0 pr-2">
+                        <div className="font-bold text-slate-200 text-xs flex items-center gap-1.5">
+                          <MapPin className="w-3.5 h-3.5 text-[#B8F000] shrink-0" />
+                          <span className="truncate">{c.area || c.city || "Kochi"}</span>
+                        </div>
+                        <p
+                          className="text-[11px] text-slate-400 leading-snug line-clamp-1 mt-0.5 font-mono"
+                          title={c.address || undefined}
+                        >
+                          {c.address || "Address not configured"}
+                        </p>
+                        <div className="flex flex-wrap gap-1 mt-1.5">
+                          {autoNeighborhoods.slice(0, 3).map((nb) => (
+                            <span key={nb} className="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-[9px] text-[#B8F000] font-mono whitespace-nowrap">
+                              {nb}
+                            </span>
+                          ))}
+                          {autoNeighborhoods.length > 3 && (
+                            <span className="text-[9px] text-slate-500 font-mono self-center">
+                              +{autoNeighborhoods.length - 3}
+                            </span>
+                          )}
+                        </div>
+                        {c.googleMapsUrl && (
+                          <a
+                            href={c.googleMapsUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 text-[10px] text-[#B8F000] hover:underline font-mono mt-1 w-fit"
+                          >
+                            <span>Google Maps</span>
+                            <ExternalLink className="w-2.5 h-2.5" />
+                          </a>
+                        )}
                       </div>
-                      <div className="flex items-center gap-1.5 text-emerald-400 whitespace-nowrap">
-                        <MessageSquare className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
-                        <span className="whitespace-nowrap">{c.whatsappDisplay || c.whatsapp}</span>
+
+                      {/* 4. Contact Column */}
+                      <div className="flex flex-col justify-center min-w-0 font-mono text-[11px] space-y-1.5">
+                        <div className="flex items-center gap-1.5 text-slate-300 whitespace-nowrap">
+                          <Phone className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+                          <span className="whitespace-nowrap">{c.phoneDisplay || c.phone}</span>
+                        </div>
+                        <div className="flex items-center gap-1.5 text-emerald-400 whitespace-nowrap">
+                          <MessageSquare className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                          <span className="whitespace-nowrap">{c.whatsappDisplay || c.whatsapp}</span>
+                        </div>
                       </div>
-                    </div>
 
                     {/* 6. Status Column */}
                     <div className="flex items-center justify-center">
@@ -599,7 +637,8 @@ export function CentresManager() {
                       </button>
                     </div>
                   </div>
-                ))}
+                );
+              })}
               </div>
             </div>
           </div>
@@ -652,21 +691,24 @@ export function CentresManager() {
                   </button>
                 </div>
 
-                {/* Mobile Specs & Location Block */}
-                <div className="grid grid-cols-2 gap-3 text-xs bg-[#07090D] p-3 rounded-xl border border-slate-800/80">
+                {/* Mobile Location & Automatic Neighborhoods Block */}
+                <div className="space-y-2.5 text-xs bg-[#07090D] p-3 rounded-xl border border-slate-800/80">
                   <div>
                     <span className="text-[10px] text-slate-500 uppercase block font-bold">Location</span>
                     <span className="text-slate-200 font-medium truncate block mt-0.5">{c.area || c.city || "Kochi"}</span>
-                  </div>
-                  <div>
-                    <span className="text-[10px] text-slate-500 uppercase block font-bold">Courts</span>
-                    <span className="text-slate-200 font-medium block mt-0.5">{c.courtCount || 4} Courts</span>
-                  </div>
-                  <div className="col-span-2 pt-1 border-t border-slate-800/60">
-                    <span className="text-[10px] text-slate-500 uppercase block font-bold">Address</span>
                     <p className="text-[11px] text-slate-400 mt-0.5 leading-snug">{c.address || "Address not configured"}</p>
                   </div>
-                  <div className="col-span-2 pt-1 border-t border-slate-800/60 flex items-center justify-between">
+                  <div>
+                    <span className="text-[10px] text-slate-500 uppercase block font-bold mb-1">Automatic Neighborhoods</span>
+                    <div className="flex flex-wrap gap-1">
+                      {resolveAutomaticNeighborhoods(c.address, c.name).slice(0, 4).map((nb) => (
+                        <span key={nb} className="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-[9px] text-[#B8F000] font-mono whitespace-nowrap">
+                          {nb}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="pt-1 border-t border-slate-800/60 flex items-center justify-between">
                     <div className="text-[11px] text-slate-300">
                       <span className="text-slate-500 text-[10px] uppercase block font-bold">Contact</span>
                       <span>{c.phoneDisplay || c.phone}</span>
@@ -761,14 +803,14 @@ export function CentresManager() {
             {/* Modal Form */}
             <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0 overflow-hidden">
               <div className="flex-1 overflow-y-auto px-6 py-5 space-y-5 font-mono text-xs">
-                {/* 1. Basic Information Card */}
+                {/* 1. Identity & Facility Photo */}
                 <div className="bg-[#07090D] border border-slate-800/90 rounded-2xl p-4 sm:p-5 space-y-4 shadow-sm">
                   <div className="flex items-center justify-between pb-3 border-b border-slate-800/80">
                     <div className="flex items-center gap-2.5 text-[#B8F000] font-bold text-xs uppercase tracking-wider">
                       <span className="w-2 h-2 rounded-full bg-[#B8F000] shadow-[0_0_8px_rgba(184,240,0,0.6)]" />
-                      <span>1. Basic Information</span>
+                      <span>1. Centre Identity &amp; Photo</span>
                     </div>
-                    <span className="text-[10px] text-slate-500 uppercase tracking-widest font-mono">Core Identity</span>
+                    <span className="text-[10px] text-slate-500 uppercase tracking-widest font-mono">Core Facility</span>
                   </div>
 
                   <div className="space-y-3.5">
@@ -786,7 +828,7 @@ export function CentresManager() {
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                       <div>
-                        <label className="block text-slate-300 mb-1.5 font-semibold text-[11px]">Short Name *</label>
+                        <label className="block text-slate-300 mb-1.5 font-semibold text-[11px]">Short Display Name *</label>
                         <input
                           type="text"
                           required
@@ -810,25 +852,88 @@ export function CentresManager() {
                       </div>
                     </div>
 
+                    {/* Centre Photo */}
                     <div>
-                      <label className="block text-slate-300 mb-1.5 font-semibold text-[11px]">Centre Overview / Bio</label>
+                      <label className="block text-slate-300 mb-1.5 font-semibold text-[11px] flex items-center justify-between">
+                        <span className="flex items-center gap-1.5">
+                          <ImageIcon className="w-3.5 h-3.5 text-[#B8F000]" />
+                          <span>Centre Photo URL *</span>
+                        </span>
+                        <span className="text-[10px] text-slate-500 font-normal">Displayed on homepage &amp; cards</span>
+                      </label>
+                      <div className="flex items-center gap-3">
+                        <input
+                          type="text"
+                          required
+                          value={form.image}
+                          onChange={(e) => setForm({ ...form, image: e.target.value })}
+                          placeholder="/images/badminton-arena.jpg or https://..."
+                          className="flex-1 px-3.5 h-10 bg-[#0D111A] border border-slate-800 rounded-xl text-white text-xs placeholder-slate-500 focus:outline-none focus:border-[#B8F000] focus:ring-1 focus:ring-[#B8F000]/30 transition-all font-mono"
+                        />
+                        {form.image && (
+                          <div className="w-10 h-10 rounded-lg bg-slate-900 border border-slate-800 overflow-hidden shrink-0">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                              src={form.image}
+                              alt="Preview"
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                (e.target as HTMLImageElement).src = "/images/badminton-arena.jpg";
+                              }}
+                            />
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 2. Description & Timing */}
+                <div className="bg-[#07090D] border border-slate-800/90 rounded-2xl p-4 sm:p-5 space-y-4 shadow-sm">
+                  <div className="flex items-center justify-between pb-3 border-b border-slate-800/80">
+                    <div className="flex items-center gap-2.5 text-[#B8F000] font-bold text-xs uppercase tracking-wider">
+                      <span className="w-2 h-2 rounded-full bg-[#B8F000] shadow-[0_0_8px_rgba(184,240,0,0.6)]" />
+                      <span>2. Description &amp; Timing</span>
+                    </div>
+                    <span className="text-[10px] text-slate-500 uppercase tracking-widest font-mono">Overview &amp; Hours</span>
+                  </div>
+
+                  <div className="space-y-3.5">
+                    <div>
+                      <label className="block text-slate-300 mb-1.5 font-semibold text-[11px]">Description *</label>
                       <textarea
-                        rows={2}
+                        rows={3}
+                        required
                         value={form.description}
                         onChange={(e) => setForm({ ...form, description: e.target.value })}
-                        placeholder="Key training facilities, accessibility, and coaching focus..."
-                        className="w-full px-3.5 py-2.5 bg-[#0D111A] border border-slate-800 rounded-xl text-white text-xs placeholder-slate-500 focus:outline-none focus:border-[#B8F000] focus:ring-1 focus:ring-[#B8F000]/30 transition-all resize-y font-mono min-h-[64px]"
+                        placeholder="Comprehensive overview of academy facilities, accessibility, and coaching focus..."
+                        className="w-full px-3.5 py-2.5 bg-[#0D111A] border border-slate-800 rounded-xl text-white text-xs placeholder-slate-500 focus:outline-none focus:border-[#B8F000] focus:ring-1 focus:ring-[#B8F000]/30 transition-all resize-y font-mono min-h-[72px]"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-slate-300 mb-1.5 font-semibold text-[11px] flex items-center gap-1.5">
+                        <Clock className="w-3.5 h-3.5 text-[#B8F000]" />
+                        <span>Timing / Operating Hours *</span>
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={form.timing}
+                        onChange={(e) => setForm({ ...form, timing: e.target.value })}
+                        placeholder="e.g. 5:00 AM – 10:00 PM (All 7 Days)"
+                        className="w-full px-3.5 h-10 bg-[#0D111A] border border-slate-800 rounded-xl text-white text-xs placeholder-slate-500 focus:outline-none focus:border-[#B8F000] focus:ring-1 focus:ring-[#B8F000]/30 transition-all font-mono"
                       />
                     </div>
                   </div>
                 </div>
 
-                {/* 2. Location & Navigation Card */}
+                {/* 3. Location & Automatic Neighborhoods */}
                 <div className="bg-[#07090D] border border-slate-800/90 rounded-2xl p-4 sm:p-5 space-y-4 shadow-sm">
                   <div className="flex items-center justify-between pb-3 border-b border-slate-800/80">
                     <div className="flex items-center gap-2.5 text-[#B8F000] font-bold text-xs uppercase tracking-wider">
                       <span className="w-2 h-2 rounded-full bg-[#B8F000] shadow-[0_0_8px_rgba(184,240,0,0.6)]" />
-                      <span>2. Location &amp; Navigation</span>
+                      <span>3. Location &amp; Navigation</span>
                     </div>
                     <span className="text-[10px] text-slate-500 uppercase tracking-widest font-mono">Geo &amp; Maps</span>
                   </div>
@@ -893,17 +998,39 @@ export function CentresManager() {
                         className="w-full px-3.5 h-10 bg-[#0D111A] border border-slate-800 rounded-xl text-white text-xs placeholder-slate-500 focus:outline-none focus:border-[#B8F000] focus:ring-1 focus:ring-[#B8F000]/30 transition-all font-mono"
                       />
                     </div>
+
+                    {/* Live Automatic Neighborhoods Preview */}
+                    <div className="pt-2 border-t border-slate-800/60">
+                      <div className="flex items-center justify-between mb-1.5">
+                        <span className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">
+                          Neighborhoods Served (Automatic Calculation)
+                        </span>
+                        <span className="text-[10px] text-[#B8F000] font-mono">
+                          Auto-resolved from Location
+                        </span>
+                      </div>
+                      <div className="flex flex-wrap gap-1.5 p-2.5 rounded-xl bg-[#0D111A] border border-slate-800/80">
+                        {resolveAutomaticNeighborhoods(`${form.address} ${form.area}`, form.name).map((n) => (
+                          <span
+                            key={n}
+                            className="px-2 py-0.5 rounded bg-slate-800/90 text-[10px] text-[#B8F000] border border-slate-700/60 font-mono"
+                          >
+                            {n}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                {/* 3. Contact & WhatsApp Card */}
+                {/* 4. Contact & WhatsApp Card */}
                 <div className="bg-[#07090D] border border-slate-800/90 rounded-2xl p-4 sm:p-5 space-y-4 shadow-sm">
                   <div className="flex items-center justify-between pb-3 border-b border-slate-800/80">
                     <div className="flex items-center gap-2.5 text-[#B8F000] font-bold text-xs uppercase tracking-wider">
                       <span className="w-2 h-2 rounded-full bg-[#B8F000] shadow-[0_0_8px_rgba(184,240,0,0.6)]" />
-                      <span>3. Contact &amp; WhatsApp</span>
+                      <span>4. Direct Contact Numbers</span>
                     </div>
-                    <span className="text-[10px] text-slate-500 uppercase tracking-widest font-mono">Direct Channels</span>
+                    <span className="text-[10px] text-slate-500 uppercase tracking-widest font-mono">Enquiry Hotline</span>
                   </div>
 
                   <div className="space-y-3.5">
@@ -926,7 +1053,7 @@ export function CentresManager() {
                           type="text"
                           required
                           value={form.whatsapp}
-                          onChange={(e) => setForm({ ...form, whatsapp: e.target.value.replace(/\D/g, "") })}
+                          onChange={(e) => setForm({ ...form, whatsapp: e.target.value.replace(/\D/g, ""), whatsappDisplay: e.target.value })}
                           placeholder="919400635548"
                           className="w-full px-3.5 h-10 bg-[#0D111A] border border-slate-800 rounded-xl text-white text-xs placeholder-slate-500 focus:outline-none focus:border-[#B8F000] focus:ring-1 focus:ring-[#B8F000]/30 transition-all font-mono"
                         />
@@ -946,65 +1073,39 @@ export function CentresManager() {
                   </div>
                 </div>
 
-                {/* 4. Facilities & Visibility Card */}
+                {/* 5. Display Order & Status */}
                 <div className="bg-[#07090D] border border-slate-800/90 rounded-2xl p-4 sm:p-5 space-y-4 shadow-sm">
                   <div className="flex items-center justify-between pb-3 border-b border-slate-800/80">
                     <div className="flex items-center gap-2.5 text-[#B8F000] font-bold text-xs uppercase tracking-wider">
                       <span className="w-2 h-2 rounded-full bg-[#B8F000] shadow-[0_0_8px_rgba(184,240,0,0.6)]" />
-                      <span>4. Facilities &amp; Visibility</span>
+                      <span>5. Display &amp; Status</span>
                     </div>
-                    <span className="text-[10px] text-slate-500 uppercase tracking-widest font-mono">Specs &amp; Status</span>
+                    <span className="text-[10px] text-slate-500 uppercase tracking-widest font-mono">Ordering</span>
                   </div>
 
-                  <div className="space-y-3.5">
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
-                      <div>
-                        <label className="block text-slate-300 mb-1.5 font-semibold text-[11px]">Court Count *</label>
-                        <input
-                          type="number"
-                          min="1"
-                          max="20"
-                          required
-                          value={form.courtCount}
-                          onChange={(e) => setForm({ ...form, courtCount: Number(e.target.value) })}
-                          className="w-full px-3.5 h-10 bg-[#0D111A] border border-slate-800 rounded-xl text-white text-xs focus:outline-none focus:border-[#B8F000] focus:ring-1 focus:ring-[#B8F000]/30 transition-all font-mono"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-slate-300 mb-1.5 font-semibold text-[11px]">Display Order *</label>
-                        <input
-                          type="number"
-                          min="1"
-                          required
-                          value={form.displayOrder}
-                          onChange={(e) => setForm({ ...form, displayOrder: Number(e.target.value) })}
-                          className="w-full px-3.5 h-10 bg-[#0D111A] border border-slate-800 rounded-xl text-white text-xs focus:outline-none focus:border-[#B8F000] focus:ring-1 focus:ring-[#B8F000]/30 transition-all font-mono"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-slate-300 mb-1.5 font-semibold text-[11px]">Status *</label>
-                        <select
-                          value={form.status}
-                          onChange={(e) => setForm({ ...form, status: e.target.value as "ACTIVE" | "INACTIVE" })}
-                          className="w-full px-3.5 h-10 bg-[#0D111A] border border-slate-800 rounded-xl text-white text-xs focus:outline-none focus:border-[#B8F000] focus:ring-1 focus:ring-[#B8F000]/30 transition-all font-mono cursor-pointer"
-                        >
-                          <option value="ACTIVE">ACTIVE (Published)</option>
-                          <option value="INACTIVE">INACTIVE (Hidden)</option>
-                        </select>
-                      </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                    <div>
+                      <label className="block text-slate-300 mb-1.5 font-semibold text-[11px]">Display Order *</label>
+                      <input
+                        type="number"
+                        min="1"
+                        required
+                        value={form.displayOrder}
+                        onChange={(e) => setForm({ ...form, displayOrder: Number(e.target.value) })}
+                        className="w-full px-3.5 h-10 bg-[#0D111A] border border-slate-800 rounded-xl text-white text-xs focus:outline-none focus:border-[#B8F000] focus:ring-1 focus:ring-[#B8F000]/30 transition-all font-mono"
+                      />
                     </div>
 
                     <div>
-                      <label className="block text-slate-300 mb-1.5 font-semibold text-[11px]">Surface Specification</label>
-                      <input
-                        type="text"
-                        value={form.surfaceType}
-                        onChange={(e) => setForm({ ...form, surfaceType: e.target.value })}
-                        placeholder="BWF Grade-1 Certified Synthetic Cushion Mats"
-                        className="w-full px-3.5 h-10 bg-[#0D111A] border border-slate-800 rounded-xl text-white text-xs placeholder-slate-500 focus:outline-none focus:border-[#B8F000] focus:ring-1 focus:ring-[#B8F000]/30 transition-all font-mono"
-                      />
+                      <label className="block text-slate-300 mb-1.5 font-semibold text-[11px]">Status *</label>
+                      <select
+                        value={form.status}
+                        onChange={(e) => setForm({ ...form, status: e.target.value as "ACTIVE" | "INACTIVE" })}
+                        className="w-full px-3.5 h-10 bg-[#0D111A] border border-slate-800 rounded-xl text-white text-xs focus:outline-none focus:border-[#B8F000] focus:ring-1 focus:ring-[#B8F000]/30 transition-all font-mono cursor-pointer"
+                      >
+                        <option value="ACTIVE">ACTIVE (Published)</option>
+                        <option value="INACTIVE">INACTIVE (Hidden)</option>
+                      </select>
                     </div>
                   </div>
                 </div>

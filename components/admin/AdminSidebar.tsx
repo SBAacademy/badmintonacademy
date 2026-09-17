@@ -15,12 +15,14 @@ import {
   X,
   Sparkles,
   MapPin,
+  Target,
 } from "lucide-react";
 
 export type AdminTab =
   | "overview"
   | "leads"
   | "centres"
+  | "programs"
   | "gallery"
   | "blog"
   | "coaches"
@@ -87,6 +89,11 @@ export function AdminSidebar({
           id: "centres",
           label: "Centres & Hubs",
           icon: MapPin,
+        },
+        {
+          id: "programs",
+          label: "Training Programs",
+          icon: Target,
         },
       ],
     },

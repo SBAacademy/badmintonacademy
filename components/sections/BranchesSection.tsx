@@ -3,11 +3,12 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { MapPin, Navigation, MessageCircle, ArrowRight, ShieldCheck, Check } from "lucide-react";
+import { MapPin, Navigation, MessageCircle, ArrowRight, Clock, Phone } from "lucide-react";
 import { LOCATIONS, LocationData } from "@/data/locations";
 import { Centre } from "@/data/centres";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { trackEvent } from "@/lib/analytics";
+import { resolveAutomaticNeighborhoods } from "@/lib/constants";
 
 export function BranchesSection() {
   const [dynamicCentres, setDynamicCentres] = useState<Centre[]>([]);
@@ -27,6 +28,11 @@ export function BranchesSection() {
     dynamicCentres.length > 0
       ? dynamicCentres.map((c) => {
           const staticLoc = LOCATIONS[c.slug as keyof typeof LOCATIONS];
+          const autoNeighborhoods = resolveAutomaticNeighborhoods(c.address, c.name);
+          const morningTiming = c.openingHours?.morning
+            ? `${c.openingHours.morning}${c.openingHours.evening ? ` | ${c.openingHours.evening}` : ""}`
+            : "5:00 AM – 10:00 PM (All 7 Days)";
+
           return {
             ...(staticLoc || {}),
             ...c,
@@ -35,44 +41,38 @@ export function BranchesSection() {
             shortName: c.shortName || c.name,
             district: c.district || "Kochi",
             address: c.address || "",
-            phone: c.phone || "",
+            phone: c.phone || "+91 94006 35548",
+            phoneDisplay: c.phoneDisplay || c.phone || "+91 94006 35548",
             email: c.email || "",
-            whatsapp: (c as any).whatsapp || (c as any).whatsappNumber || staticLoc?.whatsapp || "",
-            whatsappDisplay: (c as any).whatsappDisplay || staticLoc?.whatsappDisplay || "",
-            phoneDisplay: (c as any).phoneDisplay || staticLoc?.phoneDisplay || "",
-            courtInformation: {
-              courtCount: c.courtInformation?.courtCount ?? staticLoc?.courtInformation?.courtCount ?? 4,
-              surfaceType: c.courtInformation?.surfaceType || staticLoc?.courtInformation?.surfaceType || "BWF Standard Sprung Wooden Subfloor",
-              subfloor: (c.courtInformation as any)?.subfloor || staticLoc?.courtInformation?.subfloor || "Sprung Wooden Subfloor",
-              lightingStandard: (c.courtInformation as any)?.lightingStandard || staticLoc?.courtInformation?.lightingStandard || "Glare-Free High Bay LED (500+ Lux)",
-              ceilingClearance: (c.courtInformation as any)?.ceilingClearance || staticLoc?.courtInformation?.ceilingClearance || "30 Feet International Clear Height",
-            },
+            whatsapp: (c as any).whatsapp || "919400635548",
+            whatsappDisplay: (c as any).whatsappDisplay || "+91 94006 35548",
+            image: c.image || "/images/badminton-arena.jpg",
             openingHours: {
-              days: (c.openingHours as any)?.days || staticLoc?.openingHours?.days || "Monday - Sunday (7 Days Open)",
-              morning: (c.openingHours as any)?.morning || staticLoc?.openingHours?.morning || "05:30 AM - 08:30 AM",
-              evening: (c.openingHours as any)?.evening || staticLoc?.openingHours?.evening || "04:30 PM - 07:30 PM",
+              days: "Monday - Sunday (7 Days Open)",
+              morning: morningTiming,
+              evening: "",
             },
             intro: {
-              heading: (c.intro as any)?.heading || staticLoc?.intro?.heading || `${c.name} in Kochi`,
-              subheading: (c.intro as any)?.subheading || staticLoc?.intro?.subheading || "Premier Badminton Arena",
-              description: c.intro?.description || c.description || staticLoc?.intro?.description || "",
-              neighbourhoodsServed: (c.intro as any)?.neighbourhoodsServed || staticLoc?.intro?.neighbourhoodsServed || [c.district || "Kochi"],
-              connectivity: (c.intro as any)?.connectivity || staticLoc?.intro?.connectivity || "Easily accessible from major transit hubs in Kochi",
+              heading: c.name,
+              subheading: "Premier Badminton Arena",
+              description: c.description || c.intro?.description || "Dedicated badminton coaching and athletic conditioning arena in Kochi.",
+              neighbourhoodsServed: autoNeighborhoods,
+              connectivity: "Easily accessible from major transit corridors across Kochi",
             },
-            facilities: (c.facilities && c.facilities.length > 0) ? c.facilities : (staticLoc?.facilities || []),
-            coaches: (c.coaches && c.coaches.length > 0) ? c.coaches : (staticLoc?.coaches || []),
-            programs: staticLoc?.programs || [],
-            testimonials: (c.testimonials && c.testimonials.length > 0) ? c.testimonials : (staticLoc?.testimonials || []),
-            achievements: staticLoc?.achievements || [],
-            localFAQs: staticLoc?.localFAQs || [],
+            facilities: c.facilities || [],
+            coaches: c.coaches || [],
+            programs: [],
+            testimonials: c.testimonials || [],
+            achievements: [],
+            localFAQs: [],
             seo: {
-              title: c.seo?.title || staticLoc?.seo?.title || `${c.name} | S & A Badminton Academy`,
-              description: c.seo?.description || staticLoc?.seo?.description || c.description || "",
-              primaryKeyword: c.seo?.primaryKeyword || staticLoc?.seo?.primaryKeyword || "badminton academy",
-              secondaryKeywords: c.seo?.secondaryKeywords || staticLoc?.seo?.secondaryKeywords || [],
-              relatedKeywords: c.seo?.relatedKeywords || staticLoc?.seo?.relatedKeywords || [],
+              title: c.seo?.title || `${c.name} | S & A Badminton Academy`,
+              description: c.seo?.description || c.description || "",
+              primaryKeyword: c.seo?.primaryKeyword || `badminton coaching in ${c.name}`,
+              secondaryKeywords: c.seo?.secondaryKeywords || [],
+              relatedKeywords: c.seo?.relatedKeywords || [],
             },
-          } as LocationData;
+          } as unknown as LocationData;
         })
       : Object.values(LOCATIONS);
 
@@ -211,7 +211,7 @@ export function BranchesSection() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F14] via-transparent to-transparent" />
                 <div className="absolute top-4 left-4 px-3 py-1 bg-[#07090D]/90 border border-[#1F2937] font-mono text-[10px] font-bold text-[#B8F000] uppercase tracking-wider">
-                  {activeCentre.courtInformation.courtCount ? `${activeCentre.courtInformation.courtCount} COURTS` : "PLANNED EXPANSION"}
+                  {activeCentre.district ? `${activeCentre.district} ARENA` : "ACTIVE CENTRE"}
                 </div>
               </div>
 
@@ -229,24 +229,25 @@ export function BranchesSection() {
                 </p>
               </div>
 
-              {/* Verified Facilities & Timings */}
+              {/* Timings & Direct Contact */}
               <div className="grid grid-cols-2 gap-4 border-y border-[#1F2937] py-4 text-xs">
                 <div>
                   <div className="font-mono text-[10px] text-[#A8B0BA] uppercase tracking-wider mb-1">
-                    SURFACE & SPECS
+                    OPERATIONAL TIMINGS
                   </div>
                   <div className="text-white font-bold flex items-center gap-1.5">
-                    <ShieldCheck className="w-3.5 h-3.5 text-[#B8F000]" />
-                    <span>{activeCentre.courtInformation.surfaceType}</span>
+                    <Clock className="w-3.5 h-3.5 text-[#B8F000]" />
+                    <span>{activeCentre.openingHours?.morning || "5:00 AM – 10:00 PM"}</span>
                   </div>
                 </div>
 
                 <div>
                   <div className="font-mono text-[10px] text-[#A8B0BA] uppercase tracking-wider mb-1">
-                    OPERATIONAL TIMINGS
+                    DIRECT CONTACT
                   </div>
-                  <div className="text-white font-bold">
-                    {activeCentre.openingHours.morning}
+                  <div className="text-white font-bold flex items-center gap-1.5">
+                    <Phone className="w-3.5 h-3.5 text-[#B8F000]" />
+                    <span>{activeCentre.phoneDisplay || activeCentre.phone || "+91 94006 35548"}</span>
                   </div>
                 </div>
               </div>
@@ -346,11 +347,24 @@ export function BranchesSection() {
                       />
                     </div>
 
-                    <div className="space-y-1 text-left">
-                      <div className="text-xs text-[#B8F000] font-mono">{loc.address}</div>
+                    <div className="space-y-1.5 text-left">
+                      <div className="text-xs text-[#B8F000] font-mono flex items-center gap-1.5">
+                        <MapPin className="w-3.5 h-3.5 shrink-0" />
+                        <span>{loc.address}</span>
+                      </div>
                       <p className="text-xs text-[#A8B0BA] leading-relaxed pt-1">
                         {loc.intro.description}
                       </p>
+                      <div className="pt-2 grid grid-cols-1 gap-1.5 text-xs text-[#A8B0BA] border-t border-[#1F2937]/50 mt-2">
+                        <div className="flex items-center gap-1.5 text-white font-medium">
+                          <Clock className="w-3.5 h-3.5 text-[#B8F000] shrink-0" />
+                          <span>{loc.openingHours?.morning || "5:00 AM – 10:00 PM"}</span>
+                        </div>
+                        <div className="flex items-center gap-1.5 text-white font-medium">
+                          <Phone className="w-3.5 h-3.5 text-[#B8F000] shrink-0" />
+                          <span>{loc.phoneDisplay || loc.phone || "+91 94006 35548"}</span>
+                        </div>
+                      </div>
                     </div>
 
                     <div className="pt-2 space-y-2">

@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { LeadItem } from "@/lib/db";
 import { Centre } from "@/data/centres";
+import { AGE_CATEGORIES } from "@/lib/constants";
 
 interface AdminLeadsManagerProps {
   leads: LeadItem[];
@@ -51,6 +52,7 @@ export function AdminLeadsManager({
   const [centres, setCentres] = useState<Centre[]>(initialCentres || []);
   const [activeStage, setActiveStage] = useState<string>("ALL");
   const [centreFilter, setCentreFilter] = useState<string>("ALL");
+  const [ageCategoryFilter, setAgeCategoryFilter] = useState<string>("ALL");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [viewMode, setViewMode] = useState<"cards" | "list">("cards");
 
@@ -85,6 +87,9 @@ export function AdminLeadsManager({
         // Centre filter
         if (centreFilter !== "ALL" && l.branch !== centreFilter) return false;
 
+        // Age Category filter
+        if (ageCategoryFilter !== "ALL" && l.ageCategory !== ageCategoryFilter) return false;
+
         // Search query
         if (searchQuery.trim()) {
           const q = searchQuery.toLowerCase().trim();
@@ -98,7 +103,7 @@ export function AdminLeadsManager({
         return true;
       })
       .sort((a, b) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime());
-  }, [leads, activeStage, centreFilter, searchQuery]);
+  }, [leads, activeStage, centreFilter, ageCategoryFilter, searchQuery]);
 
   // Stage counts
   const stageCounts = useMemo(() => {
@@ -211,6 +216,20 @@ export function AdminLeadsManager({
             {centres.map((loc) => (
               <option key={loc.slug} value={loc.slug}>
                 {loc.shortName || loc.name}
+              </option>
+            ))}
+          </select>
+
+          {/* Age Category Filter */}
+          <select
+            value={ageCategoryFilter}
+            onChange={(e) => setAgeCategoryFilter(e.target.value)}
+            className="px-3 py-2 bg-[#090C12] border border-slate-800 rounded-xl text-xs text-slate-200 focus:outline-none focus:border-[#B8F000]"
+          >
+            <option value="ALL">All Age Categories</option>
+            {AGE_CATEGORIES.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat}
               </option>
             ))}
           </select>
@@ -387,9 +406,10 @@ export function AdminLeadsManager({
           <table className="w-full text-left text-xs">
             <thead className="bg-[#090C12] text-slate-400 uppercase font-semibold border-b border-slate-800">
               <tr>
-                <th className="p-3.5">Student / Parent</th>
-                <th className="p-3.5">Centre &amp; Program</th>
-                <th className="p-3.5">Preferred Slot</th>
+                <th className="p-3.5">Name</th>
+                <th className="p-3.5">Contact</th>
+                <th className="p-3.5">Centre</th>
+                <th className="p-3.5">Age Category</th>
                 <th className="p-3.5">Status</th>
                 <th className="p-3.5 text-right">Quick Contact</th>
               </tr>
@@ -413,7 +433,6 @@ export function AdminLeadsManager({
                       >
                         {lead.name}
                       </div>
-                      <div className="text-slate-400">{lead.phone}</div>
                       <div className="text-[10px] text-slate-500">
                         {new Date(lead.submittedAt).toLocaleDateString("en-IN", {
                           month: "short",
@@ -423,17 +442,23 @@ export function AdminLeadsManager({
                     </td>
 
                     <td className="p-3.5">
+                      <div className="text-slate-200 font-mono">{lead.phone}</div>
+                      {lead.email && <div className="text-[11px] text-slate-400 truncate max-w-[140px]">{lead.email}</div>}
+                    </td>
+
+                    <td className="p-3.5">
                       <div className="font-semibold text-slate-200 capitalize">
                         {lead.branch.replace("-", " ")}
                       </div>
-                      <div className="text-slate-400 capitalize">
+                      <div className="text-[11px] text-slate-400 capitalize">
                         {lead.program.replace(/-/g, " ")}
                       </div>
-                      <div className="text-[10px] text-slate-500">{lead.ageCategory}</div>
                     </td>
 
-                    <td className="p-3.5 text-slate-300">
-                      {lead.slot}
+                    <td className="p-3.5">
+                      <span className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-[#11161D] text-[#B8F000] border border-slate-700/80 font-mono">
+                        {lead.ageCategory || "—"}
+                      </span>
                     </td>
 
                     <td className="p-3.5">

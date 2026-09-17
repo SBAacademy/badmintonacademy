@@ -111,35 +111,39 @@ export default async function CoachesPage() {
                   {coach.bio}
                 </p>
 
-                {/* Verified Certifications */}
-                <div className="space-y-2 pt-4 border-t border-[#1F2937] text-left">
-                  <div className="font-mono text-[10px] uppercase tracking-wider text-[#A8B0BA]">
-                    VERIFIED ACCREDITATIONS:
+                {/* Verified Certifications (if present) */}
+                {Array.isArray(coach.certifications) && coach.certifications.length > 0 && (
+                  <div className="space-y-2 pt-4 border-t border-[#1F2937] text-left">
+                    <div className="font-mono text-[10px] uppercase tracking-wider text-[#A8B0BA]">
+                      VERIFIED ACCREDITATIONS:
+                    </div>
+                    <div className="space-y-1">
+                      {coach.certifications.map((cert, cIdx) => (
+                        <div key={cIdx} className="flex items-start gap-2 text-xs text-white">
+                          <ShieldCheck className="w-3.5 h-3.5 text-[#B8F000] shrink-0 mt-0.5" />
+                          <span>{cert}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                  <div className="space-y-1">
-                    {coach.certifications.map((cert, cIdx) => (
-                      <div key={cIdx} className="flex items-start gap-2 text-xs text-white">
-                        <ShieldCheck className="w-3.5 h-3.5 text-[#B8F000] shrink-0 mt-0.5" />
-                        <span>{cert}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+                )}
 
-                {/* Key Achievements */}
-                <div className="space-y-2 pt-4 border-t border-[#1F2937] text-left">
-                  <div className="font-mono text-[10px] uppercase tracking-wider text-[#A8B0BA]">
-                    NOTABLE TRACK RECORD:
+                {/* Key Achievements (if present) */}
+                {Array.isArray(coach.achievements) && coach.achievements.length > 0 && (
+                  <div className="space-y-2 pt-4 border-t border-[#1F2937] text-left">
+                    <div className="font-mono text-[10px] uppercase tracking-wider text-[#A8B0BA]">
+                      NOTABLE TRACK RECORD:
+                    </div>
+                    <div className="space-y-1">
+                      {coach.achievements.map((ach, aIdx) => (
+                        <div key={aIdx} className="text-xs text-[#A8B0BA] flex items-start gap-2">
+                          <span className="text-[#B8F000] font-mono">&bull;</span>
+                          <span>{ach}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                  <div className="space-y-1">
-                    {coach.achievements.map((ach, aIdx) => (
-                      <div key={aIdx} className="text-xs text-[#A8B0BA] flex items-start gap-2">
-                        <span className="text-[#B8F000] font-mono">&bull;</span>
-                        <span>{ach}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+                )}
               </div>
 
               {/* Specialization & Profile Link Footer */}

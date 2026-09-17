@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, ShieldCheck, Camera } from "lucide-react";
+import { ArrowRight, Camera } from "lucide-react";
 import { COACHES, Coach } from "@/data/coaches";
 import { getCoaches } from "@/lib/contentDb";
 
@@ -92,17 +92,8 @@ export async function CoachesSpotlight({ initialCoaches }: { initialCoaches?: Co
                     </div>
                   </div>
 
-                  {/* Verified Credentials */}
-                  <div className="space-y-1 pt-1 border-t border-[#1F2937]">
-                    {coach.certifications.slice(0, 2).map((cert, cIdx) => (
-                      <div key={cIdx} className="flex items-start gap-1.5 text-[11px] text-[#A8B0BA] leading-tight">
-                        <ShieldCheck className="w-3.5 h-3.5 text-[#B8F000] shrink-0 mt-0.5" />
-                        <span className="line-clamp-1">{cert}</span>
-                      </div>
-                    ))}
-                  </div>
-
-                  <p className="text-xs text-[#A8B0BA] line-clamp-2 leading-relaxed pt-1">
+                  {/* Bio / Description */}
+                  <p className="text-xs text-[#A8B0BA] line-clamp-3 leading-relaxed pt-1">
                     {coach.bio}
                   </p>
                 </div>

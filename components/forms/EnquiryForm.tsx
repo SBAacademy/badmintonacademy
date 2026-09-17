@@ -7,6 +7,7 @@ import { Centre } from "@/data/centres";
 import { PROGRAMS } from "@/data/programs";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { trackEvent } from "@/lib/analytics";
+import { AGE_CATEGORIES } from "@/lib/constants";
 
 interface EnquiryFormProps {
   initialBranch?: string;
@@ -27,7 +28,7 @@ export function EnquiryForm({
     name: "",
     phone: "",
     email: "",
-    ageCategory: "Junior (Ages 10-16)",
+    ageCategory: AGE_CATEGORIES[0] as string,
     preferredBranch: initialBranch || "",
     preferredProgram: initialProgram || "junior-badminton-coaching",
     preferredSlot: "Evening (04:30 PM - 07:30 PM)",
@@ -337,10 +338,11 @@ export function EnquiryForm({
               onChange={handleChange}
               className="w-full px-4 py-3 bg-[#07090D] border border-[#1F2937] text-white text-sm focus:outline-none focus:border-[#B8F000] transition-colors font-mono"
             >
-              <option value="Kids (Ages 5-9)">Kids (Ages 5–9)</option>
-              <option value="Junior (Ages 10-16)">Junior (Ages 10–16)</option>
-              <option value="Adult / Corporate (18+) ">Adult / Corporate (18+)</option>
-              <option value="Competitive Tournament Athlete">Competitive Tournament Athlete</option>
+              {AGE_CATEGORIES.map((category) => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}
             </select>
           </div>
         </div>

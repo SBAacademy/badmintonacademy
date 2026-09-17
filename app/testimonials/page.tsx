@@ -18,6 +18,7 @@ export const metadata: Metadata = createMetadata({
 });
 
 import { getTestimonials } from "@/lib/contentDb";
+import { PublicReviewModal } from "@/components/testimonials/PublicReviewModal";
 
 export default async function TestimonialsPage() {
   const testimonials = await getTestimonials();
@@ -35,11 +36,14 @@ export default async function TestimonialsPage() {
             Verified Feedback
           </div>
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
-            What Parents & Athletes Say About S & A Academy
+            What Parents &amp; Athletes Say About S &amp; A Academy
           </h1>
           <p className="text-slate-400 text-sm sm:text-base leading-relaxed">
             Real experiences from junior parents, amateur adult players, corporate fitness enthusiasts, and competitive athletes training with us daily.
           </p>
+          <div className="pt-2">
+            <PublicReviewModal />
+          </div>
         </div>
 
         {/* Testimonials Grid */}

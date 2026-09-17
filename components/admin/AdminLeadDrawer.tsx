@@ -18,11 +18,13 @@ import {
   Sparkles,
 } from "lucide-react";
 import { LeadItem } from "@/lib/db";
+import { AGE_CATEGORIES } from "@/lib/constants";
 
 interface AdminLeadDrawerProps {
   lead: LeadItem | null;
   onClose: () => void;
   onStatusChange: (id: string, status: LeadItem["status"]) => Promise<void>;
+  onAgeCategoryChange?: (id: string, ageCategory: string) => Promise<void>;
   onSaveNotes: (id: string, notes: string) => Promise<boolean>;
   onDeleteLead: (id: string, name: string) => Promise<void>;
 }
@@ -39,6 +41,7 @@ export function AdminLeadDrawer({
   lead,
   onClose,
   onStatusChange,
+  onAgeCategoryChange,
   onSaveNotes,
   onDeleteLead,
 }: AdminLeadDrawerProps) {
@@ -190,10 +193,22 @@ export function AdminLeadDrawer({
                 </div>
 
                 <div>
-                  <span className="text-xs text-slate-500 block">Age Category</span>
-                  <span className="font-semibold text-slate-200 mt-0.5 block">
-                    {lead.ageCategory || "Not specified"}
-                  </span>
+                  <span className="text-xs text-slate-500 block mb-1">Age Category</span>
+                  <select
+                    value={lead.ageCategory || ""}
+                    onChange={(e) => onAgeCategoryChange?.(lead.id, e.target.value)}
+                    className="w-full px-2.5 py-1.5 bg-[#0D111A] border border-slate-700 rounded-lg text-xs font-semibold text-white focus:outline-none focus:border-[#B8F000]"
+                  >
+                    {!lead.ageCategory && <option value="">Select Category</option>}
+                    {lead.ageCategory && !(AGE_CATEGORIES as readonly string[]).includes(lead.ageCategory) && (
+                      <option value={lead.ageCategory}>{lead.ageCategory} (Legacy)</option>
+                    )}
+                    {AGE_CATEGORIES.map((cat) => (
+                      <option key={cat} value={cat}>
+                        {cat}
+                      </option>
+                    ))}
+                  </select>
                 </div>
 
                 <div>

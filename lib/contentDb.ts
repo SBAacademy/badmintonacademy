@@ -1241,7 +1241,12 @@ export async function getTestimonials(options: { includePending?: boolean } = {}
     return items;
   }
   // Filter only approved reviews for public website
-  return items.filter((t: any) => t.status !== "PENDING" && t.isApproved !== false);
+  return items.filter((t: any) => {
+    if (t.status === "APPROVED" || t.isApproved === true) return true;
+    if (t.status === "PENDING") return false;
+    if (t.isApproved === false) return false;
+    return true;
+  });
 }
 
 export async function getBlogPosts(): Promise<BlogPost[]> {

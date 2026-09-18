@@ -6,6 +6,9 @@ import { createMetadata } from "@/lib/seo";
 import { TESTIMONIALS } from "@/data/testimonials";
 import { FinalCTA } from "@/components/sections/FinalCTA";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export const metadata: Metadata = createMetadata({
   title: "Parent & Student Reviews | S & A Badminton Academy Kochi",
   description: "Read genuine feedback and parent testimonials about S & A Badminton Academy coaching across Kadavanthra, Edappally, and Kakkanad.",
@@ -21,7 +24,7 @@ import { getTestimonials } from "@/lib/contentDb";
 import { PublicReviewModal } from "@/components/testimonials/PublicReviewModal";
 
 export default async function TestimonialsPage() {
-  const testimonials = await getTestimonials();
+  const testimonials = await getTestimonials({ includePending: false });
 
   return (
     <div className="py-8 sm:py-12 bg-[#090D16]">

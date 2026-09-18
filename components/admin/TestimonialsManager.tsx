@@ -115,12 +115,12 @@ export function TestimonialsManager() {
       const res = await fetch("/api/content/testimonials", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...item, status: "APPROVED" }),
+        body: JSON.stringify({ ...item, status: "APPROVED", isApproved: true }),
       });
       const data = await res.json();
       if (data.success) {
         setItems((prev) =>
-          prev.map((i) => (i.id === item.id ? { ...i, status: "APPROVED" as any } : i))
+          prev.map((i) => (i.id === item.id ? { ...i, status: "APPROVED" as any, isApproved: true as any } : i))
         );
       }
     } catch (err) {
@@ -142,7 +142,8 @@ export function TestimonialsManager() {
       role: editingItem?.role || "Student / Parent",
       rating: 5,
       highlight: form.content.trim().slice(0, 75),
-      status: (editingItem as any)?.status || "APPROVED",
+      status: "APPROVED",
+      isApproved: true,
     };
 
     try {
@@ -193,8 +194,8 @@ export function TestimonialsManager() {
     }
   };
 
-  const pendingItems = items.filter((i) => (i as any).status === "PENDING");
-  const approvedItems = items.filter((i) => (i as any).status !== "PENDING");
+  const pendingItems = items.filter((i: any) => i.status === "PENDING" || (i.isApproved === false && i.status !== "APPROVED"));
+  const approvedItems = items.filter((i: any) => i.status === "APPROVED" || i.isApproved === true || (i.status !== "PENDING" && i.isApproved !== false));
 
   const currentTabItems = tabFilter === "PENDING" ? pendingItems : approvedItems;
   const filteredItems = currentTabItems.filter((item) => {

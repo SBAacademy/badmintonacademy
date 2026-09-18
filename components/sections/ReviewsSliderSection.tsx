@@ -15,7 +15,7 @@ interface ReviewsSliderSectionProps {
 export function ReviewsSliderSection({ initialReviews }: ReviewsSliderSectionProps) {
   const [reviews, setReviews] = useState<Testimonial[]>(() => {
     if (initialReviews && initialReviews.length > 0) {
-      return initialReviews.filter((r: any) => r.status !== "PENDING" && r.isApproved !== false);
+      return initialReviews.filter((r: any) => r.status === "APPROVED" || r.isApproved === true || (r.status !== "PENDING" && r.isApproved !== false));
     }
     return TESTIMONIALS;
   });
@@ -31,7 +31,7 @@ export function ReviewsSliderSection({ initialReviews }: ReviewsSliderSectionPro
       .then((res) => res.json())
       .then((data) => {
         if (data.success && Array.isArray(data.items) && data.items.length > 0) {
-          const approved = data.items.filter((r: any) => r.status !== "PENDING" && r.isApproved !== false);
+          const approved = data.items.filter((r: any) => r.status === "APPROVED" || r.isApproved === true || (r.status !== "PENDING" && r.isApproved !== false));
           if (approved.length > 0) {
             setReviews(approved);
           }

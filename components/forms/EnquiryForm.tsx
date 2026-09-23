@@ -60,7 +60,7 @@ export function EnquiryForm({
     const fetchCentres = async () => {
       setLoadingCentres(true);
       try {
-        const res = await fetch("/api/centres");
+        const res = await fetch("/api/centres", { cache: "no-store" });
         const data = await res.json();
         if (data.success && Array.isArray(data.items) && data.items.length > 0) {
           setCentres(data.items);

@@ -31,7 +31,7 @@ export function CoachEnquiryForm({ coach, initialCentres }: CoachEnquiryFormProp
       try {
         setLoadingCentres(true);
         setCentresError(null);
-        const res = await fetch("/api/centres");
+        const res = await fetch("/api/centres", { cache: "no-store" });
         const data = await res.json();
         if (isMounted) {
           if (data.success && Array.isArray(data.centres) && data.centres.length > 0) {

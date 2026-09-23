@@ -64,7 +64,7 @@ export function AdminLeadsManager({
 
     const fetchCentres = async () => {
       try {
-        const res = await fetch("/api/centres");
+        const res = await fetch("/api/centres", { cache: "no-store" });
         const data = await res.json();
         if (data.success && Array.isArray(data.items)) {
           setCentres(data.items);

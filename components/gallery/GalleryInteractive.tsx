@@ -42,10 +42,10 @@ export function GalleryInteractive({
       })
       .catch(() => {});
 
-    fetch("/api/centres")
+    fetch("/api/centres", { cache: "no-store" })
       .then((r) => r.json())
       .then((d) => {
-        if (d.success && Array.isArray(d.items) && d.items.length > 0) {
+        if (d.success && Array.isArray(d.items)) {
           setCentres(d.items);
         }
       })

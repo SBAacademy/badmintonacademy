@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { getCentreBySlug, saveCentreRecord, deleteCentreRecord, getCentres } from "@/lib/contentDb";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -17,11 +20,19 @@ export async function GET(
       );
     }
 
-    return NextResponse.json({
-      success: true,
-      centre,
-      data: centre,
-    });
+    return NextResponse.json(
+      {
+        success: true,
+        centre,
+        data: centre,
+      },
+      {
+        headers: {
+          "Cache-Control": "no-store, no-cache, must-revalidate",
+          Pragma: "no-cache",
+        },
+      }
+    );
   } catch (error) {
     console.error("GET /api/admin/centres/[id] error:", error);
     return NextResponse.json(

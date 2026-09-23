@@ -20,11 +20,15 @@ function getSql(): ReturnType<typeof neon> | null {
   return neon(url);
 }
 
-// Local JSON fallback store
+// Local JSON fallback store (for non-relational CMS sections; centres are strictly database-only)
 async function readFallbackContent(): Promise<Record<string, unknown[]>> {
   try {
     const fileData = await fs.readFile(CONTENT_FILE_PATH, "utf-8");
-    return JSON.parse(fileData);
+    const parsed = JSON.parse(fileData);
+    return {
+      ...parsed,
+      centres: [], // The PostgreSQL database is the SOLE authority for centres
+    };
   } catch {
     return {
       gallery: GALLERY_ITEMS,
@@ -1212,18 +1216,14 @@ export async function getCentres(options: { includeInactive?: boolean } = {}): P
         });
       }
     } catch (err) {
-      console.warn("Error querying centres table from Neon DB, reading fallback:", err);
+      console.error("Error querying centres table from Neon DB:", err);
+      return [];
     }
   }
 
-  // Fallback to local JSON store
-  const fallback = await readFallbackContent();
-  const rawList = Array.isArray(fallback.centres) ? (fallback.centres as unknown as Centre[]) : [];
-  const filtered = includeInactive
-    ? rawList
-    : rawList.filter((c) => (c.status === "ACTIVE" || !c.status) && c.isActive !== false);
-
-  return [...filtered].sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
+  // Neon PostgreSQL 'centres' table is the ONLY source of truth.
+  // If the database has 0 centres, it returns [] cleanly.
+  return [];
 }
 
 export async function getCentreBySlug(slug: string): Promise<Centre | null> {
@@ -1413,19 +1413,6 @@ export async function saveCentreRecord(centreData: Partial<Centre>): Promise<Cen
     }
   }
 
-  // Update fallback file
-  const fallback = await readFallbackContent();
-  const currentCentres = Array.isArray(fallback.centres) ? (fallback.centres as unknown as Centre[]) : [];
-  const existingIdx = currentCentres.findIndex((c) => c.slug === slug || c.id === slug);
-
-  if (existingIdx !== -1) {
-    currentCentres[existingIdx] = savedCentre;
-  } else {
-    currentCentres.push(savedCentre);
-  }
-  fallback.centres = currentCentres.sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
-  await writeFallbackContent(fallback);
-
   return savedCentre;
 }
 
@@ -1448,17 +1435,6 @@ export async function reorderCentres(
       console.warn("Failed updating centres display_order in Neon:", e);
     }
   }
-
-  const fallback = await readFallbackContent();
-  const currentCentres = Array.isArray(fallback.centres) ? (fallback.centres as unknown as Centre[]) : [];
-  for (const item of orderMap) {
-    const found = currentCentres.find((c) => c.slug === item.id || c.id === item.id);
-    if (found) {
-      found.displayOrder = Number(item.displayOrder) || 1;
-    }
-  }
-  fallback.centres = currentCentres.sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
-  await writeFallbackContent(fallback);
 
   return getCentres({ includeInactive: true });
 }
@@ -1486,17 +1462,6 @@ export async function deleteCentreRecord(
           console.warn("Could not deactivate centre in Neon:", e);
         }
       }
-
-      const fallback = await readFallbackContent();
-      const currentCentres = Array.isArray(fallback.centres) ? (fallback.centres as unknown as Centre[]) : [];
-      const target = currentCentres.find((c) => c.slug === slug || c.id === slug);
-      if (target) {
-        target.status = "INACTIVE";
-        target.isActive = false;
-        target.updatedAt = new Date().toISOString();
-        await writeFallbackContent(fallback);
-      }
-
       return {
         success: true,
         softDeleted: true,
@@ -1566,11 +1531,10 @@ export async function deleteCentreRecord(
       await sql`DELETE FROM centres WHERE slug = ${slug};`;
     }
 
-    // 3. Remove centre from fallback content store (data/site_content.json)
+    // 3. Clean up related coach/gallery references in fallback content store if applicable
     try {
       const fallback = await readFallbackContent();
-      const currentCentres = Array.isArray(fallback.centres) ? (fallback.centres as unknown as Centre[]) : [];
-      fallback.centres = currentCentres.filter((c) => c.slug !== slug && c.id !== slug);
+
 
       // Unassign coaches in fallback store
       if (Array.isArray(fallback.coaches)) {

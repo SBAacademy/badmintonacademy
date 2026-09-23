@@ -352,16 +352,8 @@ async function migrate() {
   await sql`CREATE INDEX IF NOT EXISTS idx_audit_entity ON audit_logs(entity, entity_id);`;
   await sql`CREATE INDEX IF NOT EXISTS idx_audit_time ON audit_logs(created_at);`;
 
-  // 12. SEED CANONICAL DATA
-  console.log(`[Migration] Seeding canonical centres (Kadavanthra, Edappally, Kakkanad)...`);
-  await sql`
-    INSERT INTO centres (slug, name, short_name, address, phone, whatsapp, email, court_count, status)
-    VALUES 
-      ('kadavanthra', 'S & A Badminton Academy – Kadavanthra', 'Kadavanthra Centre', 'S&A Sports Arena, Near Rajiv Gandhi Indoor Stadium, Kadavanthra, Kochi 682020', '+91 98460 12345', '+91 98460 12345', 'kadavanthra@sabadminton.com', 4, 'ACTIVE'),
-      ('edappally', 'S & A Badminton Academy – Edappally', 'Edappally Centre', 'Metro Pillar 412, Near Toll Junction, Edappally, Kochi 682024', '+91 98460 12345', '+91 98460 12345', 'edappally@sabadminton.com', 3, 'ACTIVE'),
-      ('kakkanad', 'S & A Badminton Academy – Kakkanad', 'Kakkanad Centre', 'Near Infopark Expressway, SmartCity Hub, Kakkanad, Kochi 682030', '+91 98460 12345', '+91 98460 12345', 'kakkanad@sabadminton.com', 3, 'ACTIVE')
-    ON CONFLICT (slug) DO NOTHING;
-  `;
+  // 12. SEED CANONICAL DATA (Centres are strictly managed via Admin Panel / Database - no automated seeding)
+  console.log(`[Migration] Centres table is preserved without automatic seeding.`);
 
   console.log(`[Migration] Seeding canonical programs...`);
   await sql`

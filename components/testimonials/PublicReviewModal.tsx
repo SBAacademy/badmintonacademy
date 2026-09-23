@@ -15,7 +15,7 @@ export function PublicReviewModal() {
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-    fetch("/api/centres")
+    fetch("/api/centres", { cache: "no-store" })
       .then((r) => r.json())
       .then((data) => {
         if (data.success && Array.isArray(data.items)) {

@@ -12,7 +12,7 @@ export function HeroSection({ initialCentres }: { initialCentres?: Array<{ short
   const [centres, setCentres] = useState<Array<{ shortName?: string; name: string }>>(initialCentres || []);
 
   useEffect(() => {
-    fetch("/api/centres")
+    fetch("/api/centres", { cache: "no-store" })
       .then((res) => res.json())
       .then((data) => {
         const list = Array.isArray(data.centres)

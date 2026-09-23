@@ -2,21 +2,32 @@ import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { getCentres, saveCentreRecord } from "@/lib/contentDb";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const includeInactive = searchParams.get("includeInactive") !== "false";
     const centres = await getCentres({ includeInactive });
 
-    return NextResponse.json({
-      success: true,
-      total: centres.length,
-      centres,
-      data: {
+    return NextResponse.json(
+      {
+        success: true,
         total: centres.length,
         centres,
+        data: {
+          total: centres.length,
+          centres,
+        },
       },
-    });
+      {
+        headers: {
+          "Cache-Control": "no-store, no-cache, must-revalidate",
+          Pragma: "no-cache",
+        },
+      }
+    );
   } catch (error) {
     console.error("GET /api/admin/centres error:", error);
     return NextResponse.json(

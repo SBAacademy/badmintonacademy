@@ -8,13 +8,22 @@ export const revalidate = 0;
 export async function GET() {
   try {
     const centres = await getCentres({ includeInactive: false });
-    return NextResponse.json({
-      success: true,
-      total: centres.length,
-      centres,
-      items: centres,
-      data: centres, // for compatibility
-    });
+    return NextResponse.json(
+      {
+        success: true,
+        total: centres.length,
+        centres,
+        items: centres,
+        data: centres, // for compatibility
+      },
+      {
+        headers: {
+          "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+          Pragma: "no-cache",
+          Expires: "0",
+        },
+      }
+    );
   } catch (error) {
     console.error("GET /api/centres error:", error);
     return NextResponse.json(

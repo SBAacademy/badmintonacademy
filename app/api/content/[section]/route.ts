@@ -81,12 +81,20 @@ export async function GET(
     if (sectionKey === "centres") {
       // Return authoritative centres including inactive for admin view
       const centres = await getCentres({ includeInactive: true });
-      return NextResponse.json({
-        success: true,
-        section: sectionKey,
-        total: centres.length,
-        items: centres,
-      });
+      return NextResponse.json(
+        {
+          success: true,
+          section: sectionKey,
+          total: centres.length,
+          items: centres,
+        },
+        {
+          headers: {
+            "Cache-Control": "no-store, no-cache, must-revalidate",
+            Pragma: "no-cache",
+          },
+        }
+      );
     }
 
     if (sectionKey === "programs") {

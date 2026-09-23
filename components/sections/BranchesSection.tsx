@@ -14,7 +14,7 @@ export function BranchesSection({ initialCentres }: { initialCentres?: Centre[] 
   const [dynamicCentres, setDynamicCentres] = useState<Centre[]>(initialCentres || []);
 
   useEffect(() => {
-    fetch("/api/centres")
+    fetch("/api/centres", { cache: "no-store" })
       .then((res) => res.json())
       .then((data) => {
         const list = Array.isArray(data.centres)

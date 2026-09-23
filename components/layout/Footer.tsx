@@ -12,7 +12,7 @@ export function Footer({ initialCentres }: { initialCentres?: any[] } = {}) {
   const [programs, setPrograms] = useState<any[]>(PROGRAMS);
 
   useEffect(() => {
-    fetch("/api/centres")
+    fetch("/api/centres", { cache: "no-store" })
       .then((res) => res.json())
       .then((data) => {
         if (data.success && Array.isArray(data.items)) {

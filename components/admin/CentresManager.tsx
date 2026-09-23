@@ -74,7 +74,7 @@ export function CentresManager() {
   const fetchCentres = async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/content/centres");
+      const res = await fetch("/api/content/centres", { cache: "no-store" });
       const data = await res.json();
       if (data.success && Array.isArray(data.items)) {
         const sorted = [...data.items].sort(

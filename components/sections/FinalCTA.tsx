@@ -11,7 +11,7 @@ export function FinalCTA({ initialCount }: { initialCount?: number }) {
   const [centreCount, setCentreCount] = useState<number>(initialCount !== undefined ? initialCount : 0);
 
   useEffect(() => {
-    fetch("/api/centres")
+    fetch("/api/centres", { cache: "no-store" })
       .then((res) => res.json())
       .then((data) => {
         const list = Array.isArray(data.centres)

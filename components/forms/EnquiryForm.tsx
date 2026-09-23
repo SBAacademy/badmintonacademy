@@ -206,10 +206,14 @@ export function EnquiryForm({
           </p>
         </div>
 
-        <div className="p-4 bg-[#07090D] border border-[#1F2937] text-xs text-[#A8B0BA] space-y-1 max-w-sm mx-auto text-left font-mono">
+        <div className="p-4 bg-[#07090D] border border-[#1F2937] text-xs text-[#A8B0BA] space-y-1.5 max-w-sm mx-auto text-left font-mono">
           <div><span className="font-bold text-white">SELECTED TRACK:</span> {selectedProgramObj?.name || formData.preferredProgram}</div>
           <div><span className="font-bold text-white">PREFERRED SLOT:</span> {formData.preferredSlot}</div>
           <div><span className="font-bold text-white">TARGET ARENA:</span> {selectedBranchObj?.address.split(",")[1]?.trim() || selectedBranchObj?.city || "Central Kochi"}</div>
+          <div className="pt-2 border-t border-[#1F2937] text-[#B8F000] font-bold flex items-center gap-1.5 text-[11px]">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#B8F000]" />
+            <span>Shoes &amp; racket required for free trial.</span>
+          </div>
         </div>
 
         <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -253,7 +257,7 @@ export function EnquiryForm({
           Book a Free Trial Session
         </h3>
         <p className="text-xs sm:text-sm text-[#A8B0BA]">
-          Experience our BWF sprung wooden courts and receive an individual coach evaluation. Zero equipment required.
+          Experience our BWF sprung wooden courts and receive an individual coach evaluation. Shoes &amp; racket required for free trial.
         </p>
       </div>
 
@@ -445,6 +449,12 @@ export function EnquiryForm({
             placeholder="e.g. Complete beginner, or junior preparing for school badminton team trials..."
             className="w-full px-4 py-3 bg-[#07090D] border border-[#1F2937] text-white placeholder-[#6B7280] text-sm focus:outline-none focus:border-[#B8F000] transition-colors font-mono"
           />
+        </div>
+
+        {/* Free Trial Requirement Note */}
+        <div className="p-3 bg-[#11161D] border border-[#1F2937] text-xs font-mono text-[#A8B0BA] flex items-center gap-2.5">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#B8F000] shrink-0" />
+          <span>Shoes &amp; racket required for free trial.</span>
         </div>
 
         {/* Action Button */}

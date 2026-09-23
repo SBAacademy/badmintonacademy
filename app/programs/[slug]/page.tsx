@@ -132,24 +132,31 @@ export default async function ProgramDetailPage({ params }: ProgramDetailPagePro
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-center gap-3 pt-2">
-              <a
-                href="#booking-form"
-                className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-[#B8F000] hover:bg-[#c7fb1e] text-[#07100A] font-extrabold text-sm flex items-center justify-center gap-2 shadow-sm transition-all"
-              >
-                <span>BOOK A FREE TRIAL</span>
-                <ArrowRight className="w-4 h-4" />
-              </a>
+            <div className="space-y-2.5 pt-2">
+              <div className="flex flex-col sm:flex-row items-center gap-3">
+                <Link
+                  href="/contact"
+                  className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-[#B8F000] hover:bg-[#c7fb1e] text-[#07100A] font-extrabold text-sm flex items-center justify-center gap-2 shadow-sm transition-all"
+                >
+                  <span>BOOK A FREE TRIAL</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
 
-              <a
-                href={buildWhatsAppUrl({ programName: program.name })}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-[#121A23] hover:bg-[#17212C] text-[#F8FAFC] font-semibold text-sm flex items-center justify-center gap-2 border border-[#26313D] transition-colors"
-              >
-                <MessageCircle className="w-4 h-4 text-[#22C55E]" />
-                <span>WHATSAPP US</span>
-              </a>
+                <a
+                  href={buildWhatsAppUrl({ programName: program.name })}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-[#121A23] hover:bg-[#17212C] text-[#F8FAFC] font-semibold text-sm flex items-center justify-center gap-2 border border-[#26313D] transition-colors"
+                >
+                  <MessageCircle className="w-4 h-4 text-[#22C55E]" />
+                  <span>WHATSAPP US</span>
+                </a>
+              </div>
+
+              <p className="text-xs font-mono text-[#A8B0BA] flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#B8F000]" />
+                Shoes &amp; racket required for free trial.
+              </p>
             </div>
           </div>
 

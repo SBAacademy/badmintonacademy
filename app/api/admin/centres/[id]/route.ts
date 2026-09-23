@@ -51,6 +51,7 @@ export async function PUT(
     revalidatePath("/branches");
     revalidatePath("/contact");
     revalidatePath("/coaches");
+    revalidatePath("/sitemap.xml");
     revalidatePath(`/${id}`);
     revalidatePath(`/branches/${id}`);
 
@@ -100,6 +101,7 @@ export async function PATCH(
     revalidatePath("/branches");
     revalidatePath("/contact");
     revalidatePath("/coaches");
+    revalidatePath("/sitemap.xml");
     revalidatePath(`/${id}`);
     revalidatePath(`/branches/${id}`);
 
@@ -142,6 +144,7 @@ export async function DELETE(
     revalidatePath("/contact");
     revalidatePath("/coaches");
     revalidatePath("/gallery");
+    revalidatePath("/sitemap.xml");
     revalidatePath(`/${id}`);
     revalidatePath(`/branches/${id}`);
 

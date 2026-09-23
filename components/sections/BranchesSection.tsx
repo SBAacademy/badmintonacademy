@@ -20,13 +20,13 @@ export function BranchesSection({ initialCentres }: { initialCentres?: Centre[] 
         const list = Array.isArray(data.centres)
           ? data.centres
           : Array.isArray(data.items)
-          ? data.items
-          : Array.isArray(data.data)
-          ? data.data
-          : Array.isArray(data)
-          ? data
-          : [];
-        if (list.length > 0) {
+            ? data.items
+            : Array.isArray(data.data)
+              ? data.data
+              : Array.isArray(data)
+                ? data
+                : [];
+        if (Array.isArray(list)) {
           setDynamicCentres(list);
         }
       })
@@ -114,12 +114,12 @@ export function BranchesSection({ initialCentres }: { initialCentres?: Centre[] 
   }
 
   return (
-    <section 
+    <section
       className="py-24 lg:py-36 bg-[#07090D] relative border-b border-[#1F2937] select-none"
       aria-label="Multi-Centre Arena Selector"
     >
       <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
-        
+
         {/* Editorial Eyebrow & Category Index */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-12 sm:pb-16 border-b border-[#1F2937]">
           <div className="space-y-3">
@@ -150,7 +150,7 @@ export function BranchesSection({ initialCentres }: { initialCentres?: Centre[] 
 
         {/* Desktop 2-Column Arena Selector (Hidden on mobile) */}
         <div className="hidden lg:grid lg:grid-cols-12 gap-10 items-stretch pt-12">
-          
+
           {/* Left Column: Centre Index List */}
           <div className="lg:col-span-5 flex flex-col divide-y divide-[#1F2937] border-y border-[#1F2937]">
             {locationsList.map((loc, idx) => {
@@ -163,18 +163,16 @@ export function BranchesSection({ initialCentres }: { initialCentres?: Centre[] 
                   onMouseEnter={() => setSelectedSlug(loc.slug)}
                   onFocus={() => setSelectedSlug(loc.slug)}
                   onClick={() => setSelectedSlug(loc.slug)}
-                  className={`py-6 px-5 text-left transition-all duration-200 flex items-center justify-between group ${
-                    isActive
-                      ? "bg-[#11161D] border-l-4 border-l-[#B8F000] pl-7"
-                      : "hover:bg-[#0B0F14] hover:pl-7"
-                  }`}
+                  className={`py-6 px-5 text-left transition-all duration-200 flex items-center justify-between group ${isActive
+                    ? "bg-[#11161D] border-l-4 border-l-[#B8F000] pl-7"
+                    : "hover:bg-[#0B0F14] hover:pl-7"
+                    }`}
                   aria-selected={isActive}
                 >
                   <div className="space-y-1">
                     <div className="flex items-center gap-3">
-                      <span className={`font-mono text-xs font-black transition-colors ${
-                        isActive ? "text-[#B8F000]" : "text-[#A8B0BA]/40 group-hover:text-white"
-                      }`}>
+                      <span className={`font-mono text-xs font-black transition-colors ${isActive ? "text-[#B8F000]" : "text-[#A8B0BA]/40 group-hover:text-white"
+                        }`}>
                         {numStr}
                       </span>
                       <span className="text-[10px] font-mono tracking-wider text-[#A8B0BA] uppercase">
@@ -192,22 +190,19 @@ export function BranchesSection({ initialCentres }: { initialCentres?: Centre[] 
                       )}
                     </div>
 
-                    <h3 className={`text-2xl font-black uppercase tracking-tight transition-colors ${
-                      isActive ? "text-white" : "text-[#A8B0BA] group-hover:text-white"
-                    }`}>
+                    <h3 className={`text-2xl font-black uppercase tracking-tight transition-colors ${isActive ? "text-white" : "text-[#A8B0BA] group-hover:text-white"
+                      }`}>
                       {loc.shortName}
                     </h3>
                   </div>
 
                   <div className="flex items-center gap-2">
-                    <span className={`text-[11px] font-mono font-bold uppercase transition-opacity ${
-                      isActive ? "opacity-100 text-[#B8F000]" : "opacity-0 group-hover:opacity-100 text-[#A8B0BA]"
-                    }`}>
+                    <span className={`text-[11px] font-mono font-bold uppercase transition-opacity ${isActive ? "opacity-100 text-[#B8F000]" : "opacity-0 group-hover:opacity-100 text-[#A8B0BA]"
+                      }`}>
                       VIEW
                     </span>
-                    <ArrowRight className={`w-4 h-4 transition-transform duration-200 ${
-                      isActive ? "text-[#B8F000] translate-x-1" : "text-[#1F2937] group-hover:text-white"
-                    }`} />
+                    <ArrowRight className={`w-4 h-4 transition-transform duration-200 ${isActive ? "text-[#B8F000] translate-x-1" : "text-[#1F2937] group-hover:text-white"
+                      }`} />
                   </div>
                 </button>
               );
@@ -217,7 +212,7 @@ export function BranchesSection({ initialCentres }: { initialCentres?: Centre[] 
           {/* Right Column: Active Arena Spotlight Panel */}
           <div className="lg:col-span-7 bg-[#0B0F14] border border-[#1F2937] p-8 lg:p-10 flex flex-col justify-between">
             <div className="space-y-6">
-              
+
               {/* Centre Photography */}
               <div className="relative aspect-[16/9] overflow-hidden bg-[#07090D] border border-[#1F2937]">
                 <Image
@@ -291,35 +286,42 @@ export function BranchesSection({ initialCentres }: { initialCentres?: Centre[] 
             </div>
 
             {/* Direct Conversion Actions — SEO Friendly Links */}
-            <div className="pt-6 mt-6 border-t border-[#1F2937] flex flex-wrap items-center gap-3">
-              <Link
-                href={`/${activeCentre.slug}`}
-                className="inline-flex items-center gap-3 px-6 py-3.5 bg-[#B8F000] hover:bg-[#cbf722] text-[#07090D] font-black text-xs uppercase tracking-wider transition-all"
-              >
-                <span>EXPLORE {activeCentre.shortName.toUpperCase()} →</span>
-              </Link>
+            <div className="pt-6 mt-6 border-t border-[#1F2937] space-y-3">
+              <div className="flex flex-wrap items-center gap-3">
+                <Link
+                  href={`/${activeCentre.slug}`}
+                  className="inline-flex items-center gap-3 px-6 py-3.5 bg-[#B8F000] hover:bg-[#cbf722] text-[#07090D] font-black text-xs uppercase tracking-wider transition-all"
+                >
+                  <span>EXPLORE {activeCentre.shortName.toUpperCase()} →</span>
+                </Link>
 
-              <a
-                href={activeCentre.googleMapsUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => handleDirections(activeCentre.name, activeCentre.slug)}
-                className="inline-flex items-center gap-2 px-5 py-3.5 bg-[#11161D] hover:bg-[#17212C] text-white font-bold text-xs uppercase tracking-wider border border-[#1F2937] transition-colors"
-              >
-                <Navigation className="w-3.5 h-3.5 text-[#B8F000]" />
-                <span>GET DIRECTIONS</span>
-              </a>
+                <a
+                  href={activeCentre.googleMapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => handleDirections(activeCentre.name, activeCentre.slug)}
+                  className="inline-flex items-center gap-2 px-5 py-3.5 bg-[#11161D] hover:bg-[#17212C] text-white font-bold text-xs uppercase tracking-wider border border-[#1F2937] transition-colors"
+                >
+                  <Navigation className="w-3.5 h-3.5 text-[#B8F000]" />
+                  <span>GET DIRECTIONS</span>
+                </a>
 
-              <a
-                href={buildWhatsAppUrl({ locationSlug: activeCentre.slug, locationName: activeCentre.name })}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => handleWhatsAppLocation(activeCentre.name, activeCentre.slug)}
-                className="inline-flex items-center gap-2 px-4 py-3.5 bg-[#11161D] hover:bg-[#17212C] text-white font-bold text-xs uppercase tracking-wider border border-[#1F2937] transition-colors"
-              >
-                <MessageCircle className="w-4 h-4 text-[#22C55E]" />
-                <span>WHATSAPP</span>
-              </a>
+                <a
+                  href={buildWhatsAppUrl({ locationSlug: activeCentre.slug, locationName: activeCentre.name })}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => handleWhatsAppLocation(activeCentre.name, activeCentre.slug)}
+                  className="inline-flex items-center gap-2 px-4 py-3.5 bg-[#11161D] hover:bg-[#17212C] text-white font-bold text-xs uppercase tracking-wider border border-[#1F2937] transition-colors"
+                >
+                  <MessageCircle className="w-4 h-4 text-[#22C55E]" />
+                  <span>WHATSAPP</span>
+                </a>
+              </div>
+
+              <p className="text-xs font-mono text-[#A8B0BA] flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#B8F000]" />
+                Shoes &amp; racket required for free trial.
+              </p>
             </div>
 
           </div>
@@ -417,6 +419,10 @@ export function BranchesSection({ initialCentres }: { initialCentres?: Centre[] 
                           <span>WHATSAPP</span>
                         </a>
                       </div>
+
+                      <p className="text-[10px] font-mono text-center text-[#A8B0BA] pt-0.5">
+                        Shoes &amp; racket required for free trial.
+                      </p>
                     </div>
                   </div>
                 )}

@@ -80,7 +80,7 @@ export const PROGRAMS: Program[] = [
     faqs: [
       {
         question: "What equipment does my child need for the first day?",
-        answer: "Only clean non-marking court shoes and comfortable sports attire. S&A Academy provides demo junior rackets and shuttles for initial evaluation sessions."
+        answer: "Please bring badminton shoes and a racket for the free trial session. Clean non-marking indoor court shoes and comfortable sports attire are required."
       },
       {
         question: "Can parents watch the coaching sessions?",
@@ -88,7 +88,7 @@ export const PROGRAMS: Program[] = [
       },
       {
         question: "Is there a free trial assessment available?",
-        answer: "Absolutely! We offer a complimentary 45-minute skills and agility evaluation session for all kids."
+        answer: "Absolutely! We offer a complimentary 45-minute skills and agility evaluation session for all kids. Shoes & racket required for free trial."
       }
     ]
   },

@@ -182,24 +182,31 @@ export function ProgramsSection({ initialPrograms }: { initialPrograms?: Dynamic
             </div>
 
             {/* Action Bar */}
-            <div className="pt-6 mt-6 border-t border-[#1F2937] flex items-center gap-4">
-              <Link
-                href={`/programs/${selectedProgram.slug}`}
-                className="inline-flex items-center gap-3 px-6 py-3.5 bg-[#B8F000] hover:bg-[#cbf722] text-[#07090D] font-black text-xs uppercase tracking-wider transition-all"
-              >
-                <span>EXPLORE {selectedProgram.name} →</span>
-              </Link>
+            <div className="pt-6 mt-6 border-t border-[#1F2937] space-y-3">
+              <div className="flex items-center gap-4">
+                <Link
+                  href={`/programs/${selectedProgram.slug}`}
+                  className="inline-flex items-center gap-3 px-6 py-3.5 bg-[#B8F000] hover:bg-[#cbf722] text-[#07090D] font-black text-xs uppercase tracking-wider transition-all"
+                >
+                  <span>EXPLORE {selectedProgram.name} →</span>
+                </Link>
 
-              <a
-                href={buildWhatsAppUrl({ programName: selectedProgram.name })}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => handleProgramWhatsApp(selectedProgram.name)}
-                className="inline-flex items-center gap-2 px-5 py-3.5 bg-[#11161D] hover:bg-[#17212C] text-white font-bold text-xs uppercase tracking-wider border border-[#1F2937] transition-colors"
-              >
-                <MessageCircle className="w-4 h-4 text-[#22C55E]" />
-                <span>WHATSAPP ADMISSIONS</span>
-              </a>
+                <a
+                  href={buildWhatsAppUrl({ programName: selectedProgram.name })}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => handleProgramWhatsApp(selectedProgram.name)}
+                  className="inline-flex items-center gap-2 px-5 py-3.5 bg-[#11161D] hover:bg-[#17212C] text-white font-bold text-xs uppercase tracking-wider border border-[#1F2937] transition-colors"
+                >
+                  <MessageCircle className="w-4 h-4 text-[#22C55E]" />
+                  <span>WHATSAPP ADMISSIONS</span>
+                </a>
+              </div>
+
+              <p className="text-xs font-mono text-[#A8B0BA] flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#B8F000]" />
+                Shoes &amp; racket required for free trial.
+              </p>
             </div>
 
           </div>
@@ -252,6 +259,9 @@ export function ProgramsSection({ initialPrograms }: { initialPrograms?: Dynamic
                   >
                     BOOK TRIAL
                   </Link>
+                  <p className="text-[10px] font-mono text-center text-[#A8B0BA] pt-0.5">
+                    Shoes &amp; racket required for free trial.
+                  </p>
                 </div>
               </div>
             ))}

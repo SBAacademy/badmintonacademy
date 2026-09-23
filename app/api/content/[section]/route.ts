@@ -188,6 +188,7 @@ export async function POST(
       revalidatePath("/branches");
       revalidatePath("/contact");
       revalidatePath("/coaches");
+      revalidatePath("/sitemap.xml");
       if (savedCentre.slug) {
         revalidatePath(`/${savedCentre.slug}`);
         revalidatePath(`/branches/${savedCentre.slug}`);
@@ -347,6 +348,7 @@ export async function PUT(
       revalidatePath("/branches");
       revalidatePath("/contact");
       revalidatePath("/coaches");
+      revalidatePath("/sitemap.xml");
       if (savedCentre.slug) {
         revalidatePath(`/${savedCentre.slug}`);
         revalidatePath(`/branches/${savedCentre.slug}`);
@@ -471,6 +473,7 @@ export async function DELETE(
       revalidatePath("/contact");
       revalidatePath("/coaches");
       revalidatePath("/gallery");
+      revalidatePath("/sitemap.xml");
       revalidatePath(`/${identifier}`);
       revalidatePath(`/branches/${identifier}`);
 

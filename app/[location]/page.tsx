@@ -20,7 +20,7 @@ import {
   Navigation
 } from "lucide-react";
 import { ACADEMY_DATA } from "@/data/academy";
-import { LOCATIONS, LOCATION_SLUGS, getLocationBySlug, LocationData } from "@/data/locations";
+import { getLocationBySlug, LocationData } from "@/data/locations";
 import { getCentreBySlug, getCentres } from "@/lib/contentDb";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
@@ -37,23 +37,23 @@ interface LocationPageProps {
 
 export async function generateStaticParams() {
   const dynamicCentres = await getCentres({ includeInactive: false });
-  const slugs = new Set<string>([...LOCATION_SLUGS, ...dynamicCentres.map((c) => c.slug)]);
-  return Array.from(slugs).map((slug) => ({
-    location: slug,
+  return dynamicCentres.map((c) => ({
+    location: c.slug,
   }));
 }
 
 export async function generateMetadata({ params }: LocationPageProps): Promise<Metadata> {
   const resolvedParams = await params;
   const dynamicCentre = await getCentreBySlug(resolvedParams.location);
-  const staticLocation = getLocationBySlug(resolvedParams.location);
-  const location = dynamicCentre || staticLocation;
 
-  if (!location) {
+  if (!dynamicCentre || dynamicCentre.status === "INACTIVE" || dynamicCentre.isActive === false) {
     return {
       title: "Centre Not Found | S & A Badminton Academy",
     };
   }
+
+  const staticLocation = getLocationBySlug(resolvedParams.location);
+  const location = { ...(staticLocation || {}), ...dynamicCentre };
 
   const canonicalUrl = `${SITE_URL}/${location.slug}`;
 
@@ -98,17 +98,14 @@ export async function generateMetadata({ params }: LocationPageProps): Promise<M
 export default async function LocationPage({ params }: LocationPageProps) {
   const resolvedParams = await params;
   const dynamicCentre = await getCentreBySlug(resolvedParams.location);
+
+  if (!dynamicCentre || dynamicCentre.status === "INACTIVE" || dynamicCentre.isActive === false) {
+    notFound();
+  }
+
   const staticLocation = getLocationBySlug(resolvedParams.location);
 
-  if (!dynamicCentre && !staticLocation) {
-    notFound();
-  }
-
-  if (dynamicCentre && dynamicCentre.status === "INACTIVE" && !staticLocation) {
-    notFound();
-  }
-
-  // Merge dynamic record over static record so all 4 existing centres retain full richness
+  // Merge dynamic record over static record so all existing centres retain full richness
   // while any changes from the Admin Panel take immediate effect!
   const location: LocationData = {
     ...(staticLocation || {}),
@@ -330,37 +327,44 @@ export default async function LocationPage({ params }: LocationPageProps) {
               </p>
 
               {/* 3 Conversion CTAs */}
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 pt-2">
-                <Link
-                  href={`/contact?branch=${location.slug}`}
-                  className="px-7 py-4 rounded-xl bg-[#B8F000] hover:bg-[#c7fb1e] text-[#07100A] font-extrabold text-sm sm:text-base flex items-center justify-center gap-2 shadow-sm transition-all duration-200 group"
-                >
-                  <span>BOOK A FREE TRIAL</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-                </Link>
+              <div className="space-y-3 pt-2">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
+                  <Link
+                    href={`/contact?branch=${location.slug}`}
+                    className="px-7 py-4 rounded-xl bg-[#B8F000] hover:bg-[#c7fb1e] text-[#07100A] font-extrabold text-sm sm:text-base flex items-center justify-center gap-2 shadow-sm transition-all duration-200 group"
+                  >
+                    <span>BOOK A FREE TRIAL</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                  </Link>
 
-                <a
-                  href={buildWhatsAppUrl({
-                    locationSlug: location.slug,
-                    locationName: location.name,
-                  })}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-6 py-4 rounded-xl bg-[#121A23] hover:bg-[#17212C] text-[#F8FAFC] font-semibold text-sm sm:text-base border border-[#26313D] hover:border-[#374758] transition-colors flex items-center justify-center gap-2"
-                >
-                  <MessageCircle className="w-4 h-4 text-[#22C55E]" />
-                  <span>WHATSAPP THIS CENTRE</span>
-                </a>
+                  <a
+                    href={buildWhatsAppUrl({
+                      locationSlug: location.slug,
+                      locationName: location.name,
+                    })}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-6 py-4 rounded-xl bg-[#121A23] hover:bg-[#17212C] text-[#F8FAFC] font-semibold text-sm sm:text-base border border-[#26313D] hover:border-[#374758] transition-colors flex items-center justify-center gap-2"
+                  >
+                    <MessageCircle className="w-4 h-4 text-[#22C55E]" />
+                    <span>WHATSAPP THIS CENTRE</span>
+                  </a>
 
-                <a
-                  href={location.googleMapsUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-5 py-4 rounded-xl bg-transparent hover:bg-[#121A23] text-[#A7B0BC] hover:text-[#F8FAFC] font-semibold text-sm border border-[#26313D]/80 transition-colors flex items-center justify-center gap-1.5"
-                >
-                  <Navigation className="w-4 h-4 text-[#B8F000]" />
-                  <span>GET DIRECTIONS</span>
-                </a>
+                  <a
+                    href={location.googleMapsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-5 py-4 rounded-xl bg-transparent hover:bg-[#121A23] text-[#A7B0BC] hover:text-[#F8FAFC] font-semibold text-sm border border-[#26313D]/80 transition-colors flex items-center justify-center gap-1.5"
+                  >
+                    <Navigation className="w-4 h-4 text-[#B8F000]" />
+                    <span>GET DIRECTIONS</span>
+                  </a>
+                </div>
+
+                <p className="text-xs font-mono text-[#A8B0BA] flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#B8F000]" />
+                  Shoes &amp; racket required for free trial.
+                </p>
               </div>
 
               {/* Quick Trust Highlights */}
@@ -832,23 +836,30 @@ export default async function LocationPage({ params }: LocationPageProps) {
           <p className="text-sm sm:text-base text-[#A7B0BC]">
             Join our structured batch programs for kids, juniors, and adults. Book an assessment trial with our head coaching team today.
           </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-2">
-            <Link
-              href={`/contact?branch=${location.slug}`}
-              className="w-full sm:w-auto px-8 py-4 rounded-xl bg-[#B8F000] hover:bg-[#c7fb1e] text-[#07100A] font-extrabold text-sm sm:text-base flex items-center justify-center gap-2 shadow-sm transition-all"
-            >
-              <span>BOOK A FREE TRIAL</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-            <a
-              href={buildWhatsAppUrl({ locationName: location.name })}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full sm:w-auto px-7 py-4 rounded-xl bg-[#121A23] hover:bg-[#17212C] text-[#F8FAFC] font-bold text-sm sm:text-base border border-[#26313D] flex items-center justify-center gap-2 transition-colors"
-            >
-              <MessageCircle className="w-4 h-4 text-[#22C55E]" />
-              <span>WHATSAPP US</span>
-            </a>
+          <div className="space-y-3 pt-2">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5">
+              <Link
+                href={`/contact?branch=${location.slug}`}
+                className="w-full sm:w-auto px-8 py-4 rounded-xl bg-[#B8F000] hover:bg-[#c7fb1e] text-[#07100A] font-extrabold text-sm sm:text-base flex items-center justify-center gap-2 shadow-sm transition-all"
+              >
+                <span>BOOK A FREE TRIAL</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+              <a
+                href={buildWhatsAppUrl({ locationName: location.name })}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full sm:w-auto px-7 py-4 rounded-xl bg-[#121A23] hover:bg-[#17212C] text-[#F8FAFC] font-bold text-sm sm:text-base border border-[#26313D] flex items-center justify-center gap-2 transition-colors"
+              >
+                <MessageCircle className="w-4 h-4 text-[#22C55E]" />
+                <span>WHATSAPP US</span>
+              </a>
+            </div>
+
+            <p className="text-xs font-mono text-[#A8B0BA] flex items-center justify-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#B8F000]" />
+              Shoes &amp; racket required for free trial.
+            </p>
           </div>
         </div>
       </section>

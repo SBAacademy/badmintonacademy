@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { LOCATIONS } from "@/data/locations";
 import { getCentreBySlug } from "@/lib/contentDb";
 import { PROGRAMS } from "@/data/programs";
 import { buildEnquiryWhatsAppUrl } from "@/lib/whatsapp";
@@ -52,7 +51,7 @@ export async function POST(request: Request) {
     }
 
     const dynamicCentre = await getCentreBySlug(data.preferredBranch);
-    const branchObj = dynamicCentre || Object.values(LOCATIONS).find((b) => b.slug === data.preferredBranch);
+    const branchObj = dynamicCentre;
     const programObj = PROGRAMS.find((p) => p.slug === data.preferredProgram);
 
     const branchDisplayName = branchObj?.name || data.preferredBranch || "Kochi Centre";

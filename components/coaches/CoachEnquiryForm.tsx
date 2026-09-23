@@ -105,6 +105,8 @@ export function CoachEnquiryForm({ coach, initialCentres }: CoachEnquiryFormProp
       ``,
       `Message: ${message.trim() || "I would like to know more about the training schedule and coaching fees."}`,
       ``,
+      `Note: Shoes & racket required for free trial.`,
+      ``,
       `Source:`,
       `${coachUrl}`,
     ].filter(Boolean).join("\n");
@@ -261,6 +263,12 @@ export function CoachEnquiryForm({ coach, initialCentres }: CoachEnquiryFormProp
               placeholder="e.g. Looking for competitive junior batch timing or private match conditioning slots..."
               className="w-full px-3.5 py-2.5 bg-[#07090D] border border-[#1F2937] text-white focus:outline-none focus:border-[#B8F000] text-xs transition-colors leading-relaxed"
             />
+          </div>
+
+          {/* Free Trial Requirement Note */}
+          <div className="p-2.5 bg-[#07090D] border border-[#1F2937] text-[11px] font-mono text-[#A8B0BA] flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#B8F000] shrink-0" />
+            <span>Shoes &amp; racket required for free trial.</span>
           </div>
 
           <div className="pt-2">

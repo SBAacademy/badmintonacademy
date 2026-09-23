@@ -56,6 +56,8 @@ export function buildEnquiryWhatsAppUrl(data: FormSubmissionData): string {
     (data.preferredSlot || data.slot) ? `⏰ *Preferred Slot:* ${data.preferredSlot || data.slot}` : null,
     data.message ? `💬 *Goal/Level:* ${data.message}` : null,
     "--------------------------------------------------",
+    "👟 *Requirement:* Shoes & racket required for free trial.",
+    "--------------------------------------------------",
     "_Please confirm available trial slots for this week._",
   ].filter(Boolean);
 

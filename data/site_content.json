@@ -12,7 +12,7 @@
       "id": "g-2",
       "image": "https://images.unsplash.com/photo-1613918108466-292b78a8ef95?q=80&w=1200&auto=format&fit=crop",
       "title": "Junior Multi-Shuttle Footwork Drills",
-      "branch": "Edappally",
+      "branch": "All Centres",
       "caption": "High-cadence corner shadow movement and racquet speed drills under senior coaches.",
       "category": "Training Drills"
     },
@@ -28,7 +28,7 @@
       "id": "g-4",
       "image": "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=1200&auto=format&fit=crop",
       "title": "Kids Foundation Agility Games",
-      "branch": "Edappally",
+      "branch": "All Centres",
       "caption": "Young beginners developing hand-eye coordination with specialized mini-rackets.",
       "category": "Juniors & Camps"
     },
@@ -36,7 +36,7 @@
       "id": "g-5",
       "image": "https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?q=80&w=1200&auto=format&fit=crop",
       "title": "Adult Prime Evening Corporate Session",
-      "branch": "Kakkanad",
+      "branch": "All Centres",
       "caption": "Corporate athletes training on doubles rotation and tactical smashing in Kakkanad.",
       "category": "Coaching Sessions"
     },
@@ -60,7 +60,7 @@
       "id": "g-8",
       "image": "https://images.unsplash.com/photo-1552674605-db6ffd4facb5?q=80&w=1200&auto=format&fit=crop",
       "title": "North Kochi Training Facility",
-      "branch": "Edappally",
+      "branch": "All Centres",
       "caption": "Spacious 4-court setup with shock-absorbing subflooring at Edappally.",
       "category": "Courts & Arena"
     }
@@ -5624,458 +5624,17 @@
       "updatedAt": "2026-09-14T13:23:11.515Z"
     },
     {
-      "id": "edappally",
-      "slug": "edappally",
-      "name": "S & A Badminton Academy – Edappally",
-      "shortName": "Edappally Centre",
-      "cityArea": "Edappally, North Kochi",
-      "area": "Edappally",
-      "city": "Kochi",
-      "district": "Ernakulam",
-      "state": "Kerala",
-      "pincode": "682024",
-      "postalCode": "682024",
-      "address": "S&A Sports Complex, Behind Lulu Mall, NH 66 Bypass, Edappally, Kochi, Kerala 682024",
-      "phone": "+919400635548",
-      "phoneDisplay": "+91 94006 35548",
-      "whatsapp": "919400635548",
-      "whatsappDisplay": "+91 94006 35548",
-      "email": "edappally@sabadminton.com",
-      "courtCount": 4,
-      "surfaceType": "BWF Grade-1 Approved Multi-Layer Synthetic Mat Surface",
-      "googleMapsUrl": "https://maps.google.com/?q=Edappally+Kochi+Kerala",
-      "googleMapsEmbedUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15715.421683416045!2d76.305!3d10.0261!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b080d0d1e3d3c8d%3A0x6a05e2b02a9e1e3b!2sEdappally%2C%20Kochi%2C%20Kerala!5e0!3m2!1sen!2sin!4v1700000000000",
-      "latitude": 10.0261,
-      "longitude": 76.3125,
-      "description": "Serving North Kochi families, school students, and professionals across Edappally, Palarivattom, Kalamassery, Cheranallur, and Aluva. The Edappally centre combines international-grade synthetic cushion courts with disciplined age-specific coaching curriculums.",
-      "displayOrder": 2,
-      "status": "INACTIVE",
-      "isActive": false,
-      "seoTitle": "Badminton Academy in Edappally | S & A Badminton Academy Kochi",
-      "seoDescription": "Looking for badminton coaching in Edappally? S & A Badminton Academy near Lulu Mall provides premier badminton coaching for kids, juniors, and adults in Edappally, Kochi.",
-      "image": "/images/training-coach.jpg",
-      "courtImage": "/images/hero-athlete.jpg",
-      "isPlaceholder": false,
-      "facilities": [
-        "4 International-Standard Synthetic Badminton Courts",
-        "Uniform Overhead Anti-Glare Sports LED Lighting",
-        "Junior Physical Agility & Speed Training Zone",
-        "Player Hydration & Recovery Station",
-        "Clean Dressing Rooms and Restrooms",
-        "Comfortable Parent Seating Gallery",
-        "Dedicated On-Site Two-Wheeler & Car Parking"
-      ],
-      "openingHours": {
-        "days": "Monday – Sunday (7 Days Open)",
-        "morning": "05:30 AM – 10:00 AM",
-        "evening": "04:00 PM – 09:30 PM"
-      },
-      "intro": {
-        "heading": "North Kochi's Premier Badminton Coaching Centre",
-        "subheading": "Conveniently located near Lulu Mall, NH Bypass & Edappally Metro",
-        "description": "Serving North Kochi families, school students, and professionals across Edappally, Palarivattom, Kalamassery, Cheranallur, and Aluva. The Edappally centre combines international-grade synthetic cushion courts with disciplined age-specific coaching curriculums.",
-        "neighbourhoodsServed": [
-          "Edappally",
-          "Palarivattom",
-          "Kalamassery",
-          "Cheranallur",
-          "Aluva",
-          "Padivattom",
-          "Mamangalam",
-          "Vennala"
-        ],
-        "connectivity": "Strategically located just off the NH 66 Bypass behind Lulu Mall. 4 minutes from Edappally Metro Station with hassle-free parking and rapid corridor access to Kalamassery and Palarivattom."
-      },
-      "courtInformation": {
-        "courtCount": 4,
-        "surfaceType": "BWF Grade-1 Approved Multi-Layer Synthetic Mat Surface",
-        "subfloor": "Shock-Absorbent Resilient Wood Subflooring",
-        "lightingStandard": "600 Lux Shadow-Free LED Sports Fixtures",
-        "ceilingClearance": "9.0 Metre Clear Vertical Height"
-      },
-      "programs": [
-        {
-          "name": "Kids Foundation Badminton",
-          "slug": "kids-badminton-coaching",
-          "targetAge": "Ages 5 – 9",
-          "level": "Beginner",
-          "schedule": "Mon / Wed / Fri: 04:30 PM – 05:45 PM",
-          "description": "Engaging drills developing natural racket sense, balance, court agility, and sports discipline."
-        },
-        {
-          "name": "Junior Competitive Coaching",
-          "slug": "junior-badminton-coaching",
-          "targetAge": "Ages 10 – 16",
-          "level": "Intermediate & Advanced",
-          "schedule": "Daily Afternoon Batches: 05:00 PM – 07:00 PM",
-          "description": "Comprehensive stroke rep, multi-shuttle speed drills, footwork recovery, and singles/doubles strategy."
-        },
-        {
-          "name": "Adult Morning & Evening Training",
-          "slug": "adult-badminton-coaching",
-          "targetAge": "Ages 18+",
-          "level": "Beginner to Advanced Adult",
-          "schedule": "06:00 AM – 08:00 AM & 07:30 PM – 09:30 PM",
-          "description": "Cardio conditioning, technical stroke correction, rally endurance, and friendly competitive match play."
-        }
-      ],
-      "coaches": [
-        {
-          "name": "Coach Rahul Narayanan",
-          "role": "Head Coach – North Kochi Hub",
-          "specialization": "Advanced Singles Footwork & Junior Competitive Conditioning",
-          "bio": "Over 8 years of professional coaching experience preparing junior players for district and state ranking events."
-        }
-      ],
-      "gallery": [
-        {
-          "url": "/images/training-coach.jpg",
-          "caption": "Junior coaching drill and rally precision at the Edappally centre"
-        },
-        {
-          "url": "/images/hero-athlete.jpg",
-          "caption": "Competitive smash practice on synthetic tournament courts"
-        }
-      ],
-      "testimonials": [
-        {
-          "quote": "Finding high quality coaching near Edappally Metro was a game changer for our daughter. The structured coaching batches here transformed her serve and footwork.",
-          "author": "Sunil Kumar",
-          "role": "Parent, Kalamassery",
-          "rating": 5
-        }
-      ],
-      "achievements": [
-        "Consistent podium finishes in North Ernakulam inter-school tournaments.",
-        "Strong adult training community with morning fitness leagues."
-      ],
-      "localFAQs": [
-        {
-          "question": "Where is S & A Badminton Academy in Edappally?",
-          "answer": "Our Edappally academy is situated conveniently off the NH 66 Bypass behind Lulu Mall, just 4 minutes from the Edappally Metro Station."
-        },
-        {
-          "question": "Are badminton classes available for kids and school students in Edappally?",
-          "answer": "Yes, we run dedicated after-school batches for kids (ages 5–9) and juniors (ages 10–16) with coaches focused on technical foundations and agility."
-        },
-        {
-          "question": "How do I enroll in adult badminton classes at Edappally?",
-          "answer": "We offer early morning (06:00 AM) and late evening (07:30 PM) adult batches. Send a WhatsApp message to +91 94006 35548 to verify slot availability."
-        },
-        {
-          "question": "Is vehicle parking provided at the Edappally centre?",
-          "answer": "Yes, secure on-site parking for both cars and two-wheelers is provided for all registered students and parents."
-        }
-      ],
-      "seo": {
-        "title": "Badminton Academy in Edappally | S & A Badminton Academy Kochi",
-        "description": "Looking for badminton coaching in Edappally? S & A Badminton Academy near Lulu Mall provides premier badminton coaching for kids, juniors, and adults in Edappally, Kochi.",
-        "primaryKeyword": "badminton academy in Edappally",
-        "secondaryKeywords": [
-          "badminton coaching in Edappally",
-          "badminton classes in Edappally",
-          "badminton training in Edappally",
-          "badminton academy Edappally",
-          "badminton coaching Edappally"
-        ],
-        "relatedKeywords": [
-          "kids badminton coaching Edappally",
-          "junior badminton academy Edappally",
-          "adult badminton classes Edappally",
-          "competitive badminton coaching Edappally",
-          "badminton academy near Edappally",
-          "badminton classes for beginners Edappally"
-        ]
-      },
-      "createdAt": "2026-09-14T12:44:45.993Z",
-      "updatedAt": "2026-09-14T13:34:55.872Z"
-    },
-    {
-      "id": "kakkanad",
-      "slug": "kakkanad",
-      "name": "S & A Badminton Academy – Kakkanad",
-      "shortName": "Kakkanad Centre",
-      "cityArea": "Kakkanad & Infopark, Kochi",
-      "area": "Kakkanad",
-      "city": "Kochi",
-      "district": "Ernakulam",
-      "state": "Kerala",
-      "pincode": "682030",
-      "postalCode": "682030",
-      "address": "S&A Badminton Center, Seaport-Airport Road, Near Infopark Expressway, Kakkanad, Kochi, Kerala 682030",
-      "phone": "+919400635548",
-      "phoneDisplay": "+91 94006 35548",
-      "whatsapp": "919400635548",
-      "whatsappDisplay": "+91 94006 35548",
-      "email": "kakkanad@sabadminton.com",
-      "courtCount": 4,
-      "surfaceType": "BWF-Approved Olympic Green Vinyl Cushion Mats",
-      "googleMapsUrl": "https://maps.google.com/?q=Kakkanad+Kochi+Kerala",
-      "googleMapsEmbedUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15716.42588371842!2d76.335!3d10.0159!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b080c8e54b6c33d%3A0x6bb83b0f5b1285cb!2sKakkanad%2C%20Kochi%2C%20Kerala!5e0!3m2!1sen!2sin!4v1700000000000",
-      "latitude": 10.0159,
-      "longitude": 76.3419,
-      "description": "Situated on Seaport-Airport Road minutes from Infopark and SmartCity, our Kakkanad centre serves tech professionals, resident families, and young athletes across Kakkanad, Thrikkakara, Vazhakkala, and Rajagiri valley.",
-      "displayOrder": 3,
-      "status": "ACTIVE",
-      "isActive": true,
-      "seoTitle": "Badminton Academy in Kakkanad | S & A Badminton Academy Kochi",
-      "seoDescription": "Looking for badminton coaching in Kakkanad near Infopark? S & A Badminton Academy provides expert badminton training for kids, juniors, adults & IT professionals in Kakkanad.",
-      "image": "/images/hero-athlete.jpg",
-      "courtImage": "/images/training-coach.jpg",
-      "isPlaceholder": false,
-      "facilities": [
-        "4 Synthetic Courts with Wooden Base Layer Protection",
-        "700 Lux Commercial Sports Lighting Fixtures",
-        "Speed, Agility & Core Strength Conditioning Area",
-        "Changing Rooms and Hot Showers for Working Professionals",
-        "Racket Restringing and Equipment Support Desk",
-        "Spacious Vehicle Parking with 24/7 Security"
-      ],
-      "openingHours": {
-        "days": "Monday – Sunday (7 Days Open)",
-        "morning": "05:00 AM – 10:30 AM",
-        "evening": "04:00 PM – 11:00 PM"
-      },
-      "intro": {
-        "heading": "Kakkanad's High-Performance Badminton Hub Near Infopark",
-        "subheading": "Extended hours, corporate flexibility, and intensive youth development",
-        "description": "Situated on Seaport-Airport Road minutes from Infopark and SmartCity, our Kakkanad centre serves tech professionals, resident families, and young athletes across Kakkanad, Thrikkakara, Vazhakkala, and Rajagiri valley.",
-        "neighbourhoodsServed": [
-          "Kakkanad",
-          "Infopark & SmartCity",
-          "Thrikkakara",
-          "Vazhakkala",
-          "Padamugal",
-          "Kalamassery South",
-          "Chittethukara"
-        ],
-        "connectivity": "Conveniently accessible along Seaport-Airport Road, 3 minutes from Infopark Main Gate. Offers extended morning and late-evening batch schedules suited for IT working hours."
-      },
-      "courtInformation": {
-        "courtCount": 4,
-        "surfaceType": "BWF-Approved Olympic Green Vinyl Cushion Mats",
-        "subfloor": "Shock-Absorbing Engineered Hardwood Base",
-        "lightingStandard": "700 Lux Glare-Free Shadow-Eliminating LED Sports Illumination",
-        "ceilingClearance": "9.2 Metre Clear Height"
-      },
-      "programs": [
-        {
-          "name": "Kids Foundation Badminton",
-          "slug": "kids-badminton-coaching",
-          "targetAge": "Ages 5 – 9",
-          "level": "Beginner",
-          "schedule": "Mon / Wed / Fri: 04:30 PM – 05:45 PM",
-          "description": "Coordination games, fundamental swing mechanics, and court safety basics."
-        },
-        {
-          "name": "Junior Competitive Program",
-          "slug": "junior-badminton-coaching",
-          "targetAge": "Ages 10 – 16",
-          "level": "Intermediate & Advanced",
-          "schedule": "Tue / Thu / Sat: 05:00 PM – 07:00 PM",
-          "description": "Footwork speed, deceptive drop shots, power smash generation, and match mental composure."
-        },
-        {
-          "name": "Corporate & Adult Coaching",
-          "slug": "adult-badminton-coaching",
-          "targetAge": "Ages 18+",
-          "level": "All Adult Levels",
-          "schedule": "Early Bird 05:00 AM – 07:00 AM & Night Owl 08:00 PM – 10:30 PM",
-          "description": "Flexible attendance model for tech professionals, stamina building, and match play coaching."
-        }
-      ],
-      "coaches": [
-        {
-          "name": "Coach Sarath Chandran",
-          "role": "Head Coach – Kakkanad Hub",
-          "specialization": "Advanced Doubles Tactics & Athletic Conditioning",
-          "bio": "Former university championship team captain with 7+ years of coaching junior district athletes and corporate executives."
-        }
-      ],
-      "gallery": [
-        {
-          "url": "/images/hero-athlete.jpg",
-          "caption": "Late evening competitive training match play at Kakkanad"
-        },
-        {
-          "url": "/images/training-coach.jpg",
-          "caption": "Multi-shuttle technical drill session with coach"
-        }
-      ],
-      "testimonials": [
-        {
-          "quote": "Working at Infopark, having the 8:00 PM coaching batch at S&A Kakkanad is fantastic. Great wooden courts, coaching feedback, and professional environment.",
-          "author": "Arjun Radhakrishnan",
-          "role": "Software Architect, Infopark Kakkanad",
-          "rating": 5
-        }
-      ],
-      "achievements": [
-        "Official training destination for corporate badminton teams across Infopark Kochi.",
-        "Rapidly expanding junior squad with top-4 placements in Ernakulam district opens."
-      ],
-      "localFAQs": [
-        {
-          "question": "Where is the S & A Badminton Academy centre located in Kakkanad?",
-          "answer": "Our Kakkanad facility is on Seaport-Airport Road near the Infopark Expressway, only 3 minutes from the Infopark Main Gate."
-        },
-        {
-          "question": "Are late evening badminton batches available in Kakkanad for IT professionals?",
-          "answer": "Yes, we run dedicated corporate batches from 08:00 PM to 10:30 PM on weekdays with shower and locker facilities."
-        },
-        {
-          "question": "Can kids join badminton coaching at the Kakkanad centre?",
-          "answer": "Yes, our youth programs run from 04:30 PM to 07:00 PM with age-specific coaching batches for ages 5 to 16."
-        },
-        {
-          "question": "How can I book a trial session at Kakkanad?",
-          "answer": "Reach our Kakkanad desk via WhatsApp at +91 94006 35548 or submit the quick assessment form on this page."
-        }
-      ],
-      "seo": {
-        "title": "Badminton Academy in Kakkanad | S & A Badminton Academy Kochi",
-        "description": "Looking for badminton coaching in Kakkanad near Infopark? S & A Badminton Academy provides expert badminton training for kids, juniors, adults & IT professionals in Kakkanad.",
-        "primaryKeyword": "badminton academy in Kakkanad",
-        "secondaryKeywords": [
-          "badminton coaching in Kakkanad",
-          "badminton classes in Kakkanad",
-          "badminton training in Kakkanad",
-          "badminton academy Kakkanad",
-          "badminton coaching Kakkanad"
-        ],
-        "relatedKeywords": [
-          "kids badminton coaching Kakkanad",
-          "junior badminton coaching Kakkanad",
-          "adult badminton classes Kakkanad",
-          "competitive badminton coaching Kakkanad",
-          "badminton academy near Kakkanad",
-          "badminton coaching near Infopark Kakkanad"
-        ]
-      },
-      "createdAt": "2026-09-14T12:44:45.993Z",
-      "updatedAt": "2026-09-14T12:44:45.993Z"
-    },
-    {
-      "id": "fourth-centre",
-      "slug": "fourth-centre",
-      "name": "S & A Badminton Academy — Upcoming Fourth Centre",
-      "shortName": "Upcoming Fourth Centre",
-      "area": "Greater Kochi",
-      "city": "Kochi",
-      "district": "Ernakulam",
-      "state": "Kerala",
-      "pincode": "[PINCODE]",
-      "postalCode": "[PINCODE]",
-      "address": "[FACILITY_ADDRESS], [AREA], Kochi, Kerala [PINCODE]",
-      "phone": "+919400635548",
-      "phoneDisplay": "+91 94006 35548",
-      "whatsapp": "919400635548",
-      "whatsappDisplay": "+91 94006 35548",
-      "email": "info@sabadminton.com",
-      "courtCount": 4,
-      "surfaceType": "BWF-Grade Multi-Layer Synthetic Cushion Surface",
-      "googleMapsUrl": "https://maps.google.com/?q=Kochi+Kerala",
-      "googleMapsEmbedUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d125745.74828770425!2d76.2239462!3d9.9826798!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b080d514abec6bf%3A0xbd582caa5844192!2sKochi%2C%20Kerala!5e0!3m2!1sen!2sin!4v1700000000000",
-      "latitude": null,
-      "longitude": null,
-      "description": "S & A Badminton Academy is preparing to launch our fourth dedicated coaching arena in Kochi.",
-      "displayOrder": 4,
-      "status": "INACTIVE",
-      "isActive": false,
-      "seoTitle": "Badminton Academy in Kochi | S & A Badminton Academy Kochi",
-      "seoDescription": "New upcoming badminton arena expanding our footprint across Greater Kochi.",
-      "image": "/images/badminton-arena.jpg",
-      "courtImage": "/images/badminton-arena.jpg",
-      "isPlaceholder": true,
-      "programs": [],
-      "coaches": [],
-      "gallery": [],
-      "testimonials": [],
-      "achievements": [],
-      "localFAQs": [],
-      "seo": {
-        "title": "Badminton Academy in Kochi | S & A Badminton Academy Kochi",
-        "description": "New upcoming badminton arena expanding our footprint across Greater Kochi.",
-        "primaryKeyword": "badminton coaching Greater Kochi",
-        "secondaryKeywords": [
-          "badminton academy Greater Kochi",
-          "badminton courts Kochi"
-        ],
-        "relatedKeywords": [
-          "training academy Greater Kochi",
-          "badminton near me"
-        ]
-      },
-      "createdAt": "2026-09-14T13:08:17.257Z",
-      "updatedAt": "2026-09-14T13:28:34.423Z"
-    },
-    {
-      "id": "maradu",
-      "slug": "maradu",
-      "name": "S & A Badminton Academy — Maradu",
-      "shortName": "Maradu",
-      "area": "Greater Kochi",
-      "city": "Kochi",
-      "district": "Ernakulam",
-      "state": "Kerala",
-      "pincode": "[PINCODE]",
-      "postalCode": "[PINCODE]",
-      "address": "ProSmash Badminton Academy, Society Road, near Vadakke Cheruvaram, Maradu, Kerala",
-      "phone": "+919400635548",
-      "phoneDisplay": "+91 94006 35548",
-      "whatsapp": "919400635548",
-      "whatsappDisplay": "+91 94006 35548",
-      "email": "info@sabadminton.com",
-      "courtCount": 4,
-      "surfaceType": "BWF-Grade Multi-Layer Synthetic Cushion Surface",
-      "googleMapsUrl": "https://maps.app.goo.gl/TBFKhXZ4B1FTzNgu5",
-      "googleMapsEmbedUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d125745.74828770425!2d76.2239462!3d9.9826798!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b080d514abec6bf%3A0xbd582caa5844192!2sKochi%2C%20Kerala!5e0!3m2!1sen!2sin!4v1700000000000",
-      "latitude": null,
-      "longitude": null,
-      "description": "Beginner, intermediate, and advanced coaching for kids (ages 5+) and adults, including specialized morning and evening batches, summer camps, and fitness training.",
-      "displayOrder": 4,
-      "status": "ACTIVE",
-      "isActive": true,
-      "seoTitle": "Badminton Academy in Kochi | S & A Badminton Academy Kochi",
-      "seoDescription": "New upcoming badminton arena expanding our footprint across Greater Kochi.",
-      "image": "/images/badminton-arena.jpg",
-      "courtImage": "/images/badminton-arena.jpg",
-      "isPlaceholder": false,
-      "facilities": [],
-      "programs": [],
-      "coaches": [],
-      "gallery": [],
-      "testimonials": [],
-      "achievements": [],
-      "localFAQs": [],
-      "seo": {
-        "title": "Badminton Academy in Kochi | S & A Badminton Academy Kochi",
-        "description": "New upcoming badminton arena expanding our footprint across Greater Kochi.",
-        "primaryKeyword": "badminton coaching Greater Kochi",
-        "secondaryKeywords": [
-          "badminton academy Greater Kochi",
-          "badminton courts Kochi"
-        ],
-        "relatedKeywords": [
-          "training academy Greater Kochi",
-          "badminton near me"
-        ]
-      },
-      "createdAt": "2026-09-14T13:26:11.852Z",
-      "updatedAt": "2026-09-14T13:26:11.852Z"
-    },
-    {
       "id": "chullikal",
       "slug": "chullikal",
       "name": "S & A Badminton Academy — Chullikal",
-      "shortName": "Chullikal",
-      "area": "Greater Kochi",
+      "shortName": "Chullikal Centre",
+      "area": "Chullikal",
       "city": "Kochi",
       "district": "Ernakulam",
       "state": "Kerala",
-      "pincode": "[PINCODE]",
-      "postalCode": "[PINCODE]",
-      "address": "[FACILITY_ADDRESS], [AREA], Kochi, Kerala [PINCODE]",
+      "pincode": "676508",
+      "postalCode": "676508",
+      "address": "Beginner, intermediate, and advanced professional coaching for kids and adults, including specialized camps and personal training sessions.",
       "phone": "+919400635548",
       "phoneDisplay": "+91 94006 35548",
       "whatsapp": "919400635548",
@@ -6089,14 +5648,19 @@
       "longitude": null,
       "description": "Professional coaching for kids and adults, ranging from beginner to advanced/professional levels.",
       "displayOrder": 4,
-      "status": "INACTIVE",
-      "isActive": false,
+      "status": "ACTIVE",
+      "isActive": true,
       "seoTitle": "Badminton Academy in Kochi | S & A Badminton Academy Kochi",
       "seoDescription": "New upcoming badminton arena expanding our footprint across Greater Kochi.",
       "image": "/images/badminton-arena.jpg",
       "courtImage": "/images/badminton-arena.jpg",
       "isPlaceholder": false,
       "facilities": [],
+      "openingHours": {
+        "days": "All 7 Days",
+        "morning": "5:00 AM – 10:00 PM (All 7 Days)",
+        "evening": ""
+      },
       "programs": [],
       "coaches": [],
       "gallery": [],
@@ -6106,18 +5670,138 @@
       "seo": {
         "title": "Badminton Academy in Kochi | S & A Badminton Academy Kochi",
         "description": "New upcoming badminton arena expanding our footprint across Greater Kochi.",
-        "primaryKeyword": "badminton coaching Greater Kochi",
+        "primaryKeyword": "badminton coaching Chullikal",
         "secondaryKeywords": [
-          "badminton academy Greater Kochi",
+          "badminton academy Chullikal",
           "badminton courts Kochi"
         ],
         "relatedKeywords": [
-          "training academy Greater Kochi",
+          "training academy Chullikal",
           "badminton near me"
         ]
       },
       "createdAt": "2026-09-14T13:29:20.321Z",
-      "updatedAt": "2026-09-14T13:29:20.321Z"
+      "updatedAt": "2026-09-19T06:40:19.087Z"
+    },
+    {
+      "id": "maradu",
+      "slug": "maradu",
+      "name": "S & A Badminton Academy — Maradu",
+      "shortName": "Maradu Centre",
+      "area": "Maradu",
+      "city": "Kochi",
+      "district": "Ernakulam",
+      "state": "Kerala",
+      "pincode": "682020",
+      "postalCode": "682020",
+      "address": "Society Road, near Vadakke Cheruvaram, Shastri Nagar, Maradu, Ernakulam, Kochi, Kerala 682304 (hosted at ProSmash Badminton Academy).",
+      "phone": "+91 94006 35548",
+      "phoneDisplay": "+91 94006 35548",
+      "whatsapp": "919400635548",
+      "whatsappDisplay": "+91 94006 35548",
+      "email": "info@sabadminton.com",
+      "courtCount": 4,
+      "surfaceType": "BWF Grade-1 Certified Synthetic Cushion Surface",
+      "googleMapsUrl": "https://maps.app.goo.gl/qQWZcRxovB8Yhqj78",
+      "googleMapsEmbedUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d125745.74828770425!2d76.2239462!3d9.9826798!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b080d514abec6bf%3A0xbd582caa5844192!2sKochi%2C%20Kerala!5e0!3m2!1sen!2sin!4v1700000000000",
+      "latitude": null,
+      "longitude": null,
+      "description": "S&A Badminton Academy (Sooraj's Badminton Academy) conducts coaching programs and training camps in association with the ProSmash Badminton Academy",
+      "displayOrder": 5,
+      "status": "ACTIVE",
+      "isActive": true,
+      "seoTitle": "Badminton Academy in Kochi | S & A Badminton Academy Kochi",
+      "seoDescription": "New upcoming badminton arena expanding our footprint across Greater Kochi.",
+      "image": "/images/badminton-arena.jpg",
+      "courtImage": "/images/badminton-arena.jpg",
+      "isPlaceholder": false,
+      "facilities": "International BWF Synthetic Courts\nOverhead Glare-Free LED Floodlighting\nAir-Conditioned Parent Viewing Area\nSeparate Dressing Rooms & Hot Showers\nDedicated Parking",
+      "openingHours": {
+        "days": "All 7 Days",
+        "morning": "5:00 AM – 10:00 PM (All 7 Days)",
+        "evening": ""
+      },
+      "programs": [],
+      "coaches": [],
+      "gallery": [],
+      "testimonials": [],
+      "achievements": [],
+      "localFAQs": [],
+      "seo": {
+        "title": "Badminton Academy in Kochi | S & A Badminton Academy Kochi",
+        "description": "New upcoming badminton arena expanding our footprint across Greater Kochi.",
+        "primaryKeyword": "badminton coaching Maradu",
+        "secondaryKeywords": [
+          "badminton academy Maradu",
+          "badminton courts Kochi"
+        ],
+        "relatedKeywords": [
+          "training academy Maradu",
+          "badminton near me"
+        ]
+      },
+      "createdAt": "2026-09-14T13:26:11.852Z",
+      "updatedAt": "2026-09-19T06:40:27.455Z"
+    },
+    {
+      "id": "palluruthy",
+      "slug": "palluruthy",
+      "name": "S & A Badminton Academy – Palluruthy",
+      "shortName": "Palluruthy Centre",
+      "area": "Palluruthy",
+      "city": "Kochi",
+      "district": "Ernakulam",
+      "state": "Kerala",
+      "pincode": "682007",
+      "postalCode": "682007",
+      "address": "All Star Badminton Indoor Court located in Kumbalangi, Kochi, Kerala 682007",
+      "phone": "+91 94006 35548",
+      "phoneDisplay": "+91 94006 35548",
+      "whatsapp": "919400635548",
+      "whatsappDisplay": "+91 94006 35548",
+      "email": "palluruthy@sabadminton.com",
+      "courtCount": 4,
+      "surfaceType": "BWF Grade-1 Certified Synthetic Cushion Mats",
+      "googleMapsUrl": "https://maps.app.goo.gl/ZcoDdytygoWoRLZC8",
+      "googleMapsEmbedUrl": "",
+      "latitude": null,
+      "longitude": null,
+      "description": "Provides professional training from beginner to advanced levels for both kids and adults.",
+      "displayOrder": 6,
+      "status": "ACTIVE",
+      "isActive": true,
+      "seoTitle": "Palluruthy | S&A Badminton Academy",
+      "seoDescription": "Provides professional training from beginner to advanced levels for both kids and adults.",
+      "image": "/images/badminton-arena.jpg",
+      "courtImage": "/images/badminton-arena.jpg",
+      "isPlaceholder": false,
+      "facilities": "International BWF Synthetic Courts\nOverhead Glare-Free LED Floodlighting\nAir-Conditioned Parent Viewing Area\nSeparate Dressing Rooms & Hot Showers\nDedicated Parking",
+      "openingHours": {
+        "days": "All 7 Days",
+        "morning": "5:00 AM – 10:00 PM (All 7 Days)",
+        "evening": ""
+      },
+      "programs": [],
+      "coaches": [],
+      "gallery": [],
+      "testimonials": [],
+      "achievements": [],
+      "localFAQs": [],
+      "seo": {
+        "title": "Palluruthy | S&A Badminton Academy",
+        "description": "Provides professional training from beginner to advanced levels for both kids and adults.",
+        "primaryKeyword": "badminton coaching Palluruthy",
+        "secondaryKeywords": [
+          "badminton academy Palluruthy",
+          "badminton courts Kochi"
+        ],
+        "relatedKeywords": [
+          "training academy Palluruthy",
+          "badminton near me"
+        ]
+      },
+      "createdAt": "2026-09-17T19:01:32.985Z",
+      "updatedAt": "2026-09-19T06:40:41.025Z"
     }
   ]
 }

@@ -16,7 +16,7 @@ export const FAQS: FAQItem[] = [
     id: "faq-2",
     category: "Admissions",
     question: "Is a free trial assessment session available?",
-    answer: "Yes, we provide a complimentary 45-minute baseline assessment for both children and adults. Our coach evaluates your current movement, grip, and stamina to recommend the ideal batch and development track."
+    answer: "Yes, we provide a complimentary 45-minute baseline assessment for both children and adults. Our coach evaluates your current movement, grip, and stamina to recommend the ideal batch and development track. Shoes & racket required for free trial."
   },
   {
     id: "faq-3",
@@ -52,7 +52,7 @@ export const FAQS: FAQItem[] = [
     id: "faq-8",
     category: "Equipment & Attire",
     question: "What gear do I need to bring for my first training session?",
-    answer: "You only need to bring clean non-marking indoor badminton shoes, sports socks, and comfortable athletic wear. S&A Academy provides demo rackets, shuttles, and locker access for evaluation and initial trial sessions."
+    answer: "Please bring your badminton shoes and racket for the free trial session. Clean non-marking indoor court shoes and comfortable athletic wear are required on our BWF synthetic courts."
   },
   {
     id: "faq-9",

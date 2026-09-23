@@ -24,7 +24,7 @@ export function HeroSection({ initialCentres }: { initialCentres?: Array<{ short
           : Array.isArray(data)
           ? data
           : [];
-        if (list.length > 0) {
+        if (Array.isArray(list)) {
           setCentres(list);
         }
       })
@@ -104,25 +104,32 @@ export function HeroSection({ initialCentres }: { initialCentres?: Array<{ short
           </p>
 
           {/* 04. Tactile, High-Voltage Action CTAs */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 pt-2">
-            <Link
-              href="/contact"
-              className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-[#B8F000] hover:bg-[#cbf722] text-[#07090D] font-black text-sm uppercase tracking-wider transition-all duration-150 group shadow-md"
-            >
-              <span>BOOK A FREE TRIAL</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform duration-150" />
-            </Link>
+          <div className="space-y-2.5 pt-2">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
+              <Link
+                href="/contact"
+                className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-[#B8F000] hover:bg-[#cbf722] text-[#07090D] font-black text-sm uppercase tracking-wider transition-all duration-150 group shadow-md"
+              >
+                <span>BOOK A FREE TRIAL</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform duration-150" />
+              </Link>
 
-            <a
-              href={buildWhatsAppUrl()}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={handleWhatsApp}
-              className="inline-flex items-center justify-center gap-2.5 px-7 py-4 bg-[#11161D] hover:bg-[#17212C] text-white font-bold text-sm uppercase tracking-wider border border-[#1F2937] hover:border-[#B8F000]/60 transition-colors"
-            >
-              <MessageCircle className="w-4 h-4 text-[#22C55E]" />
-              <span>WHATSAPP ADMISSIONS</span>
-            </a>
+              <a
+                href={buildWhatsAppUrl()}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={handleWhatsApp}
+                className="inline-flex items-center justify-center gap-2.5 px-7 py-4 bg-[#11161D] hover:bg-[#17212C] text-white font-bold text-sm uppercase tracking-wider border border-[#1F2937] hover:border-[#B8F000]/60 transition-colors"
+              >
+                <MessageCircle className="w-4 h-4 text-[#22C55E]" />
+                <span>WHATSAPP ADMISSIONS</span>
+              </a>
+            </div>
+
+            <p className="text-xs font-mono text-[#A8B0BA] flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#B8F000]" />
+              Shoes &amp; racket required for free trial.
+            </p>
           </div>
 
           {/* 05. Safe Verified Operational Footprint */}

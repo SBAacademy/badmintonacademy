@@ -68,41 +68,48 @@ export function FinalCTA({ initialCount }: { initialCount?: number }) {
         </p>
 
         {/* Tactile Conversion CTAs */}
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-4">
-          <Link
-            href="/contact"
-            className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-[#B8F000] hover:bg-[#cbf722] text-[#07090D] font-black text-sm uppercase tracking-wider transition-all duration-150 group shadow-md"
-          >
-            <span>BOOK A FREE TRIAL</span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform duration-150" />
-          </Link>
+        <div className="space-y-3 pt-4">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+            <Link
+              href="/contact"
+              className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-[#B8F000] hover:bg-[#cbf722] text-[#07090D] font-black text-sm uppercase tracking-wider transition-all duration-150 group shadow-md"
+            >
+              <span>BOOK A FREE TRIAL</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform duration-150" />
+            </Link>
 
-          <a
-            href={buildWhatsAppUrl()}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={handleWhatsApp}
-            className="inline-flex items-center justify-center gap-2.5 px-7 py-4 bg-[#11161D] hover:bg-[#17212C] text-white font-bold text-sm uppercase tracking-wider border border-[#1F2937] hover:border-[#B8F000]/60 transition-colors"
-          >
-            <MessageCircle className="w-4 h-4 text-[#22C55E]" />
-            <span>WHATSAPP ADMISSIONS</span>
-          </a>
+            <a
+              href={buildWhatsAppUrl()}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={handleWhatsApp}
+              className="inline-flex items-center justify-center gap-2.5 px-7 py-4 bg-[#11161D] hover:bg-[#17212C] text-white font-bold text-sm uppercase tracking-wider border border-[#1F2937] hover:border-[#B8F000]/60 transition-colors"
+            >
+              <MessageCircle className="w-4 h-4 text-[#22C55E]" />
+              <span>WHATSAPP ADMISSIONS</span>
+            </a>
 
-          <a
-            href={`tel:${ACADEMY_DATA.phone}`}
-            onClick={handleCall}
-            className="inline-flex items-center justify-center gap-2 px-6 py-4 bg-[#0B0F14] hover:bg-[#11161D] text-[#A8B0BA] hover:text-white font-mono text-xs uppercase tracking-wider border border-[#1F2937] transition-colors"
-          >
-            <Phone className="w-3.5 h-3.5 text-[#B8F000]" />
-            <span>{ACADEMY_DATA.phone}</span>
-          </a>
+            <a
+              href={`tel:${ACADEMY_DATA.phone}`}
+              onClick={handleCall}
+              className="inline-flex items-center justify-center gap-2 px-6 py-4 bg-[#0B0F14] hover:bg-[#11161D] text-[#A8B0BA] hover:text-white font-mono text-xs uppercase tracking-wider border border-[#1F2937] transition-colors"
+            >
+              <Phone className="w-3.5 h-3.5 text-[#B8F000]" />
+              <span>{ACADEMY_DATA.phone}</span>
+            </a>
+          </div>
+
+          <p className="text-xs font-mono text-[#A8B0BA] flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#B8F000]" />
+            Shoes &amp; racket required for free trial.
+          </p>
         </div>
 
         {/* Structural Footprint Guarantees */}
         <div className="pt-10 border-t border-[#1F2937] grid grid-cols-1 sm:grid-cols-3 gap-4 font-mono text-[11px] text-[#A8B0BA] uppercase tracking-wider">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 text-[#E5E7EB]">
             <span className="w-1.5 h-1.5 bg-[#B8F000]" />
-            <span>ZERO EQUIPMENT REQUIRED FOR TRIAL</span>
+            <span>SHOES &amp; RACKET REQUIRED FOR FREE TRIAL</span>
           </div>
           <div className="flex items-center gap-2">
             <span className="w-1.5 h-1.5 bg-[#B8F000]" />

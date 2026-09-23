@@ -5,7 +5,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X, MessageCircle, ChevronDown, ArrowRight, Phone } from "lucide-react";
 import { ACADEMY_DATA } from "@/data/academy";
-import { LOCATIONS } from "@/data/locations";
 import { PROGRAMS } from "@/data/programs";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { trackEvent } from "@/lib/analytics";
@@ -25,11 +24,7 @@ const NAV_LINKS = [
   { 
     name: "Centres", 
     href: "/branches",
-    dropdown: Object.values(LOCATIONS).map(l => ({ 
-      name: l.shortName, 
-      href: `/${l.slug}`,
-      desc: l.city 
-    }))
+    dropdown: []
   },
   { name: "Coaches", href: "/coaches" },
   { name: "Achievements", href: "/achievements" },
@@ -43,19 +38,13 @@ export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [openMobileMenu, setOpenMobileMenu] = useState<string | null>(null);
-  const [dynamicCentres, setDynamicCentres] = useState<{ name: string; href: string; desc: string }[]>(
-    Object.values(LOCATIONS).map(l => ({
-      name: l.shortName,
-      href: `/${l.slug}`,
-      desc: l.city,
-    }))
-  );
+  const [dynamicCentres, setDynamicCentres] = useState<{ name: string; href: string; desc: string }[]>([]);
 
   useEffect(() => {
     fetch("/api/centres")
       .then((res) => res.json())
       .then((data) => {
-        if (data.success && Array.isArray(data.items) && data.items.length > 0) {
+        if (data.success && Array.isArray(data.items)) {
           setDynamicCentres(
             data.items.map((c: any) => ({
               name: c.shortName || c.name,
@@ -529,6 +518,10 @@ export function Navbar() {
               <span>BOOK A FREE TRIAL</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
+
+            <p className="text-[11px] font-mono text-center text-[#A8B0BA]">
+              Shoes &amp; racket required for free trial.
+            </p>
 
             <div className="grid grid-cols-2 gap-2.5">
               <a

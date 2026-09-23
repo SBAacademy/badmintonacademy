@@ -44,6 +44,7 @@ export async function POST(request: Request) {
     revalidatePath("/branches");
     revalidatePath("/contact");
     revalidatePath("/coaches");
+    revalidatePath("/sitemap.xml");
     if (saved.slug) {
       revalidatePath(`/${saved.slug}`);
       revalidatePath(`/branches/${saved.slug}`);

@@ -18,6 +18,7 @@ import { AchievementsManager } from "@/components/admin/AchievementsManager";
 import { TestimonialsManager } from "@/components/admin/TestimonialsManager";
 import { CentresManager } from "@/components/admin/CentresManager";
 import { ProgramsManager } from "@/components/admin/ProgramsManager";
+import { EventsManager } from "@/components/admin/EventsManager";
 
 export default function AdminDashboardPage() {
   // Authentication State
@@ -375,6 +376,7 @@ export default function AdminDashboardPage() {
 
           {activeTab === "centres" && <CentresManager />}
           {activeTab === "programs" && <ProgramsManager />}
+          {activeTab === "events" && <EventsManager />}
           {activeTab === "gallery" && <GalleryManager />}
           {activeTab === "coaches" && <CoachesManager />}
           {activeTab === "achievements" && <AchievementsManager />}

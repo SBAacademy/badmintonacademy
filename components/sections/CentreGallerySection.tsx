@@ -13,7 +13,7 @@ import {
   Camera,
   Maximize2,
 } from "lucide-react";
-import { GalleryItem, GALLERY_ITEMS } from "@/data/gallery";
+import { GalleryItem } from "@/data/gallery";
 
 interface CentreGallerySectionProps {
   branchSlug?: string;
@@ -32,7 +32,7 @@ export function CentreGallerySection({
   description,
   initialItems,
 }: CentreGallerySectionProps) {
-  const [items, setItems] = useState<GalleryItem[]>(initialItems || GALLERY_ITEMS);
+  const [items, setItems] = useState<GalleryItem[]>(initialItems || []);
   const [activePhoto, setActivePhoto] = useState<GalleryItem | null>(null);
 
   // Fetch live items from Neon DB API

@@ -15,7 +15,7 @@ export function AnnouncementBar() {
       aria-label="Announcement"
       className="relative z-50 bg-[#07090D] text-[#A8B0BA] text-xs h-10 border-b border-[#1F2937] flex items-center"
     >
-      <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto w-full px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
+      <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-6 xl:px-8 flex items-center justify-between gap-4">
         {/* Left Message Cluster */}
         <div className="flex items-center gap-2 sm:gap-3 overflow-hidden">
           <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] sm:text-[11px] font-black tracking-widest bg-[#B8F000]/15 text-[#B8F000] border border-[#B8F000]/30 shrink-0 uppercase font-mono">

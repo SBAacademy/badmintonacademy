@@ -21,6 +21,7 @@ import { CoachEnquiryForm } from "@/components/coaches/CoachEnquiryForm";
 import { CoachPhotoGallery } from "@/components/coaches/CoachPhotoGallery";
 import { FinalCTA } from "@/components/sections/FinalCTA";
 import { formatWhatsAppDisplay, getCoachPrimaryPhoto } from "@/data/coaches";
+import { ACADEMY_DATA } from "@/data/academy";
 
 interface PageProps {
   params: Promise<{ slug: string }>;

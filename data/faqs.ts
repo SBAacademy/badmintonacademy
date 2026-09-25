@@ -21,8 +21,8 @@ export const FAQS: FAQItem[] = [
   {
     id: "faq-3",
     category: "Admissions",
-    question: "How do I enroll or book a trial at Kadavanthra, Edappally, or Kakkanad?",
-    answer: "You can book directly by sending a WhatsApp message to +91 94006 35548 or filling out our quick online enquiry form on the Contact page. Our admissions counselor will confirm your preferred branch and slot within 2 hours."
+    question: "How do I enroll or book a trial session?",
+    answer: "You can book directly by sending a WhatsApp message to +91 79076 55513 or filling out our quick online enquiry form on the Contact page. Our admissions counselor will confirm your preferred training centre and slot within 2 hours."
   },
   {
     id: "faq-4",
@@ -40,13 +40,13 @@ export const FAQS: FAQItem[] = [
     id: "faq-6",
     category: "Courts & Infrastructure",
     question: "What type of court flooring does S&A Badminton Academy use?",
-    answer: "All our branches use BWF Grade-1 certified multi-layer synthetic court mats laid over shock-absorbing sprung wooden subflooring. This dual-cushion design absorbs up to 60% of joint impact, safeguarding players' knees and ankles."
+    answer: "All our centres use BWF Grade-1 certified multi-layer synthetic court mats laid over shock-absorbing sprung wooden subflooring. This dual-cushion design absorbs up to 60% of joint impact, safeguarding players' knees and ankles."
   },
   {
     id: "faq-7",
     category: "Courts & Infrastructure",
-    question: "Where are your branches located in Kochi?",
-    answer: "We have 3 full-scale training facilities in Kochi: 1) Kadavanthra (Central Kochi HQ near Rajiv Gandhi Indoor Stadium), 2) Edappally (North Kochi Hub behind Lulu Mall & Metro), and 3) Kakkanad (Seaport-Airport Road near Infopark)."
+    question: "Where are your training centres located in Kochi?",
+    answer: "We operate dedicated training facilities across strategic hubs in Kochi, including our central arena at Kadavanthra (near Rajiv Gandhi Indoor Stadium) and centres across Ernakulam. Visit our Centres section to view all operational locations, amenities, and directions."
   },
   {
     id: "faq-8",

@@ -231,6 +231,7 @@ export function Footer({ initialCentres }: { initialCentres?: any[] } = {}) {
           <p>&copy; {new Date().getFullYear()} {ACADEMY_DATA.name}. All rights reserved.</p>
           <div className="flex items-center space-x-6">
             <Link href="/about" className="hover:text-white transition-colors">About</Link>
+            <Link href="/events" className="hover:text-white transition-colors">Events</Link>
             <Link href="/blog" className="hover:text-white transition-colors">Blog</Link>
             <Link href="/privacy" className="hover:text-white transition-colors">Privacy</Link>
             <Link href="/terms" className="hover:text-white transition-colors">Terms</Link>

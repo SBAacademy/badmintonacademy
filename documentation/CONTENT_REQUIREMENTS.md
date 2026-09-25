@@ -30,8 +30,8 @@ Please complete and confirm the following data points for all four centres:
 * [ ] **Exact Arena Name:** (e.g., Rajiv Gandhi Indoor Stadium / S&A Kadavanthra Arena)
 * [ ] **Full Street Address:** 
 * [ ] **PIN Code:** 
-* [ ] **Primary Phone:** (+91 94006 35548 verified)
-* [ ] **Direct WhatsApp Number:** (+91 94006 35548 verified)
+* [ ] **Primary Phone:** (+91 79076 55513 verified)
+* [ ] **Direct WhatsApp Number:** (+91 79076 55513 verified)
 * [ ] **Contact Email:** 
 * [ ] **Google Maps Share URL / Embed Link:**
 * [ ] **Google Business Profile (GBP) CID URL:**

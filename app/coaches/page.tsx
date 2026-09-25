@@ -5,7 +5,6 @@ import Link from "next/link";
 import { Award, ShieldCheck, MapPin, ArrowRight, Camera } from "lucide-react";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { createMetadata } from "@/lib/seo";
-import { COACHES } from "@/data/coaches";
 import { FinalCTA } from "@/components/sections/FinalCTA";
 
 export const metadata: Metadata = createMetadata({

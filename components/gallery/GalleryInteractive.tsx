@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { X, ChevronLeft, ChevronRight, Eye, MapPin } from "lucide-react";
-import { GALLERY_ITEMS, GalleryItem } from "@/data/gallery";
+import { GalleryItem } from "@/data/gallery";
 import { normalizeImageSrc, isInternalImage } from "@/lib/imageUtils";
 
 import { Centre } from "@/data/centres";
@@ -26,7 +26,7 @@ export function GalleryInteractive({
   initialItems,
   initialCentres,
 }: GalleryInteractiveProps) {
-  const [items, setItems] = useState<GalleryItem[]>(initialItems || GALLERY_ITEMS);
+  const [items, setItems] = useState<GalleryItem[]>(initialItems || []);
   const [centres, setCentres] = useState<Centre[]>(initialCentres || []);
   const [activeCategory, setActiveCategory] = useState("All");
   const [activeBranchKey, setActiveBranchKey] = useState("all");

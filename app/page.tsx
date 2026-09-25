@@ -12,8 +12,9 @@ import { GalleryPreview } from "@/components/sections/GalleryPreview";
 import { FAQSection } from "@/components/sections/FAQSection";
 import { FinalCTA } from "@/components/sections/FinalCTA";
 import { ReviewsSliderSection } from "@/components/sections/ReviewsSliderSection";
+import { UpcomingEventsSection } from "@/components/sections/UpcomingEventsSection";
 import { createMetadata } from "@/lib/seo";
-import { getCentres, getPrograms, getCoaches, getTestimonials } from "@/lib/contentDb";
+import { getCentres, getPrograms, getCoaches, getTestimonials, getEvents } from "@/lib/contentDb";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -34,11 +35,12 @@ export const metadata: Metadata = createMetadata({
 });
 
 export default async function HomePage() {
-  const [centres, programs, coaches, testimonials] = await Promise.all([
+  const [centres, programs, coaches, testimonials, upcomingEvents] = await Promise.all([
     getCentres({ includeInactive: false }),
     getPrograms(),
     getCoaches(),
     getTestimonials({ includePending: false }),
+    getEvents({ status: "upcoming" }),
   ]);
 
   return (
@@ -67,16 +69,19 @@ export default async function HomePage() {
       {/* 08. Trophy Wall Tournament Archive */}
       <AchievementsSection />
 
-      {/* 09. Court Action Visual Gallery */}
+      {/* 09. Dynamic Upcoming Events & Tournaments (Hidden if 0 events) */}
+      <UpcomingEventsSection initialEvents={upcomingEvents} />
+
+      {/* 10. Court Action Visual Gallery */}
       <GalleryPreview />
 
-      {/* 10. FAQ Intel Briefing */}
+      {/* 11. FAQ Intel Briefing */}
       <FAQSection limit={6} />
 
-      {/* 11. Final Campaign CTA */}
+      {/* 12. Final Campaign CTA */}
       <FinalCTA initialCount={centres.length} />
 
-      {/* 12. Reviews Section (Directly Before Footer) */}
+      {/* 13. Reviews Section (Directly Before Footer) */}
       <ReviewsSliderSection initialReviews={testimonials} />
     </>
   );

@@ -3,10 +3,10 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
-import { TESTIMONIALS, Testimonial } from "@/data/testimonials";
+import { Testimonial } from "@/data/testimonials";
 
 export function TestimonialsSection({ initialTestimonials }: { initialTestimonials?: Testimonial[] }) {
-  const [items, setItems] = useState<Testimonial[]>(initialTestimonials || TESTIMONIALS);
+  const [items, setItems] = useState<Testimonial[]>(initialTestimonials || []);
   const [currentIndex, setCurrentIndex] = useState(0);
 
   React.useEffect(() => {
@@ -20,7 +20,7 @@ export function TestimonialsSection({ initialTestimonials }: { initialTestimonia
       .catch(() => {});
   }, []);
 
-  const currentItem = items[currentIndex] || items[0] || TESTIMONIALS[0];
+  const currentItem = items[currentIndex] || items[0];
 
   const handlePrev = () => {
     setCurrentIndex((prev) => (prev === 0 ? items.length - 1 : prev - 1));

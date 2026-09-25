@@ -16,7 +16,7 @@ import {
   MapPin,
   Tag,
 } from "lucide-react";
-import { GalleryItem, GALLERY_ITEMS } from "@/data/gallery";
+import { GalleryItem } from "@/data/gallery";
 import { ImageUploadField } from "./ImageUploadField";
 import { Centre } from "@/data/centres";
 
@@ -55,10 +55,10 @@ export function GalleryManager() {
       if (data.success && Array.isArray(data.items)) {
         setItems(data.items);
       } else {
-        setItems(GALLERY_ITEMS);
+        setItems([]);
       }
     } catch {
-      setItems(GALLERY_ITEMS);
+      setItems([]);
     } finally {
       setLoading(false);
     }

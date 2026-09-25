@@ -16,6 +16,7 @@ import {
   Sparkles,
   MapPin,
   Target,
+  Calendar,
 } from "lucide-react";
 
 export type AdminTab =
@@ -23,6 +24,7 @@ export type AdminTab =
   | "leads"
   | "centres"
   | "programs"
+  | "events"
   | "gallery"
   | "blog"
   | "coaches"
@@ -94,6 +96,11 @@ export function AdminSidebar({
           id: "programs",
           label: "Training Programs",
           icon: Target,
+        },
+        {
+          id: "events",
+          label: "Events & Tournaments",
+          icon: Calendar,
         },
       ],
     },

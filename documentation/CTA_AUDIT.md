@@ -18,7 +18,7 @@ The website incorporates 5 primary conversion pathways designed for maximum conv
 [BOOK FREE TRIAL]    [WHATSAPP US]       [CALL DESK]
       │                    │                    │
 Opens Modal/Form    Opens Contextual    Initiates tel:
-(EnquiryForm.tsx)   WhatsApp URL        +919400635548
+(EnquiryForm.tsx)   WhatsApp URL        +917907655513
       │             (lib/whatsapp.ts)           │
       ▼                    │                    ▼
 POST /api/enquiries        ▼             Coach Sooraj Desk
@@ -33,7 +33,7 @@ Instant WhatsApp Handover
 ## 2. Deep Component Audit
 
 ### 1. WhatsApp Integration Engine ([`lib/whatsapp.ts`](file:///Users/mohammednibrasulhaqq/Documents/Web/S-A-BADMINTON-ACADEMY/lib/whatsapp.ts))
-* **Phone Number:** `+91 94006 35548` (Normalized clean standard `919400635548`).
+* **Phone Number:** `+91 79076 55513` (Normalized clean standard `917907655513`).
 * **Contextual Pre-filled Copy:**
   - *General:* `"Hello S & A Badminton Academy, I would like to enquire about coaching batches in Kochi."`
   - *Location-Specific:* `"Hello S & A Badminton Academy, I am interested in coaching at your Kadavanthra centre."`

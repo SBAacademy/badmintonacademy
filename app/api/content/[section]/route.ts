@@ -17,11 +17,7 @@ import {
   deleteProgramRecord,
   getTestimonials,
 } from "@/lib/contentDb";
-import { GALLERY_ITEMS } from "@/data/gallery";
-import { COACHES, Coach } from "@/data/coaches";
-import { ACHIEVEMENTS } from "@/data/achievements";
-import { TESTIMONIALS } from "@/data/testimonials";
-import { BLOG_POSTS } from "@/data/blog";
+import type { Coach } from "@/data/coaches";
 
 const VALID_SECTIONS: ContentSectionKey[] = [
   "gallery",
@@ -33,21 +29,8 @@ const VALID_SECTIONS: ContentSectionKey[] = [
   "programs",
 ];
 
-function getDefaultItems(section: ContentSectionKey): unknown[] {
-  switch (section) {
-    case "gallery":
-      return GALLERY_ITEMS;
-    case "coaches":
-      return [];
-    case "achievements":
-      return ACHIEVEMENTS;
-    case "testimonials":
-      return TESTIMONIALS;
-    case "blog":
-      return BLOG_POSTS;
-    default:
-      return [];
-  }
+function getDefaultItems(_section: ContentSectionKey): unknown[] {
+  return [];
 }
 
 // 1. GET: Fetch items for the given content section

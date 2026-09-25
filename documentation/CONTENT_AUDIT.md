@@ -21,7 +21,7 @@ To prevent Google quality downgrades, deceptive advertising penalties, or mislea
 
 | Claim / Content Element | On-Page Appearance | Current Data Source | Classification | Verification Notes / Action Required |
 | :--- | :--- | :--- | :---: | :--- |
-| **Academy Phone Number** | `+91 94006 35548` | `data/academy.ts`, `data/locations.ts` | **Verified** | Explicitly confirmed and mandated by client across all touchpoints. |
+| **Academy Phone Number** | `+91 79076 55513` | `data/academy.ts`, `data/locations.ts` | **Verified** | Explicitly confirmed and mandated by client across all touchpoints. |
 | **Head Coach Identity** | Coach Sooraj | `data/coaches.ts`, `app/about` | **Verified** | Lead coach and academy founder. |
 | **3 Active Centres** | Kadavanthra, Edappally, Kakkanad | `data/locations.ts` | **Verified** | Established operational locations in Kochi. |
 | **Fourth Centre Details** | Arena Name, Address, PIN | `data/locations.ts` | **Placeholder** | Marked as `[FACILITY_NAME]` / `[AREA]`; awaits Sooraj's confirmation. |

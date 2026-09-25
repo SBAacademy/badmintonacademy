@@ -133,7 +133,7 @@ All verified technical assets were rigorously audited and preserved:
 
 - **Preserved & Verified:**
   - Headquarters address: Rajiv Gandhi Indoor Stadium vicinity, Kadavanthra, Kochi.
-  - Contact numbers: `+91 94006 35548` and WhatsApp routing.
+  - Contact numbers: `+91 79076 55513` and WhatsApp routing.
   - BWF-standard synthetic court mats on shock-absorbing sprung wooden subflooring.
   - Coach qualifications: Anand Varma (BWF Level 2, NIS Diploma), Shalini Menon (BWF Level 1), Rohan Mathew (BWF Level 1, CSCS), Karthik Nair (BWF Level 1, Dartfish).
   - Achievements: Verified tournament medals from 2022 to 2024.

@@ -27,6 +27,7 @@ const NAV_LINKS = [
     dropdown: []
   },
   { name: "Coaches", href: "/coaches" },
+  { name: "Events", href: "/events" },
   { name: "Achievements", href: "/achievements" },
   { name: "Gallery", href: "/gallery" },
   { name: "Contact", href: "/contact" },
@@ -149,15 +150,15 @@ export function Navbar() {
             : "bg-[#07090D]/90 backdrop-blur-sm border-b border-[#1F2937]/80"
         }`}
       >
-        <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between">
+        <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-6 xl:px-8 h-full flex items-center justify-between">
           
           {/* Compact Horizontal Logo Lockup */}
-          <Link href="/" className="flex items-center gap-3 group shrink-0 mr-3 lg:mr-8 xl:mr-10">
-            <div className="w-10 h-10 lg:w-11 lg:h-11 rounded-xl bg-[#121A23] border border-[#26313D] group-hover:border-[#B8F000]/60 flex items-center justify-center transition-colors shadow-sm">
+          <Link href="/" className="flex items-center gap-2.5 lg:gap-3 group shrink-0 mr-2 lg:mr-4 xl:mr-6">
+            <div className="w-9 h-9 lg:w-10 lg:h-10 xl:w-11 xl:h-11 rounded-xl bg-[#121A23] border border-[#26313D] group-hover:border-[#B8F000]/60 flex items-center justify-center transition-colors shadow-sm">
               {/* Authentic Badminton Racket & Shuttlecock Vector */}
               <svg
                 viewBox="0 0 24 24"
-                className="w-5 h-5 lg:w-6 lg:h-6 text-[#B8F000]"
+                className="w-4.5 h-4.5 lg:w-5 lg:h-5 xl:w-6 xl:h-6 text-[#B8F000]"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"
@@ -181,17 +182,17 @@ export function Navbar() {
             </div>
 
             <div className="flex flex-col text-left">
-              <span className="font-black text-base lg:text-lg tracking-tight text-[#F8FAFC] leading-none group-hover:text-white transition-colors">
+              <span className="font-black text-sm lg:text-base xl:text-lg tracking-tight text-[#F8FAFC] leading-none group-hover:text-white transition-colors">
                 S & A
               </span>
-              <span className="text-[10px] lg:text-[11px] font-bold text-[#A7B0BC] uppercase tracking-wider mt-1">
+              <span className="text-[9px] lg:text-[10px] xl:text-[11px] font-bold text-[#A7B0BC] uppercase tracking-wider mt-0.5 lg:mt-1">
                 Badminton Academy
               </span>
             </div>
           </Link>
 
-          {/* Desktop Navigation Links with Generous Spacing */}
-          <nav className="hidden lg:flex items-center gap-1 xl:gap-1.5 2xl:gap-2.5" aria-label="Main Navigation">
+          {/* Desktop Navigation Links with Responsive Spacing */}
+          <nav className="hidden lg:flex items-center gap-0.5 xl:gap-1 2xl:gap-1.5" aria-label="Main Navigation">
             {navLinks.map((link) => {
               const isActive = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href));
               const hasDropdown = !!link.dropdown;
@@ -212,7 +213,7 @@ export function Navbar() {
                         if (timeoutRef.current) clearTimeout(timeoutRef.current);
                         setOpenDropdown(isOpen ? null : link.name);
                       }}
-                      className={`px-3 py-2 text-[13px] xl:text-sm font-semibold rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer ${
+                      className={`px-2 xl:px-2.5 2xl:px-3 py-1.5 xl:py-2 text-xs xl:text-[13px] 2xl:text-sm font-semibold rounded-xl flex items-center gap-1 xl:gap-1.5 transition-colors cursor-pointer ${
                         isActive || isOpen
                           ? "text-[#B8F000] bg-[#121A23] border border-[#26313D] font-bold"
                           : "text-[#A7B0BC] hover:text-[#F8FAFC] hover:bg-[#121A23]/60"
@@ -222,7 +223,7 @@ export function Navbar() {
                     >
                       <span>{link.name}</span>
                       <ChevronDown
-                        className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                        className={`w-3 h-3 xl:w-3.5 xl:h-3.5 transition-transform duration-200 ${
                           isOpen ? "rotate-180 text-[#B8F000]" : "text-[#6B7280]"
                         }`}
                       />
@@ -276,7 +277,7 @@ export function Navbar() {
                 <Link
                   key={link.name}
                   href={link.href}
-                  className={`px-3 py-2 text-[13px] xl:text-sm font-semibold rounded-xl transition-colors ${
+                  className={`px-2 xl:px-2.5 2xl:px-3 py-1.5 xl:py-2 text-xs xl:text-[13px] 2xl:text-sm font-semibold rounded-xl transition-colors ${
                     isActive
                       ? "text-[#B8F000] bg-[#121A23] border border-[#26313D] font-bold"
                       : "text-[#A7B0BC] hover:text-[#F8FAFC] hover:bg-[#121A23]/60"
@@ -289,25 +290,27 @@ export function Navbar() {
           </nav>
 
           {/* Clean Standardized Action CTAs (WhatsApp + Primary Book Free Trial) */}
-          <div className="hidden lg:flex items-center gap-3 xl:gap-3.5 shrink-0 ml-4 xl:ml-6">
+          <div className="hidden lg:flex items-center gap-2 xl:gap-3 shrink-0 ml-2 xl:ml-4">
             {/* WhatsApp Direct */}
             <a
               href={buildWhatsAppUrl()}
               target="_blank"
               rel="noopener noreferrer"
               onClick={handleWhatsAppClick}
-              className="inline-flex items-center gap-2 px-3.5 xl:px-4 py-2.5 rounded-xl bg-[#121A23] hover:bg-[#17212C] text-[#F8FAFC] text-xs xl:text-[13px] font-semibold border border-[#26313D] hover:border-[#374758] transition-colors whitespace-nowrap shrink-0"
+              className="inline-flex items-center gap-1.5 xl:gap-2 px-2.5 xl:px-3.5 py-2 xl:py-2.5 rounded-xl bg-[#121A23] hover:bg-[#17212C] text-[#F8FAFC] text-xs xl:text-[13px] font-semibold border border-[#26313D] hover:border-[#374758] transition-colors whitespace-nowrap shrink-0"
+              aria-label="Contact WhatsApp Desk"
             >
               <MessageCircle className="w-4 h-4 text-[#22C55E]" />
-              <span>WhatsApp</span>
+              <span className="hidden xl:inline">WhatsApp</span>
             </a>
 
-            {/* Primary CTA — Never Wraps */}
+            {/* Primary CTA — Never Wraps or Clips */}
             <Link
               href="/contact"
-              className="inline-flex items-center justify-center gap-2 px-4.5 xl:px-5 py-2.5 rounded-xl bg-[#B8F000] hover:bg-[#c7fb1e] text-[#07100A] text-xs xl:text-[13px] font-extrabold uppercase tracking-wide shadow-sm transition-all duration-200 whitespace-nowrap shrink-0 group leading-none"
+              className="inline-flex items-center justify-center gap-1.5 xl:gap-2 px-3.5 xl:px-4.5 py-2 xl:py-2.5 rounded-xl bg-[#B8F000] hover:bg-[#c7fb1e] text-[#07100A] text-xs xl:text-[13px] font-extrabold uppercase tracking-wide shadow-sm transition-all duration-200 whitespace-nowrap shrink-0 group leading-none"
             >
-              <span>BOOK A FREE TRIAL</span>
+              <span className="hidden xl:inline">BOOK A FREE TRIAL</span>
+              <span className="xl:hidden">FREE TRIAL</span>
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
             </Link>
           </div>

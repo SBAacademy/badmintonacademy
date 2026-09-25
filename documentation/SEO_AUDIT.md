@@ -63,7 +63,7 @@ Inspection of [`components/seo/SEOJsonLd.tsx`](file:///Users/mohammednibrasulhaq
 * **Location:** Injected globally in `app/layout.tsx` (line 73).
 * **Schema Type:** `SportsOrganization` / `BadmintonAcademy`.
 * **`@id`:** `https://sabadmintonacademy.com/#academy`.
-* **Fields:** Name, Description, URL, Logo, Telephone (`+919400635548`), AreaServed (`Kochi`, `Ernakulam`).
+* **Fields:** Name, Description, URL, Logo, Telephone (`+917907655513`), AreaServed (`Kochi`, `Ernakulam`).
 
 ### 2. Local Centre Schemas (`SportsActivityLocation` & `LocalBusiness`)
 * **Location:** Injected dynamically on `app/[location]/page.tsx` (lines 142–188).

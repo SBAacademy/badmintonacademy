@@ -2,13 +2,14 @@ import { neon } from "@neondatabase/serverless";
 import fs from "fs/promises";
 import path from "path";
 
-import { GALLERY_ITEMS, GalleryItem } from "@/data/gallery";
-import { COACHES, Coach, CoachPhoto, normalizeWhatsAppNumber } from "@/data/coaches";
-import { ACHIEVEMENTS, Achievement } from "@/data/achievements";
-import { TESTIMONIALS, Testimonial } from "@/data/testimonials";
-import { BLOG_POSTS, BlogPost } from "@/data/blog";
+import { GalleryItem } from "@/data/gallery";
+import { Coach, CoachPhoto, normalizeWhatsAppNumber } from "@/data/coaches";
+import { Achievement } from "@/data/achievements";
+import { Testimonial } from "@/data/testimonials";
+import { BlogPost } from "@/data/blog";
 import { Centre, CentreOpeningHours } from "@/data/centres";
 import { PROGRAMS, Program } from "@/data/programs";
+import { EventItem, EventStatus, EventType, resolveEventDisplayStatus } from "@/data/events";
 
 export type ContentSectionKey = "gallery" | "coaches" | "achievements" | "testimonials" | "blog" | "centres" | "programs";
 
@@ -20,7 +21,7 @@ function getSql(): ReturnType<typeof neon> | null {
   return neon(url);
 }
 
-// Local JSON fallback store (for non-relational CMS sections; centres are strictly database-only)
+// Local JSON fallback store (for non-relational CMS sections; centres, coaches, and events are strictly database-only)
 async function readFallbackContent(): Promise<Record<string, unknown[]>> {
   try {
     const fileData = await fs.readFile(CONTENT_FILE_PATH, "utf-8");
@@ -28,15 +29,19 @@ async function readFallbackContent(): Promise<Record<string, unknown[]>> {
     return {
       ...parsed,
       centres: [], // The PostgreSQL database is the SOLE authority for centres
+      coaches: [], // The PostgreSQL database is the SOLE authority for coaches
+      events: [], // The PostgreSQL database is the SOLE authority for events
     };
   } catch {
     return {
-      gallery: GALLERY_ITEMS,
-      coaches: COACHES,
-      achievements: ACHIEVEMENTS,
-      testimonials: TESTIMONIALS,
-      blog: BLOG_POSTS,
+      gallery: [],
+      coaches: [],
+      achievements: [],
+      testimonials: [],
+      blog: [],
       centres: [],
+      events: [],
+      programs: [],
     };
   }
 }
@@ -69,11 +74,11 @@ export async function initContentDb(): Promise<void> {
     const existingSections = new Set(existing.map((r) => r.section));
 
     const defaults: Record<ContentSectionKey, unknown[]> = {
-      gallery: GALLERY_ITEMS,
+      gallery: [],
       coaches: [],
-      achievements: ACHIEVEMENTS,
-      testimonials: TESTIMONIALS,
-      blog: BLOG_POSTS,
+      achievements: [],
+      testimonials: [],
+      blog: [],
       centres: [],
       programs: [],
     };
@@ -202,6 +207,38 @@ export async function initContentDb(): Promise<void> {
       `;
     } catch {
       // Ignored
+    }
+
+    // 4. Create dedicated relational events table
+    try {
+      await sql`
+        CREATE TABLE IF NOT EXISTS events (
+          id VARCHAR(64) PRIMARY KEY,
+          title VARCHAR(255) NOT NULL,
+          slug VARCHAR(255) UNIQUE NOT NULL,
+          description TEXT,
+          event_type VARCHAR(64) NOT NULL DEFAULT 'TOURNAMENT',
+          event_date VARCHAR(64) NOT NULL,
+          start_time VARCHAR(32),
+          end_time VARCHAR(32),
+          venue VARCHAR(255) NOT NULL,
+          centre_slug VARCHAR(64) REFERENCES centres(slug) ON DELETE SET NULL,
+          image TEXT,
+          registration_url TEXT,
+          contact VARCHAR(128),
+          status VARCHAR(32) NOT NULL DEFAULT 'UPCOMING',
+          is_featured BOOLEAN NOT NULL DEFAULT FALSE,
+          is_published BOOLEAN NOT NULL DEFAULT TRUE,
+          display_order INTEGER NOT NULL DEFAULT 1,
+          created_at TIMESTAMPTZ DEFAULT NOW(),
+          updated_at TIMESTAMPTZ DEFAULT NOW()
+        );
+      `;
+      await sql`CREATE INDEX IF NOT EXISTS idx_events_date ON events(event_date ASC);`;
+      await sql`CREATE INDEX IF NOT EXISTS idx_events_status ON events(status);`;
+      await sql`CREATE INDEX IF NOT EXISTS idx_events_centre ON events(centre_slug);`;
+    } catch {
+      // Ignored for concurrent workers
     }
 
     isInitialized = true;
@@ -968,11 +1005,11 @@ export async function deleteCoachRecord(
 
 // Getters for specific website components
 export async function getGalleryItems(): Promise<GalleryItem[]> {
-  return getContentSection<GalleryItem>("gallery", GALLERY_ITEMS);
+  return getContentSection<GalleryItem>("gallery", []);
 }
 
 export async function getAchievements(): Promise<Achievement[]> {
-  return getContentSection<Achievement>("achievements", ACHIEVEMENTS);
+  return getContentSection<Achievement>("achievements", []);
 }
 
 export { resolveAutomaticNeighborhoods } from "./constants";
@@ -1095,7 +1132,7 @@ export async function deleteProgramRecord(slug: string): Promise<{ success: bool
 }
 
 export async function getTestimonials(options: { includePending?: boolean } = {}): Promise<Testimonial[]> {
-  const items = await getContentSection<Testimonial>("testimonials", TESTIMONIALS);
+  const items = await getContentSection<Testimonial>("testimonials", []);
   if (options.includePending) {
     return items;
   }
@@ -1109,7 +1146,7 @@ export async function getTestimonials(options: { includePending?: boolean } = {}
 }
 
 export async function getBlogPosts(): Promise<BlogPost[]> {
-  return getContentSection<BlogPost>("blog", BLOG_POSTS);
+  return getContentSection<BlogPost>("blog", []);
 }
 
 // ============================================================================
@@ -1259,9 +1296,9 @@ export async function saveCentreRecord(centreData: Partial<Centre>): Promise<Cen
   const state = (centreData.state || current?.state || "Kerala").trim();
   const pincode = (centreData.pincode || centreData.postalCode || current?.pincode || current?.postalCode || "682020").trim();
   const address = (centreData.address || current?.address || `${area}, ${city}`).trim();
-  const phone = (centreData.phone || current?.phone || "+919400635548").trim();
+  const phone = (centreData.phone || current?.phone || "+917907655513").trim();
   const phoneDisplay = (centreData.phoneDisplay || current?.phoneDisplay || phone).trim();
-  const whatsapp = (centreData.whatsapp || current?.whatsapp || "919400635548").replace(/\D/g, "");
+  const whatsapp = (centreData.whatsapp || current?.whatsapp || "917907655513").replace(/\D/g, "");
   const whatsappDisplay = (centreData.whatsappDisplay || current?.whatsappDisplay || phoneDisplay).trim();
   const email = (centreData.email || current?.email || `${slug}@sabadminton.com`).trim();
   const courtCount = Number(centreData.courtCount ?? current?.courtCount) || 3;
@@ -1507,6 +1544,13 @@ export async function deleteCentreRecord(
       }
 
       try {
+        // Safely unassign events pointing to this centre
+        await sql`UPDATE events SET centre_slug = NULL WHERE centre_slug = ${slug};`;
+      } catch (e) {
+        console.warn("Could not unassign events for centre:", slug, e);
+      }
+
+      try {
         // Preserve gallery items in database by re-tagging them to 'All Centres'
         const galleryRow = (await sql`SELECT data FROM site_content WHERE section = 'gallery';`) as unknown as Array<{ data: any }>;
         if (galleryRow.length > 0 && Array.isArray(galleryRow[0].data)) {
@@ -1575,5 +1619,351 @@ export async function deleteCentreRecord(
     };
   }
 }
+
+// ============================================================================
+// AUTHORITATIVE EVENTS & TOURNAMENTS DATA LAYER (Neon PostgreSQL events table)
+// ============================================================================
+
+export async function getEvents(options: {
+  includeUnpublished?: boolean;
+  status?: EventStatus | "upcoming" | "all";
+  eventType?: string;
+  limit?: number;
+} = {}): Promise<EventItem[]> {
+  const { includeUnpublished = false, status = "all", eventType, limit } = options;
+  const sql = getSql();
+
+  if (!sql) {
+    return [];
+  }
+
+  try {
+    await initContentDb();
+
+    // Query events with left join to centres to fetch centre name
+    const rawRows = (await sql`
+      SELECT 
+        e.id,
+        e.title,
+        e.slug,
+        e.description,
+        e.event_type AS "eventType",
+        e.event_date AS "eventDate",
+        e.start_time AS "startTime",
+        e.end_time AS "endTime",
+        e.venue,
+        e.centre_slug AS "centreSlug",
+        c.name AS "centreName",
+        e.image,
+        e.registration_url AS "registrationUrl",
+        e.contact,
+        e.status,
+        e.is_featured AS "isFeatured",
+        e.is_published AS "isPublished",
+        e.display_order AS "displayOrder",
+        e.created_at AS "createdAt",
+        e.updated_at AS "updatedAt"
+      FROM events e
+      LEFT JOIN centres c ON e.centre_slug = c.slug
+      WHERE 1=1
+      ${includeUnpublished ? sql`` : sql`AND e.is_published = TRUE`}
+      ${eventType && eventType !== "All" && eventType !== "ALL" ? sql`AND e.event_type = ${eventType}` : sql``}
+      ORDER BY e.event_date ASC, e.start_time ASC, e.display_order ASC;
+    `) as unknown as Record<string, unknown>[];
+
+    if (!Array.isArray(rawRows) || rawRows.length === 0) {
+      return [];
+    }
+
+    // Resolve dynamic display status based on date/time
+    let items: EventItem[] = rawRows.map((r) => {
+      const storedStatus = (r.status as EventStatus) || "UPCOMING";
+      const eventDate = String(r.eventDate || "");
+      const resolvedStatus = resolveEventDisplayStatus(storedStatus, eventDate);
+
+      return {
+        id: String(r.id),
+        title: String(r.title || ""),
+        slug: String(r.slug || r.id),
+        description: String(r.description || ""),
+        eventType: (r.eventType as EventItem["eventType"]) || "TOURNAMENT",
+        eventDate,
+        startTime: r.startTime ? String(r.startTime) : null,
+        endTime: r.endTime ? String(r.endTime) : null,
+        venue: String(r.venue || ""),
+        centreSlug: r.centreSlug ? String(r.centreSlug) : null,
+        centreName: r.centreName ? String(r.centreName) : null,
+        image: r.image ? String(r.image) : null,
+        registrationUrl: r.registrationUrl ? String(r.registrationUrl) : null,
+        contact: r.contact ? String(r.contact) : null,
+        status: resolvedStatus,
+        isFeatured: Boolean(r.isFeatured),
+        isPublished: Boolean(r.isPublished),
+        displayOrder: Number(r.displayOrder) || 1,
+        createdAt: r.createdAt ? new Date(r.createdAt as string).toISOString() : undefined,
+        updatedAt: r.updatedAt ? new Date(r.updatedAt as string).toISOString() : undefined,
+      };
+    });
+
+    // Filter by status if specified
+    if (status === "upcoming") {
+      items = items.filter((e) => e.status === "UPCOMING" || e.status === "ONGOING");
+    } else if (status && status !== "all") {
+      items = items.filter((e) => e.status === status);
+    }
+
+    if (typeof limit === "number" && limit > 0) {
+      items = items.slice(0, limit);
+    }
+
+    return items;
+  } catch (err) {
+    console.error("Error querying events from Neon DB:", err);
+    return [];
+  }
+}
+
+export async function getEventBySlug(
+  slug: string,
+  options: { includeUnpublished?: boolean } = {}
+): Promise<EventItem | null> {
+  const { includeUnpublished = false } = options;
+  if (!slug) return null;
+
+  const sql = getSql();
+  if (!sql) return null;
+
+  try {
+    await initContentDb();
+    const cleanSlug = slug.toLowerCase().trim();
+
+    const rawRows = (await sql`
+      SELECT 
+        e.id,
+        e.title,
+        e.slug,
+        e.description,
+        e.event_type AS "eventType",
+        e.event_date AS "eventDate",
+        e.start_time AS "startTime",
+        e.end_time AS "endTime",
+        e.venue,
+        e.centre_slug AS "centreSlug",
+        c.name AS "centreName",
+        e.image,
+        e.registration_url AS "registrationUrl",
+        e.contact,
+        e.status,
+        e.is_featured AS "isFeatured",
+        e.is_published AS "isPublished",
+        e.display_order AS "displayOrder",
+        e.created_at AS "createdAt",
+        e.updated_at AS "updatedAt"
+      FROM events e
+      LEFT JOIN centres c ON e.centre_slug = c.slug
+      WHERE (LOWER(e.slug) = ${cleanSlug} OR LOWER(e.id) = ${cleanSlug})
+      ${includeUnpublished ? sql`` : sql`AND e.is_published = TRUE`}
+      LIMIT 1;
+    `) as unknown as Record<string, unknown>[];
+
+    if (!Array.isArray(rawRows) || rawRows.length === 0) {
+      return null;
+    }
+
+    const r = rawRows[0];
+    const storedStatus = (r.status as EventStatus) || "UPCOMING";
+    const eventDate = String(r.eventDate || "");
+    const resolvedStatus = resolveEventDisplayStatus(storedStatus, eventDate);
+
+    return {
+      id: String(r.id),
+      title: String(r.title || ""),
+      slug: String(r.slug || r.id),
+      description: String(r.description || ""),
+      eventType: (r.eventType as EventItem["eventType"]) || "TOURNAMENT",
+      eventDate,
+      startTime: r.startTime ? String(r.startTime) : null,
+      endTime: r.endTime ? String(r.endTime) : null,
+      venue: String(r.venue || ""),
+      centreSlug: r.centreSlug ? String(r.centreSlug) : null,
+      centreName: r.centreName ? String(r.centreName) : null,
+      image: r.image ? String(r.image) : null,
+      registrationUrl: r.registrationUrl ? String(r.registrationUrl) : null,
+      contact: r.contact ? String(r.contact) : null,
+      status: resolvedStatus,
+      isFeatured: Boolean(r.isFeatured),
+      isPublished: Boolean(r.isPublished),
+      displayOrder: Number(r.displayOrder) || 1,
+      createdAt: r.createdAt ? new Date(r.createdAt as string).toISOString() : undefined,
+      updatedAt: r.updatedAt ? new Date(r.updatedAt as string).toISOString() : undefined,
+    };
+  } catch (err) {
+    console.error("Error querying event by slug:", err);
+    return null;
+  }
+}
+
+export async function getEventById(id: string): Promise<EventItem | null> {
+  return getEventBySlug(id, { includeUnpublished: true });
+}
+
+export async function saveEventRecord(data: Partial<EventItem>): Promise<EventItem> {
+  const sql = getSql();
+  if (!sql) {
+    throw new Error("Database connection is not configured.");
+  }
+
+  await initContentDb();
+
+  if (!data.title || !data.title.trim()) {
+    throw new Error("Event title is required.");
+  }
+  if (!data.eventDate || !data.eventDate.trim()) {
+    throw new Error("Event date is required.");
+  }
+  if (!data.venue || !data.venue.trim()) {
+    throw new Error("Event venue is required.");
+  }
+
+  const title = data.title.trim();
+  const rawSlug = (data.slug || data.title || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+  const slug = rawSlug || `event-${Date.now()}`;
+  const id = data.id || `evt_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+
+  const description = (data.description || "").trim();
+  const eventType = data.eventType || "TOURNAMENT";
+  const eventDate = data.eventDate.trim().split("T")[0]; // YYYY-MM-DD
+  const startTime = data.startTime ? data.startTime.trim() : null;
+  const endTime = data.endTime ? data.endTime.trim() : null;
+  const venue = data.venue.trim();
+  const centreSlug = data.centreSlug && data.centreSlug.trim() ? data.centreSlug.trim() : null;
+  const image = data.image ? data.image.trim() : null;
+  const registrationUrl = data.registrationUrl ? data.registrationUrl.trim() : null;
+  const contact = data.contact ? data.contact.trim() : null;
+  const status = data.status || "UPCOMING";
+  const isFeatured = Boolean(data.isFeatured);
+  const isPublished = data.isPublished !== false;
+  const displayOrder = Number(data.displayOrder) || 1;
+
+  if (isFeatured) {
+    try {
+      await sql`UPDATE events SET is_featured = FALSE WHERE id != ${id};`;
+    } catch {
+      // Ignored
+    }
+  }
+
+  await sql`
+    INSERT INTO events (
+      id,
+      title,
+      slug,
+      description,
+      event_type,
+      event_date,
+      start_time,
+      end_time,
+      venue,
+      centre_slug,
+      image,
+      registration_url,
+      contact,
+      status,
+      is_featured,
+      is_published,
+      display_order,
+      created_at,
+      updated_at
+    ) VALUES (
+      ${id},
+      ${title},
+      ${slug},
+      ${description},
+      ${eventType},
+      ${eventDate},
+      ${startTime},
+      ${endTime},
+      ${venue},
+      ${centreSlug},
+      ${image},
+      ${registrationUrl},
+      ${contact},
+      ${status},
+      ${isFeatured},
+      ${isPublished},
+      ${displayOrder},
+      NOW(),
+      NOW()
+    )
+    ON CONFLICT (id) DO UPDATE SET
+      title = EXCLUDED.title,
+      slug = EXCLUDED.slug,
+      description = EXCLUDED.description,
+      event_type = EXCLUDED.event_type,
+      event_date = EXCLUDED.event_date,
+      start_time = EXCLUDED.start_time,
+      end_time = EXCLUDED.end_time,
+      venue = EXCLUDED.venue,
+      centre_slug = EXCLUDED.centre_slug,
+      image = EXCLUDED.image,
+      registration_url = EXCLUDED.registration_url,
+      contact = EXCLUDED.contact,
+      status = EXCLUDED.status,
+      is_featured = EXCLUDED.is_featured,
+      is_published = EXCLUDED.is_published,
+      display_order = EXCLUDED.display_order,
+      updated_at = NOW();
+  `;
+
+  const saved = await getEventBySlug(slug, { includeUnpublished: true });
+  if (!saved) {
+    throw new Error("Failed to retrieve saved event record from database.");
+  }
+  return saved;
+}
+
+export async function deleteEventRecord(idOrSlug: string): Promise<{ success: boolean; message: string }> {
+  const sql = getSql();
+  if (!sql) {
+    throw new Error("Database connection is not configured.");
+  }
+
+  await initContentDb();
+  const clean = idOrSlug.trim();
+
+  await sql`DELETE FROM events WHERE id = ${clean} OR slug = ${clean};`;
+
+  return {
+    success: true,
+    message: "Event deleted successfully.",
+  };
+}
+
+export async function toggleEventPublish(id: string, isPublished: boolean): Promise<EventItem> {
+  const sql = getSql();
+  if (!sql) throw new Error("No database connection.");
+
+  await sql`UPDATE events SET is_published = ${isPublished}, updated_at = NOW() WHERE id = ${id};`;
+  const updated = await getEventById(id);
+  if (!updated) throw new Error("Event not found.");
+  return updated;
+}
+
+export async function toggleEventFeatured(id: string, isFeatured: boolean): Promise<EventItem> {
+  const sql = getSql();
+  if (!sql) throw new Error("No database connection.");
+
+  if (isFeatured) {
+    await sql`UPDATE events SET is_featured = FALSE;`;
+  }
+  await sql`UPDATE events SET is_featured = ${isFeatured}, updated_at = NOW() WHERE id = ${id};`;
+  const updated = await getEventById(id);
+  if (!updated) throw new Error("Event not found.");
+  return updated;
+}
+
 
 

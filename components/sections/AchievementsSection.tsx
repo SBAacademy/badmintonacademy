@@ -2,7 +2,7 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { ACHIEVEMENTS, Achievement } from "@/data/achievements";
+import { Achievement } from "@/data/achievements";
 import { getAchievements } from "@/lib/contentDb";
 
 export async function AchievementsSection({ initialAchievements }: { initialAchievements?: Achievement[] }) {

@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Eye } from "lucide-react";
-import { GALLERY_ITEMS, GalleryItem } from "@/data/gallery";
+import { GalleryItem } from "@/data/gallery";
 import { getGalleryItems } from "@/lib/contentDb";
 import { normalizeImageSrc, isInternalImage } from "@/lib/imageUtils";
 

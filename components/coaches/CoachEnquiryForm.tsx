@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Send, MessageSquare, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
 import { Coach, formatWhatsAppDisplay } from "@/data/coaches";
+import { ACADEMY_DATA } from "@/data/academy";
 import { AGE_CATEGORIES } from "@/lib/constants";
 
 interface CoachEnquiryFormProps {
@@ -82,10 +83,9 @@ export function CoachEnquiryForm({ coach, initialCentres }: CoachEnquiryFormProp
       return;
     }
 
-    if (!hasWhatsApp) {
-      setErrorMessage("Direct WhatsApp enquiry is unavailable for this coach.");
-      return;
-    }
+    const targetWhatsApp = (coach.whatsappNumber && coach.whatsappNumber.trim())
+      ? coach.whatsappNumber.trim()
+      : ACADEMY_DATA.whatsappNumber;
 
     setIsSubmitting(true);
 
@@ -111,7 +111,7 @@ export function CoachEnquiryForm({ coach, initialCentres }: CoachEnquiryFormProp
       `${coachUrl}`,
     ].filter(Boolean).join("\n");
 
-    const whatsappUrl = `https://wa.me/${coach.whatsappNumber}?text=${encodeURIComponent(textLines)}`;
+    const whatsappUrl = `https://wa.me/${targetWhatsApp}?text=${encodeURIComponent(textLines)}`;
 
     setSubmitted(true);
     setIsSubmitting(false);

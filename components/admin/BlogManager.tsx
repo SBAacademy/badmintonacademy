@@ -17,7 +17,7 @@ import {
   User,
   Tag,
 } from "lucide-react";
-import { BlogPost, BLOG_POSTS } from "@/data/blog";
+import { BlogPost } from "@/data/blog";
 import { ImageUploadField } from "./ImageUploadField";
 
 const CATEGORIES = [
@@ -60,10 +60,10 @@ export function BlogManager() {
       if (data.success && Array.isArray(data.items)) {
         setPosts(data.items);
       } else {
-        setPosts(BLOG_POSTS);
+        setPosts([]);
       }
     } catch {
-      setPosts(BLOG_POSTS);
+      setPosts([]);
     } finally {
       setLoading(false);
     }

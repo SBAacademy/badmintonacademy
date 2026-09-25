@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getContentSection, saveContentSection } from "@/lib/contentDb";
-import { TESTIMONIALS, Testimonial } from "@/data/testimonials";
+import { Testimonial } from "@/data/testimonials";
 
 export async function POST(request: Request) {
   try {
@@ -16,7 +16,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const current = await getContentSection<Testimonial>("testimonials", TESTIMONIALS);
+    const current = await getContentSection<Testimonial>("testimonials", []);
 
     const parts = name.split(" ");
     let initials = "SA";

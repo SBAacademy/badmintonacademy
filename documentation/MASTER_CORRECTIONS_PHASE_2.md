@@ -62,7 +62,7 @@ To ensure Phase 2 development proceeds with surgical precision and does not rewr
    - *Architecture:* Honeypot bot protection, 10-digit telephone sanitization, UTM attribution, and lead token generation (`ENQ-*`).
 10. **Context-Aware WhatsApp Engine (`lib/whatsapp.ts`):**
     - *Status:* **KEEP / VERIFIED**.
-    - *Architecture:* Automatically formats pre-filled query text attributing the user's active branch and program. Verified telephone: `+91 94006 35548`.
+    - *Architecture:* Automatically formats pre-filled query text attributing the user's active branch and program. Verified telephone: `+91 79076 55513`.
 11. **Athletic Design Tokens & Motion Safety (`app/globals.css`):**
     - *Status:* **KEEP / VERIFIED**.
     - *Architecture:* Curated Court Black (`#080B10`), Deep Slate (`#0E141B`), and Athletic Lime (`#B8F000`) color tokens with strict `@media (prefers-reduced-motion: reduce)` accessibility overrides.

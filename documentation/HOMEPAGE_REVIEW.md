@@ -58,7 +58,7 @@ On the homepage, the application loads within [`app/layout.tsx`](file:///Users/m
 ---
 
 ### 2. Navbar ([`components/layout/Navbar.tsx`](file:///Users/mohammednibrasulhaqq/Documents/Web/S-A-BADMINTON-ACADEMY/components/layout/Navbar.tsx))
-* **Content Status:** Authentic brand identity (`S & A Badminton Academy`), custom vector badminton racket logo, verified phone number `+91 94006 35548`.
+* **Content Status:** Authentic brand identity (`S & A Badminton Academy`), custom vector badminton racket logo, verified phone number `+91 79076 55513`.
 * **UI & Typography:** Sticky header (`z-40`, `bg-[#080B10]/95 backdrop-blur-md`). Contrast-compliant navigation pills with active states.
 * **Desktop UX:** Zero-gap hover container with `pt-2` bridge and 180ms close buffer. Escape key and outside-click dismiss listeners implemented. Direct links inside dropdowns.
 * **Mobile UX:** Solid opaque drawer (`bg-[#080B10]`, `z-[100]`), full-width 48px touch targets, dedicated `openMobileMenu` state for accordion expansion.
@@ -161,7 +161,7 @@ On the homepage, the application loads within [`app/layout.tsx`](file:///Users/m
 ---
 
 ### 15. Footer ([`components/layout/Footer.tsx`](file:///Users/mohammednibrasulhaqq/Documents/Web/S-A-BADMINTON-ACADEMY/components/layout/Footer.tsx))
-* **Content Status:** Complete NAP (Name, Address, Phone: `+91 94006 35548`), crawlable links to all 4 centre pages (`/kadavanthra`, `/edappally`, `/kakkanad`, `/fourth-centre`), all 5 program pages, and legal policies.
+* **Content Status:** Complete NAP (Name, Address, Phone: `+91 79076 55513`), crawlable links to all 4 centre pages (`/kadavanthra`, `/edappally`, `/kakkanad`, `/fourth-centre`), all 5 program pages, and legal policies.
 
 ---
 
@@ -169,5 +169,5 @@ On the homepage, the application loads within [`app/layout.tsx`](file:///Users/m
 * **UX:** Fixed bottom sheet visible on screens < 1024px with 3 instant conversion buttons:
   - `WhatsApp` (Green pill, pre-filled WhatsApp link)
   - `Book Free Trial` (Lime pill, opens trial booking)
-  - `Call Desk` (Direct dial `tel:+919400635548`)
+  - `Call Desk` (Direct dial `tel:+917907655513`)
 * **Safe-Area Clearance:** Styled with `paddingBottom: "max(0.75rem, env(safe-area-inset-bottom))"`.

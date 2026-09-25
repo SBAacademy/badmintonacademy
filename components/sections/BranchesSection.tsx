@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { MapPin, Navigation, MessageCircle, ArrowRight, Clock, Phone } from "lucide-react";
-import { LOCATIONS, LocationData } from "@/data/locations";
+import type { LocationData } from "@/data/locations";
 import { Centre } from "@/data/centres";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { trackEvent } from "@/lib/analytics";
@@ -34,27 +34,25 @@ export function BranchesSection({ initialCentres }: { initialCentres?: Centre[] 
   }, []);
 
   const locationsList: LocationData[] = dynamicCentres.map((c) => {
-    const staticLoc = LOCATIONS[c.slug as keyof typeof LOCATIONS];
     const autoNeighborhoods = resolveAutomaticNeighborhoods(c.address, c.name);
     const morningTiming = c.openingHours?.morning
       ? `${c.openingHours.morning}${c.openingHours.evening ? ` | ${c.openingHours.evening}` : ""}`
       : "5:00 AM – 10:00 PM (All 7 Days)";
 
-    const primaryImage = c.image || c.courtImage || (staticLoc as any)?.image || "/images/badminton-arena.jpg";
+    const primaryImage = c.image || c.courtImage || "/images/badminton-arena.jpg";
 
     return {
-      ...(staticLoc || {}),
       ...c,
       slug: c.slug,
       name: c.name,
       shortName: c.shortName || c.name,
       district: c.district || "Kochi",
       address: c.address || "",
-      phone: c.phone || "+91 94006 35548",
-      phoneDisplay: c.phoneDisplay || c.phone || "+91 94006 35548",
+      phone: c.phone || "+91 79076 55513",
+      phoneDisplay: c.phoneDisplay || c.phone || "+91 79076 55513",
       email: c.email || "",
-      whatsapp: (c as any).whatsapp || "919400635548",
-      whatsappDisplay: (c as any).whatsappDisplay || "+91 94006 35548",
+      whatsapp: (c as any).whatsapp || "917907655513",
+      whatsappDisplay: (c as any).whatsappDisplay || "+91 79076 55513",
       googleMapsUrl: c.googleMapsUrl || `https://maps.google.com/?q=${encodeURIComponent(c.address || c.name + " Kochi")}`,
       image: primaryImage,
       gallery: (c as any).gallery?.length > 0 ? (c as any).gallery : [{ url: primaryImage, caption: c.name }],
@@ -70,12 +68,12 @@ export function BranchesSection({ initialCentres }: { initialCentres?: Centre[] 
       intro: {
         heading: c.name,
         subheading: c.shortName || "Premier Badminton Arena",
-        description: c.description || (staticLoc as any)?.intro?.description || "Dedicated badminton coaching and athletic conditioning arena in Kochi.",
+        description: c.description || "Dedicated badminton coaching and athletic conditioning arena in Kochi.",
         neighbourhoodsServed: autoNeighborhoods,
         connectivity: "Easily accessible from major transit corridors across Kochi",
       },
-      facilities: c.facilities || (staticLoc as any)?.facilities || [],
-      coaches: c.coaches || (staticLoc as any)?.coaches || [],
+      facilities: c.facilities || [],
+      coaches: c.coaches || [],
       programs: [],
       testimonials: c.testimonials || [],
       achievements: [],
@@ -261,7 +259,7 @@ export function BranchesSection({ initialCentres }: { initialCentres?: Centre[] 
                   </div>
                   <div className="text-white font-bold flex items-center gap-1.5">
                     <Phone className="w-3.5 h-3.5 text-[#B8F000]" />
-                    <span>{activeCentre.phoneDisplay || activeCentre.phone || "+91 94006 35548"}</span>
+                    <span>{activeCentre.phoneDisplay || activeCentre.phone || "+91 79076 55513"}</span>
                   </div>
                 </div>
               </div>
@@ -384,7 +382,7 @@ export function BranchesSection({ initialCentres }: { initialCentres?: Centre[] 
                         </div>
                         <div className="flex items-center gap-1.5 text-white font-medium">
                           <Phone className="w-3.5 h-3.5 text-[#B8F000] shrink-0" />
-                          <span>{loc.phoneDisplay || loc.phone || "+91 94006 35548"}</span>
+                          <span>{loc.phoneDisplay || loc.phone || "+91 79076 55513"}</span>
                         </div>
                       </div>
                     </div>

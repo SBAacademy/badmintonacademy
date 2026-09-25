@@ -310,7 +310,7 @@ export function EnquiryForm({
               required
               value={formData.phone}
               onChange={handleChange}
-              placeholder="e.g. +91 94006 XXXXX"
+              placeholder="e.g. +91 79076 XXXXX"
               className="w-full px-4 py-3 bg-[#07090D] border border-[#1F2937] text-white placeholder-[#6B7280] text-sm focus:outline-none focus:border-[#B8F000] transition-colors font-mono"
             />
           </div>

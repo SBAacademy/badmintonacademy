@@ -81,31 +81,6 @@ export async function initDb(): Promise<void> {
       );
     `;
 
-    // Check if table is empty, if so, seed from JSON
-    const countResult = (await sql`SELECT COUNT(*)::int as count FROM leads;`) as unknown as Array<{ count: number }>;
-    const count = countResult[0]?.count ?? 0;
-
-    if (count === 0) {
-      const fallbackLeads = await readFallbackLeads();
-      for (const lead of fallbackLeads) {
-        await sql`
-          INSERT INTO leads (
-            id, name, phone, email, age_category, branch, program, slot,
-            message, status, notes, utm_source, utm_medium, utm_campaign,
-            submitted_at, updated_at
-          ) VALUES (
-            ${lead.id}, ${lead.name}, ${lead.phone}, ${lead.email || null},
-            ${lead.ageCategory || null}, ${lead.branch}, ${lead.program},
-            ${lead.slot || null}, ${lead.message || ""}, ${lead.status || "NEW"},
-            ${lead.notes || ""}, ${lead.utmSource || null}, ${lead.utmMedium || null},
-            ${lead.utmCampaign || null},
-            ${lead.submittedAt ? new Date(lead.submittedAt).toISOString() : new Date().toISOString()},
-            ${lead.updatedAt ? new Date(lead.updatedAt).toISOString() : new Date().toISOString()}
-          ) ON CONFLICT (id) DO NOTHING;
-        `;
-      }
-    }
-
     isInitialized = true;
   } catch (err) {
     console.error("Neon DB init error (falling back to JSON store):", err);

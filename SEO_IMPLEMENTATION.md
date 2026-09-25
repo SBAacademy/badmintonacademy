@@ -82,7 +82,7 @@ On each location landing page:
    * `parentOrganization`: `{ "@id": "https://sabadmintonacademy.com/#academy" }`
    * `address`: `PostalAddress` with Street, City (Kochi), State (Kerala), Country (IN), PostalCode.
    * `geo`: `GeoCoordinates` with verified latitude and longitude.
-   * `telephone`: `+919400635548`
+   * `telephone`: `+917907655513`
    * `openingHoursSpecification`: Verified day/time arrays.
 2. **`BreadcrumbList`:**
    * Step 1: Home (`https://sabadmintonacademy.com`)
@@ -97,8 +97,8 @@ On each location landing page:
 
 The Name, Address, and Phone number are enforced consistently across the codebase via `data/locations.ts`:
 * **Name:** S & A Badminton Academy ([Location])
-* **Phone:** `+91 94006 35548` (Click-to-call: `tel:+919400635548`)
-* **WhatsApp:** `+91 94006 35548` (Pre-filled URL with contextual location query)
+* **Phone:** `+91 79076 55513` (Click-to-call: `tel:+917907655513`)
+* **WhatsApp:** `+91 79076 55513` (Pre-filled URL with contextual location query)
 * **NAP Verification Points:**
   1. Header & Navigation dropdown
   2. Location hero contact badges

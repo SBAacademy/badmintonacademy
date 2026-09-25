@@ -16,6 +16,7 @@ import {
   LayoutDashboard,
   Star,
   Target,
+  Calendar,
 } from "lucide-react";
 import { AdminTab } from "./AdminSidebar";
 
@@ -62,8 +63,15 @@ const TAB_INFO: Record<
     title: "Training Programs & Tracks",
     subtitle: "Manage training tracks, descriptions, and homepage program cards",
     icon: Target,
-    publicUrl: "/training",
-    publicLabel: "View Training Page",
+    publicUrl: "/programs",
+    publicLabel: "View Programs Page",
+  },
+  events: {
+    title: "Events & Tournaments",
+    subtitle: "Manage upcoming badminton tournaments, championships, camps, workshops & academy events",
+    icon: Calendar,
+    publicUrl: "/events",
+    publicLabel: "View Public Events",
   },
   gallery: {
     title: "Court & Training Gallery",

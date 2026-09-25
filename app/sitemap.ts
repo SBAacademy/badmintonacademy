@@ -1,6 +1,6 @@
 import { MetadataRoute } from "next";
 import { PROGRAMS } from "@/data/programs";
-import { getCentres, getCoaches, getBlogPosts } from "@/lib/contentDb";
+import { getCentres, getCoaches, getBlogPosts, getEvents } from "@/lib/contentDb";
 import { SITE_URL } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
@@ -14,6 +14,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_URL}/programs`, changeFrequency: "weekly", priority: 0.9 },
     { url: `${SITE_URL}/branches`, changeFrequency: "weekly", priority: 0.9 },
     { url: `${SITE_URL}/coaches`, changeFrequency: "weekly", priority: 0.9 },
+    { url: `${SITE_URL}/events`, changeFrequency: "weekly", priority: 0.9 },
     { url: `${SITE_URL}/achievements`, changeFrequency: "monthly", priority: 0.7 },
     { url: `${SITE_URL}/gallery`, changeFrequency: "monthly", priority: 0.7 },
     { url: `${SITE_URL}/testimonials`, changeFrequency: "monthly", priority: 0.7 },
@@ -63,11 +64,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.75,
   }));
 
+  // 6. Dynamic Published Events Pages (Single Source of Truth: events table)
+  // Excludes unpublished and cancelled events
+  const dynamicEvents = await getEvents({ includeUnpublished: false });
+  const eventRoutes: MetadataRoute.Sitemap = dynamicEvents
+    .filter((e) => e.status !== "CANCELLED" && Boolean(e.slug))
+    .map((event) => ({
+      url: `${SITE_URL}/events/${event.slug}`,
+      lastModified: event.updatedAt ? new Date(event.updatedAt) : undefined,
+      changeFrequency: "weekly",
+      priority: 0.85,
+    }));
+
   return [
     ...staticRoutes,
     ...centreRoutes,
     ...coachRoutes,
     ...programRoutes,
     ...blogRoutes,
+    ...eventRoutes,
   ];
 }

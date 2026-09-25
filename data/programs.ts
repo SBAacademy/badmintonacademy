@@ -84,7 +84,7 @@ export const PROGRAMS: Program[] = [
       },
       {
         question: "Can parents watch the coaching sessions?",
-        answer: "Yes, all our branches (Kadavanthra, Edappally, Kakkanad) feature elevated glass viewing galleries with seating and Wi-Fi for parents."
+        answer: "Yes, our training centres feature viewing galleries with comfortable seating and Wi-Fi for parents."
       },
       {
         question: "Is there a free trial assessment available?",
@@ -196,7 +196,7 @@ export const PROGRAMS: Program[] = [
       "Low impact on BWF-certified wooden spring cushion subflooring",
       "Specialized warm-up and cool-down protocols preventing next-day stiffness",
       "Corporate batch packages and inter-company weekend tournaments",
-      "Shower & locker facilities across Kadavanthra, Edappally, and Kakkanad"
+      "Shower & locker facilities across our Kochi training centres"
     ],
     suitableFor: [
       "IT and corporate executives seeking fun cardiovascular fitness",
@@ -271,7 +271,7 @@ export const PROGRAMS: Program[] = [
       },
       {
         question: "Does the academy provide transport between school and courts?",
-        answer: "We offer coordinated shuttle van routes connecting major schools in Kochi to our Kadavanthra and Edappally academies for our evening competitive squad."
+        answer: "We offer coordinated travel guidance connecting major student areas to our training academies in Kochi."
       }
     ]
   },
@@ -282,7 +282,7 @@ export const PROGRAMS: Program[] = [
     badge: "Seasonal Special",
     tagline: "Accelerated 4-Week Skill Boost with Guest Master Coaches",
     shortDescription: "High-energy vacation and holiday camps combining technical skill masterclasses, fitness bootcamps, and exciting tournament matches for all ages.",
-    fullDescription: "Our signature Vacation Intensive Camps run every Summer (April – May), Onam, and Christmas holidays across all three Kochi branches. The 4-week fast-track curriculum packs 3 months of technical learning into an exciting, intensive sports experience. Campers receive custom academy jerseys, participation certificates, and medals at our grand camp championship.",
+    fullDescription: "Our signature Vacation Intensive Camps run every Summer (April – May), Onam, and Christmas holidays across our Kochi training centres. The 4-week fast-track curriculum packs 3 months of technical learning into an exciting, intensive sports experience. Campers receive custom academy jerseys, participation certificates, and medals at our grand camp championship.",
     targetAge: "6 to 18 Years (Grouped by age and skill)",
     skillLevel: "Beginner, Intermediate & Advanced Tracks",
     duration: "2 Hours Daily (Monday through Saturday)",

@@ -4,7 +4,6 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { Clock, Calendar, User, ArrowLeft, ArrowRight, Tag } from "lucide-react";
-import { BLOG_POSTS } from "@/data/blog";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { SEOJsonLd } from "@/components/seo/SEOJsonLd";
 import { createMetadata, SITE_URL } from "@/lib/seo";

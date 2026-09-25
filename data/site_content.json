@@ -70,7 +70,7 @@
       "id": "sooraj-m-s",
       "slug": "sooraj-m-s",
       "name": "Sooraj M S",
-      "role": "Senior Badminton Coach",
+      "role": "Chief Badminton Coach",
       "bio": "Dedicated badminton trainer with extensive experience mentoring junior and adult athletes in Kochi.",
       "certifications": [
         "BWF Level 1 Certified Coach",
@@ -87,8 +87,7 @@
       "primaryBranch": "S & A Badminton Academy – Kadavanthra",
       "image": "/api/images/whatsapp_image_2026-09-13_at_1_1789383820075.jpeg",
       "images": [
-        "/api/images/whatsapp_image_2026-09-13_at_1_1789383820075.jpeg",
-        "/api/images/whatsapp_image_2026-09-13_at_1_1789383912492.jpeg"
+        "/api/images/whatsapp_image_2026-09-13_at_1_1789383820075.jpeg"
       ],
       "photos": [
         {
@@ -97,17 +96,8 @@
           "imageUrl": "/api/images/whatsapp_image_2026-09-13_at_1_1789383820075.jpeg",
           "sortOrder": 1,
           "isPrimary": true,
-          "createdAt": "2026-09-14T12:12:56.732468+00:00",
-          "updatedAt": "2026-09-14T12:12:56.732468+00:00"
-        },
-        {
-          "id": "photo_2",
-          "coachId": "sooraj-m-s",
-          "imageUrl": "/api/images/whatsapp_image_2026-09-13_at_1_1789383912492.jpeg",
-          "sortOrder": 2,
-          "isPrimary": false,
-          "createdAt": "2026-09-14T12:12:57.077255+00:00",
-          "updatedAt": "2026-09-14T12:12:57.077255+00:00"
+          "createdAt": "2026-09-24T09:08:56.638436+00:00",
+          "updatedAt": "2026-09-24T09:08:56.638436+00:00"
         }
       ],
       "whatsappNumber": null,
@@ -115,7 +105,7 @@
       "isPublished": true,
       "displayOrder": 1,
       "createdAt": "Thu Sep 10 2026 15:09:27 GMT+0530 (India Standard Time)",
-      "updatedAt": "Mon Sep 14 2026 17:42:55 GMT+0530 (India Standard Time)"
+      "updatedAt": "Thu Sep 24 2026 14:38:56 GMT+0530 (India Standard Time)"
     },
     {
       "id": "saniya-george-maijo",
@@ -151,7 +141,7 @@
       "isPublished": true,
       "displayOrder": 2,
       "createdAt": "Thu Sep 10 2026 15:09:26 GMT+0530 (India Standard Time)",
-      "updatedAt": "Mon Sep 14 2026 17:42:06 GMT+0530 (India Standard Time)"
+      "updatedAt": "Sat Sep 19 2026 10:48:53 GMT+0530 (India Standard Time)"
     },
     {
       "id": "robin-biju",
@@ -185,7 +175,7 @@
       "isPublished": true,
       "displayOrder": 3,
       "createdAt": "Thu Sep 10 2026 15:09:26 GMT+0530 (India Standard Time)",
-      "updatedAt": "Mon Sep 14 2026 17:42:07 GMT+0530 (India Standard Time)"
+      "updatedAt": "Sat Sep 19 2026 10:48:53 GMT+0530 (India Standard Time)"
     },
     {
       "id": "adithyan-s",
@@ -222,7 +212,7 @@
       "isPublished": true,
       "displayOrder": 4,
       "createdAt": "Thu Sep 10 2026 15:09:26 GMT+0530 (India Standard Time)",
-      "updatedAt": "Mon Sep 14 2026 17:42:07 GMT+0530 (India Standard Time)"
+      "updatedAt": "Sat Sep 19 2026 10:48:53 GMT+0530 (India Standard Time)"
     },
     {
       "id": "fayis",
@@ -258,7 +248,7 @@
       "isPublished": true,
       "displayOrder": 5,
       "createdAt": "Thu Sep 10 2026 15:09:27 GMT+0530 (India Standard Time)",
-      "updatedAt": "Mon Sep 14 2026 17:42:07 GMT+0530 (India Standard Time)"
+      "updatedAt": "Sat Sep 19 2026 10:48:53 GMT+0530 (India Standard Time)"
     }
   ],
   "achievements": [
@@ -5374,5 +5364,6 @@
       "publishDate": "January 16, 2025"
     }
   ],
-  "centres": []
+  "centres": [],
+  "events": []
 }

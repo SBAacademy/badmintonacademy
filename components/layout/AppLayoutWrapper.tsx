@@ -2,7 +2,6 @@
 
 import React from "react";
 import { usePathname } from "next/navigation";
-import { AnnouncementBar } from "@/components/layout/AnnouncementBar";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { MobileConversionBar } from "@/components/layout/MobileConversionBar";
@@ -17,7 +16,6 @@ export function AppLayoutWrapper({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <AnnouncementBar />
       <Navbar />
       <main className="flex-1 w-full">{children}</main>
       <Footer />

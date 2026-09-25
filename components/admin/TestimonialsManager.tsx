@@ -14,7 +14,7 @@ import {
   CheckCircle,
   MessageSquareQuote,
 } from "lucide-react";
-import { Testimonial, TESTIMONIALS } from "@/data/testimonials";
+import { Testimonial } from "@/data/testimonials";
 import { Centre } from "@/data/centres";
 
 export function TestimonialsManager() {
@@ -48,10 +48,10 @@ export function TestimonialsManager() {
       if (data.success && Array.isArray(data.items)) {
         setItems(data.items);
       } else {
-        setItems(TESTIMONIALS);
+        setItems([]);
       }
     } catch {
-      setItems(TESTIMONIALS);
+      setItems([]);
     } finally {
       setLoading(false);
     }

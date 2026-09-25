@@ -15,7 +15,7 @@ import {
   Calendar,
 } from "lucide-react";
 import Image from "next/image";
-import { Achievement, ACHIEVEMENTS } from "@/data/achievements";
+import { Achievement } from "@/data/achievements";
 import { ImageUploadField } from "./ImageUploadField";
 
 const CATEGORIES: Achievement["category"][] = [
@@ -53,10 +53,10 @@ export function AchievementsManager() {
       if (data.success && Array.isArray(data.items)) {
         setItems(data.items);
       } else {
-        setItems(ACHIEVEMENTS);
+        setItems([]);
       }
     } catch {
-      setItems(ACHIEVEMENTS);
+      setItems([]);
     } finally {
       setLoading(false);
     }

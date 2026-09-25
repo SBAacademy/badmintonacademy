@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight, MessageSquare, ArrowRight } from "lucide-react";
-import { Testimonial, TESTIMONIALS } from "@/data/testimonials";
+import { Testimonial } from "@/data/testimonials";
 
 // Configurable Autoplay Interval in Milliseconds (5.5 seconds per slide)
 const AUTOPLAY_INTERVAL = 5500;
@@ -17,7 +17,7 @@ export function ReviewsSliderSection({ initialReviews }: ReviewsSliderSectionPro
     if (initialReviews && initialReviews.length > 0) {
       return initialReviews.filter((r: any) => r.status === "APPROVED" || r.isApproved === true || (r.status !== "PENDING" && r.isApproved !== false));
     }
-    return TESTIMONIALS;
+    return [];
   });
 
   const [currentIndex, setCurrentIndex] = useState(0);

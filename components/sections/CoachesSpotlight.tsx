@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Camera } from "lucide-react";
-import { COACHES, Coach } from "@/data/coaches";
+import { Coach } from "@/data/coaches";
 import { getCoaches } from "@/lib/contentDb";
 
 export async function CoachesSpotlight({ initialCoaches }: { initialCoaches?: Coach[] }) {

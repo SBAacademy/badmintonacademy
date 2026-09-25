@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import { Star, Quote, CheckCircle, ShieldCheck } from "lucide-react";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { createMetadata } from "@/lib/seo";
-import { TESTIMONIALS } from "@/data/testimonials";
 import { FinalCTA } from "@/components/sections/FinalCTA";
 
 export const dynamic = "force-dynamic";

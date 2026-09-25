@@ -53,10 +53,10 @@ export function CentresManager() {
     city: "Kochi",
     pincode: "682020",
     address: "",
-    phone: "+91 94006 35548",
-    phoneDisplay: "+91 94006 35548",
-    whatsapp: "919400635548",
-    whatsappDisplay: "+91 94006 35548",
+    phone: "+91 79076 55513",
+    phoneDisplay: "+91 79076 55513",
+    whatsapp: "917907655513",
+    whatsappDisplay: "+91 79076 55513",
     email: "",
     googleMapsUrl: "",
     googleMapsEmbedUrl: "",
@@ -110,10 +110,10 @@ export function CentresManager() {
       city: "Kochi",
       pincode: "682020",
       address: "",
-      phone: "+91 94006 35548",
-      phoneDisplay: "+91 94006 35548",
-      whatsapp: "919400635548",
-      whatsappDisplay: "+91 94006 35548",
+      phone: "+91 79076 55513",
+      phoneDisplay: "+91 79076 55513",
+      whatsapp: "917907655513",
+      whatsappDisplay: "+91 79076 55513",
       email: "",
       googleMapsUrl: "",
       googleMapsEmbedUrl: "",
@@ -147,10 +147,10 @@ export function CentresManager() {
       city: centre.city || "Kochi",
       pincode: centre.pincode || centre.postalCode || "682020",
       address: centre.address || "",
-      phone: centre.phone || "+91 94006 35548",
-      phoneDisplay: centre.phoneDisplay || centre.phone || "+91 94006 35548",
-      whatsapp: centre.whatsapp || "919400635548",
-      whatsappDisplay: centre.whatsappDisplay || centre.whatsapp || "+91 94006 35548",
+      phone: centre.phone || "+91 79076 55513",
+      phoneDisplay: centre.phoneDisplay || centre.phone || "+91 79076 55513",
+      whatsapp: centre.whatsapp || "917907655513",
+      whatsappDisplay: centre.whatsappDisplay || centre.whatsapp || "+91 79076 55513",
       email: centre.email || "",
       googleMapsUrl: centre.googleMapsUrl || "",
       googleMapsEmbedUrl: centre.googleMapsEmbedUrl || "",
@@ -1042,7 +1042,7 @@ export function CentresManager() {
                           required
                           value={form.phone}
                           onChange={(e) => setForm({ ...form, phone: e.target.value, phoneDisplay: e.target.value })}
-                          placeholder="+91 94006 35548"
+                          placeholder="+91 79076 55513"
                           className="w-full px-3.5 h-10 bg-[#0D111A] border border-slate-800 rounded-xl text-white text-xs placeholder-slate-500 focus:outline-none focus:border-[#B8F000] focus:ring-1 focus:ring-[#B8F000]/30 transition-all font-mono"
                         />
                       </div>
@@ -1054,7 +1054,7 @@ export function CentresManager() {
                           required
                           value={form.whatsapp}
                           onChange={(e) => setForm({ ...form, whatsapp: e.target.value.replace(/\D/g, ""), whatsappDisplay: e.target.value })}
-                          placeholder="919400635548"
+                          placeholder="917907655513"
                           className="w-full px-3.5 h-10 bg-[#0D111A] border border-slate-800 rounded-xl text-white text-xs placeholder-slate-500 focus:outline-none focus:border-[#B8F000] focus:ring-1 focus:ring-[#B8F000]/30 transition-all font-mono"
                         />
                       </div>

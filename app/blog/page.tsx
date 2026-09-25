@@ -5,7 +5,6 @@ import Image from "next/image";
 import { Clock, Calendar, ArrowRight, User } from "lucide-react";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { createMetadata } from "@/lib/seo";
-import { BLOG_POSTS } from "@/data/blog";
 import { FinalCTA } from "@/components/sections/FinalCTA";
 
 export const metadata: Metadata = createMetadata({

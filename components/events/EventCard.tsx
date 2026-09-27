@@ -5,10 +5,9 @@ import Link from "next/link";
 import Image from "next/image";
 import {
   Calendar,
-  Clock,
   MapPin,
   ArrowRight,
-  ExternalLink,
+  MessageCircle,
   Star,
   Trophy,
 } from "lucide-react";
@@ -86,16 +85,11 @@ export function EventCard({ event, featuredLayout = false }: EventCardProps) {
               {/* Meta Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-[#1F2937] text-xs">
                 <div className="space-y-1">
-                  <div className="font-mono text-[10px] text-[#A8B0BA] uppercase">DATE &amp; TIME</div>
+                  <div className="font-mono text-[10px] text-[#A8B0BA] uppercase">EVENT DATE</div>
                   <div className="text-white font-bold flex items-center gap-1.5">
                     <Calendar className="w-3.5 h-3.5 text-[#B8F000]" />
                     <span>{formatEventDate(event.eventDate)}</span>
                   </div>
-                  {event.startTime && (
-                    <div className="text-[11px] text-[#A8B0BA] font-mono pl-5">
-                      {event.startTime} {event.endTime ? `– ${event.endTime}` : ""}
-                    </div>
-                  )}
                 </div>
 
                 <div className="space-y-1">
@@ -118,17 +112,15 @@ export function EventCard({ event, featuredLayout = false }: EventCardProps) {
                 <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform" />
               </Link>
 
-              {event.registrationUrl && (
-                <a
-                  href={event.registrationUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-3.5 bg-[#161F2C] hover:bg-[#1E293B] border border-[#1F2937] text-white font-bold text-xs uppercase tracking-wider rounded-xl transition-colors"
-                >
-                  <ExternalLink className="w-3.5 h-3.5 text-[#B8F000]" />
-                  <span>REGISTER NOW</span>
-                </a>
-              )}
+              <a
+                href={`https://wa.me/${(event.contact || "917907655513").replace(/[^0-9]/g, "")}?text=${encodeURIComponent(`Hi S&A Badminton Academy, I would like to enquire about ${event.title} on ${formatEventDate(event.eventDate)}.`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-5 py-3.5 bg-[#161F2C] hover:bg-[#1E293B] border border-[#1F2937] hover:border-[#25D366]/60 text-white font-bold text-xs uppercase tracking-wider rounded-xl transition-colors group/wa"
+              >
+                <MessageCircle className="w-3.5 h-3.5 text-[#25D366] group-hover/wa:scale-110 transition-transform" />
+                <span>ENQUIRE ON WHATSAPP</span>
+              </a>
             </div>
           </div>
         </div>
@@ -189,13 +181,6 @@ export function EventCard({ event, featuredLayout = false }: EventCardProps) {
               <span>{formatEventDate(event.eventDate)}</span>
             </div>
 
-            {event.startTime && (
-              <div className="flex items-center gap-2 font-mono text-[11px] text-[#A8B0BA]">
-                <Clock className="w-3.5 h-3.5 text-[#A8B0BA] shrink-0" />
-                <span>{event.startTime} {event.endTime ? `– ${event.endTime}` : ""}</span>
-              </div>
-            )}
-
             <div className="flex items-center gap-2 text-[11px] text-[#A8B0BA] truncate">
               <MapPin className="w-3.5 h-3.5 text-[#A8B0BA] shrink-0" />
               <span className="truncate">{event.venue}</span>
@@ -221,17 +206,15 @@ export function EventCard({ event, featuredLayout = false }: EventCardProps) {
             <ArrowRight className="w-3.5 h-3.5" />
           </Link>
 
-          {event.registrationUrl && (
-            <a
-              href={event.registrationUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[11px] font-mono text-[#A8B0BA] hover:text-white inline-flex items-center gap-1 uppercase"
-            >
-              <span>Register</span>
-              <ExternalLink className="w-3 h-3" />
-            </a>
-          )}
+          <a
+            href={`https://wa.me/${(event.contact || "917907655513").replace(/[^0-9]/g, "")}?text=${encodeURIComponent(`Hi S&A Badminton Academy, I would like to enquire about ${event.title} on ${formatEventDate(event.eventDate)}.`)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[11px] font-mono text-[#A8B0BA] hover:text-[#25D366] inline-flex items-center gap-1 uppercase transition-colors"
+          >
+            <MessageCircle className="w-3.5 h-3.5 text-[#25D366]" />
+            <span>Enquire</span>
+          </a>
         </div>
       </div>
     </div>

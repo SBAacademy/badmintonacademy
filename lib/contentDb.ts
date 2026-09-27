@@ -1668,7 +1668,7 @@ export async function getEvents(options: {
       WHERE 1=1
       ${includeUnpublished ? sql`` : sql`AND e.is_published = TRUE`}
       ${eventType && eventType !== "All" && eventType !== "ALL" ? sql`AND e.event_type = ${eventType}` : sql``}
-      ORDER BY e.event_date ASC, e.start_time ASC, e.display_order ASC;
+      ORDER BY e.event_date ASC, e.display_order ASC;
     `) as unknown as Record<string, unknown>[];
 
     if (!Array.isArray(rawRows) || rawRows.length === 0) {

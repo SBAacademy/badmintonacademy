@@ -5,7 +5,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
   Calendar,
-  Clock,
   MapPin,
   ExternalLink,
   MessageCircle,
@@ -43,20 +42,26 @@ export async function generateMetadata({
 
   if (!event) {
     return {
-      title: "Event Not Found | S & A Badminton Academy",
+      title: "Event Not Found | S&A Badminton Academy",
     };
   }
 
-  const title = `${event.title} | Badminton Tournament Kochi`;
-  const description =
-    event.description?.slice(0, 160) ||
-    `Register for ${event.title} scheduled on ${formatEventDate(event.eventDate)} at ${event.venue}. Organized by S & A Badminton Academy Kochi.`;
+  // Section 8: Target title format
+  // Academy Tournament 2026 | Badminton Tournament in Kochi | S&A Badminton Academy
+  const title = `${event.title} | Badminton Tournament in Kochi | S&A Badminton Academy`;
+
+  // Section 8: Dynamic meta description using real event information
+  // Example: Academy Tournament 2026 at S&A Badminton Academy, Kumbalanghi, Kochi. View tournament details, date, venue and event information.
+  const centrePart = event.centreName || (event.venue.toLowerCase().includes("kumbalanghi") ? "Kumbalanghi" : event.venue.toLowerCase().includes("kadavanthra") ? "Kadavanthra" : "");
+  const venueLocation = centrePart ? `${centrePart}, Kochi` : event.venue;
+  const description = `${event.title} at S&A Badminton Academy, ${venueLocation}. View tournament details, date, venue and event information.`;
+
   const canonicalUrl = `${SITE_URL}/events/${event.slug}`;
   const ogImage = event.image || `${SITE_URL}/images/hero-athlete.jpg`;
 
   return {
     title: {
-      absolute: `${event.title} | S & A Badminton Academy`,
+      absolute: title,
     },
     description,
     alternates: {
@@ -98,27 +103,37 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
   const statusConfig = EVENT_STATUS_LABELS[event.status] || EVENT_STATUS_LABELS.UPCOMING;
   const canonicalUrl = `${SITE_URL}/events/${event.slug}`;
 
+  // Clean date without inventing missing start/end times
+  const cleanStartDate = event.eventDate?.includes("T")
+    ? event.eventDate.split("T")[0]
+    : event.eventDate;
+
+  const venueName = event.centreName
+    ? `S&A Badminton Academy — ${event.centreName}`
+    : event.venue;
+
   // JSON-LD SportsEvent Schema Markup
   const eventSchema = {
     "@context": "https://schema.org",
     "@type": "SportsEvent",
     "@id": `${canonicalUrl}#event`,
     name: event.title,
-    description: event.description || event.title,
-    startDate: event.eventDate,
-    endDate: event.eventDate,
+    description: event.description || `${event.title} at ${venueName}, Kochi.`,
+    startDate: cleanStartDate,
     eventStatus:
       event.status === "CANCELLED"
         ? "https://schema.org/EventCancelled"
         : event.status === "COMPLETED"
         ? "https://schema.org/EventCompleted"
         : "https://schema.org/EventScheduled",
+    eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
     location: {
       "@type": "Place",
-      name: event.venue,
+      name: venueName,
       address: {
         "@type": "PostalAddress",
-        addressLocality: "Kochi",
+        streetAddress: event.venue,
+        addressLocality: event.centreName || "Kochi",
         addressRegion: "Kerala",
         addressCountry: "IN",
       },
@@ -129,20 +144,19 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
       name: ACADEMY_DATA.name,
       url: SITE_URL,
     },
-    offers: event.registrationUrl
-      ? {
-          "@type": "Offer",
-          url: event.registrationUrl,
-          availability:
-            event.status === "UPCOMING" || event.status === "ONGOING"
-              ? "https://schema.org/InStock"
-              : "https://schema.org/SoldOut",
-        }
-      : undefined,
+    offers: {
+      "@type": "Offer",
+      url: canonicalUrl,
+      availability:
+        event.status === "UPCOMING" || event.status === "ONGOING"
+          ? "https://schema.org/InStock"
+          : "https://schema.org/SoldOut",
+    },
   };
 
   const whatsappInquiryUrl = buildWhatsAppUrl({
-    customMessage: `Hello S&A Academy, I would like more information/registration details regarding the tournament "${event.title}" scheduled on ${formatEventDate(event.eventDate)}.`,
+    phone: event.contact ? event.contact.replace(/[^0-9]/g, "") : undefined,
+    customMessage: `Hello S&A Academy, I would like more information/registration details regarding "${event.title}" scheduled on ${formatEventDate(event.eventDate)}.`,
   });
 
   return (
@@ -153,7 +167,7 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
         dangerouslySetInnerHTML={{ __html: JSON.stringify(eventSchema) }}
       />
 
-      <div className="max-w-6xl 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-20 space-y-10">
+      <div className="max-w-6xl 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-20 space-y-8">
         {/* Navigation Breadcrumbs & Back Link */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#1F2937] pb-4">
           <Breadcrumbs
@@ -170,6 +184,36 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>Back to All Events</span>
           </Link>
+        </div>
+
+        {/* Primary Page Header with Single H1 & Supporting Information */}
+        <div className="space-y-3 pt-2 text-left border-b border-[#1F2937] pb-8">
+          <div className="flex flex-wrap items-center gap-2.5">
+            <span className="px-2.5 py-0.5 text-[11px] font-mono font-black uppercase rounded bg-[#B8F000] text-[#07090D] tracking-wider">
+              {badge.label}
+            </span>
+            <span className="text-xs font-mono font-bold tracking-wider text-[#A8B0BA] uppercase">
+              {event.centreName
+                ? `S&A BADMINTON ACADEMY — ${event.centreName.toUpperCase()}`
+                : "S&A BADMINTON ACADEMY"}
+            </span>
+          </div>
+
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black uppercase tracking-tight text-white leading-tight">
+            {event.title}
+          </h1>
+
+          <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-[#A8B0BA] pt-1">
+            <div className="flex items-center gap-1.5 text-white font-bold">
+              <Calendar className="w-4 h-4 text-[#B8F000]" />
+              <span>{formatEventDate(event.eventDate).toUpperCase()}</span>
+            </div>
+            <span>•</span>
+            <div className="flex items-center gap-1.5">
+              <MapPin className="w-4 h-4 text-[#B8F000]" />
+              <span>{event.venue}</span>
+            </div>
+          </div>
         </div>
 
         {/* Hero Banner Grid */}
@@ -250,13 +294,13 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
           {/* Right Column: Key Details & Registration Card */}
           <div className="lg:col-span-5 space-y-6 text-left">
             <div className="bg-[#0F141C] border border-[#1F2937] p-6 sm:p-8 rounded-3xl space-y-6 shadow-2xl sticky top-24">
-              <div className="space-y-2">
+              <div className="space-y-1">
                 <div className="font-mono text-xs text-[#B8F000] uppercase tracking-wider">
                   OFFICIAL FIXTURE
                 </div>
-                <h1 className="text-2xl sm:text-3xl font-black uppercase tracking-tight text-white leading-tight">
-                  {event.title}
-                </h1>
+                <h2 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-white leading-tight">
+                  Registration &amp; Summary
+                </h2>
               </div>
 
               {/* Schedule and Location Info */}
@@ -273,21 +317,6 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
                     </div>
                   </div>
                 </div>
-
-                {/* Time */}
-                {event.startTime && (
-                  <div className="flex items-start gap-3">
-                    <div className="p-2.5 bg-[#161F2C] rounded-xl border border-[#1F2937] text-[#B8F000] shrink-0">
-                      <Clock className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <div className="font-mono text-[10px] text-[#A8B0BA] uppercase">TIME</div>
-                      <div className="text-sm font-bold text-white mt-0.5 font-mono">
-                        {event.startTime} {event.endTime ? `– ${event.endTime}` : ""}
-                      </div>
-                    </div>
-                  </div>
-                )}
 
                 {/* Venue */}
                 <div className="flex items-start gap-3">
@@ -321,7 +350,7 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
                       <Phone className="w-5 h-5" />
                     </div>
                     <div>
-                      <div className="font-mono text-[10px] text-[#A8B0BA] uppercase">CONTACT &amp; QUERIES</div>
+                      <div className="font-mono text-[10px] text-[#A8B0BA] uppercase">DESK CONTACT / WHATSAPP</div>
                       <div className="text-sm font-bold text-white mt-0.5 font-mono">
                         {event.contact}
                       </div>
@@ -332,26 +361,14 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
 
               {/* Action Buttons */}
               <div className="space-y-3 pt-2">
-                {event.registrationUrl && (
-                  <a
-                    href={event.registrationUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full py-4 px-6 bg-[#B8F000] hover:bg-[#cbf722] text-[#07090D] font-black text-xs uppercase tracking-wider rounded-xl flex items-center justify-center gap-2 transition-all shadow-md group"
-                  >
-                    <span>REGISTER FOR TOURNAMENT</span>
-                    <ExternalLink className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                  </a>
-                )}
-
                 <a
                   href={whatsappInquiryUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full py-3.5 px-6 bg-[#161F2C] hover:bg-[#1E293B] border border-[#1F2937] text-white font-bold text-xs uppercase tracking-wider rounded-xl flex items-center justify-center gap-2 transition-colors"
+                  className="w-full py-4 px-6 bg-[#B8F000] hover:bg-[#cbf722] text-[#07090D] font-mono font-black text-xs uppercase tracking-wider rounded-xl flex items-center justify-center gap-2 transition-all shadow-md group"
                 >
-                  <MessageCircle className="w-4 h-4 text-[#22C55E]" />
-                  <span>INQUIRE VIA WHATSAPP</span>
+                  <MessageCircle className="w-4 h-4 text-[#07090D]" />
+                  <span>ENQUIRE ON WHATSAPP</span>
                 </a>
               </div>
 

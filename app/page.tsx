@@ -1,6 +1,7 @@
 import React from "react";
 import type { Metadata } from "next";
 import { HeroSection } from "@/components/hero/HeroSection";
+import { EventAnnouncement } from "@/components/sections/EventAnnouncement";
 import { PerformanceMarquee } from "@/components/sections/PerformanceMarquee";
 import { WhySA } from "@/components/sections/WhySA";
 import { ProgramsSection } from "@/components/sections/ProgramsSection";
@@ -48,6 +49,12 @@ export default async function HomePage() {
       {/* 01. Cinematic Athletic Hero */}
       <HeroSection initialCentres={centres} />
 
+      {/* Dynamic Event Announcement Bar (Teaser) */}
+      <EventAnnouncement initialEvents={upcomingEvents} />
+
+      {/* Full Events & Tournaments Section (Hidden if 0 upcoming events) */}
+      <UpcomingEventsSection initialEvents={upcomingEvents} />
+
       {/* 02. Performance Ticker Marquee */}
       <PerformanceMarquee />
 
@@ -68,9 +75,6 @@ export default async function HomePage() {
 
       {/* 08. Trophy Wall Tournament Archive */}
       <AchievementsSection />
-
-      {/* 09. Dynamic Upcoming Events & Tournaments (Hidden if 0 events) */}
-      <UpcomingEventsSection initialEvents={upcomingEvents} />
 
       {/* 10. Court Action Visual Gallery */}
       <GalleryPreview />

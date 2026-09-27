@@ -63,6 +63,7 @@ export async function POST(request: Request) {
     revalidatePath("/events");
     revalidatePath(`/events/${saved.slug}`);
     revalidatePath("/sitemap.xml");
+    revalidatePath("/tournaments-sitemap.xml");
 
     return NextResponse.json({
       success: true,

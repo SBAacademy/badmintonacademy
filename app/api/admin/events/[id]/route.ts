@@ -76,6 +76,7 @@ export async function PUT(
       revalidatePath(`/events/${existing.slug}`);
     }
     revalidatePath("/sitemap.xml");
+    revalidatePath("/tournaments-sitemap.xml");
 
     return NextResponse.json({
       success: true,
@@ -126,6 +127,7 @@ export async function PATCH(
     revalidatePath("/events");
     revalidatePath(`/events/${updated.slug}`);
     revalidatePath("/sitemap.xml");
+    revalidatePath("/tournaments-sitemap.xml");
 
     return NextResponse.json({
       success: true,
@@ -158,6 +160,7 @@ export async function DELETE(
       revalidatePath(`/events/${existing.slug}`);
     }
     revalidatePath("/sitemap.xml");
+    revalidatePath("/tournaments-sitemap.xml");
 
     return NextResponse.json({
       success: true,

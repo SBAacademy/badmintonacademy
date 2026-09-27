@@ -80,12 +80,9 @@ export function EventsManager() {
     description: "",
     eventType: "TOURNAMENT",
     eventDate: new Date().toISOString().split("T")[0],
-    startTime: "09:00 AM",
-    endTime: "05:00 PM",
     venue: "S & A Badminton Arena, Kadavanthra",
     centreSlug: "",
     image: "",
-    registrationUrl: "",
     contact: "+91 79076 55513",
     status: "UPCOMING",
     isFeatured: false,
@@ -137,12 +134,9 @@ export function EventsManager() {
       description: "",
       eventType: "TOURNAMENT",
       eventDate: today,
-      startTime: "09:00 AM",
-      endTime: "05:00 PM",
       venue: centres.length > 0 ? centres[0].name : "S & A Badminton Arena, Kadavanthra",
       centreSlug: centres.length > 0 ? centres[0].slug : "",
       image: "/images/badminton-arena.jpg",
-      registrationUrl: "",
       contact: "+91 79076 55513",
       status: "UPCOMING",
       isFeatured: false,
@@ -185,13 +179,20 @@ export function EventsManager() {
     setSaving(true);
     setFeedback(null);
 
+    const payload = {
+      ...form,
+      startTime: null,
+      endTime: null,
+      registrationUrl: null,
+    };
+
     try {
       if (editingEvent) {
         // Update existing
         const res = await fetch(`/api/admin/events/${editingEvent.id}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(form),
+          body: JSON.stringify(payload),
         });
         const data = await res.json();
         if (data.success) {
@@ -206,7 +207,7 @@ export function EventsManager() {
         const res = await fetch("/api/admin/events", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(form),
+          body: JSON.stringify(payload),
         });
         const data = await res.json();
         if (data.success) {
@@ -539,13 +540,6 @@ export function EventsManager() {
                         {formatEventDate(evt.eventDate)}
                       </span>
 
-                      {evt.startTime && (
-                        <span className="flex items-center gap-1.5 font-mono text-[11px]">
-                          <Clock className="w-3.5 h-3.5 text-[#A8B0BA]" />
-                          {evt.startTime} {evt.endTime ? `– ${evt.endTime}` : ""}
-                        </span>
-                      )}
-
                       <span className="flex items-center gap-1.5 truncate max-w-xs text-[11px]">
                         <MapPin className="w-3.5 h-3.5 text-[#A8B0BA]" />
                         {evt.venue}
@@ -700,46 +694,18 @@ export function EventsManager() {
                 </div>
               </div>
 
-              {/* Date, Start Time & End Time */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div className="space-y-1.5">
-                  <label className="font-bold text-white uppercase tracking-wider block">
-                    Event Date <span className="text-red-400">*</span>
-                  </label>
-                  <input
-                    type="date"
-                    required
-                    value={form.eventDate || ""}
-                    onChange={(e) => setForm({ ...form, eventDate: e.target.value })}
-                    className="w-full bg-[#161F2C] border border-[#1F2937] text-white px-4 py-2.5 rounded-xl text-xs focus:outline-none focus:border-[#B8F000]"
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="font-bold text-white uppercase tracking-wider block">
-                    Start Time
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="09:00 AM"
-                    value={form.startTime || ""}
-                    onChange={(e) => setForm({ ...form, startTime: e.target.value })}
-                    className="w-full bg-[#161F2C] border border-[#1F2937] text-white px-4 py-2.5 rounded-xl text-xs focus:outline-none focus:border-[#B8F000]"
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="font-bold text-white uppercase tracking-wider block">
-                    End Time
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="06:00 PM"
-                    value={form.endTime || ""}
-                    onChange={(e) => setForm({ ...form, endTime: e.target.value })}
-                    className="w-full bg-[#161F2C] border border-[#1F2937] text-white px-4 py-2.5 rounded-xl text-xs focus:outline-none focus:border-[#B8F000]"
-                  />
-                </div>
+              {/* Event Date */}
+              <div className="space-y-1.5">
+                <label className="font-bold text-white uppercase tracking-wider block">
+                  Event Date <span className="text-red-400">*</span>
+                </label>
+                <input
+                  type="date"
+                  required
+                  value={form.eventDate || ""}
+                  onChange={(e) => setForm({ ...form, eventDate: e.target.value })}
+                  className="w-full bg-[#161F2C] border border-[#1F2937] text-white px-4 py-2.5 rounded-xl text-xs focus:outline-none focus:border-[#B8F000]"
+                />
               </div>
 
               {/* Venue & Associated Centre */}
@@ -751,7 +717,7 @@ export function EventsManager() {
                   <input
                     type="text"
                     required
-                    placeholder="e.g. Rajiv Gandhi Indoor Stadium / S&A Arena"
+                    placeholder="e.g. S & A Badminton Academy, Kumbalanghi"
                     value={form.venue || ""}
                     onChange={(e) => setForm({ ...form, venue: e.target.value })}
                     className="w-full bg-[#161F2C] border border-[#1F2937] text-white px-4 py-2.5 rounded-xl text-xs focus:outline-none focus:border-[#B8F000]"
@@ -791,33 +757,21 @@ export function EventsManager() {
                 />
               </div>
 
-              {/* Registration Link & Contact */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-1.5">
-                  <label className="font-bold text-white uppercase tracking-wider block">
-                    Registration URL (Google Form / External Link)
-                  </label>
-                  <input
-                    type="url"
-                    placeholder="https://forms.gle/... or tournament website"
-                    value={form.registrationUrl || ""}
-                    onChange={(e) => setForm({ ...form, registrationUrl: e.target.value })}
-                    className="w-full bg-[#161F2C] border border-[#1F2937] text-white px-4 py-2.5 rounded-xl text-xs focus:outline-none focus:border-[#B8F000]"
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="font-bold text-white uppercase tracking-wider block">
-                    Desk Contact / WhatsApp
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="+91 79076 55513 / events@sabadminton.com"
-                    value={form.contact || ""}
-                    onChange={(e) => setForm({ ...form, contact: e.target.value })}
-                    className="w-full bg-[#161F2C] border border-[#1F2937] text-white px-4 py-2.5 rounded-xl text-xs focus:outline-none focus:border-[#B8F000]"
-                  />
-                </div>
+              {/* Desk Contact / WhatsApp */}
+              <div className="space-y-1.5">
+                <label className="font-bold text-white uppercase tracking-wider block">
+                  Desk Contact / WhatsApp
+                </label>
+                <input
+                  type="text"
+                  placeholder="+91 79076 55513 / events@sabadminton.com"
+                  value={form.contact || ""}
+                  onChange={(e) => setForm({ ...form, contact: e.target.value })}
+                  className="w-full bg-[#161F2C] border border-[#1F2937] text-white px-4 py-2.5 rounded-xl text-xs focus:outline-none focus:border-[#B8F000]"
+                />
+                <span className="text-[10px] text-[#A8B0BA] block">
+                  Direct phone / WhatsApp for participant registration queries and entries.
+                </span>
               </div>
 
               {/* Description & Rules */}

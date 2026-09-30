@@ -1,13 +1,22 @@
 import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { getEvents, saveEventRecord } from "@/lib/contentDb";
+import { requireAuth } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 // GET /api/admin/events - Admin view of all events
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    const auth = await requireAuth(request);
+    if (!auth.authorized) {
+      return NextResponse.json(
+        { success: false, error: auth.error },
+        { status: auth.status }
+      );
+    }
+
     const events = await getEvents({ includeUnpublished: true });
 
     return NextResponse.json(
@@ -36,6 +45,14 @@ export async function GET() {
 // POST /api/admin/events - Create new event
 export async function POST(request: Request) {
   try {
+    const auth = await requireAuth(request, ["SUPER_ADMIN", "ADMIN", "CONTENT_MANAGER"]);
+    if (!auth.authorized) {
+      return NextResponse.json(
+        { success: false, error: auth.error },
+        { status: auth.status }
+      );
+    }
+
     const body = await request.json();
 
     if (!body.title || !body.title.trim()) {

@@ -120,7 +120,20 @@ export default async function LocationPage({ params }: LocationPageProps) {
     latitude: dynamicCentre.latitude ?? null,
     longitude: dynamicCentre.longitude ?? null,
     googleMapsUrl: dynamicCentre.googleMapsUrl || `https://maps.google.com/?q=${encodeURIComponent(dynamicCentre.address || dynamicCentre.name + " Kochi")}`,
-    googleMapsEmbedUrl: dynamicCentre.googleMapsEmbedUrl || "",
+    googleMapsEmbedUrl: (() => {
+      let rawEmbed = dynamicCentre.googleMapsEmbedUrl?.trim();
+      if (rawEmbed) {
+        const iframeMatch = rawEmbed.match(/src=["']([^"']+)["']/i);
+        if (iframeMatch) {
+          rawEmbed = iframeMatch[1];
+        }
+        if (rawEmbed) return rawEmbed;
+      }
+      const mapQuery = (dynamicCentre.latitude && dynamicCentre.longitude)
+        ? `${dynamicCentre.latitude},${dynamicCentre.longitude}`
+        : (dynamicCentre.address || `${dynamicCentre.name || "Badminton Academy"} ${dynamicCentre.city || "Kochi"}`);
+      return `https://maps.google.com/maps?q=${encodeURIComponent(mapQuery)}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
+    })(),
     googleBusinessProfileUrl: (dynamicCentre as any)?.googleBusinessProfileUrl || null,
     gallery: (dynamicCentre.gallery && dynamicCentre.gallery.length > 0)
       ? dynamicCentre.gallery
@@ -736,16 +749,33 @@ export default async function LocationPage({ params }: LocationPageProps) {
             {/* Embedded Google Map */}
             <div className="lg:col-span-7">
               <div className="rounded-2xl overflow-hidden border border-[#26313D] h-[380px] lg:h-[440px] w-full relative bg-[#121A23]">
-                <iframe
-                  title={`Google Maps location for ${location.name}`}
-                  src={location.googleMapsEmbedUrl}
-                  width="100%"
-                  height="100%"
-                  style={{ border: 0, filter: "invert(90%) hue-rotate(180deg)" }}
-                  allowFullScreen
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                />
+                {location.googleMapsEmbedUrl ? (
+                  <iframe
+                    title={`Google Maps location for ${location.name}`}
+                    src={location.googleMapsEmbedUrl}
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0, filter: "invert(90%) hue-rotate(180deg)" }}
+                    allowFullScreen
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  />
+                ) : (
+                  <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center">
+                    <Navigation className="w-10 h-10 text-[#B8F000] mb-3 opacity-60" />
+                    <p className="text-sm font-semibold text-[#F8FAFC] mb-1">{location.name}</p>
+                    <p className="text-xs text-[#A7B0BC] max-w-sm mb-4">{location.address}</p>
+                    <a
+                      href={location.googleMapsUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#B8F000] text-[#0A0E14] font-bold text-xs uppercase tracking-wider hover:bg-[#cbf533] transition-colors"
+                    >
+                      <span>Open Google Maps Directions</span>
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
+                  </div>
+                )}
               </div>
             </div>
 

@@ -10,6 +10,7 @@
     "generate:pdf": "node generate-pdf.mjs",
     "generate-blog": "node scripts/generate-and-seed-blog.mjs",
     "validate-blog": "node scripts/validate-blog.mjs",
+    "setup:admin": "node --env-file=.env scripts/setup-super-admin.mjs",
     "test": "node generate-pdf.mjs"
   },
   "dependencies": {

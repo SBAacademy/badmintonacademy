@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { neon } from "@neondatabase/serverless";
 import fs from "fs";
 import path from "path";
+import { requireAuth } from "@/lib/auth";
 
 // Helper for Neon DB connection
 function getDb() {
@@ -34,6 +35,14 @@ async function ensureTable(sql: any) {
 
 export async function POST(request: NextRequest) {
   try {
+    const auth = await requireAuth(request, ["SUPER_ADMIN", "ADMIN", "CONTENT_MANAGER"]);
+    if (!auth.authorized) {
+      return NextResponse.json(
+        { success: false, error: auth.error },
+        { status: auth.status }
+      );
+    }
+
     const formData = await request.formData();
     const file = formData.get("file") as File | null;
 

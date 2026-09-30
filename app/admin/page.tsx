@@ -1,14 +1,16 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Lock, ShieldCheck, ArrowRight } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { ShieldCheck, ShieldAlert } from "lucide-react";
 import { LeadItem } from "@/lib/db";
-import { AdminSidebar, AdminTab } from "@/components/admin/AdminSidebar";
+import { AdminSidebar, AdminTab, CurrentUser } from "@/components/admin/AdminSidebar";
 import { AdminHeader } from "@/components/admin/AdminHeader";
 import { AdminOverview } from "@/components/admin/AdminOverview";
 import { AdminLeadsManager } from "@/components/admin/AdminLeadsManager";
 import { AdminLeadDrawer } from "@/components/admin/AdminLeadDrawer";
 import { AdminAddLeadModal } from "@/components/admin/AdminAddLeadModal";
+import { ChangePasswordModal } from "@/components/admin/ChangePasswordModal";
 
 // Modular CMS Managers
 import { GalleryManager } from "@/components/admin/GalleryManager";
@@ -21,10 +23,13 @@ import { ProgramsManager } from "@/components/admin/ProgramsManager";
 import { EventsManager } from "@/components/admin/EventsManager";
 
 export default function AdminDashboardPage() {
-  // Authentication State
+  const router = useRouter();
+
+  // Authentication & Session State
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [pinInput, setPinInput] = useState("");
-  const [pinError, setPinError] = useState(false);
+  const [isVerifyingAuth, setIsVerifyingAuth] = useState(true);
+  const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
+  const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
 
   // Active Tab / Section
   const [activeTab, setActiveTab] = useState<AdminTab>("overview");
@@ -39,19 +44,55 @@ export default function AdminDashboardPage() {
   const [selectedLead, setSelectedLead] = useState<LeadItem | null>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
-  // Check existing session
+  // Verify server-side authenticated session on mount
   useEffect(() => {
-    const auth = sessionStorage.getItem("sa_crm_auth");
-    if (auth === "true") {
-      setIsAuthenticated(true);
-    }
-  }, []);
+    let mounted = true;
 
-  // Fetch inquiries
+    async function verifySession() {
+      try {
+        const res = await fetch("/api/admin/auth/me", {
+          cache: "no-store",
+          headers: { "Cache-Control": "no-cache" },
+        });
+
+        if (!res.ok) {
+          router.replace("/admin/login");
+          return;
+        }
+
+        const data = await res.json();
+        if (!data.success || !data.data?.user) {
+          router.replace("/admin/login");
+          return;
+        }
+
+        if (mounted) {
+          setCurrentUser(data.data.user);
+          setIsAuthenticated(true);
+          setIsVerifyingAuth(false);
+        }
+      } catch (err) {
+        console.error("Session verification failed:", err);
+        router.replace("/admin/login");
+      }
+    }
+
+    verifySession();
+
+    return () => {
+      mounted = false;
+    };
+  }, [router]);
+
+  // Fetch inquiries (only once session is established)
   const fetchLeads = async () => {
     setLoadingLeads(true);
     try {
       const res = await fetch("/api/enquiries");
+      if (res.status === 401 || res.status === 403) {
+        window.location.replace("/admin/login");
+        return;
+      }
       const data = await res.json();
       if (data.success && Array.isArray(data.leads)) {
         setLeads(data.leads);
@@ -76,22 +117,18 @@ export default function AdminDashboardPage() {
     }
   }, [isAuthenticated]);
 
-  // Auth Handler
-  const handlePinSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (pinInput === "1234" || pinInput === "9400") {
-      setIsAuthenticated(true);
-      sessionStorage.setItem("sa_crm_auth", "true");
-      setPinError(false);
-    } else {
-      setPinError(true);
+  // Terminate session, clear auth cookies, and redirect
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/admin/auth/logout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+    } catch (err) {
+      console.error("Failed to call logout endpoint:", err);
     }
-  };
-
-  const handleLogout = () => {
-    setIsAuthenticated(false);
-    sessionStorage.removeItem("sa_crm_auth");
-    setPinInput("");
+    // Hard navigate to prevent browser back-button caching
+    window.location.replace("/admin/login");
   };
 
   // Status Change (Optimistic + Backend)
@@ -266,57 +303,22 @@ export default function AdminDashboardPage() {
   const newLeadsCount = leads.filter((l) => l.status === "NEW").length;
 
   // -------------------------------------------------------------
-  // Clean, Simple Auth Unlock Screen
+  // Clean, Minimal Session Verification Loader
   // -------------------------------------------------------------
-  if (!isAuthenticated) {
+  if (isVerifyingAuth || !isAuthenticated) {
     return (
-      <div className="min-h-screen bg-[#07090D] flex items-center justify-center p-4">
-        <div className="max-w-md w-full bg-[#0D111A] border border-slate-800 rounded-3xl p-8 space-y-6 text-center shadow-2xl relative overflow-hidden">
-          <div className="absolute top-0 inset-x-0 h-1.5 bg-[#B8F000]" />
-
-          <div className="w-16 h-16 rounded-2xl bg-[#B8F000]/10 border border-[#B8F000]/30 text-[#B8F000] flex items-center justify-center mx-auto shadow-inner">
-            <Lock className="w-7 h-7" />
+      <div className="min-h-screen bg-[#07090D] flex flex-col items-center justify-center p-4">
+        <div className="text-center space-y-4">
+          <div className="w-16 h-16 rounded-2xl bg-[#0D111A] border border-slate-800 text-[#B8F000] flex items-center justify-center mx-auto shadow-2xl relative">
+            <div className="w-6 h-6 border-2 border-[#B8F000] border-t-transparent rounded-full animate-spin" />
           </div>
-
-          <div className="space-y-2">
-            <h1 className="text-2xl font-black text-white tracking-tight">
+          <div>
+            <h2 className="text-lg font-bold text-white tracking-tight">
               S&amp;A Badminton Academy
-            </h1>
-            <p className="text-sm text-slate-400">
-              Admin &amp; Admissions Desk
+            </h2>
+            <p className="text-xs text-slate-400 mt-1">
+              Verifying administrative session...
             </p>
-            <p className="text-xs text-slate-500">
-              Enter authorized PIN to view student inquiries and manage website content.
-            </p>
-          </div>
-
-          <form onSubmit={handlePinSubmit} className="space-y-4">
-            <input
-              type="password"
-              value={pinInput}
-              onChange={(e) => setPinInput(e.target.value)}
-              placeholder="Enter PIN (e.g. 1234)"
-              autoFocus
-              className="w-full text-center tracking-[0.4em] font-mono text-2xl py-3 px-4 bg-[#090C12] border border-slate-800 rounded-xl text-white focus:outline-none focus:border-[#B8F000]"
-            />
-
-            {pinError && (
-              <div className="text-rose-400 text-xs font-semibold">
-                Incorrect PIN. Default access PIN is: 1234
-              </div>
-            )}
-
-            <button
-              type="submit"
-              className="w-full py-3.5 rounded-xl bg-[#B8F000] hover:bg-[#cbf722] text-black font-bold text-sm tracking-wide transition-all shadow-md cursor-pointer flex items-center justify-center gap-2"
-            >
-              <span>Unlock Admin Panel</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
-          </form>
-
-          <div className="text-xs text-slate-500 pt-2 border-t border-slate-800/80">
-            Kochi Centres: Kadavanthra &bull; Edappally &bull; Kakkanad
           </div>
         </div>
       </div>
@@ -335,6 +337,8 @@ export default function AdminDashboardPage() {
         newLeadsCount={newLeadsCount}
         totalLeadsCount={leads.length}
         onLogout={handleLogout}
+        currentUser={currentUser}
+        onOpenChangePassword={() => setIsChangePasswordOpen(true)}
         mobileOpen={mobileNavOpen}
         onCloseMobile={() => setMobileNavOpen(false)}
       />
@@ -400,6 +404,12 @@ export default function AdminDashboardPage() {
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
         onAddLead={handleAddLead}
+      />
+
+      {/* Admin Change Password Modal */}
+      <ChangePasswordModal
+        isOpen={isChangePasswordOpen}
+        onClose={() => setIsChangePasswordOpen(false)}
       />
     </div>
   );

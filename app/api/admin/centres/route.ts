@@ -1,12 +1,21 @@
 import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { getCentres, saveCentreRecord } from "@/lib/contentDb";
+import { requireAuth } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export async function GET(request: Request) {
   try {
+    const auth = await requireAuth(request);
+    if (!auth.authorized) {
+      return NextResponse.json(
+        { success: false, error: auth.error },
+        { status: auth.status }
+      );
+    }
+
     const { searchParams } = new URL(request.url);
     const includeInactive = searchParams.get("includeInactive") !== "false";
     const centres = await getCentres({ includeInactive });
@@ -39,6 +48,14 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
+    const auth = await requireAuth(request, ["SUPER_ADMIN", "ADMIN"]);
+    if (!auth.authorized) {
+      return NextResponse.json(
+        { success: false, error: auth.error },
+        { status: auth.status }
+      );
+    }
+
     const body = await request.json();
 
     if (!body.name || !body.name.trim()) {

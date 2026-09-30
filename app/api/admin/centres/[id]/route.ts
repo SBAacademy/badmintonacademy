@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { getCentreBySlug, saveCentreRecord, deleteCentreRecord, getCentres } from "@/lib/contentDb";
+import { requireAuth } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -10,6 +11,14 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const auth = await requireAuth(request);
+    if (!auth.authorized) {
+      return NextResponse.json(
+        { success: false, error: auth.error },
+        { status: auth.status }
+      );
+    }
+
     const { id } = await params;
     const centre = await getCentreBySlug(id);
 
@@ -47,6 +56,14 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const auth = await requireAuth(request, ["SUPER_ADMIN", "ADMIN"]);
+    if (!auth.authorized) {
+      return NextResponse.json(
+        { success: false, error: auth.error },
+        { status: auth.status }
+      );
+    }
+
     const { id } = await params;
     const body = await request.json();
 
@@ -86,6 +103,14 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const auth = await requireAuth(request, ["SUPER_ADMIN", "ADMIN"]);
+    if (!auth.authorized) {
+      return NextResponse.json(
+        { success: false, error: auth.error },
+        { status: auth.status }
+      );
+    }
+
     const { id } = await params;
     const body = await request.json();
 
@@ -136,6 +161,14 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const auth = await requireAuth(request, ["SUPER_ADMIN", "ADMIN"]);
+    if (!auth.authorized) {
+      return NextResponse.json(
+        { success: false, error: auth.error },
+        { status: auth.status }
+      );
+    }
+
     const { id } = await params;
     const { searchParams } = new URL(request.url);
     const softDelete = searchParams.get("softDelete") === "true";

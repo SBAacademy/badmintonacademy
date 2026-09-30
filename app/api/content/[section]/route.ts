@@ -17,6 +17,7 @@ import {
   deleteProgramRecord,
   getTestimonials,
 } from "@/lib/contentDb";
+import { requireAuth } from "@/lib/auth";
 import type { Coach } from "@/data/coaches";
 
 const VALID_SECTIONS: ContentSectionKey[] = [
@@ -126,6 +127,14 @@ export async function POST(
   { params }: { params: Promise<{ section: string }> }
 ) {
   try {
+    const auth = await requireAuth(request, ["SUPER_ADMIN", "ADMIN", "CONTENT_MANAGER"]);
+    if (!auth.authorized) {
+      return NextResponse.json(
+        { success: false, error: auth.error },
+        { status: auth.status }
+      );
+    }
+
     const { section } = await params;
 
     if (!VALID_SECTIONS.includes(section as ContentSectionKey)) {
@@ -258,6 +267,14 @@ export async function PUT(
   { params }: { params: Promise<{ section: string }> }
 ) {
   try {
+    const auth = await requireAuth(request, ["SUPER_ADMIN", "ADMIN", "CONTENT_MANAGER"]);
+    if (!auth.authorized) {
+      return NextResponse.json(
+        { success: false, error: auth.error },
+        { status: auth.status }
+      );
+    }
+
     const { section } = await params;
 
     if (!VALID_SECTIONS.includes(section as ContentSectionKey)) {
@@ -414,6 +431,14 @@ export async function DELETE(
   { params }: { params: Promise<{ section: string }> }
 ) {
   try {
+    const auth = await requireAuth(request, ["SUPER_ADMIN", "ADMIN", "CONTENT_MANAGER"]);
+    if (!auth.authorized) {
+      return NextResponse.json(
+        { success: false, error: auth.error },
+        { status: auth.status }
+      );
+    }
+
     const { section } = await params;
 
     if (!VALID_SECTIONS.includes(section as ContentSectionKey)) {

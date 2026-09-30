@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { neon } from "@neondatabase/serverless";
-import { verifyPassword, createAccessToken, createRefreshToken } from "@/lib/auth";
+import { verifyPassword, createAccessToken, createRefreshToken, setAuthCookies } from "@/lib/auth";
 import { logAuditEvent } from "@/lib/audit";
 
 function getSql() {
@@ -11,12 +11,15 @@ function getSql() {
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
+    const body = await request.json().catch(() => ({}));
     const { email, password } = body;
+
+    // Generic error constant to prevent account enumeration
+    const GENERIC_ERROR = "Invalid email or password.";
 
     if (!email || !password) {
       return NextResponse.json(
-        { success: false, error: "Email and password are required." },
+        { success: false, error: GENERIC_ERROR },
         { status: 400 }
       );
     }
@@ -38,7 +41,7 @@ export async function POST(request: Request) {
 
     if (rows.length === 0) {
       return NextResponse.json(
-        { success: false, error: "Invalid credentials." },
+        { success: false, error: GENERIC_ERROR },
         { status: 401 }
       );
     }
@@ -47,20 +50,20 @@ export async function POST(request: Request) {
 
     if (!user.is_active) {
       return NextResponse.json(
-        { success: false, error: "Account has been deactivated. Please contact Super Admin." },
-        { status: 403 }
+        { success: false, error: GENERIC_ERROR },
+        { status: 401 }
       );
     }
 
     const isValid = verifyPassword(password, user.password_hash);
     if (!isValid) {
       return NextResponse.json(
-        { success: false, error: "Invalid credentials." },
+        { success: false, error: GENERIC_ERROR },
         { status: 401 }
       );
     }
 
-    // Update last login
+    // Update last login timestamp
     await sql`UPDATE users SET last_login_at = NOW() WHERE id = ${user.id};`;
 
     const userSession = {
@@ -71,8 +74,11 @@ export async function POST(request: Request) {
       assignedCentre: user.assigned_centre,
     };
 
+    const ipAddress = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
+    const userAgent = request.headers.get("user-agent") || undefined;
+
     const access = createAccessToken(userSession);
-    const refresh = await createRefreshToken(user.id);
+    const refresh = await createRefreshToken(user.id, ipAddress, userAgent);
 
     // Audit log
     await logAuditEvent({
@@ -83,7 +89,7 @@ export async function POST(request: Request) {
       entityId: user.id,
     });
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       success: true,
       message: "Authentication successful.",
       data: {
@@ -93,6 +99,11 @@ export async function POST(request: Request) {
         refreshToken: refresh.rawToken,
       },
     });
+
+    // Set secure HttpOnly cookies for session
+    setAuthCookies(response, access.token, refresh.rawToken);
+
+    return response;
   } catch (error) {
     console.error("Login API error:", error);
     return NextResponse.json(

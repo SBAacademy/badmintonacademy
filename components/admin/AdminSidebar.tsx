@@ -17,6 +17,8 @@ import {
   MapPin,
   Target,
   Calendar,
+  KeyRound,
+  Shield,
 } from "lucide-react";
 
 export type AdminTab =
@@ -31,12 +33,21 @@ export type AdminTab =
   | "achievements"
   | "testimonials";
 
+export interface CurrentUser {
+  id?: string;
+  email?: string;
+  fullName?: string;
+  role?: string;
+}
+
 interface AdminSidebarProps {
   activeTab: AdminTab;
   onSelectTab: (tab: AdminTab) => void;
   newLeadsCount: number;
   totalLeadsCount: number;
   onLogout: () => void;
+  currentUser?: CurrentUser | null;
+  onOpenChangePassword?: () => void;
   mobileOpen: boolean;
   onCloseMobile: () => void;
 }
@@ -47,6 +58,8 @@ export function AdminSidebar({
   newLeadsCount,
   totalLeadsCount,
   onLogout,
+  currentUser,
+  onOpenChangePassword,
   mobileOpen,
   onCloseMobile,
 }: AdminSidebarProps) {
@@ -227,26 +240,59 @@ export function AdminSidebar({
         </div>
 
         {/* Footer Actions */}
-        <div className="p-4 border-t border-slate-800/80 space-y-2 bg-[#080B10]">
-          <Link
-            href="/"
-            target="_blank"
-            className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/70 border border-slate-800 transition-colors"
-          >
-            <span className="flex items-center gap-2">
+        <div className="p-3.5 border-t border-slate-800/80 space-y-2 bg-[#080B10]">
+          {currentUser && (
+            <div className="p-2.5 rounded-xl bg-[#0D111A] border border-slate-800/80 flex items-center justify-between">
+              <div className="flex items-center gap-2.5 min-w-0">
+                <div className="w-8 h-8 rounded-lg bg-[#B8F000]/10 border border-[#B8F000]/30 text-[#B8F000] flex items-center justify-center font-bold text-xs flex-shrink-0">
+                  {currentUser.fullName ? currentUser.fullName[0].toUpperCase() : "A"}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs font-bold text-white truncate leading-tight">
+                    {currentUser.fullName || "Administrator"}
+                  </p>
+                  <p className="text-[10px] text-slate-400 truncate leading-tight">
+                    {currentUser.email || ""}
+                  </p>
+                </div>
+              </div>
+              <span className="px-1.5 py-0.5 rounded text-[9px] font-bold tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 uppercase flex-shrink-0">
+                {currentUser.role === "SUPER_ADMIN" ? "Super Admin" : currentUser.role || "Admin"}
+              </span>
+            </div>
+          )}
+
+          <div className="grid grid-cols-2 gap-1.5">
+            {onOpenChangePassword && (
+              <button
+                type="button"
+                onClick={onOpenChangePassword}
+                className="flex items-center justify-center gap-1.5 py-2 px-2 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/70 border border-slate-800 transition-colors cursor-pointer"
+                title="Change Password"
+              >
+                <KeyRound className="w-3.5 h-3.5 text-amber-400" />
+                <span>Password</span>
+              </button>
+            )}
+
+            <Link
+              href="/"
+              target="_blank"
+              className="flex items-center justify-center gap-1.5 py-2 px-2 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/70 border border-slate-800 transition-colors"
+              title="View Public Site"
+            >
               <ExternalLink className="w-3.5 h-3.5 text-[#B8F000]" />
-              <span>View Public Website</span>
-            </span>
-            <span className="text-[10px] text-slate-500 uppercase">Live</span>
-          </Link>
+              <span>Website</span>
+            </Link>
+          </div>
 
           <button
             type="button"
             onClick={onLogout}
-            className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 transition-colors cursor-pointer"
+            className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs font-semibold text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 border border-rose-500/20 transition-colors cursor-pointer"
           >
             <LogOut className="w-3.5 h-3.5" />
-            <span>Lock Admin Panel</span>
+            <span>Sign Out / Logout</span>
           </button>
         </div>
       </aside>

@@ -10,6 +10,7 @@ import {
   deleteLead,
 } from "@/lib/db";
 import { AGE_CATEGORIES, isValidAgeCategory } from "@/lib/constants";
+import { requireAuth } from "@/lib/auth";
 
 export type { LeadItem };
 
@@ -132,6 +133,14 @@ export async function POST(request: Request) {
 // 2. GET: Retrieve leads from Neon DB for CRM tool with optional filtering
 export async function GET(request: Request) {
   try {
+    const auth = await requireAuth(request, ["SUPER_ADMIN", "ADMIN", "FRONT_DESK"]);
+    if (!auth.authorized) {
+      return NextResponse.json(
+        { success: false, error: auth.error },
+        { status: auth.status }
+      );
+    }
+
     const { searchParams } = new URL(request.url);
     const status = searchParams.get("status");
     const branch = searchParams.get("branch");
@@ -157,6 +166,14 @@ export async function GET(request: Request) {
 // 3. PATCH: Update lead status or internal notes in Neon DB from CRM
 export async function PATCH(request: Request) {
   try {
+    const auth = await requireAuth(request, ["SUPER_ADMIN", "ADMIN", "FRONT_DESK"]);
+    if (!auth.authorized) {
+      return NextResponse.json(
+        { success: false, error: auth.error },
+        { status: auth.status }
+      );
+    }
+
     const body = await request.json();
     const { id, ...updates } = body;
 
@@ -202,6 +219,14 @@ export async function PATCH(request: Request) {
 // 4. DELETE: Remove lead from Neon DB
 export async function DELETE(request: Request) {
   try {
+    const auth = await requireAuth(request, ["SUPER_ADMIN", "ADMIN"]);
+    if (!auth.authorized) {
+      return NextResponse.json(
+        { success: false, error: auth.error },
+        { status: auth.status }
+      );
+    }
+
     const { searchParams } = new URL(request.url);
     const id = searchParams.get("id");
 

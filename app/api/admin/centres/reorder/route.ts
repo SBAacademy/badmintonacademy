@@ -1,9 +1,18 @@
 import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { reorderCentres } from "@/lib/contentDb";
+import { requireAuth } from "@/lib/auth";
 
 export async function PUT(request: Request) {
   try {
+    const auth = await requireAuth(request, ["SUPER_ADMIN", "ADMIN"]);
+    if (!auth.authorized) {
+      return NextResponse.json(
+        { success: false, error: auth.error },
+        { status: auth.status }
+      );
+    }
+
     const body = await request.json();
     const orders = Array.isArray(body.orders)
       ? body.orders

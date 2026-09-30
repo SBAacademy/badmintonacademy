@@ -232,28 +232,141 @@ export async function revokeRefreshToken(compositeToken: string): Promise<boolea
   return true;
 }
 
-// 5. Route Protection Helper (requireAuth)
+// 5. Cookie & Session Constants
+export const AUTH_COOKIE_NAME = "sa_admin_token";
+export const REFRESH_COOKIE_NAME = "sa_admin_refresh";
+
+/**
+ * Extracts authentication token from either Authorization Bearer header or HttpOnly cookie.
+ */
+export function extractTokenFromRequest(request: Request): string | null {
+  // 1. Check Authorization header
+  const authHeader = request.headers.get("Authorization") || request.headers.get("authorization");
+  if (authHeader && authHeader.startsWith("Bearer ")) {
+    return authHeader.substring(7).trim();
+  }
+
+  // 2. Check Cookie header
+  const cookieHeader = request.headers.get("cookie") || request.headers.get("Cookie");
+  if (cookieHeader) {
+    const cookies = cookieHeader.split(";").map((c) => c.trim());
+    for (const cookie of cookies) {
+      if (cookie.startsWith(`${AUTH_COOKIE_NAME}=`)) {
+        return decodeURIComponent(cookie.substring(AUTH_COOKIE_NAME.length + 1));
+      }
+    }
+  }
+
+  return null;
+}
+
+/**
+ * Extracts refresh token from composite token or refresh cookie
+ */
+export function extractRefreshTokenFromRequest(request: Request): string | null {
+  const cookieHeader = request.headers.get("cookie") || request.headers.get("Cookie");
+  if (cookieHeader) {
+    const cookies = cookieHeader.split(";").map((c) => c.trim());
+    for (const cookie of cookies) {
+      if (cookie.startsWith(`${REFRESH_COOKIE_NAME}=`)) {
+        return decodeURIComponent(cookie.substring(REFRESH_COOKIE_NAME.length + 1));
+      }
+    }
+  }
+  return null;
+}
+
+/**
+ * Sets secure HttpOnly cookies for session authentication
+ */
+export function setAuthCookies(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  response: any,
+  accessToken: string,
+  refreshToken?: string
+) {
+  const isProduction = process.env.NODE_ENV === "production";
+  
+  if (response.cookies?.set) {
+    response.cookies.set({
+      name: AUTH_COOKIE_NAME,
+      value: accessToken,
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: "lax",
+      path: "/",
+      maxAge: 24 * 60 * 60, // 24 hours
+    });
+
+    if (refreshToken) {
+      response.cookies.set({
+        name: REFRESH_COOKIE_NAME,
+        value: refreshToken,
+        httpOnly: true,
+        secure: isProduction,
+        sameSite: "lax",
+        path: "/",
+        maxAge: 30 * 24 * 60 * 60, // 30 days
+      });
+    }
+  }
+}
+
+/**
+ * Clears authentication cookies upon logout or session invalidation
+ */
+export function clearAuthCookies(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  response: any
+) {
+  const isProduction = process.env.NODE_ENV === "production";
+
+  if (response.cookies?.set) {
+    response.cookies.set({
+      name: AUTH_COOKIE_NAME,
+      value: "",
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: "lax",
+      path: "/",
+      maxAge: 0,
+      expires: new Date(0),
+    });
+
+    response.cookies.set({
+      name: REFRESH_COOKIE_NAME,
+      value: "",
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: "lax",
+      path: "/",
+      maxAge: 0,
+      expires: new Date(0),
+    });
+  }
+}
+
+// 6. Route Protection Helper (requireAuth)
 export async function requireAuth(
   request: Request,
   allowedRoles?: Role[]
 ): Promise<AuthResult> {
-  const authHeader = request.headers.get("Authorization");
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+  const token = extractTokenFromRequest(request);
+  if (!token) {
     return {
       authorized: false,
       status: 401,
-      error: "Authentication required. Please provide a Bearer token.",
+      error: "Authentication required. Please sign in to access this resource.",
     };
   }
 
-  const token = authHeader.substring(7).trim();
   const user = verifyAccessToken(token);
 
   if (!user) {
     return {
       authorized: false,
       status: 401,
-      error: "Invalid or expired access token.",
+      error: "Invalid or expired session. Please sign in again.",
     };
   }
 

@@ -7,6 +7,7 @@ import {
   toggleEventPublish,
   toggleEventFeatured,
 } from "@/lib/contentDb";
+import { requireAuth } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -17,6 +18,14 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const auth = await requireAuth(request);
+    if (!auth.authorized) {
+      return NextResponse.json(
+        { success: false, error: auth.error },
+        { status: auth.status }
+      );
+    }
+
     const { id } = await params;
     const event = await getEventById(id);
 
@@ -51,6 +60,14 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const auth = await requireAuth(request, ["SUPER_ADMIN", "ADMIN", "CONTENT_MANAGER"]);
+    if (!auth.authorized) {
+      return NextResponse.json(
+        { success: false, error: auth.error },
+        { status: auth.status }
+      );
+    }
+
     const { id } = await params;
     const body = await request.json();
 
@@ -98,6 +115,14 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const auth = await requireAuth(request, ["SUPER_ADMIN", "ADMIN", "CONTENT_MANAGER"]);
+    if (!auth.authorized) {
+      return NextResponse.json(
+        { success: false, error: auth.error },
+        { status: auth.status }
+      );
+    }
+
     const { id } = await params;
     const body = await request.json();
 
@@ -149,6 +174,14 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const auth = await requireAuth(request, ["SUPER_ADMIN", "ADMIN"]);
+    if (!auth.authorized) {
+      return NextResponse.json(
+        { success: false, error: auth.error },
+        { status: auth.status }
+      );
+    }
+
     const { id } = await params;
     const existing = await getEventById(id);
 

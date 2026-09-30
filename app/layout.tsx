@@ -66,9 +66,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={jakarta.variable} data-scroll-behavior="smooth">
-      <head>
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-      </head>
+
       <body className="antialiased bg-[#07090D] text-[#FFFFFF] min-h-screen flex flex-col font-sans selection:bg-[#B8F000] selection:text-[#07100A]">
         <SEOJsonLd schema={getOrganizationSchema()} />
         <AppLayoutWrapper>{children}</AppLayoutWrapper>

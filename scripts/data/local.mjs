@@ -18,7 +18,7 @@ export const localArticles = [
     "image": "/images/badminton-arena.jpg",
     "status": "PUBLISHED",
     "content": [
-      "With the explosive popularity of badminton across Ernakulam district, dozens of private indoor courts and coaching programs have emerged across Kadavanthra, Edappally, Kakkanad, and West Kochi. However, not all coaching setups provide the same pedagogical quality, injury prevention standards, or developmental pathways.",
+      "With the explosive popularity of badminton across Ernakulam district, dozens of private indoor courts and coaching programs have emerged across Kadavanthra, Kumbalanghi, Maradu, Palluruthy, and Chullikal. However, not all coaching setups provide the same pedagogical quality, injury prevention standards, or developmental pathways.",
       "### 1. Coach Certification & Pedigree",
       "Always inquire about the credentials of the head and assistant coaches. Are they certified by the Badminton World Federation (BWF Level 1 or 2) or the National Institute of Sports (NIS)? Certified coaches understand growth plate safety, biomechanical stroke efficiency, and age-appropriate volume.",
       "### 2. Court Subfloor Architecture (Shock Absorption)",
@@ -372,7 +372,7 @@ export const localArticles = [
     "image": "/images/training-coach.jpg",
     "status": "PUBLISHED",
     "content": [
-      "Over the past decade, Kochi has witnessed a dramatic sporting renaissance. Across Panampilly Nagar, Kadavanthra, Kakkanad, and Maradu, the evening routine of urban professionals and families has shifted from passive entertainment to lively, sweat-filled badminton rallies.",
+      "Over the past decade, Kochi has witnessed a dramatic sporting renaissance. Across Panampilly Nagar, Kadavanthra, Kumbalanghi, Palluruthy, and Maradu, the evening routine of urban professionals and families has shifted from passive entertainment to lively, sweat-filled badminton rallies.",
       "### A Sport for the Entire Family",
       "Badminton is uniquely multi-generational. It is not uncommon to see a father, mother, and their 10-year-old child sharing an adjacent court, all getting an intense workout suited to their respective fitness levels.",
       "### Fostering Healthy Urban Communities",
@@ -438,9 +438,9 @@ export const localArticles = [
     ]
   },
   {
-    "slug": "badminton-coaching-near-infopark-kakkanad",
-    "title": "Badminton Training Near Infopark Kakkanad: High-Performance Facilities for Tech Corridor",
-    "excerpt": "Extended morning and late-night badminton batches tailored for IT professionals and resident families in Kakkanad, SmartCity, and Thrikkakara.",
+    "slug": "badminton-coaching-in-maradu-kochi",
+    "title": "Badminton Training in Maradu: High-Performance Facilities Near Kundannoor & Tripunithura",
+    "excerpt": "Extended morning and evening badminton batches tailored for athletes, professionals, and resident families in Maradu, Kundannoor, and Tripunithura.",
     "category": "Kochi & Local Guides",
     "readTime": "7 min read",
     "publishDate": "January 07, 2025",
@@ -448,19 +448,19 @@ export const localArticles = [
     "author": "Coach Anand Varma",
     "authorRole": "Head Coach, S&A Badminton Academy",
     "tags": [
-      "Kakkanad Badminton",
-      "Infopark Kochi",
-      "SmartCity",
-      "Tech Corridor Sports"
+      "Maradu Badminton",
+      "Kundannoor Sports",
+      "Tripunithura",
+      "South Kochi Badminton"
     ],
     "image": "/images/hero-athlete.jpg",
     "status": "PUBLISHED",
     "content": [
-      "The fast-paced tech lifestyle around Infopark and SmartCity in Kakkanad requires athletic outlets that accommodate flexible work shifts. Our Kakkanad facility along Seaport-Airport Road provides premier badminton coaching and open play slots.",
-      "### Convenient for IT Shift Timings",
-      "With dawn batches starting at 5:00 AM and corporate night owl slots operating until 11:00 PM, tech professionals can play without disrupting project deliverables.",
-      "### Youth Coaching for Kakkanad Residential Communities",
-      "Families living across Thrikkakara, Vazhakkala, and Padamugal benefit from structured afternoon junior batches that build physical discipline in growing children.",
+      "The fast-paced lifestyle across South Kochi and Maradu requires dedicated athletic facilities that accommodate busy working and school schedules. Our Maradu facility provides premier badminton coaching, certified training tracks, and open play slots.",
+      "### Convenient for South Kochi & Tripunithura Commuters",
+      "With dawn batches starting at 5:30 AM and evening coaching slots operating through 10:00 PM, players from Maradu, Kundannoor, Nettoor, and Tripunithura can train without difficult city traffic.",
+      "### Youth Coaching for Maradu Residential Communities",
+      "Families living across Maradu, Thykoodam, and Petta benefit from structured afternoon junior batches that build physical discipline and athletic fundamentals in growing children.",
       "### Structured Execution & Key Coaching Pointers",
       "To execute this effectively on court, certified mentors emphasize three core technical checkpoints:",
       "- **Preparation & Stance:** Visit training hubs in person to inspect court cleanliness, ceiling clearance, and coach-to-student ratios.",
@@ -476,7 +476,7 @@ export const localArticles = [
       "- **Warm-Up Phase:** 5 minutes of dynamic joint mobilization and shadow movement.",
       "- **Drill Volume:** 4 to 6 sets of 15 to 20 focused repetitions with a 45-second recovery interval between sets.",
       "- **Pressure Match Application:** Conclude with 15 minutes of conditional match play where points scored using this specific technique earn double value.",
-      "Explore the facility on our [Kakkanad Centre Page](/kakkanad)."
+      "Explore the facility on our [Maradu Centre Page](/maradu)."
     ]
   },
   {

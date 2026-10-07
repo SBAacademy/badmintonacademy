@@ -46,7 +46,7 @@ async function runGate4Tests() {
   const testLeadId = `TEST-CONV-LEAD-${Date.now()}`;
   await sql`
     INSERT INTO leads (id, name, phone, branch, program, status, submitted_at, updated_at)
-    VALUES (${testLeadId}, 'Rahul Menon', '+919846088888', 'edappally', 'adult-badminton-coaching', 'TRIAL_ATTENDED', NOW(), NOW());
+    VALUES (${testLeadId}, 'Rahul Menon', '+919846088888', 'kadavanthra', 'adult-badminton-coaching', 'TRIAL_ATTENDED', NOW(), NOW());
   `;
 
   // Simulate atomic conversion
@@ -59,7 +59,7 @@ async function runGate4Tests() {
   `;
   await sql`
     INSERT INTO students (id, parent_id, full_name, primary_centre, primary_program, status)
-    VALUES (${convertedStudentId}, ${convParentId}, 'Rahul Menon', 'edappally', 'adult-badminton-coaching', 'ACTIVE');
+    VALUES (${convertedStudentId}, ${convParentId}, 'Rahul Menon', 'kadavanthra', 'adult-badminton-coaching', 'ACTIVE');
   `;
   await sql`
     UPDATE leads SET status = 'ENROLLED', converted_student_id = ${convertedStudentId}, updated_at = NOW()

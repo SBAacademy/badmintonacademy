@@ -26,8 +26,8 @@
 ## 2. Redundancy Analysis: `branches.ts` vs `locations.ts`
 
 ### Direct Comparison
-* **`data/locations.ts`:**
-  - Contains all 4 centres: `kadavanthra`, `edappally`, `kakkanad`, `fourth-centre`.
+* **`data/locations.ts` (and PostgreSQL `centres` table):**
+  - Contains all 5 canonical centres: `kadavanthra`, `kumbalanghi`, `maradu`, `palluruthy`, `chullikal`.
   - Rich local SEO metadata fields (`primaryKeyword`, `secondaryKeywords`, `longTailKeywords`).
   - Full structured NAP, GeoCoordinates, opening hours, local neighbourhood lists, facilities, and local FAQs.
   - Actively consumed by: `app/[location]/page.tsx`, `components/sections/BranchesSection.tsx`, `components/layout/Navbar.tsx`, `components/layout/Footer.tsx`, `components/forms/EnquiryForm.tsx`.

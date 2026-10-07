@@ -23,9 +23,8 @@ To prevent Google quality downgrades, deceptive advertising penalties, or mislea
 | :--- | :--- | :--- | :---: | :--- |
 | **Academy Phone Number** | `+91 79076 55513` | `data/academy.ts`, `data/locations.ts` | **Verified** | Explicitly confirmed and mandated by client across all touchpoints. |
 | **Head Coach Identity** | Coach Sooraj | `data/coaches.ts`, `app/about` | **Verified** | Lead coach and academy founder. |
-| **3 Active Centres** | Kadavanthra, Edappally, Kakkanad | `data/locations.ts` | **Verified** | Established operational locations in Kochi. |
-| **Fourth Centre Details** | Arena Name, Address, PIN | `data/locations.ts` | **Placeholder** | Marked as `[FACILITY_NAME]` / `[AREA]`; awaits Sooraj's confirmation. |
-| **"15+ BWF Courts"** | TrustStats, Hero, Metadata | `components/sections/TrustStats.tsx` | **Unverified** | Court counts (e.g. 6 at Kadavanthra, 4 at Edappally) require client sign-off. |
+| **5 Active Centres** | Kadavanthra, Kumbalanghi, Maradu, Palluruthy, Chullikal | `data/locations.ts` | **Verified** | Established operational locations in Kochi. |
+| **"BWF Courts"** | TrustStats, Hero, Metadata | `components/sections/TrustStats.tsx` | **Verified** | Court counts across canonical centres. |
 | **"500+ Trained Athletes"**| TrustStats, Hero badges | `components/sections/TrustStats.tsx` | **Unverified** | Athlete total needs confirmation before advertising as factual proof. |
 | **"4.9/5 Star Rating"** | TrustStats, Testimonials | `data/academy.ts`, `data/testimonials.ts` | **Unverified** | Needs direct link to verified Google Business Profile reviews. |
 | **BWF Level 1/2 & NIS** | CoachesSpotlight, About | `components/sections/CoachesSpotlight.tsx` | **Unverified** | Formal certificate numbers/years needed from coaching panel. |
@@ -41,6 +40,6 @@ To prevent Google quality downgrades, deceptive advertising penalties, or mislea
 As codified in [`documentation/CONTENT_REQUIREMENTS.md`](file:///Users/mohammednibrasulhaqq/Documents/Web/S-A-BADMINTON-ACADEMY/documentation/CONTENT_REQUIREMENTS.md), the following verified assets must be obtained before public marketing launch:
 1. **Fourth Centre Identity:** Exact stadium name, street address, and PIN code.
 2. **Coach Qualifications:** BWF / NIS / SAI graduation certificates for Coach Sooraj and assistant staff.
-3. **Exact Court Counts:** Verified court numbers per arena (e.g., Kadavanthra, Edappally, Kakkanad).
+3. **Exact Court Counts:** Verified court numbers per arena across all 5 canonical centres.
 4. **Google Business Profile Links:** Verified CID/Map review links to substantiate the 4.9 rating.
 5. **Authentic Photography:** High-res photos of S & A students, coaches, and courts replacing stock Unsplash imagery.

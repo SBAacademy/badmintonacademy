@@ -30,7 +30,7 @@
 ---
 
 ## 2. Preserved Technical & SEO Foundations
-* App Router dynamic parameters `[location]` (`/kadavanthra`, `/edappally`, `/kakkanad`, `/fourth-centre`).
+* App Router dynamic parameters `[location]` (`/kadavanthra`, `/kumbalanghi`, `/maradu`, `/palluruthy`, `/chullikal`).
 * Single-hop HTTP 308 permanent redirects from `/branches/:slug` to `/:slug`.
 * Self-referential canonical URLs and JSON-LD schemas (`SportsOrganization`, `SportsActivityLocation`, `LocalBusiness`, `BreadcrumbList`, `FAQPage`).
 * Full accessibility and `@media (prefers-reduced-motion: reduce)` overrides.

@@ -107,7 +107,7 @@ S-A-BADMINTON-ACADEMY/
 │   ├── coaches.ts                    # Coaches credentials, specialties, headshots
 │   ├── faqs.ts                       # General academy questions and answers
 │   ├── gallery.ts                    # Media items, tags, captions
-│   ├── locations.ts                  # Modern 4-centre database (Kadavanthra, Edappally, Kakkanad, Fourth)
+│   ├── locations.ts                  # Canonical 5-centre database (Kadavanthra, Kumbalanghi, Maradu, Palluruthy, Chullikal)
 │   ├── programs.ts                   # 5 Coaching tracks (Kids, Junior, Adult, Competitive, Camp)
 │   └── testimonials.ts               # Verified reviews with ratings and categories
 │

@@ -31,13 +31,17 @@ final class RBACPermissionTests: XCTestCase {
     }
 
     func testCanonicalCentresEnforcement() {
-        let validCentres = ["kadavanthra", "edappally", "kakkanad"]
+        let validCentres = ["kadavanthra", "kumbalanghi", "maradu", "palluruthy", "chullikal"]
 
-        // Must reject or disallow 'fourth-centre' as per requirements
+        // Must reject or disallow unapproved centres
         XCTAssertFalse(validCentres.contains("fourth-centre"))
+        XCTAssertFalse(validCentres.contains("invalid-centre-1"))
+        XCTAssertFalse(validCentres.contains("invalid-centre-2"))
         XCTAssertTrue(validCentres.contains("kadavanthra"))
-        XCTAssertTrue(validCentres.contains("edappally"))
-        XCTAssertTrue(validCentres.contains("kakkanad"))
-        XCTAssertEqual(validCentres.count, 3)
+        XCTAssertTrue(validCentres.contains("kumbalanghi"))
+        XCTAssertTrue(validCentres.contains("maradu"))
+        XCTAssertTrue(validCentres.contains("palluruthy"))
+        XCTAssertTrue(validCentres.contains("chullikal"))
+        XCTAssertEqual(validCentres.count, 5)
     }
 }

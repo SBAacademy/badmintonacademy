@@ -132,6 +132,6 @@ flutter build macos --release
 The **S&A Badminton Academy Management Platform** is **100% production-ready**:
 - **No Mock Data**: All screens connect to the live Neon Serverless PostgreSQL database.
 - **No Hardcoded Secrets**: Secrets and database credentials reside exclusively on the server.
-- **Data Safety**: Canonical centres (Kadavanthra, Edappally, Kakkanad), programs, and existing leads are strictly preserved.
+- **Data Safety**: Canonical centres (Kadavanthra, Kumbalanghi, Maradu, Palluruthy, Chullikal), programs, and existing leads are strictly preserved.
 - **Offline Resilient**: Attendance marks persist locally and synchronize automatically when connectivity resumes.
 - **Zero Build Regressions**: Both Next.js and Flutter target builds compile cleanly with zero errors.

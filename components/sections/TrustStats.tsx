@@ -15,7 +15,7 @@ const STAT_ITEMS = [
     icon: MapPin,
     value: `${ACADEMY_DATA.stats.branchesCount} Hubs`,
     label: "Training Locations",
-    detail: "Kadavanthra · Edappally · Kakkanad",
+    detail: "5 Premier Hubs Across Kochi",
   },
   {
     icon: ShieldCheck,

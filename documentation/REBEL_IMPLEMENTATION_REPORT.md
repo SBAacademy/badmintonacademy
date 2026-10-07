@@ -14,9 +14,9 @@ The S&A Badminton Academy web application has been completely transformed from a
 1. **Aesthetic Shift:** Eradicated all cyberpunk clutter, cyan lighting, glowing neon card borders, glassmorphism, floating SVG shuttlecocks, and repetitive 3-card grids. Replaced with an ultra-clean, high-contrast editorial system: **Pitch Black** (`#07090D`), **Carbon Slate** (`#0B0F14`), **Panel Slate** (`#11161D`), **Structural Border** (`#1F2937`), and **Acid Lime** (`#B8F000`) used strictly as a high-voltage action accent.
 2. **Typography Power:** Hero display typography scaled to `clamp(2.8rem, 7.5vw, 6.5rem)` with tight line-height (`0.92`), -0.04em tracking, and asymmetric uppercase breaks: `TRAIN HARD. / SMASH HARDER. / MASTER THE COURT.` Section numbering and metadata now utilize technical monospace coordinates (`01 // PERFORMANCE`, `02 // MANIFESTO`, `03 // PATHWAYS`).
 3. **Authentic Sports Photography:** Replaced generic placeholders with 4 high-resolution, authentic badminton sports photographs showcasing real athlete movement (smash impact, court baseline, coach training).
-4. **Interactive Homepage Campaign:** Rebuilt the entire homepage into a progressive athletic campaign story with a double horizontal GPU marquee, Rebel Manifesto, 2-column program experience, 4-stage connected methodology, and an interactive 4-centre arena selector.
+4. **Interactive Homepage Campaign:** Rebuilt the entire homepage into a progressive athletic campaign story with a double horizontal GPU marquee, Rebel Manifesto, 2-column program experience, 4-stage connected methodology, and an interactive 5-centre arena selector.
 5. **Strict Content Authenticity:** Removed unverified marketing claims ("500+ Athletes", "15+ Courts", uncertified coaching assertions) from large visual statistics. Preserved only verified data and genuine institutional commitments (BWF-standard synthetic mats, shock-absorbing sprung wooden subflooring).
-6. **Zero Technical Regression:** 100% of existing SEO routes, 4-centre dynamic URLs (`/kadavanthra`, `/edappally`, `/kakkanad`, `/fourth-centre`), legacy 308 redirects, JSON-LD schemas (LocalBusiness, SportsActivityLocation, FAQPage, BreadcrumbList), zero-gap desktop dropdown navigation, 48px mobile drawer accordions, and `/api/enquiries` lead capture remain fully intact and verified.
+6. **Zero Technical Regression:** 100% of existing SEO routes, 5-centre dynamic URLs (`/kadavanthra`, `/kumbalanghi`, `/maradu`, `/palluruthy`, `/chullikal`), legacy 308 redirects, JSON-LD schemas (LocalBusiness, SportsActivityLocation, FAQPage, BreadcrumbList), zero-gap desktop dropdown navigation, 48px mobile drawer accordions, and `/api/enquiries` lead capture remain fully intact and verified.
 
 ---
 
@@ -104,7 +104,7 @@ The animation language is strictly hardware-accelerated, lightweight, and athlet
 
 All verified technical assets were rigorously audited and preserved:
 - **Canonical URLs:** Every page maintains verified canonical URLs matching production domain (`https://sabadmintonacademy.com`).
-- **Dynamic 4-Centre Routing:** Verified SSG generation for `/kadavanthra`, `/edappally`, `/kakkanad`, and `/fourth-centre`.
+- **Dynamic 5-Centre Routing:** Verified SSG generation for `/kadavanthra`, `/kumbalanghi`, `/maradu`, `/palluruthy`, and `/chullikal`.
 - **Schema JSON-LD:** Preserved LocalBusiness, SportsActivityLocation, BreadcrumbList, and FAQPage schemas.
 - **Crawlers:** `robots.txt` and `sitemap.xml` fully operational and pre-rendered.
 - **Legacy Redirects:** Preserved Next.js redirects mapping old query parameters and legacy paths.
@@ -146,5 +146,5 @@ All verified technical assets were rigorously audited and preserved:
 
 ## 12. Known Limitations & Recommendations
 
-1. **Client Photography:** The repository currently includes 4 high-performance badminton action photographs (`hero-athlete.jpg`, `training-coach.jpg`, `badminton-junior.jpg`, `badminton-arena.jpg`). Once original high-resolution photography of S&A's actual Kadavanthra, Edappally, and Kakkanad halls is delivered by the client, these should be placed directly in `/public/images/`.
+1. **Client Photography:** The repository currently includes 4 high-performance badminton action photographs (`hero-athlete.jpg`, `training-coach.jpg`, `badminton-junior.jpg`, `badminton-arena.jpg`). Once original high-resolution photography of S&A's actual halls across Kochi is delivered by the client, these should be placed directly in `/public/images/`.
 2. **Google Tag Manager:** Container ID is prepared in `lib/analytics.ts` and will activate as soon as the client supplies their GTM tracking ID.

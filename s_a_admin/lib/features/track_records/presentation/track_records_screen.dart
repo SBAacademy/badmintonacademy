@@ -21,7 +21,7 @@ class _TrackRecordsScreenState extends ConsumerState<TrackRecordsScreen> {
   List<dynamic> _filteredRecords = [];
 
   String _statusFilter = 'ALL'; // ALL, PUBLISHED, DRAFT
-  String _selectedCentre = 'ALL'; // ALL, Kadavanthra, Edappally, Kakkanad
+  String _selectedCentre = 'ALL'; // ALL, Kadavanthra, Kumbalanghi, Maradu, Palluruthy, Chullikal
 
   final List<Map<String, String>> _statusTabs = [
     {'key': 'ALL', 'label': 'All'},
@@ -29,7 +29,7 @@ class _TrackRecordsScreenState extends ConsumerState<TrackRecordsScreen> {
     {'key': 'DRAFT', 'label': 'Draft'},
   ];
 
-  final List<String> _centres = ['ALL', 'Kadavanthra', 'Edappally', 'Kakkanad'];
+  final List<String> _centres = ['ALL', 'Kadavanthra', 'Kumbalanghi', 'Maradu', 'Palluruthy', 'Chullikal'];
 
   @override
   void initState() {
@@ -245,8 +245,10 @@ class _TrackRecordsScreenState extends ConsumerState<TrackRecordsScreen> {
                                   isExpanded: true,
                                   items: const [
                                     DropdownMenuItem(value: 'Kadavanthra', child: Text('Kadavanthra')),
-                                    DropdownMenuItem(value: 'Edappally', child: Text('Edappally')),
-                                    DropdownMenuItem(value: 'Kakkanad', child: Text('Kakkanad')),
+                                    DropdownMenuItem(value: 'Kumbalanghi', child: Text('Kumbalanghi')),
+                                    DropdownMenuItem(value: 'Maradu', child: Text('Maradu')),
+                                    DropdownMenuItem(value: 'Palluruthy', child: Text('Palluruthy')),
+                                    DropdownMenuItem(value: 'Chullikal', child: Text('Chullikal')),
                                   ],
                                   onChanged: (val) {
                                     if (val != null) setModalState(() => selectedCentre = val);

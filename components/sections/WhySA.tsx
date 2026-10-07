@@ -124,7 +124,7 @@ export function WhySA() {
             </h3>
 
             <p className="text-sm sm:text-base text-[#A8B0BA] leading-relaxed">
-              Competitive badminton requires brutal deceleration and explosive lateral change-of-direction. To protect knees and ankles from cumulative joint stress, all academy courts across Kadavanthra, Edappally, and Kakkanad utilize tournament-spec synthetic mats installed over shock-absorbing sprung wooden subfloors.
+              Competitive badminton requires brutal deceleration and explosive lateral change-of-direction. To protect knees and ankles from cumulative joint stress, all academy courts across Kadavanthra, Kumbalanghi, Maradu, Palluruthy, and Chullikal utilize tournament-spec synthetic mats installed over shock-absorbing sprung wooden subfloors.
             </p>
 
             <div className="pt-2">

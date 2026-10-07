@@ -319,8 +319,10 @@ struct AddStaffSheet: View {
 
                         Picker("Assigned Centre", selection: $centreId) {
                             Text("Kadavanthra").tag("kadavanthra")
-                            Text("Edappally").tag("edappally")
-                            Text("Kakkanad").tag("kakkanad")
+                            Text("Kumbalanghi").tag("kumbalanghi")
+                            Text("Maradu").tag("maradu")
+                            Text("Palluruthy").tag("palluruthy")
+                            Text("Chullikal").tag("chullikal")
                         }
                     }
                     .listRowBackground(Color.rebelDarkSurface)

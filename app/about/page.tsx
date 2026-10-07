@@ -63,7 +63,7 @@ export default function AboutPage() {
             <div className="absolute inset-0 bg-gradient-to-t from-[#07090D] via-transparent to-transparent" />
             <div className="absolute bottom-6 left-6 right-6 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div className="font-mono text-xs text-[#B8F000] uppercase tracking-wider font-bold">
-                OPERATIONAL CENTRES // KADAVANTHRA &bull; EDAPPALLY &bull; KAKKANAD
+                OPERATIONAL CENTRES // KADAVANTHRA &bull; KUMBALANGHI &bull; MARADU &bull; PALLURUTHY &bull; CHULLIKAL
               </div>
               <div className="font-mono text-[11px] text-[#A8B0BA] uppercase">
                 BWF-SPEC SYNTHETIC MATS ON SPRUNG WOOD

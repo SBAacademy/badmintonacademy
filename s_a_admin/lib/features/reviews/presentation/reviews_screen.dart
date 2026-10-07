@@ -21,10 +21,10 @@ class _ReviewsScreenState extends ConsumerState<ReviewsScreen> {
   List<dynamic> _filteredReviews = [];
 
   String _statusFilter = 'ALL'; // ALL, PENDING, APPROVED, PUBLISHED, REJECTED
-  String _selectedCentre = 'ALL'; // ALL, Kadavanthra, Edappally, Kakkanad
+  String _selectedCentre = 'ALL'; // ALL, Kadavanthra, Kumbalanghi, Maradu, Palluruthy, Chullikal
   String _selectedSource = 'ALL'; // ALL, Google, Website
 
-  final List<String> _centres = ['ALL', 'Kadavanthra', 'Edappally', 'Kakkanad'];
+  final List<String> _centres = ['ALL', 'Kadavanthra', 'Kumbalanghi', 'Maradu', 'Palluruthy', 'Chullikal'];
   final List<String> _sources = ['ALL', 'Google', 'Website'];
 
   final List<Map<String, String>> _statusTabs = [

@@ -93,8 +93,8 @@ BODY COPY:          text-base text-[#A8B0BA] leading-relaxed max-w-xl
      • "01 ASSESS ───→ 02 TRAIN ───→ 03 DEVELOP ───→ 04 COMPETE"
      • Large horizontal progression track with athlete movement illustrations
 ─────────────────────────────────────────────────────────────────────────────
-[06] INTERACTIVE 4-CENTRE ARENA SELECTOR (Local SEO Powerhouse)
-     • Interactive selector: [01 KADAVANTHRA] [02 EDAPPALLY] [03 KAKKANAD] [04 EXPANSION]
+[06] INTERACTIVE 5-CENTRE ARENA SELECTOR (Local SEO Powerhouse)
+     • Interactive selector: [01 KADAVANTHRA] [02 KUMBALANGHI] [03 MARADU] [04 PALLURUTHY] [05 CHULLIKAL]
      • Active tab dynamically updates venue imagery, court stats, map link, and contextual WhatsApp
      • Direct SEO Deep Link ("EXPLORE KADAVANTHRA ARENA →")
 ─────────────────────────────────────────────────────────────────────────────
@@ -167,13 +167,14 @@ BODY COPY:          text-base text-[#A8B0BA] leading-relaxed max-w-xl
 
 ---
 
-### 5. Interactive 4-Centre Arena Selector (Local SEO Pillar)
-* **Goal:** Elevate the 4 dedicated local SEO landing pages (`/kadavanthra`, `/edappally`, `/kakkanad`, `/fourth-centre`) into an interactive flagship experience on the homepage.
+### 5. Interactive 5-Centre Arena Selector (Local SEO Pillar)
+* **Goal:** Elevate the 5 dedicated local SEO landing pages (`/kadavanthra`, `/kumbalanghi`, `/maradu`, `/palluruthy`, `/chullikal`) into an interactive flagship experience on the homepage.
 * **Selector Tabs:**
   - `[01] KADAVANTHRA (Central Kochi HQ)`
-  - `[02] EDAPPALLY (North Kochi Hub)`
-  - `[03] KAKKANAD (Infopark IT Arena)`
-  - `[04] FOURTH ARENA (Upcoming Kochi Expansion)`
+  - `[02] KUMBALANGHI`
+  - `[03] MARADU`
+  - `[04] PALLURUTHY`
+  - `[05] CHULLIKAL`
 * **Active Panel Displays:**
   - High-resolution arena interior photo.
   - Verified venue specifications (flooring, lighting, changing rooms).
@@ -251,7 +252,7 @@ BODY COPY:          text-base text-[#A8B0BA] leading-relaxed max-w-xl
 To execute this visual overhaul truthfully without fabricating claims:
 1. **High-Resolution Photography:**
    - 1 Hero Action Shot (Badminton smash / high-intensity match play).
-   - 4 Centre Venue Photos (Actual courts for Kadavanthra, Edappally, Kakkanad, Fourth Centre).
+   - 5 Centre Venue Photos (Actual courts for Kadavanthra, Kumbalanghi, Maradu, Palluruthy, Chullikal).
    - 1 Coach Sooraj Editorial Portrait.
 2. **Verified Metrics:** Confirm court numbers and athlete counts before enlarging statistics into colossal display numbers.
 

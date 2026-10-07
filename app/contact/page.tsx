@@ -13,7 +13,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = createMetadata({
   title: "Contact & Book Free Trial | S & A Badminton Academy Kochi",
-  description: "Get in touch with S & A Badminton Academy in Kochi. Book a free trial assessment, enquire about batch timings across Kadavanthra, Edappally, and Kakkanad.",
+  description: "Get in touch with S & A Badminton Academy in Kochi. Book a free trial assessment, enquire about batch timings across Kadavanthra, Kumbalanghi, Maradu, Palluruthy, and Chullikal.",
   path: "/contact",
   keywords: [
     "badminton academy contact Kochi",

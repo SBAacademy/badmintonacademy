@@ -16,13 +16,12 @@ All routes were verified against the actual Next.js 16 App Router build output (
 | `/about` | `app/about/page.tsx` | Static (SSG) | 200 | Yes | `https://sabadmintonacademy.com/about` | Brand history, Head Coach Sooraj philosophy | **Verified Active** |
 | `/branches` | `app/branches/page.tsx` | Static (SSG) | 200 | Yes | `https://sabadmintonacademy.com/branches` | All-centres directory across Kochi | **Verified Active** |
 | `/kadavanthra` | `app/[location]/page.tsx` | Dynamic SSG | 200 | Yes (Unique) | `https://sabadmintonacademy.com/kadavanthra` | "badminton academy in Kadavanthra", "badminton coaching Kadavanthra" | **Verified Active** |
-| `/edappally` | `app/[location]/page.tsx` | Dynamic SSG | 200 | Yes (Unique) | `https://sabadmintonacademy.com/edappally` | "badminton academy in Edappally", "badminton coaching Edappally" | **Verified Active** |
-| `/kakkanad` | `app/[location]/page.tsx` | Dynamic SSG | 200 | Yes (Unique) | `https://sabadmintonacademy.com/kakkanad` | "badminton academy in Kakkanad", Infopark IT batches | **Verified Active** |
-| `/fourth-centre` | `app/[location]/page.tsx` | Dynamic SSG | 200 | Yes (Unique) | `https://sabadmintonacademy.com/fourth-centre` | Expansion arena in Kochi (Dev placeholder) | **Verified Active (Placeholder Data)** |
+| `/kumbalanghi` | `app/[location]/page.tsx` | Dynamic SSG | 200 | Yes (Unique) | `https://sabadmintonacademy.com/kumbalanghi` | "badminton academy in Kumbalanghi", "badminton coaching Kumbalanghi" | **Verified Active** |
+| `/maradu` | `app/[location]/page.tsx` | Dynamic SSG | 200 | Yes (Unique) | `https://sabadmintonacademy.com/maradu` | "badminton academy in Maradu", "badminton coaching Maradu" | **Verified Active** |
+| `/palluruthy` | `app/[location]/page.tsx` | Dynamic SSG | 200 | Yes (Unique) | `https://sabadmintonacademy.com/palluruthy` | "badminton academy in Palluruthy", "badminton coaching Palluruthy" | **Verified Active** |
+| `/chullikal` | `app/[location]/page.tsx` | Dynamic SSG | 200 | Yes (Unique) | `https://sabadmintonacademy.com/chullikal` | "badminton academy in Chullikal", "badminton coaching Chullikal" | **Verified Active** |
 | `/branches/kadavanthra` | `app/branches/[slug]/page.tsx` | Dynamic SSG / Redirect | 308 | N/A (Redirect) | `→ /kadavanthra` | Legacy URL consolidation to short URL | **Verified Redirect (308)** |
-| `/branches/edappally` | `app/branches/[slug]/page.tsx` | Dynamic SSG / Redirect | 308 | N/A (Redirect) | `→ /edappally` | Legacy URL consolidation to short URL | **Verified Redirect (308)** |
-| `/branches/kakkanad` | `app/branches/[slug]/page.tsx` | Dynamic SSG / Redirect | 308 | N/A (Redirect) | `→ /kakkanad` | Legacy URL consolidation to short URL | **Verified Redirect (308)** |
-| `/branches/fourth-centre`| `app/branches/[slug]/page.tsx` | Dynamic SSG / Redirect | 308 | N/A (Redirect) | `→ /fourth-centre` | Legacy URL consolidation to short URL | **Verified Redirect (308)** |
+| `/branches/:slug` | `app/branches/[slug]/page.tsx` | Dynamic SSG / Redirect | 308 | N/A (Redirect) | `→ /:slug` | Legacy URL consolidation to short URL | **Verified Redirect (308)** |
 | `/programs` | `app/programs/page.tsx` | Static (SSG) | 200 | Yes | `https://sabadmintonacademy.com/programs` | "badminton classes in Kochi", program matrix | **Verified Active** |
 | `/programs/kids-badminton-coaching` | `app/programs/[slug]/page.tsx` | Dynamic SSG | 200 | Yes (Unique) | `.../programs/kids-badminton-coaching` | "kids badminton coaching Kochi" (Ages 5–9) | **Verified Active** |
 | `/programs/junior-badminton-coaching` | `app/programs/[slug]/page.tsx` | Dynamic SSG | 200 | Yes (Unique) | `.../programs/junior-badminton-coaching` | "junior badminton coaching Kochi" (Ages 10–16) | **Verified Active** |
@@ -56,9 +55,10 @@ Because `app/[location]/page.tsx` sits at the root segment of `app/`, it was ver
    ```ts
    return [
      { location: "kadavanthra" },
-     { location: "edappally" },
-     { location: "kakkanad" },
-     { location: "fourth-centre" },
+     { location: "kumbalanghi" },
+     { location: "maradu" },
+     { location: "palluruthy" },
+     { location: "chullikal" },
    ];
    ```
 3. **Invalid Parameter Test**: Tested `curl -I http://localhost:3000/not-a-real-centre`. Result: **`HTTP/1.1 404 Not Found`** returned via `notFound()`.

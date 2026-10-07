@@ -105,7 +105,7 @@ The design direction is **REBEL ADMIN**: athletic, professional, dark obsidian (
 
 #### Screen 9: Students Roster
 - **Path**: `lib/features/students/presentation/students_screen.dart`
-- **Search & Filter**: Search bar with centre filter pills (`All`, `Kadavanthra`, `Edappally`, `Kakkanad`).
+- **Search & Filter**: Search bar with centre filter pills (`All`, `Kadavanthra`, `Kumbalanghi`, `Maradu`, `Palluruthy`, `Chullikal`).
 - **Student Cards**: Shows avatar, student name, enrolled program tier, batch schedule, and chevron.
 - **FAB**: Electric lime circular `+` to open student enrollment form.
 

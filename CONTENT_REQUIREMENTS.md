@@ -2,7 +2,7 @@
 
 **Client Representative:** Head Coach Sooraj  
 **Entity:** S & A Badminton Academy (Kochi / Ernakulam)  
-**Locations:** Kadavanthra, Edappally, Kakkanad, and Fourth Centre (Expansion)
+**Locations:** Kadavanthra, Kumbalanghi, Maradu, Palluruthy, and Chullikal
 
 ---
 
@@ -24,7 +24,7 @@ To protect academy credibility, consumer trust, and comply with Google search qu
 
 ## 2. Master Centre Information Checklist
 
-Please complete and confirm the following data points for all four centres:
+Please complete and confirm the following data points for all five centres:
 
 ### Centre 1: Kadavanthra (Central Kochi HQ)
 * [ ] **Exact Arena Name:** (e.g., Rajiv Gandhi Indoor Stadium / S&A Kadavanthra Arena)
@@ -56,16 +56,16 @@ Please complete and confirm the following data points for all four centres:
 
 ---
 
-### Centre 2: Edappally (North Kochi Hub)
+### Centre 2: Kumbalanghi
 * [ ] **Exact Arena Name:**
-* [ ] **Full Street Address:** (Currently: Near Edappally Metro Station / Lulu Junction)
+* [ ] **Full Street Address:**
 * [ ] **PIN Code:** 
 * [ ] **Primary Phone:** 
 * [ ] **Direct WhatsApp Number:** 
 * [ ] **Contact Email:** 
 * [ ] **Google Maps Share URL / Embed Link:**
 * [ ] **Google Business Profile (GBP) CID URL:**
-* [ ] **Exact Coordinates:** Latitude: `10.0261° N`, Longitude: `76.3125° E` (Pending final confirmation)
+* [ ] **Exact Coordinates:**
 * [ ] **Operating Hours:** 
 * [ ] **Court Specifications:** Number of courts: [ ] / Surface: [ ]
 * [ ] **Facilities Available On-Site:** 
@@ -74,17 +74,17 @@ Please complete and confirm the following data points for all four centres:
 
 ---
 
-### Centre 3: Kakkanad (IT Corridor / Infopark Arena)
+### Centre 3: Maradu
 * [ ] **Exact Arena Name:**
-* [ ] **Full Street Address:** (Currently: Near Infopark Expressway, Kakkanad)
+* [ ] **Full Street Address:**
 * [ ] **PIN Code:** 
 * [ ] **Primary Phone:** 
 * [ ] **Direct WhatsApp Number:** 
 * [ ] **Contact Email:** 
 * [ ] **Google Maps Share URL / Embed Link:**
 * [ ] **Google Business Profile (GBP) CID URL:**
-* [ ] **Exact Coordinates:** Latitude: `10.0159° N`, Longitude: `76.3419° E` (Pending final confirmation)
-* [ ] **Operating Hours & Corporate Batches:** (Confirm early morning and post-7 PM slots)
+* [ ] **Exact Coordinates:**
+* [ ] **Operating Hours & Corporate Batches:**
 * [ ] **Court Specifications:** Number of courts: [ ] / Surface: [ ]
 * [ ] **Facilities Available On-Site:** 
 * [ ] **Assigned Coaches & Credentials:**
@@ -92,14 +92,26 @@ Please complete and confirm the following data points for all four centres:
 
 ---
 
-### Centre 4: Fourth Centre (Upcoming Expansion)
-* [ ] **Target Locality / Area:** (e.g. Aluva / Thoppumpady / Tripunithura / Palarivattom)
-* [ ] **Exact Facility / Arena Name:** 
+### Centre 4: Palluruthy
+* [ ] **Exact Arena Name:** 
 * [ ] **Full Street Address:** 
 * [ ] **PIN Code:** 
 * [ ] **Primary Phone:** 
-* [ ] **Expected Opening / Batch Start Date:** 
+* [ ] **Google Maps Share URL / Embed Link:**
 * [ ] **Court Specifications:** Number of courts: [ ] / Surface: [ ]
+* [ ] **Facilities Available On-Site:**
+* [ ] **Available Programs:** 
+
+---
+
+### Centre 5: Chullikal
+* [ ] **Exact Arena Name:** 
+* [ ] **Full Street Address:** 
+* [ ] **PIN Code:** 
+* [ ] **Primary Phone:** 
+* [ ] **Google Maps Share URL / Embed Link:**
+* [ ] **Court Specifications:** Number of courts: [ ] / Surface: [ ]
+* [ ] **Facilities Available On-Site:**
 * [ ] **Available Programs:** 
 
 ---

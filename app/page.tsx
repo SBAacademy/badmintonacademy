@@ -21,15 +21,17 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export const metadata: Metadata = createMetadata({
-  title: "Badminton Coaching & Academy in Kochi | Kadavanthra, Edappally, Kakkanad",
-  description: "Join S & A Badminton Academy in Kochi. Premier badminton coaching for kids, juniors, adults & competitive athletes across Kadavanthra, Edappally, and Kakkanad. BWF sprung wooden courts & certified coaches.",
+  title: "Badminton Coaching & Academy in Kochi | Kadavanthra, Kumbalanghi, Maradu, Palluruthy, Chullikal",
+  description: "Join S & A Badminton Academy in Kochi. Premier badminton coaching for kids, juniors, adults & competitive athletes across Kadavanthra, Kumbalanghi, Maradu, Palluruthy, and Chullikal. BWF sprung wooden courts & certified coaches.",
   path: "/",
   keywords: [
     "badminton academy in Kochi",
     "badminton coaching in Kochi",
     "badminton coaching Kadavanthra",
-    "badminton academy Edappally",
-    "badminton coaching Kakkanad",
+    "badminton academy Kumbalanghi",
+    "badminton coaching Maradu",
+    "badminton coaching Palluruthy",
+    "badminton academy Chullikal",
     "kids badminton classes Kochi",
     "badminton summer camp Kochi",
   ],

@@ -30,7 +30,7 @@ Over the past week, the digital platform successfully completed its transition f
 ### 2. Completed This Week
 
 #### A. Basic SEO Implementation
-- **Standardized Metadata Architecture**: Integrated a centralized metadata generator (`lib/seo.ts`) across all application routes, configuring distinct `<title>` tags, search-optimized `<meta name="description">` snippets, and targeted regional keywords (e.g., *badminton academy Kochi*, *badminton coaching Kadavanthra*, *kids badminton classes Edappally*).
+- **Standardized Metadata Architecture**: Integrated a centralized metadata generator (`lib/seo.ts`) across all application routes, configuring distinct `<title>` tags, search-optimized `<meta name="description">` snippets, and targeted regional keywords (e.g., *badminton academy Kochi*, *badminton coaching Kadavanthra*, *kids badminton classes Kumbalanghi*).
 - **Canonical URL Enforcement**: Automated absolute canonical tag generation across all pages using the primary domain (`https://www.soorajbadmintonacademy.in`) to consolidate page authority and prevent duplicate content penalties.
 - **Social Sharing Previews**: Configured OpenGraph (`og:title`, `og:description`, `og:image`, `og:locale`) and Twitter Card (`summary_large_image`) specifications across all public routes.
 - **Structured Data (Schema.org JSON-LD)**:
@@ -114,7 +114,7 @@ The following items are actively in progress or pending final execution:
 1. **Studio Coach Photographs**: Completing high-resolution, uniform studio portraits and on-court action photos for all coaching faculty members to replace initial working media.
 2. **Ongoing Google Search Console Monitoring**: Tracking crawl rates, index coverage reports, mobile usability verifications, and monitoring newly discovered URLs.
 3. **Index Expansion for Knowledge Base**: Facilitating Google discovery and indexing of remaining specialized badminton training articles and local branch landing pages.
-4. **Local Search / Google Business Profile Coordination**: Aligning on-page centre schema with Google Business Profile location listings for Kadavanthra, Edappally, Kakkanad, and Kumbalanghi.
+4. **Local Search / Google Business Profile Coordination**: Aligning on-page centre schema with Google Business Profile location listings for Kadavanthra, Kumbalanghi, Maradu, Palluruthy, and Chullikal.
 5. **Final Content & Policy Review**: Reviewing academy fee disclosures, batch timings, and tournament track record highlights with academy directors.
 
 ---

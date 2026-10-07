@@ -2,7 +2,7 @@
 **Architecture:** Next.js App Router (SSG / Static Pre-Rendering)  
 **Protocol / Host:** `https://sabadmintonacademy.com`  
 **Target Geographic Entity:** Kochi / Ernakulam, Kerala  
-**Centres:** Kadavanthra, Edappally, Kakkanad, Fourth Centre (Placeholder)
+**Centres:** Kadavanthra, Kumbalanghi, Maradu, Palluruthy, Chullikal
 
 ---
 
@@ -13,9 +13,10 @@
 * **All-Centre Directory:** `/branches`
 * **Local SEO Landing Pages:**
   * `/kadavanthra`
-  * `/edappally`
-  * `/kakkanad`
-  * `/fourth-centre` (Placeholder until verified locality name is confirmed)
+  * `/kumbalanghi`
+  * `/maradu`
+  * `/palluruthy`
+  * `/chullikal`
 * **Program Landing Pages:**
   * `/programs/kids-badminton-coaching`
   * `/programs/junior-badminton-coaching`
@@ -27,7 +28,7 @@
 ### Dynamic Route Implementation
 * File: `app/[location]/page.tsx`
 * Uses `generateStaticParams()` returning only the approved locations:
-  * `kadavanthra`, `edappally`, `kakkanad`, `fourth-centre`.
+  * `kadavanthra`, `kumbalanghi`, `maradu`, `palluruthy`, `chullikal`.
 * Unknown or invalid paths trigger `notFound()` immediately, returning HTTP 404.
 * Does NOT collide with static routes (`/about`, `/branches`, `/programs`, etc.) because static file system routes have precedence in Next.js App Router.
 
@@ -38,9 +39,7 @@
 To preserve link equity and support seamless migration from older URL structures:
 * Legacy paths:
   * `/branches/kadavanthra` → `/kadavanthra`
-  * `/branches/edappally` → `/edappally`
-  * `/branches/kakkanad` → `/kakkanad`
-  * `/branches/fourth-centre` → `/fourth-centre`
+  * `/branches/:slug` → `/:slug`
 * Configured in `next.config.mjs` using `permanent: true`.
 * In Next.js, `permanent: true` emits an **HTTP 308 Permanent Redirect**.
 * Verification via curl:
@@ -60,9 +59,10 @@ Every location page generates unique metadata via `generateMetadata()` in `app/[
 * **Open Graph:** Includes location-specific image, title, description, and canonical URL.
 * **Canonical URL:** Strictly self-canonicalizing:
   * `/kadavanthra` → `https://sabadmintonacademy.com/kadavanthra`
-  * `/edappally` → `https://sabadmintonacademy.com/edappally`
-  * `/kakkanad` → `https://sabadmintonacademy.com/kakkanad`
-  * `/fourth-centre` → `https://sabadmintonacademy.com/fourth-centre`
+  * `/kumbalanghi` → `https://sabadmintonacademy.com/kumbalanghi`
+  * `/maradu` → `https://sabadmintonacademy.com/maradu`
+  * `/palluruthy` → `https://sabadmintonacademy.com/palluruthy`
+  * `/chullikal` → `https://sabadmintonacademy.com/chullikal`
 
 ---
 
@@ -115,7 +115,7 @@ The Name, Address, and Phone number are enforced consistently across the codebas
 ### Sitemap (`app/sitemap.ts`)
 * Automatically enumerates:
   * City-level pages (`/`, `/about`, `/coaches`, `/contact`, `/branches`, etc.)
-  * 4 Location landing pages (`/kadavanthra`, `/edappally`, `/kakkanad`, `/fourth-centre`) with `priority: 0.95` and `changeFrequency: 'weekly'`
+  * 5 Location landing pages (`/kadavanthra`, `/kumbalanghi`, `/maradu`, `/palluruthy`, `/chullikal`) with `priority: 0.95` and `changeFrequency: 'weekly'`
   * All 5 program landing pages with `priority: 0.9`
   * All blog posts with `priority: 0.7`
 * Dynamic generation at `https://sabadmintonacademy.com/sitemap.xml`.
@@ -177,8 +177,8 @@ All conversion actions trigger structured custom events (ready for Google Tag Ma
    * Create Domain Property in Google Search Console for `sabadmintonacademy.com`.
    * Submit `https://sabadmintonacademy.com/sitemap.xml`.
 2. **URL Inspection:**
-   * Inspect `/kadavanthra`, `/edappally`, `/kakkanad`, and ensure "URL is on Google" with valid `SportsActivityLocation` and `BreadcrumbList` rich results detected.
+   * Inspect `/kadavanthra`, `/kumbalanghi`, `/maradu`, `/palluruthy`, `/chullikal`, and ensure "URL is on Google" with valid `SportsActivityLocation` and `BreadcrumbList` rich results detected.
 3. **Google Business Profile Synchronization:**
    * For each physical branch, create/claim the official Google Business Profile.
-   * Link the GBP primary website button directly to that branch's landing page (`/kadavanthra`, `/edappally`, etc.), NOT to the general homepage.
+   * Link the GBP primary website button directly to that branch's landing page (`/kadavanthra`, `/kumbalanghi`, etc.), NOT to the general homepage.
    * Ensure Business Name matches: `S & A Badminton Academy - Kadavanthra`.

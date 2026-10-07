@@ -23,11 +23,11 @@ class _CrmScreenState extends ConsumerState<CrmScreen> {
   List<dynamic> _allLeads = [];
   List<dynamic> _filteredLeads = [];
 
-  String _selectedCentre = 'ALL'; // ALL, KADAVANTHRA, EDAPPALLY, KAKKANAD
+  String _selectedCentre = 'ALL'; // ALL, KADAVANTHRA, KUMBALANGHI, MARADU, PALLURUTHY, CHULLIKAL
   String _selectedStatus = 'ALL'; // ALL, NEW, CONTACTED, FOLLOW_UP, TRIAL, CONVERTED, CLOSED
   dynamic _selectedLead;
 
-  final List<String> _centres = ['ALL', 'KADAVANTHRA', 'EDAPPALLY', 'KAKKANAD'];
+  final List<String> _centres = ['ALL', 'KADAVANTHRA', 'KUMBALANGHI', 'MARADU', 'PALLURUTHY', 'CHULLIKAL'];
 
   final List<Map<String, String>> _statusFilters = [
     {'key': 'ALL', 'label': 'All'},
@@ -397,8 +397,10 @@ class _CrmScreenState extends ConsumerState<CrmScreen> {
                     isExpanded: true,
                     items: const [
                       DropdownMenuItem(value: 'kadavanthra', child: Text('Kadavanthra Centre')),
-                      DropdownMenuItem(value: 'edappally', child: Text('Edappally Centre')),
-                      DropdownMenuItem(value: 'kakkanad', child: Text('Kakkanad Centre')),
+                      DropdownMenuItem(value: 'kumbalanghi', child: Text('Kumbalanghi Centre')),
+                      DropdownMenuItem(value: 'maradu', child: Text('Maradu Centre')),
+                      DropdownMenuItem(value: 'palluruthy', child: Text('Palluruthy Centre')),
+                      DropdownMenuItem(value: 'chullikal', child: Text('Chullikal Centre')),
                     ],
                     onChanged: (val) {
                       if (val != null) setModalState(() => selectedBranch = val);

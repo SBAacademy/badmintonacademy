@@ -26,7 +26,7 @@ export default function TermsPage() {
 
           <h2 className="text-xl font-bold text-white pt-4">1. Footwear & Court Etiquette</h2>
           <p>
-            Non-marking indoor badminton court shoes are strictly mandatory across all branches (Kadavanthra, Edappally, and Kakkanad). Shoes worn on outdoor roads or soil must not be stepped onto the synthetic courts.
+            Non-marking indoor badminton court shoes are strictly mandatory across all branches (Kadavanthra, Kumbalanghi, Maradu, Palluruthy, and Chullikal). Shoes worn on outdoor roads or soil must not be stepped onto the synthetic courts.
           </p>
 
           <h2 className="text-xl font-bold text-white pt-4">2. Session Punctuality & Attendance</h2>

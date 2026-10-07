@@ -9,7 +9,7 @@
 ## 1. EXECUTIVE OVERVIEW & CURRENT STAGE
 
 ### 1.1 Project Mission
-S & A Badminton Academy is a high-performance badminton training institution based in Kochi, Kerala, operating international-standard indoor facilities across Kadavanthra, Edappally, and Kakkanad. 
+S & A Badminton Academy is a high-performance badminton training institution based in Kochi, Kerala, operating international-standard indoor facilities across Kadavanthra, Kumbalanghi, Maradu, Palluruthy, and Chullikal. 
 
 The website serves three core business functions:
 1. **Brand Positioning ("Rebel Performance")**: An editorial sports campaign aesthetic inspired by Nike Training and Red Bull, rejecting generic academy templates in favor of cinematic typography, high-contrast imagery, and athletic discipline.
@@ -133,7 +133,7 @@ sequenceDiagram
 - **Design Tokens**: Solid athletic black `#07090D` with top 1px border `#1F2937`.
 - **Navigation Links**:
   - `Programs`: Hover dropdown featuring Kids, Junior, Adult, Competitive, and Camps.
-  - `Centres`: Quick selector for Kadavanthra, Edappally, Kakkanad, and Fourth Centre.
+  - `Centres`: Quick selector for Kadavanthra, Kumbalanghi, Maradu, Palluruthy, and Chullikal.
   - `Coaches`: Direct link to faculty profiles.
   - `Track Record`: Direct link to tournament achievements.
   - `Reviews`: Verified testimonials.
@@ -164,7 +164,7 @@ sequenceDiagram
 | **01. Hero Campaign** | `HeroSection.tsx` | High-impact full-viewport intro featuring cinematic badminton athlete imagery, athletic typography, dynamic stat badges (4 Centres, 18+ Coaches, 500+ Active Athletes), and dual CTAs. |
 | **02. Rebel Manifesto** | In-page | Bold typography statement defining the academy's coaching philosophy: discipline, footwork biomechanics, and tournament excellence. |
 | **03. Program Experience** | `ProgramsSection.tsx` | Interactive 4-card pathway grid (Kids Foundation, Junior Development, Adult Fitness, Tournament Elite) with age tags, weekly schedules, and curriculum breakdown. |
-| **04. Kochi Centres Infrastructure** | In-page | Grid highlighting Kadavanthra (HQ), Edappally, and Kakkanad with court counts, flooring specs, and directions. |
+| **04. Kochi Centres Infrastructure** | In-page | Grid highlighting Kadavanthra (HQ), Kumbalanghi, Maradu, Palluruthy, and Chullikal with court counts, flooring specs, and directions. |
 | **05. Coaching Spotlight** | `CoachesSpotlight.tsx` | Live profiles of senior coaches (Anand Varma, Priya Nair, etc.) loaded dynamically from Neon DB via `getCoaches()`. |
 | **06. Training Methodology** | In-page | 4-pillar athletic breakdown: Biomechanics & Grip, Footwork Agility, Match Tactics & Video Analysis, Conditioning & Nutrition. |
 | **07. Track Record Archive** | `AchievementsSection.tsx` | Tournament victories and state medals loaded dynamically from Neon DB via `getAchievements()`, with medal ribbons, athlete names, and podium photos. |
@@ -177,7 +177,7 @@ sequenceDiagram
 
 ### 3.3 Page 2: Dedicated Centre Landing Pages (`app/[location]/page.tsx`)
 
-**Routes:** `/kadavanthra`, `/edappally`, `/kakkanad`, `/fourth-centre`
+**Routes:** `/kadavanthra`, `/kumbalanghi`, `/maradu`, `/palluruthy`, `/chullikal`
 
 Each centre has a dedicated SEO-optimized landing page featuring:
 1. **Centre Hero Banner**: Headline, exact address, contact phone, operating hours (05:00 AM – 10:30 PM), and Google Maps direction button.
@@ -197,8 +197,8 @@ Each centre has a dedicated SEO-optimized landing page featuring:
 - **Purpose**: High-level overview of the entire academy network across Kochi.
 - **Features**:
   - Detailed directory cards for each centre with court counts, full addresses, directions, and phone hotlines.
-  - **Centres & Courts Gallery (`CentreGallerySection.tsx`)**: Visual tour of facilities across Kadavanthra, Edappally, and Kakkanad.
-  - Internal links to dedicated sub-pages (`/kadavanthra`, `/edappally`, etc.).
+  - **Centres & Courts Gallery (`CentreGallerySection.tsx`)**: Visual tour of facilities across Kadavanthra, Kumbalanghi, Maradu, Palluruthy, and Chullikal.
+  - Internal links to dedicated sub-pages (`/kadavanthra`, `/kumbalanghi`, etc.).
 
 ---
 
@@ -251,7 +251,7 @@ Each centre has a dedicated SEO-optimized landing page featuring:
 - **Elements**:
   - Star rating display (1 to 5 stars).
   - Reviewer identity, child name, and age category.
-  - Branch location badge (`Kadavanthra Branch`, `Edappally Branch`, etc.).
+  - Branch location badge (`Kadavanthra Branch`, `Kumbalanghi Branch`, etc.).
   - Pull-quote highlights and detailed parent testimonials.
 
 ---
@@ -271,7 +271,7 @@ Each centre has a dedicated SEO-optimized landing page featuring:
 ### 3.10 Page 9: Central Photo Gallery (`app/gallery/page.tsx`)
 
 - **Interactive Features (`GalleryInteractive.tsx`)**:
-  - **Centre Selector Strip**: Filter by `All Centres`, `Kadavanthra`, `Edappally`, or `Kakkanad`.
+  - **Centre Selector Strip**: Filter by `All Centres`, `Kadavanthra`, `Kumbalanghi`, `Maradu`, `Palluruthy`, or `Chullikal`.
   - **Category Pills**: Filter by `Courts & Arena`, `Training Drills`, `Tournaments`, `Juniors & Camps`, `Coaching Sessions`.
   - **Full-Screen Lightbox**: Clicking any photo opens the interactive modal with Next/Previous buttons, captions, and branch tags.
   - **Dynamic Ingestion**: Pulls photos directly from Neon PostgreSQL (`/api/content/gallery`).
@@ -283,7 +283,7 @@ Each centre has a dedicated SEO-optimized landing page featuring:
 - **Features**:
   - Direct branch phone hotlines and operational hours.
   - Interactive Enquiry Form with real-time feedback.
-  - Pre-selection support via URL query parameters (e.g. `/contact?branch=edappally&program=kids-badminton-coaching`).
+  - Pre-selection support via URL query parameters (e.g. `/contact?branch=kumbalanghi&program=kids-badminton-coaching`).
   - Automatic lead insertion into Neon DB followed by WhatsApp dispatch.
 
 ---
@@ -395,7 +395,7 @@ CREATE TABLE IF NOT EXISTS uploaded_images (
 ```
 S-A-BADMINTON-ACADEMY/
 ├── app/
-│   ├── [location]/page.tsx             # 4 Centre landing pages (Kadavanthra, Edappally, etc.)
+│   ├── [location]/page.tsx             # 5 Centre landing pages (Kadavanthra, Kumbalanghi, etc.)
 │   ├── about/page.tsx                  # Academy heritage & coaching methodology
 │   ├── achievements/page.tsx           # Tournament medals & achievements timeline
 │   ├── admin/page.tsx                  # Isolated Admin Portal (CRM + CMS Studio)

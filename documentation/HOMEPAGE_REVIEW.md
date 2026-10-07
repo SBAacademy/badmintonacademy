@@ -49,7 +49,7 @@ On the homepage, the application loads within [`app/layout.tsx`](file:///Users/m
 ## 2. Detailed Section-by-Section Evaluation
 
 ### 1. AnnouncementBar ([`components/layout/AnnouncementBar.tsx`](file:///Users/mohammednibrasulhaqq/Documents/Web/S-A-BADMINTON-ACADEMY/components/layout/AnnouncementBar.tsx))
-* **Content Status:** Real/Seasonal. Announces `2026–27 ADMISSIONS: New Training Batches Enrolling Across Kochi • Kadavanthra, Edappally & Kakkanad`.
+* **Content Status:** Real/Seasonal. Announces `2026–27 ADMISSIONS: New Training Batches Enrolling Across Kochi • Kadavanthra, Kumbalanghi, Maradu, Palluruthy & Chullikal`.
 * **UI & Typography:** Dark slate background (`#0E141B`), athletic lime tag (`bg-[#B8F000]/15`), subtle text (`#A7B0BC`). Height: 44px (`h-11`).
 * **UX & Interaction:** "Book a Free Trial →" link with dismiss button (X) that hides the bar for the active session.
 * **Technical:** Client component managing local visibility state.
@@ -67,7 +67,7 @@ On the homepage, the application loads within [`app/layout.tsx`](file:///Users/m
 ---
 
 ### 3. HeroSection ([`components/hero/HeroSection.tsx`](file:///Users/mohammednibrasulhaqq/Documents/Web/S-A-BADMINTON-ACADEMY/components/hero/HeroSection.tsx))
-* **Content Status:** High-impact copy: *"TRAIN HARD. SMASH HARD. MASTER THE COURT."* Supported by local context: *"Structured badminton coaching for kids, juniors, adults and competitive players across Kadavanthra, Edappally and Kakkanad."*
+* **Content Status:** High-impact copy: *"TRAIN HARD. SMASH HARD. MASTER THE COURT."* Supported by local context: *"Structured badminton coaching for kids, juniors, adults and competitive players across Kadavanthra, Kumbalanghi, Maradu, Palluruthy and Chullikal."*
 * **Headings & SEO:** Single primary `<h1>`: *"TRAIN HARD. SMASH HARD. MASTER THE COURT."*
 * **UI & Media:** Uses Next.js `<Image priority>` on [`public/images/hero-athlete.jpg`](file:///Users/mohammednibrasulhaqq/Documents/Web/S-A-BADMINTON-ACADEMY/public/images/hero-athlete.jpg) with a gradient overlay to prevent text clash.
 * **UX & Conversion:** Dual CTAs: Primary *"BOOK A FREE TRIAL →"* (Lime button linking to `/contact`) and Secondary *"WHATSAPP US"* (links to pre-filled WhatsApp via `lib/whatsapp.ts`).
@@ -121,12 +121,13 @@ On the homepage, the application loads within [`app/layout.tsx`](file:///Users/m
 ---
 
 ### 9. BranchesSection ([`components/sections/BranchesSection.tsx`](file:///Users/mohammednibrasulhaqq/Documents/Web/S-A-BADMINTON-ACADEMY/components/sections/BranchesSection.tsx))
-* **Content Status:** Fully integrated with `data/locations.ts`, rendering all 4 physical centres:
+* **Content Status:** Fully integrated with `data/locations.ts`, rendering all 5 physical centres:
   - *Kadavanthra* → Links directly to `/kadavanthra`
-  - *Edappally* → Links directly to `/edappally`
-  - *Kakkanad* → Links directly to `/kakkanad`
-  - *Fourth Centre* → Links directly to `/fourth-centre` (Placeholder tag)
-* **SEO & Internal Linking:** Critical local SEO hub passing crawl equity directly to the 4 local landing pages.
+  - *Kumbalanghi* → Links directly to `/kumbalanghi`
+  - *Maradu* → Links directly to `/maradu`
+  - *Palluruthy* → Links directly to `/palluruthy`
+  - *Chullikal* → Links directly to `/chullikal`
+* **SEO & Internal Linking:** Critical local SEO hub passing crawl equity directly to the 5 local landing pages.
 
 ---
 
@@ -144,7 +145,7 @@ On the homepage, the application loads within [`app/layout.tsx`](file:///Users/m
 
 ### 12. TestimonialsSection ([`components/sections/TestimonialsSection.tsx`](file:///Users/mohammednibrasulhaqq/Documents/Web/S-A-BADMINTON-ACADEMY/components/sections/TestimonialsSection.tsx))
 * **Content Status:** Verified parent and athlete feedback from `data/testimonials.ts` with 5-star ratings.
-* **UI:** 3-column masonry grid with reviewer branch attribution (Kadavanthra, Edappally, Kakkanad).
+* **UI:** 3-column masonry grid with reviewer branch attribution (Kadavanthra, Kumbalanghi, Maradu, Palluruthy, Chullikal).
 
 ---
 
@@ -161,7 +162,7 @@ On the homepage, the application loads within [`app/layout.tsx`](file:///Users/m
 ---
 
 ### 15. Footer ([`components/layout/Footer.tsx`](file:///Users/mohammednibrasulhaqq/Documents/Web/S-A-BADMINTON-ACADEMY/components/layout/Footer.tsx))
-* **Content Status:** Complete NAP (Name, Address, Phone: `+91 79076 55513`), crawlable links to all 4 centre pages (`/kadavanthra`, `/edappally`, `/kakkanad`, `/fourth-centre`), all 5 program pages, and legal policies.
+* **Content Status:** Complete NAP (Name, Address, Phone: `+91 79076 55513`), crawlable links to all 5 centre pages (`/kadavanthra`, `/kumbalanghi`, `/maradu`, `/palluruthy`, `/chullikal`), all 5 program pages, and legal policies.
 
 ---
 

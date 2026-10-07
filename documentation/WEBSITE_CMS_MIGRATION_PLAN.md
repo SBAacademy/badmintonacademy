@@ -27,7 +27,7 @@ If the database query succeeds, live content is rendered. If a network fault occ
 
 | Section | Current Source | Target Source | Migration Method | SEO Risk | Fallback Strategy |
 |---|---|---|---|:---:|---|
-| **Centres & Locations** | `data/locations.ts` | Relational `centres` table | Canonical seed from Kadavanthra, Edappally, Kakkanad | **HIGH** | Static `LOCATIONS` object in `data/locations.ts` preserved verbatim |
+| **Centres & Locations** | `data/locations.ts` | Relational `centres` table | Canonical seed from Kadavanthra, Kumbalanghi, Maradu, Palluruthy, Chullikal | **HIGH** | Static `LOCATIONS` object in `data/locations.ts` preserved verbatim |
 | **Coaches Roster** | `data/coaches.ts` & `site_content` | Relational `coaches` table | Seed from verified 4 coaches | **MEDIUM** | `COACHES` in `data/coaches.ts` |
 | **Programs** | `data/programs.ts` | Relational `programs` table | Seed from 5 canonical curriculums | **HIGH** | `PROGRAMS` in `data/programs.ts` |
 | **Gallery** | `site_content` JSONB & `data/gallery.ts` | `site_content` + `/api/upload` | Direct Neon DB storage | **LOW** | `GALLERY_ITEMS` in `data/gallery.ts` |

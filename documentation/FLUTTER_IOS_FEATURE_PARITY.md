@@ -17,7 +17,7 @@ This document provides a comprehensive feature comparison between the reference 
 | **Offline Attendance**| ✓ (Hive/SQLite) | ✓ (SwiftData) | `/api/admin/attendance` | **Complete (100%)** | Local persistence, operation IDs, auto-sync when network returns, retry count. |
 | **Invoices & Finance**| ✓ | ✓ | `/api/admin/invoices`<br>`/api/admin/payments` | **Complete (100%)** | Server-authoritative balances, record partial/full payments, WhatsApp reminders. |
 | **Coaches Directory** | ✓ | ✓ | `/api/admin/coaches` | **Complete (100%)** | Verified coaching staff list, experience, certifications, direct call/email. |
-| **Centres Directory** | ✓ | ✓ | `/api/admin/centres` | **Complete (100%)** | Verified 3 canonical centres: Kadavanthra, Edappally, Kakkanad. |
+| **Centres Directory** | ✓ | ✓ | `/api/admin/centres` | **Complete (100%)** | Verified 5 canonical centres: Kadavanthra, Kumbalanghi, Maradu, Palluruthy, Chullikal. |
 | **Training Programs** | ✓ | ✓ | `/api/admin/programs` | **Complete (100%)** | Age ranges, coach-student ratios, skill levels, descriptions. |
 | **Athlete Performance**| ✓ | ✓ | `/api/admin/performance` | **Complete (100%)** | 5-rubric evaluation (Footwork, Technique, Fitness, Tactical, Consistency). |
 | **Reports & Analytics**| ✓ | ✓ | `/api/admin/reports/summary` | **Complete (100%)** | Admissions funnel, conversion rates, attendance discipline %, revenue totals. |

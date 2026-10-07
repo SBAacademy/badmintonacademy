@@ -60,7 +60,7 @@
 | Schedule | Segmented filter (`Today`, `Day`, `Week`), chronological sessions | **PASSED** |
 | Attendance | Numbered student rows, status selection (`Present`, `Absent`, `Late`), Mark All Present, Save Attendance | **PASSED** |
 | Offline Attendance | Local storage queuing when offline, status banner, background sync | **PASSED** |
-| Students Roster | Centre filtering (`Kadavanthra`, `Edappally`, `Kakkanad`), student profile cards | **PASSED** |
+| Students Roster | Centre filtering (`Kadavanthra`, `Kumbalanghi`, `Maradu`, `Palluruthy`, `Chullikal`), student profile cards | **PASSED** |
 | Student Detail | Tabs (`Profile`, `Attendance`, `Payments`, `Performance`), deep action tiles | **PASSED** |
 | Payments & Billing | Invoices vs Payments receipts segment, status chips, amount breakdown | **PASSED** |
 | Invoice Detail | Balance due highlight, `Record Payment` sheet, `Send WhatsApp Reminder` launcher | **PASSED** |

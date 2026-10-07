@@ -10,7 +10,7 @@ export const revalidate = 0;
 
 export const metadata: Metadata = createMetadata({
   title: "Parent & Student Reviews | S & A Badminton Academy Kochi",
-  description: "Read genuine feedback and parent testimonials about S & A Badminton Academy coaching across Kadavanthra, Edappally, and Kakkanad.",
+  description: "Read genuine feedback and parent testimonials about S & A Badminton Academy coaching across Kadavanthra, Kumbalanghi, Maradu, Palluruthy, and Chullikal.",
   path: "/testimonials",
   keywords: [
     "badminton academy reviews Kochi",

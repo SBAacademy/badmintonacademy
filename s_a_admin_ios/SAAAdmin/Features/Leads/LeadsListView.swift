@@ -46,10 +46,12 @@ public struct LeadsListView: View {
 
                         // Centre Selector
                         Picker("Centre", selection: $selectedCentre) {
-                            Text("All Centres").tag("ALL")
+                            Text("All").tag("ALL")
                             Text("Kadavanthra").tag("kadavanthra")
-                            Text("Edappally").tag("edappally")
-                            Text("Kakkanad").tag("kakkanad")
+                            Text("Kumbalanghi").tag("kumbalanghi")
+                            Text("Maradu").tag("maradu")
+                            Text("Palluruthy").tag("palluruthy")
+                            Text("Chullikal").tag("chullikal")
                         }
                         .pickerStyle(.segmented)
                         .onChange(of: selectedCentre) { _ in

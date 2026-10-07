@@ -20,7 +20,7 @@ All historical navigation defects—specifically the desktop dropdown hover-gap 
 ## 2. Verified Functionality Status
 
 ### What Is Fully Functional & Verified Working
-* **Top-Level Dynamic 4-Centre SEO Routes:** `/kadavanthra`, `/edappally`, `/kakkanad`, and `/fourth-centre` pre-render with SSG via `generateStaticParams()`. Invalid routes return HTTP 404 cleanly.
+* **Top-Level Dynamic 5-Centre SEO Routes:** `/kadavanthra`, `/kumbalanghi`, `/maradu`, `/palluruthy`, and `/chullikal` pre-render with SSG via `generateStaticParams()`. Invalid routes return HTTP 404 cleanly.
 * **Legacy 308 Redirections:** Requests to `/branches/:slug` redirect to `/:slug` via HTTP 308 in a single hop.
 * **Desktop Navigation:** Features a gapless `pt-2` continuous hover positioning wrapper, 180ms debounce buffer, Escape key dismissal, outside-click listener, and direct overview links.
 * **Mobile Drawer Navigation:** 100% opaque drawer, body scroll lock, full-width 48px touch targets, mutually exclusive accordion toggling, and instant route transitions.

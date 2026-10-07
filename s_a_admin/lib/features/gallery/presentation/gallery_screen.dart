@@ -25,7 +25,7 @@ class _GalleryScreenState extends ConsumerState<GalleryScreen> {
   List<dynamic> _filteredItems = [];
 
   String _statusFilter = 'ALL'; // ALL, PUBLISHED, DRAFT
-  String _centreFilter = 'ALL'; // ALL, Kadavanthra, Edappally, Kakkanad
+  String _centreFilter = 'ALL'; // ALL, Kadavanthra, Kumbalanghi, Maradu, Palluruthy, Chullikal
   String _categoryFilter = 'ALL';
 
   final List<Map<String, String>> _statusTabs = [
@@ -34,7 +34,7 @@ class _GalleryScreenState extends ConsumerState<GalleryScreen> {
     {'key': 'DRAFT', 'label': 'Draft'},
   ];
 
-  List<String> _centres = ['ALL', 'Kadavanthra', 'Edappally', 'Kakkanad'];
+  List<String> _centres = ['ALL', 'Kadavanthra', 'Kumbalanghi', 'Maradu', 'Palluruthy', 'Chullikal'];
 
   final List<String> _categories = [
     'ALL',

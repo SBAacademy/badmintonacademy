@@ -46,8 +46,8 @@ final class ModelDecodingTests: XCTestCase {
                     "phone": "9847012345",
                     "email": "rohan@example.com",
                     "status": "TRIAL_SCHEDULED",
-                    "preferred_centre": "edappally",
-                    "centre_name": "Edappally Centre",
+                    "preferred_centre": "kumbalanghi",
+                    "centre_name": "Kumbalanghi Centre",
                     "program_id": "juniors",
                     "program_name": "Junior Development",
                     "created_at": "2026-09-08T09:00:00.000Z"

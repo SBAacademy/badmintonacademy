@@ -116,7 +116,7 @@ const validInternalLinkPatterns = [
   /^\/coaches(\/[a-z0-9-]+)?$/,
   /^\/contact$/,
   /^\/blog(\/[a-z0-9-]+)?$/,
-  /^\/(kadavanthra|kumbalanghi|maradu|palluruthy|chullikal|kakkanad|edappally|fourth-centre)$/,
+  /^\/(kadavanthra|kumbalanghi|maradu|palluruthy|chullikal)$/,
   /^\/terms$/,
   /^\/privacy$/,
 ];

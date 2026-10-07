@@ -83,7 +83,7 @@ CREATE INDEX IF NOT EXISTS idx_refresh_tokens_user ON refresh_tokens(user_id);
 ### Physical Infrastructure & Programs
 
 ```sql
--- 3. CANONICAL CENTRES (Strictly Kadavanthra, Edappally, Kakkanad)
+-- 3. CANONICAL CENTRES (Strictly Kadavanthra, Kumbalanghi, Maradu, Palluruthy, Chullikal)
 CREATE TABLE IF NOT EXISTS centres (
     slug VARCHAR(64) PRIMARY KEY,
     name VARCHAR(128) NOT NULL,

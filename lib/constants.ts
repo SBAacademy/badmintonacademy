@@ -17,12 +17,6 @@ export function resolveAutomaticNeighborhoods(locationOrAddress?: string, name?:
   if (combined.includes("kadavanthra")) {
     return ["Panampilly Nagar", "Girinagar", "Elamkulam", "Vyttila", "Thevara", "MG Road", "Ravipuram", "Ernakulam South"];
   }
-  if (combined.includes("edappally")) {
-    return ["Palarivattom", "Kaloor", "Elamakkara", "Kalamassery", "Cheranallur", "Lulu Junction", "Aluva Bypass", "Ernakulam North"];
-  }
-  if (combined.includes("kakkanad")) {
-    return ["Infopark Phase 1 & 2", "SmartCity Kochi", "Vazhakkala", "Padamughal", "Thrikkakara", "Edachira", "Kakkanad Expressway"];
-  }
   if (combined.includes("kumbalang") || combined.includes("kumbalan")) {
     return ["Perumpadappu", "Palluruthy", "Aroor", "Edakochi", "Chellanam", "Thoppumpady"];
   }

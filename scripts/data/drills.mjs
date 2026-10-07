@@ -360,7 +360,7 @@ export const drillsArticles = [
       "- **Warm-Up Phase:** 5 minutes of dynamic joint mobilization and shadow movement.",
       "- **Drill Volume:** 4 to 6 sets of 15 to 20 focused repetitions with a 45-second recovery interval between sets.",
       "- **Pressure Match Application:** Conclude with 15 minutes of conditional match play where points scored using this specific technique earn double value.",
-      "Test your limits in our advanced batches across [Kadavanthra](/kadavanthra) and [Kakkanad](/kakkanad)."
+      "Test your limits in our advanced batches across [Kadavanthra](/kadavanthra) and [Kumbalanghi](/kumbalanghi)."
     ]
   },
   {

@@ -12,7 +12,7 @@ export const revalidate = 0;
 export const metadata: Metadata = createMetadata({
   title: "Badminton Tournaments & Events in Kochi | S & A Badminton Academy",
   description:
-    "Explore upcoming badminton tournaments, championships, holiday training camps, and workshops across S & A Badminton Academy centres in Kadavanthra, Edappally, and Kakkanad.",
+    "Explore upcoming badminton tournaments, championships, holiday training camps, and workshops across S & A Badminton Academy centres in Kadavanthra, Kumbalanghi, Maradu, Palluruthy, and Chullikal.",
   path: "/events",
   keywords: [
     "badminton tournaments in Kochi",

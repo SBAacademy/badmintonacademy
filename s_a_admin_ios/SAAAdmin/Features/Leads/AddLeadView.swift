@@ -36,8 +36,10 @@ public struct AddLeadView: View {
                     Section("Academy Preferences") {
                         Picker("Preferred Centre", selection: $branch) {
                             Text("Kadavanthra Centre").tag("kadavanthra")
-                            Text("Edappally Centre").tag("edappally")
-                            Text("Kakkanad Centre").tag("kakkanad")
+                            Text("Kumbalanghi Centre").tag("kumbalanghi")
+                            Text("Maradu Centre").tag("maradu")
+                            Text("Palluruthy Centre").tag("palluruthy")
+                            Text("Chullikal Centre").tag("chullikal")
                         }
 
                         Picker("Curriculum", selection: $program) {

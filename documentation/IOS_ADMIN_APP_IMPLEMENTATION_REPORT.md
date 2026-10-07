@@ -55,7 +55,7 @@ The native iOS administration application for S&A Badminton Academy (`s_a_admin_
 - `SAAAdmin/Features/Schedule/ScheduleView.swift`: Court timetable, batch cohorts, capacity indicators.
 - `SAAAdmin/Features/Finance/FinanceView.swift`: Invoice tracking, balance calculations, recording payments, WhatsApp reminders.
 - `SAAAdmin/Features/Coaches/CoachesListView.swift`: Coaching staff directory with direct phone and email launchers.
-- `SAAAdmin/Features/Centres/CentresListView.swift`: Verified 3 canonical centres (Kadavanthra, Edappally, Kakkanad).
+- `SAAAdmin/Features/Centres/CentresListView.swift`: Verified 5 canonical centres (Kadavanthra, Kumbalanghi, Maradu, Palluruthy, Chullikal).
 - `SAAAdmin/Features/Performance/PerformanceView.swift`: 5-rubric athlete assessment (Footwork, Technique, Fitness, Tactical, Consistency).
 - `SAAAdmin/Features/Reports/ReportsView.swift`: Aggregated admissions funnel, conversion rates, attendance discipline %, revenue totals.
 - `SAAAdmin/Features/CMS/CMSView.swift`: Testimonials, achievements, announcements, and blog management.

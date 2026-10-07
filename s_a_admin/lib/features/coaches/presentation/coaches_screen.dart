@@ -142,7 +142,7 @@ class _CoachesScreenState extends ConsumerState<CoachesScreen> {
     final photoCtrl = TextEditingController(text: existingCoach?['photo'] ?? existingCoach?['image'] ?? '');
     final bioCtrl = TextEditingController(text: existingCoach?['bio'] ?? existingCoach?['short_bio'] ?? '');
     final specCtrl = TextEditingController(text: existingCoach?['specialization'] ?? 'Singles Strategy & Footwork');
-    final centresCtrl = TextEditingController(text: (existingCoach?['centres'] is List) ? (existingCoach['centres'] as List).join(', ') : (existingCoach?['centres'] ?? 'Kadavanthra, Edappally'));
+    final centresCtrl = TextEditingController(text: (existingCoach?['centres'] is List) ? (existingCoach['centres'] as List).join(', ') : (existingCoach?['centres'] ?? 'Kadavanthra, Kumbalanghi'));
     final orderCtrl = TextEditingController(text: (existingCoach?['display_order'] ?? existingCoach?['order'] ?? '1').toString());
     bool isPublished = existingCoach != null ? (existingCoach['published'] == true || existingCoach['is_published'] == true) : true;
 
@@ -212,7 +212,7 @@ class _CoachesScreenState extends ConsumerState<CoachesScreen> {
                       TextField(
                         controller: centresCtrl,
                         style: const TextStyle(color: AppTheme.textPrimary),
-                        decoration: const InputDecoration(hintText: 'Centre(s) (e.g. Kadavanthra, Edappally)'),
+                        decoration: const InputDecoration(hintText: 'Centre(s) (e.g. Kadavanthra, Kumbalanghi)'),
                       ),
                       const SizedBox(height: 10),
                       TextField(

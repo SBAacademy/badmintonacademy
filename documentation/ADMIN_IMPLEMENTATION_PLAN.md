@@ -22,7 +22,7 @@
 ### Gate 1: Database Backup, Non-Destructive Migrations & Canonical Seeding
 - Pre-flight automated backup of existing `leads` (5 rows), `site_content`, `uploaded_images`.
 - Non-destructive execution of PostgreSQL DDL on Neon Serverless.
-- Canonical seeding of Centres (Kadavanthra, Edappally, Kakkanad), Programs (Kids, Junior, Adult, Competitive, Camp), and Verified Coaches (Anand, Shalini, Rohan, Karthik).
+- Canonical seeding of Centres (Kadavanthra, Kumbalanghi, Maradu, Palluruthy, Chullikal), Programs (Kids, Junior, Adult, Competitive, Camp), and Verified Coaches (Anand, Shalini, Rohan, Karthik).
 - Bootstrap initial Super Admin account with secure password hash.
 - Verification script asserting table counts and zero loss of existing records.
 

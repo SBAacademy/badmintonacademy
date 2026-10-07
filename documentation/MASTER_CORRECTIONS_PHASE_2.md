@@ -39,9 +39,9 @@ To ensure Phase 2 development proceeds with surgical precision and does not rewr
 2. **Mobile Drawer Navigation (`components/layout/Navbar.tsx`):**
    - *Status:* **KEEP / VERIFIED**.
    - *Architecture:* Fully decoupled `openMobileMenu` state, full-width 48px tap targets, mutual exclusivity (opening Centres collapses Programs), 100% opaque `#080B10` drawer with body scroll lock.
-3. **Top-Level 4-Centre Dynamic Routing (`app/[location]/page.tsx`):**
+3. **Top-Level 5-Centre Dynamic Routing (`app/[location]/page.tsx`):**
    - *Status:* **KEEP / VERIFIED**.
-   - *Architecture:* Short URLs (`/kadavanthra`, `/edappally`, `/kakkanad`, `/fourth-centre`) statically generated via `generateStaticParams()`. Invalid routes trigger `notFound()` (HTTP 404).
+   - *Architecture:* Short URLs (`/kadavanthra`, `/kumbalanghi`, `/maradu`, `/palluruthy`, `/chullikal`) statically generated via `generateStaticParams()`. Invalid routes trigger `notFound()` (HTTP 404).
 4. **Single-Hop HTTP 308 Legacy Redirects (`next.config.mjs`):**
    - *Status:* **KEEP / VERIFIED**.
    - *Architecture:* Maps `/branches/:slug` to `/:slug` via HTTP 308 permanent redirects without redirect chains.
@@ -313,14 +313,15 @@ All actionable findings from the 19 audit reports are consolidated into the foll
 
 ---
 
-## 7. Four-Centre Local SEO Master Matrix
+## 7. Five-Centre Local SEO Master Matrix
 
 | Centre URL | Location Name | Target Micro-Market | Primary Keyword | H1 Heading | Schema `@id` Anchor | Content Status |
 | :--- | :--- | :--- | :--- | :--- | :--- | :---: |
 | `/kadavanthra` | Kadavanthra Central HQ | Central Kochi, Panampilly Nagar, Girinagar | `badminton academy in Kadavanthra` | Badminton Academy in Kadavanthra | `https://sabadmintonacademy.com/kadavanthra#location` | **Verified Active** |
-| `/edappally` | Edappally North Hub | North Kochi, Palarivattom, Kalamassery, Metro | `badminton academy in Edappally` | Badminton Academy in Edappally | `https://sabadmintonacademy.com/edappally#location` | **Verified Active** |
-| `/kakkanad` | Kakkanad IT Arena | Infopark, SmartCity, Thrikkakara, Vazhakkala | `badminton academy in Kakkanad` | Badminton Academy in Kakkanad | `https://sabadmintonacademy.com/kakkanad#location` | **Verified Active** |
-| `/fourth-centre` | [FACILITY_NAME] | [AREA] (Client to confirm) | `badminton academy in [Area]` | Badminton Academy in [Upcoming Centre] | `https://sabadmintonacademy.com/fourth-centre#location` | **Awaiting Client (FIX-001)** |
+| `/kumbalanghi` | Kumbalanghi | Kumbalanghi, West Kochi, Ezhupunna, Aroor | `badminton academy in Kumbalanghi` | Badminton Academy in Kumbalanghi | `https://sabadmintonacademy.com/kumbalanghi#location` | **Verified Active** |
+| `/maradu` | Maradu | Maradu, Kundannoor, Nettoor, Thykoodam | `badminton academy in Maradu` | Badminton Academy in Maradu | `https://sabadmintonacademy.com/maradu#location` | **Verified Active** |
+| `/palluruthy` | Palluruthy | Palluruthy, Thoppumpady, Edakochi, Perumpadappu | `badminton academy in Palluruthy` | Badminton Academy in Palluruthy | `https://sabadmintonacademy.com/palluruthy#location` | **Verified Active** |
+| `/chullikal` | Chullikal | Chullikal, Mattancherry, Fort Kochi, Kochangadi | `badminton academy in Chullikal` | Badminton Academy in Chullikal | `https://sabadmintonacademy.com/chullikal#location` | **Verified Active** |
 
 ---
 

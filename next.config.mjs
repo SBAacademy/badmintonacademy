@@ -22,21 +22,6 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: '/branches/edappally',
-        destination: '/edappally',
-        permanent: true,
-      },
-      {
-        source: '/branches/kakkanad',
-        destination: '/kakkanad',
-        permanent: true,
-      },
-      {
-        source: '/branches/fourth-centre',
-        destination: '/fourth-centre',
-        permanent: true,
-      },
-      {
         source: '/branches/:slug',
         destination: '/:slug',
         permanent: true,

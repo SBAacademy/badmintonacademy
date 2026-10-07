@@ -821,7 +821,7 @@ export function CentresManager() {
                         required
                         value={form.name}
                         onChange={(e) => handleNameChange(e.target.value)}
-                        placeholder="e.g. S & A Badminton Academy — Edappally"
+                        placeholder="e.g. S & A Badminton Academy — Kumbalanghi"
                         className="w-full px-3.5 h-10 bg-[#0D111A] border border-slate-800 rounded-xl text-white text-xs placeholder-slate-500 focus:outline-none focus:border-[#B8F000] focus:ring-1 focus:ring-[#B8F000]/30 transition-all font-mono"
                       />
                     </div>
@@ -834,7 +834,7 @@ export function CentresManager() {
                           required
                           value={form.shortName}
                           onChange={(e) => setForm({ ...form, shortName: e.target.value })}
-                          placeholder="e.g. Edappally Centre"
+                          placeholder="e.g. Kumbalanghi Centre"
                           className="w-full px-3.5 h-10 bg-[#0D111A] border border-slate-800 rounded-xl text-white text-xs placeholder-slate-500 focus:outline-none focus:border-[#B8F000] focus:ring-1 focus:ring-[#B8F000]/30 transition-all font-mono"
                         />
                       </div>
@@ -846,7 +846,7 @@ export function CentresManager() {
                           required
                           value={form.slug}
                           onChange={(e) => setForm({ ...form, slug: e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, "-") })}
-                          placeholder="e.g. edappally"
+                          placeholder="e.g. kumbalanghi"
                           className="w-full px-3.5 h-10 bg-[#0D111A] border border-slate-800 rounded-xl text-white text-xs placeholder-slate-500 focus:outline-none focus:border-[#B8F000] focus:ring-1 focus:ring-[#B8F000]/30 transition-all font-mono"
                         />
                       </div>
@@ -946,7 +946,7 @@ export function CentresManager() {
                         required
                         value={form.address}
                         onChange={(e) => setForm({ ...form, address: e.target.value })}
-                        placeholder="e.g. Metro Pillar 412, Near Toll Junction, Edappally, Kochi 682024"
+                        placeholder="e.g. All Star Badminton Indoor Court, Kumbalanghi, Kochi 682007"
                         className="w-full px-3.5 h-10 bg-[#0D111A] border border-slate-800 rounded-xl text-white text-xs placeholder-slate-500 focus:outline-none focus:border-[#B8F000] focus:ring-1 focus:ring-[#B8F000]/30 transition-all font-mono"
                       />
                     </div>
@@ -959,7 +959,7 @@ export function CentresManager() {
                           required
                           value={form.area}
                           onChange={(e) => setForm({ ...form, area: e.target.value })}
-                          placeholder="e.g. Edappally"
+                          placeholder="e.g. Kumbalanghi"
                           className="w-full px-3.5 h-10 bg-[#0D111A] border border-slate-800 rounded-xl text-white text-xs placeholder-slate-500 focus:outline-none focus:border-[#B8F000] focus:ring-1 focus:ring-[#B8F000]/30 transition-all font-mono"
                         />
                       </div>
@@ -1066,7 +1066,7 @@ export function CentresManager() {
                         type="email"
                         value={form.email}
                         onChange={(e) => setForm({ ...form, email: e.target.value })}
-                        placeholder="edappally@sabadminton.com"
+                        placeholder="kumbalanghi@sabadminton.com"
                         className="w-full px-3.5 h-10 bg-[#0D111A] border border-slate-800 rounded-xl text-white text-xs placeholder-slate-500 focus:outline-none focus:border-[#B8F000] focus:ring-1 focus:ring-[#B8F000]/30 transition-all font-mono"
                       />
                     </div>

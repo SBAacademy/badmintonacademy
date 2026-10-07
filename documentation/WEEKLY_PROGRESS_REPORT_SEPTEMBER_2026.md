@@ -56,7 +56,7 @@ A rigorous content planning phase was executed prior to software development to 
 ### Scope & Structure Defined
 - **Academy Heritage & Pedagogy**: Highlighting certified BWF/NIS mentorship, athlete longevity, and competitive grit.
 - **Coaching Program Pathways**: Clear distinctions between Beginners, Intermediate, High-Performance Competitive, and Adult Fitness programs.
-- **Multi-Centre Hierarchy**: Segmented content and facilities breakdown for all training hubs (Kadavanthra HQ, Edappally, Kakkanad).
+- **Multi-Centre Hierarchy**: Segmented content and facilities breakdown for all training hubs (Kadavanthra HQ, Kumbalanghi, Maradu, Palluruthy, Chullikal).
 - **Faculty & Mentor Profiles**: Individual profiles presenting professional accreditations, national/international distinctions, and coaching focus areas.
 - **Athletic Track Records**: Verified record books (Asia Book & India Book of Records) and district/state team head coach distinctions.
 - **Academy Media & Visual Proof**: Categorized high-resolution photo galleries representing on-court training sessions and tournament wins.
@@ -172,7 +172,7 @@ The administrative **Coaching Panel & Mentors Manager** empowers the academy to 
 - **Unique Profile URL Slug**: Automatically generated from coach name (e.g., `sooraj-m-s`) with manual override capability.
 - **Dedicated WhatsApp / Contact Number**: Standardized with international country code normalization (`91XXXXXXXXXX`).
 - **Coaching Experience**: Numerical tracking (e.g., *10+ Years Experience*).
-- **Primary Branch Association**: Kadavanthra (Headquarters), Edappally, Kakkanad, or All Centres.
+- **Primary Branch Association**: Kadavanthra (Headquarters), Kumbalanghi, Maradu, Palluruthy, Chullikal, or All Centres.
 - **Specialization & Focus**: (e.g., *Singles Tactical Footwork & Match Biomechanics*).
 - **Official Portrait / Headshot**: Uploaded directly via file browser or selected from existing media storage.
 - **Verified Accreditations (BWF / NIS)**: Line-by-line management of international certifications and state diplomas.
@@ -260,7 +260,7 @@ Every dynamic coach profile features an integrated **Direct Coach Enquiry** inte
 - **Visitor Full Name** (Required)
 - **Player Age** (Numerical capture)
 - **WhatsApp Contact Number** (Validated for 10-digit international compatibility)
-- **Preferred Academy Centre** (Kadavanthra HQ, Edappally, Kakkanad)
+- **Preferred Academy Centre** (Kadavanthra HQ, Kumbalanghi, Maradu, Palluruthy, Chullikal)
 - **Training Goals & Questions** (Optional customized note)
 
 ### Pre-Formatted WhatsApp Message Blueprint
@@ -311,9 +311,7 @@ Athlete conditioning and nutritional support represent a strategic differentiato
 
 S&A Badminton Academy operates multiple premier training facilities across Kochi. Content structuring for each centre is actively undergoing alignment:
 
-- **Central Headquarters**: Kadavanthra (Regional Training HQ)
-- **North Hub**: Edappally Branch
-- **Tech Corridor Hub**: Kakkanad Branch
+- **Regional Hubs Across Kochi**: Kadavanthra (HQ), Kumbalanghi, Maradu, Palluruthy, Chullikal
 - **Cross-Platform Consistency**: Ensuring facility amenities, court specifications, operating hours, and location maps remain consistent across the homepage, dynamic coach associations, CRM drop-downs, and contact forms.
 
 ---
@@ -423,7 +421,7 @@ Testing is performed continuously to ensure system security, data integrity, and
 ## 22. Next Actions & Milestones
 
 ### Immediate Technical & Content Priorities
-1. **Centre Information Verification**: Finalize accurate facility descriptions, address points, and contact extensions for Kadavanthra, Edappally, and Kakkanad.
+1. **Centre Information Verification**: Finalize accurate facility descriptions, address points, and contact extensions for Kadavanthra, Kumbalanghi, Maradu, Palluruthy, and Chullikal.
 2. **Coach Photographic Asset Uploads**: Replace temporary training placeholders with high-resolution portraits of all faculty members.
 3. **WhatsApp Number Audit**: Complete end-to-end verification of all individual coach numbers to ensure 100% Click-to-Chat dispatch accuracy.
 4. **Mobile Usability & Cross-Device Review**: Perform touch-target and layout audits across iOS Safari, Android Chrome, and desktop viewports.

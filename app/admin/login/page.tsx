@@ -238,7 +238,7 @@ function AdminLoginForm() {
         {/* Footer info */}
         <div className="mt-6 text-center space-y-1">
           <p className="text-xs text-slate-500 font-medium">
-            Kochi Centres: Kadavanthra &bull; Edappally &bull; Kakkanad
+            Kochi Centres: Kadavanthra &bull; Kumbalanghi &bull; Maradu &bull; Palluruthy &bull; Chullikal
           </p>
           <p className="text-[11px] text-slate-600">
             Authorized S&amp;A Badminton Academy staff only.

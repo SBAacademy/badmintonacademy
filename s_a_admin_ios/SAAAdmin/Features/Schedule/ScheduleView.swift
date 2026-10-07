@@ -308,8 +308,10 @@ struct AddBatchSheet: View {
                         TextField("Batch Name", text: $name)
                         Picker("Centre", selection: $centreId) {
                             Text("Kadavanthra").tag("kadavanthra")
-                            Text("Edappally").tag("edappally")
-                            Text("Kakkanad").tag("kakkanad")
+                            Text("Kumbalanghi").tag("kumbalanghi")
+                            Text("Maradu").tag("maradu")
+                            Text("Palluruthy").tag("palluruthy")
+                            Text("Chullikal").tag("chullikal")
                         }
                         Picker("Program", selection: $programId) {
                             Text("Junior Development").tag("juniors")

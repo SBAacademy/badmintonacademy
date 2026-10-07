@@ -106,7 +106,7 @@ export const adultsArticles = [
     "image": "/images/training-coach.jpg",
     "status": "PUBLISHED",
     "content": [
-      "Between marathon Zoom calls, traffic on the Seaport-Airport Road, and tight project deadlines, maintaining personal athletic health often falls by the wayside. However, scores of IT and corporate leaders in Kakkanad and Kochi prioritize 3 sessions of badminton each week.",
+      "Between marathon meetings, city traffic, and tight project deadlines, maintaining personal athletic health often falls by the wayside. However, scores of working professionals and corporate leaders across Kochi prioritize 3 sessions of badminton each week.",
       "### The 'Early Bird' vs. 'Night Owl' Framework",
       "- **The 5:30 AM to 7:00 AM Dawn Shift:** Ideal for professionals whose evening work hours are unpredictable. Complete your high-energy court workout, shower in our on-site facilities, and arrive at your office energized with endorphins before 9:00 AM.",
       "- **The 8:00 PM to 10:00 PM Decompression Shift:** Decompress mental workplace stress through physical sweat before heading home, guaranteeing deep, restful sleep.",
@@ -127,7 +127,7 @@ export const adultsArticles = [
       "- **Warm-Up Phase:** 5 minutes of dynamic joint mobilization and shadow movement.",
       "- **Drill Volume:** 4 to 6 sets of 15 to 20 focused repetitions with a 45-second recovery interval between sets.",
       "- **Pressure Match Application:** Conclude with 15 minutes of conditional match play where points scored using this specific technique earn double value.",
-      "Explore our corporate-friendly hours at our [Kakkanad Infopark Centre](/kakkanad) and central hub in [Kadavanthra](/kadavanthra)."
+      "Explore our corporate-friendly hours across our network of training facilities, including our central hub in [Kadavanthra](/kadavanthra) and [Maradu](/maradu)."
     ]
   },
   {
@@ -443,7 +443,7 @@ export const adultsArticles = [
   {
     "slug": "corporate-badminton-tournaments-and-team-coaching-in-kochi",
     "title": "Corporate Badminton Leagues in Kochi: How Companies Leverage Sport for Team Culture",
-    "excerpt": "Why top tech firms in Infopark Kakkanad and Kochi businesses sponsor corporate badminton tournaments to boost cross-department camaraderie and employee health.",
+    "excerpt": "Why top firms and Kochi businesses sponsor corporate badminton tournaments to boost cross-department camaraderie and employee health.",
     "category": "Adult Badminton",
     "readTime": "7 min read",
     "publishDate": "December 22, 2024",

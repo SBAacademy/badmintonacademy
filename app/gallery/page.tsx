@@ -7,7 +7,7 @@ import { FinalCTA } from "@/components/sections/FinalCTA";
 
 export const metadata: Metadata = createMetadata({
   title: "Badminton Academy Photo & Video Gallery | Courts & Coaching",
-  description: "Browse photos and videos of S & A Badminton Academy Kochi. Tour our 14 synthetic courts across Kadavanthra, Edappally, and Kakkanad, junior drills, and tournaments.",
+  description: "Browse photos and videos of S & A Badminton Academy Kochi. Tour our synthetic courts across Kadavanthra, Kumbalanghi, Maradu, Palluruthy, and Chullikal, junior drills, and tournaments.",
   path: "/gallery",
   keywords: [
     "badminton courts photos Kochi",

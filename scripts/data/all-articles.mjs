@@ -24,7 +24,7 @@ export const existingArticles = [
     image: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?q=80&w=1200&auto=format&fit=crop",
     status: "PUBLISHED",
     content: [
-      "Badminton in Kochi has transformed from a seasonal recreational hobby into one of the city's most passionately pursued competitive sports. With modern indoor stadiums operating across Kadavanthra, Edappally, and Kakkanad, players of all ages can now train year-round regardless of Kerala's heavy monsoons.",
+      "Badminton in Kochi has transformed from a seasonal recreational hobby into one of the city's most passionately pursued competitive sports. With modern indoor stadiums operating across Kadavanthra, Kumbalanghi, Maradu, Palluruthy, and Chullikal, players of all ages can now train year-round regardless of Kerala's heavy monsoons.",
       "### Why Court Flooring Matters More Than You Think",
       "One of the biggest mistakes beginners make is playing on bare concrete or thin linoleum mats. Badminton involves sudden decelerations, lunges, and vertical jumps that exert up to 4x your body weight on your knees. Certified BWF Grade-1 synthetic courts laid over sprung wooden timber provide crucial shock absorption, reducing impact strain by over 50%.",
       "### The Importance of Genuine Non-Marking Court Shoes",

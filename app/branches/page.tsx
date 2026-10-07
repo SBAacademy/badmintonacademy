@@ -13,14 +13,16 @@ import { CentreGallerySection } from "@/components/sections/CentreGallerySection
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = createMetadata({
-  title: "Badminton Academy Centres in Kochi | Kadavanthra, Edappally, Kakkanad",
-  description: "Explore all S & A Badminton Academy training centres across Kochi. Dedicated multi-court facilities in Kadavanthra, Edappally, Kakkanad, and expanding locations.",
+  title: "Badminton Academy Centres in Kochi | Kadavanthra, Kumbalanghi, Maradu, Palluruthy, Chullikal",
+  description: "Explore all S & A Badminton Academy training centres across Kochi. Dedicated multi-court facilities in Kadavanthra, Kumbalanghi, Maradu, Palluruthy, and Chullikal.",
   path: "/branches",
   keywords: [
     "badminton academy near me",
     "badminton academy in Kadavanthra",
-    "badminton coaching Edappally",
-    "badminton academy Kakkanad",
+    "badminton coaching Kumbalanghi",
+    "badminton academy Maradu",
+    "badminton academy Palluruthy",
+    "badminton coaching Chullikal",
     "badminton courts Kochi",
   ],
 });
@@ -161,7 +163,7 @@ export default async function BranchesPage() {
       <CentreGallerySection
         eyebrow="NETWORK INFRASTRUCTURE // KOCHI CENTRES"
         title="CENTRES & COURTS PHOTO GALLERY"
-        description="Take an interactive tour through our BWF Grade-1 certified badminton courts across Kadavanthra, Edappally, and Kakkanad."
+        description="Take an interactive tour through our BWF Grade-1 certified badminton courts across Kadavanthra, Kumbalanghi, Maradu, Palluruthy, and Chullikal."
       />
 
       <FinalCTA />

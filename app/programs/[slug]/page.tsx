@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: ProgramDetailPageProps): Prom
 
   return createMetadata({
     title: `${program.name} in Kochi | S & A Badminton Academy`,
-    description: `${program.shortDescription} Structured badminton coaching in Kochi across Kadavanthra, Edappally & Kakkanad.`,
+    description: `${program.shortDescription} Structured badminton coaching in Kochi across Kadavanthra, Kumbalanghi, Maradu, Palluruthy & Chullikal.`,
     path: `/programs/${program.slug}`,
     keywords: [
       program.name,
@@ -175,7 +175,7 @@ export default async function ProgramDetailPage({ params }: ProgramDetailPagePro
               <div className="absolute bottom-4 left-4 right-4 p-4 rounded-2xl bg-[#090D16]/90 backdrop-blur-md border border-slate-800">
                 <div className="text-xs font-bold text-white">{program.tagline}</div>
                 <div className="text-[11px] text-emerald-400 mt-0.5">
-                  Conducted at Kadavanthra, Edappally & Kakkanad
+                  Conducted across all 5 training centres in Kochi
                 </div>
               </div>
             </div>

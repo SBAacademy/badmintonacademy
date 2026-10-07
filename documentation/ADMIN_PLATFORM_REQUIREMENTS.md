@@ -12,7 +12,7 @@
 
 The primary landing experience for academy staff must be an action-oriented operational cockpit, not an abstract analytics page. When staff open the application at 7:00 AM, it must answer:
 
-- **What sessions are taking place today across Kadavanthra, Edappally, and Kakkanad?**
+- **What sessions are taking place today across Kadavanthra, Kumbalanghi, Maradu, Palluruthy, and Chullikal?**
 - **Which students are expected, and who hasn't been marked yet?**
 - **Which prospective athletes have free trials scheduled today?**
 - **Which newly submitted website leads require an immediate call?**
@@ -48,7 +48,7 @@ A complete lifecycle tracking prospective athletes from initial website form sub
 - Lead ID (e.g., `LEAD-1725700000`)
 - Student Name & Age Category (Kids 5–9, Junior 10–16, Adult 16+, Competitive)
 - Parent/Guardian Name, Phone (10+ digits cleaned), Email
-- Preferred Centre (`kadavanthra`, `edappally`, `kakkanad`)
+- Preferred Centre (`kadavanthra`, `kumbalanghi`, `maradu`, `palluruthy`, `chullikal`)
 - Preferred Program & Preferred Slot (Morning / Evening)
 - Source (`website`, `walk-in`, `phone`, `referral`)
 - UTM Parameters (`utm_source`, `utm_medium`, `utm_campaign`)
@@ -110,12 +110,12 @@ Parent / Guardian Record (Phone, Email, Billing Address)
 
 ## 6. Centre Management
 
-Strictly limited to the 3 verified canonical facilities:
-1. **Kadavanthra Centre** (Headquarters, Rajiv Gandhi Stadium Area — 4 Courts)
-2. **Edappally Centre** (Toll Junction Arena — 3 Courts)
-3. **Kakkanad Centre** (Infopark Expressway Arena — 3 Courts)
-
-*Note: The placeholder `"fourth-centre"` is strictly excluded from operational assignments.*
+Strictly limited to the 5 verified canonical facilities:
+1. **Kadavanthra Centre** (Headquarters, Rajiv Gandhi Stadium Area)
+2. **Kumbalanghi Centre**
+3. **Maradu Centre**
+4. **Palluruthy Centre**
+5. **Chullikal Centre**
 
 ### Attributes:
 - Centre Name, Slug, Short Name, Physical Address, Geolocation (Lat/Lng)
@@ -193,8 +193,8 @@ Manages verified academy trainers without fabricated credentials.
 
 ### Active Verified Coaching Staff:
 1. **Coach Anand Varma:** Head Coach & Technical Director (BWF Level 2, NIS Diploma, Kadavanthra)
-2. **Coach Shalini Menon:** Senior Coach — Junior & Girls (BWF Level 1, Edappally)
-3. **Coach Rohan Mathew:** Lead Coach — Doubles & Adults (BWF Level 1, CSCS, Kakkanad)
+2. **Coach Shalini Menon:** Senior Coach — Junior & Girls (BWF Level 1, Kumbalanghi)
+3. **Coach Rohan Mathew:** Lead Coach — Doubles & Adults (BWF Level 1, CSCS, Maradu)
 4. **Coach Karthik Nair:** Assistant Coach & Video Analyst (BWF Level 1, Dartfish Specialist)
 
 ### Attributes:

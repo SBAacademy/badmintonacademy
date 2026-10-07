@@ -27,7 +27,7 @@ void main() {
         'id': 'lead-002',
         'name': 'Ananya Menon',
         'phone': '+91 98765 00002',
-        'branch': 'edappally',
+        'branch': 'kumbalanghi',
         'program': 'Elite Junior',
       };
 
@@ -45,7 +45,7 @@ void main() {
         'id': 'lead-003',
         'name': 'Siddharth Nair',
         'phone': '+91 98765 00003',
-        'branch': 'kakkanad',
+        'branch': 'maradu',
         'program': 'Adult Fitness',
       };
 

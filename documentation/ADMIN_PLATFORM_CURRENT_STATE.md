@@ -39,7 +39,7 @@ Every finding is classified under one of six strict operational states:
 
 - **Public Routes:** 35 active routes including:
   - City Homepage: `/`
-  - Location Hub & Canonical Centres: `/branches`, `/kadavanthra`, `/edappally`, `/kakkanad`
+  - Location Hub & Canonical Centres: `/branches`, `/kadavanthra`, `/kumbalanghi`, `/maradu`, `/palluruthy`, `/chullikal`
   - Program Landing Pages: `/programs`, `/programs/kids-badminton-coaching`, `/programs/junior-badminton-coaching`, `/programs/adult-badminton-coaching`, `/programs/competitive-badminton-training`, `/programs/summer-badminton-camp`
   - Story & Credibility: `/about`, `/coaches`, `/achievements`, `/testimonials`, `/gallery`, `/blog`
   - Admissions & Legal: `/contact`, `/privacy`, `/terms`
@@ -105,12 +105,13 @@ Every finding is classified under one of six strict operational states:
 
 **Status:** `IMPLEMENTED` (with placeholder risk)
 
-- 3 canonical verified centres:
-  1. `kadavanthra`: Headquarters near Rajiv Gandhi Indoor Stadium (4 courts).
-  2. `edappally`: Toll Junction facility (3 courts).
-  3. `kakkanad`: Near Infopark Expressway (3 courts).
-- **Placeholder Alert:** `fourth-centre` exists in `data/locations.ts` with `isPlaceholder: true` and dummy bracketed text (`[FACILITY_NAME]`).
-- **Operational Rule:** The internal management platform must strictly ignore `fourth-centre` until physical lease verification.
+- 5 canonical verified centres:
+  1. `kadavanthra`: Headquarters near Rajiv Gandhi Indoor Stadium.
+  2. `kumbalanghi`: Kumbalanghi facility.
+  3. `maradu`: Maradu arena.
+  4. `palluruthy`: Palluruthy centre.
+  5. `chullikal`: Chullikal facility.
+- **Operational Rule:** The internal management platform operates exclusively on these 5 canonical centres.
 
 ---
 

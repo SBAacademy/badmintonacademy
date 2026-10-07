@@ -265,18 +265,22 @@ export function mapBranchToCentreSlug(branch?: string | null): string {
   if (!branch) return "kadavanthra";
   const b = branch.toLowerCase().trim();
   if (!b.includes(" ") && !b.includes("(")) return b;
-  if (b.includes("edappally")) return "edappally";
-  if (b.includes("kakkanad")) return "kakkanad";
   if (b.includes("kadavanthra")) return "kadavanthra";
+  if (b.includes("kumbalanghi") || b.includes("kumbalangi")) return "kumbalanghi";
+  if (b.includes("maradu")) return "maradu";
+  if (b.includes("palluruthy") || b.includes("palluruthi")) return "palluruthy";
+  if (b.includes("chullikal") || b.includes("chullical")) return "chullikal";
   return b.replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 }
 
 export function mapCentreSlugToBranch(slug?: string | null): string {
   if (!slug) return "Kadavanthra (Headquarters)";
   const s = slug.toLowerCase();
-  if (s.includes("edappally")) return "Edappally Branch";
-  if (s.includes("kakkanad")) return "Kakkanad Branch";
   if (s.includes("kadavanthra")) return "Kadavanthra (Headquarters)";
+  if (s.includes("kumbalanghi") || s.includes("kumbalangi")) return "Kumbalanghi Centre";
+  if (s.includes("maradu")) return "Maradu Centre";
+  if (s.includes("palluruthy") || s.includes("palluruthi")) return "Palluruthy Centre";
+  if (s.includes("chullikal") || s.includes("chullical")) return "Chullikal Centre";
   return slug;
 }
 

@@ -5,6 +5,7 @@ import { AppLayoutWrapper } from "@/components/layout/AppLayoutWrapper";
 import { SEOJsonLd } from "@/components/seo/SEOJsonLd";
 import { getOrganizationSchema, SITE_URL } from "@/lib/seo";
 import { ACADEMY_DATA } from "@/data/academy";
+import { Analytics } from "@vercel/analytics/next";
 
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -72,6 +73,7 @@ export default function RootLayout({
       <body className="antialiased bg-[#07090D] text-[#FFFFFF] min-h-screen flex flex-col font-sans selection:bg-[#B8F000] selection:text-[#07100A]">
         <SEOJsonLd schema={getOrganizationSchema()} />
         <AppLayoutWrapper>{children}</AppLayoutWrapper>
+        <Analytics />
       </body>
     </html>
   );

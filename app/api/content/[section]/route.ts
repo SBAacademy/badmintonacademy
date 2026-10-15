@@ -83,35 +83,58 @@ export async function GET(
 
     if (sectionKey === "programs") {
       const programs = await getPrograms();
-      return NextResponse.json({
-        success: true,
-        section: sectionKey,
-        total: programs.length,
-        items: programs,
-      });
+      return NextResponse.json(
+        {
+          success: true,
+          section: sectionKey,
+          total: programs.length,
+          items: programs,
+        },
+        {
+          headers: {
+            "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
+          },
+        }
+      );
     }
 
     if (sectionKey === "testimonials") {
       const { searchParams } = new URL(request.url);
       const includePending = searchParams.get("includePending") === "true";
       const testimonials = await getTestimonials({ includePending });
-      return NextResponse.json({
-        success: true,
-        section: sectionKey,
-        total: testimonials.length,
-        items: testimonials,
-      });
+      return NextResponse.json(
+        {
+          success: true,
+          section: sectionKey,
+          total: testimonials.length,
+          items: testimonials,
+        },
+        {
+          headers: {
+            "Cache-Control": includePending
+              ? "no-store, no-cache, must-revalidate"
+              : "public, s-maxage=1800, stale-while-revalidate=86400",
+          },
+        }
+      );
     }
 
     const defaults = getDefaultItems(sectionKey);
     const items = await getContentSection(sectionKey, defaults);
 
-    return NextResponse.json({
-      success: true,
-      section: sectionKey,
-      total: items.length,
-      items,
-    });
+    return NextResponse.json(
+      {
+        success: true,
+        section: sectionKey,
+        total: items.length,
+        items,
+      },
+      {
+        headers: {
+          "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
+        },
+      }
+    );
   } catch (error) {
     console.error("Content API GET error:", error);
     return NextResponse.json(

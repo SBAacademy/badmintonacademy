@@ -12,7 +12,9 @@ export function HeroSection({ initialCentres }: { initialCentres?: Array<{ short
   const [centres, setCentres] = useState<Array<{ shortName?: string; name: string }>>(initialCentres || []);
 
   useEffect(() => {
-    fetch("/api/centres", { cache: "no-store" })
+    if (initialCentres && initialCentres.length > 0) return;
+
+    fetch("/api/centres")
       .then((res) => res.json())
       .then((data) => {
         const list = Array.isArray(data.centres)
@@ -29,7 +31,7 @@ export function HeroSection({ initialCentres }: { initialCentres?: Array<{ short
         }
       })
       .catch(() => {});
-  }, []);
+  }, [initialCentres]);
 
   const handleWhatsApp = () => {
     trackEvent("whatsapp_click", { source: "hero_rebel" });

@@ -41,6 +41,8 @@ export function ProgramsSection({ initialPrograms }: { initialPrograms?: Dynamic
   );
 
   useEffect(() => {
+    if (initialPrograms && initialPrograms.length > 0) return;
+
     fetch("/api/content/programs")
       .then((r) => r.json())
       .then((data) => {
@@ -52,7 +54,7 @@ export function ProgramsSection({ initialPrograms }: { initialPrograms?: Dynamic
         }
       })
       .catch(() => {});
-  }, [activeSlug]);
+  }, [initialPrograms, activeSlug]);
 
   const selectedProgram =
     programsList.find((p) => p.slug === activeSlug) || programsList[0] || {

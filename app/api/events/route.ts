@@ -3,7 +3,7 @@ import { getEvents } from "@/lib/contentDb";
 import { EventStatus } from "@/data/events";
 
 export const dynamic = "force-dynamic";
-export const revalidate = 0;
+export const revalidate = 1800;
 
 // GET /api/events - Public published events
 export async function GET(request: Request) {
@@ -36,9 +36,7 @@ export async function GET(request: Request) {
       },
       {
         headers: {
-          "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
-          Pragma: "no-cache",
-          Expires: "0",
+          "Cache-Control": "public, s-maxage=1800, stale-while-revalidate=86400",
         },
       }
     );

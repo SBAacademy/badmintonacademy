@@ -10,6 +10,7 @@
     "generate:pdf": "node generate-pdf.mjs",
     "generate-blog": "node scripts/generate-and-seed-blog.mjs",
     "validate-blog": "node scripts/validate-blog.mjs",
+    "db:migrate": "node --env-file=.env scripts/migrate-db.mjs",
     "setup:admin": "node --env-file=.env scripts/setup-super-admin.mjs",
     "test": "node generate-pdf.mjs"
   },

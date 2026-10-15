@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
 import { getCentres } from "@/lib/contentDb";
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+export const revalidate = 3600;
 
 // GET /api/centres - Public active centres in displayOrder ASC
 export async function GET() {
@@ -18,9 +17,7 @@ export async function GET() {
       },
       {
         headers: {
-          "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
-          Pragma: "no-cache",
-          Expires: "0",
+          "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
         },
       }
     );

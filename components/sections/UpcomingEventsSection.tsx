@@ -48,7 +48,9 @@ export function UpcomingEventsSection({ initialEvents }: UpcomingEventsSectionPr
   const [loading, setLoading] = useState(!initialEvents);
 
   useEffect(() => {
-    fetch("/api/events?status=upcoming", { cache: "no-store" })
+    if (initialEvents !== undefined) return;
+
+    fetch("/api/events?status=upcoming")
       .then((res) => res.json())
       .then((data) => {
         if (data.success && Array.isArray(data.items)) {
@@ -57,7 +59,7 @@ export function UpcomingEventsSection({ initialEvents }: UpcomingEventsSectionPr
       })
       .catch((err) => console.error("Failed to load upcoming events:", err))
       .finally(() => setLoading(false));
-  }, []);
+  }, [initialEvents]);
 
   // Strict requirement: If zero upcoming events exist in database, hide section completely
   if (!loading && events.length === 0) {

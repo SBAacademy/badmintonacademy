@@ -12,6 +12,14 @@ const PUBLIC_ADMIN_API_PATHS = [
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // 0. Handle legacy / next-auth callback and signin routes (/api/auth/*)
+  if (pathname.startsWith("/api/auth")) {
+    const token = request.cookies.get(AUTH_COOKIE_NAME)?.value;
+    const session = token ? verifyAccessToken(token) : null;
+    const destination = session ? "/admin" : "/admin/login";
+    return NextResponse.redirect(new URL(destination, request.url));
+  }
+
   // 1. API Route Protection (/api/admin/*)
   if (pathname.startsWith("/api/admin")) {
     // Allow public authentication endpoints
@@ -73,5 +81,6 @@ export const config = {
   matcher: [
     "/admin/:path*",
     "/api/admin/:path*",
+    "/api/auth/:path*",
   ],
 };

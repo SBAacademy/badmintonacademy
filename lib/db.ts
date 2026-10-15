@@ -29,10 +29,15 @@ function getDatabaseUrl(): string | undefined {
   return process.env.DATABASE_URL;
 }
 
+let sqlInstance: ReturnType<typeof neon> | null = null;
+
 function getSql(): ReturnType<typeof neon> | null {
   const url = getDatabaseUrl();
   if (!url) return null;
-  return neon(url);
+  if (!sqlInstance) {
+    sqlInstance = neon(url);
+  }
+  return sqlInstance;
 }
 
 // Fallback to local JSON file if DB unavailable
@@ -53,38 +58,9 @@ async function saveFallbackLeads(leads: LeadItem[]): Promise<void> {
   }
 }
 
-let isInitialized = false;
-
+// Runtime schema migrations are decoupled to scripts/migrate-db.mjs.
 export async function initDb(): Promise<void> {
-  const sql = getSql();
-  if (!sql || isInitialized) return;
-
-  try {
-    await sql`
-      CREATE TABLE IF NOT EXISTS leads (
-        id VARCHAR(64) PRIMARY KEY,
-        name VARCHAR(255) NOT NULL,
-        phone VARCHAR(64) NOT NULL,
-        email VARCHAR(255),
-        age_category VARCHAR(64),
-        branch VARCHAR(64) NOT NULL,
-        program VARCHAR(128) NOT NULL,
-        slot VARCHAR(128),
-        message TEXT,
-        status VARCHAR(32) DEFAULT 'NEW',
-        notes TEXT,
-        utm_source VARCHAR(64),
-        utm_medium VARCHAR(64),
-        utm_campaign VARCHAR(64),
-        submitted_at TIMESTAMPTZ DEFAULT NOW(),
-        updated_at TIMESTAMPTZ DEFAULT NOW()
-      );
-    `;
-
-    isInitialized = true;
-  } catch (err) {
-    console.error("Neon DB init error (falling back to JSON store):", err);
-  }
+  return;
 }
 
 function mapRowToLead(row: Record<string, unknown>): LeadItem {
@@ -122,7 +98,6 @@ export async function getLeads(filters?: {
 
   if (sql) {
     try {
-      await initDb();
       const rows = (await sql`
         SELECT * FROM leads 
         ORDER BY submitted_at DESC;
@@ -183,7 +158,6 @@ export async function createLead(lead: LeadItem): Promise<LeadItem> {
 
   if (sql) {
     try {
-      await initDb();
       await sql`
         INSERT INTO leads (
           id, name, phone, email, age_category, branch, program, slot,
@@ -218,7 +192,6 @@ export async function updateLead(
 
   if (sql) {
     try {
-      await initDb();
       
       // Fetch current record first
       const currentRows = (await sql`SELECT * FROM leads WHERE id = ${id} LIMIT 1;`) as unknown as Record<string, unknown>[];
@@ -291,7 +264,6 @@ export async function deleteLead(id: string): Promise<boolean> {
 
   if (sql) {
     try {
-      await initDb();
       await sql`DELETE FROM leads WHERE id = ${id};`;
     } catch (err) {
       console.error("Failed to delete lead from Neon DB:", err);

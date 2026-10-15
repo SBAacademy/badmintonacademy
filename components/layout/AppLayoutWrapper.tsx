@@ -6,7 +6,15 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { MobileConversionBar } from "@/components/layout/MobileConversionBar";
 
-export function AppLayoutWrapper({ children }: { children: React.ReactNode }) {
+export function AppLayoutWrapper({
+  children,
+  initialCentres,
+  initialPrograms,
+}: {
+  children: React.ReactNode;
+  initialCentres?: any[];
+  initialPrograms?: any[];
+}) {
   const pathname = usePathname();
   const isAdmin = pathname?.startsWith("/admin");
 
@@ -16,10 +24,11 @@ export function AppLayoutWrapper({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <Navbar />
+      <Navbar initialCentres={initialCentres} />
       <main className="flex-1 w-full">{children}</main>
-      <Footer />
+      <Footer initialCentres={initialCentres} initialPrograms={initialPrograms} />
       <MobileConversionBar />
     </>
   );
 }
+

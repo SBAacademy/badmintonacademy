@@ -31,7 +31,9 @@ export function EventAnnouncement({ initialEvents }: EventAnnouncementProps) {
   const [loading, setLoading] = useState(!initialEvents);
 
   useEffect(() => {
-    fetch("/api/events?status=upcoming", { cache: "no-store" })
+    if (initialEvents !== undefined) return;
+
+    fetch("/api/events?status=upcoming")
       .then((res) => res.json())
       .then((data) => {
         if (data.success && Array.isArray(data.items)) {
@@ -40,7 +42,7 @@ export function EventAnnouncement({ initialEvents }: EventAnnouncementProps) {
       })
       .catch((err) => console.error("Failed to load announcement event:", err))
       .finally(() => setLoading(false));
-  }, []);
+  }, [initialEvents]);
 
   // Gracefully hide if no upcoming published event exists
   if (!loading && (!events || events.length === 0)) {

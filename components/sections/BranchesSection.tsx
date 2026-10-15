@@ -14,7 +14,9 @@ export function BranchesSection({ initialCentres }: { initialCentres?: Centre[] 
   const [dynamicCentres, setDynamicCentres] = useState<Centre[]>(initialCentres || []);
 
   useEffect(() => {
-    fetch("/api/centres", { cache: "no-store" })
+    if (initialCentres && initialCentres.length > 0) return;
+
+    fetch("/api/centres")
       .then((res) => res.json())
       .then((data) => {
         const list = Array.isArray(data.centres)
@@ -31,7 +33,7 @@ export function BranchesSection({ initialCentres }: { initialCentres?: Centre[] 
         }
       })
       .catch((err) => console.error("Failed to load centres in BranchesSection:", err));
-  }, []);
+  }, [initialCentres]);
 
   const locationsList: LocationData[] = dynamicCentres.map((c) => {
     const autoNeighborhoods = resolveAutomaticNeighborhoods(c.address, c.name);

@@ -7,29 +7,41 @@ import { ACADEMY_DATA } from "@/data/academy";
 import { PROGRAMS } from "@/data/programs";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 
-export function Footer({ initialCentres }: { initialCentres?: any[] } = {}) {
+export function Footer({
+  initialCentres,
+  initialPrograms,
+}: {
+  initialCentres?: any[];
+  initialPrograms?: any[];
+} = {}) {
   const [centres, setCentres] = useState<any[]>(initialCentres || []);
-  const [programs, setPrograms] = useState<any[]>(PROGRAMS);
+  const [programs, setPrograms] = useState<any[]>(
+    initialPrograms && initialPrograms.length > 0 ? initialPrograms : PROGRAMS
+  );
 
   useEffect(() => {
-    fetch("/api/centres", { cache: "no-store" })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success && Array.isArray(data.items)) {
-          setCentres(data.items);
-        }
-      })
-      .catch((err) => console.error("Failed to load centres in Footer:", err));
+    if (!initialCentres || initialCentres.length === 0) {
+      fetch("/api/centres")
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success && Array.isArray(data.items)) {
+            setCentres(data.items);
+          }
+        })
+        .catch((err) => console.error("Failed to load centres in Footer:", err));
+    }
 
-    fetch("/api/content/programs")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success && Array.isArray(data.items) && data.items.length > 0) {
-          setPrograms(data.items);
-        }
-      })
-      .catch(() => { });
-  }, []);
+    if (!initialPrograms || initialPrograms.length === 0) {
+      fetch("/api/content/programs")
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success && Array.isArray(data.items) && data.items.length > 0) {
+            setPrograms(data.items);
+          }
+        })
+        .catch(() => { });
+    }
+  }, [initialCentres, initialPrograms]);
   return (
     <footer className="bg-[#07090D] border-t border-[#1F2937] text-[#A8B0BA] text-sm relative z-10 pb-32 lg:pb-12 select-none">
       {/* Top Athletic Lime Rule */}

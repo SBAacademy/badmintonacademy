@@ -10,17 +10,21 @@
 
 | Specification | Project Details |
 | :--- | :--- |
-| **Project Name** | Sooraj Badminton Academy — Website, CRM & SEO |
+| **Project Name** | Sooraj Badminton Academy — Website, CRM & Local SEO |
 | **Official Website URL** | [https://soorajbadmintonacademy.in/](https://soorajbadmintonacademy.in/) |
+| **Project Type** | Professional Website · Dynamic CMS · Admin Dashboard / CRM · Local SEO & GBP Setup |
 | **Project Reference** | `SAA-WEB-SEO-2026-001` |
 | **Project Commencement Date** | 06 September 2026 |
-| **Handover Date** | 07 October 2026 |
-| **Commercial Project Value** | ₹25,000 INR (*Itemized: Professional Website ₹15,000 + 30-Day Local SEO ₹10,000*) |
+| **Official Handover Date** | 07 October 2026 |
+| **Handover Status** | Project handed over for client testing and review |
+| **7-Day Testing & Review Period** | 07 October 2026 to 13 October 2026 |
+| **Final Date for Reporting Included Corrections** | 13 October 2026 |
+| **Commercial Project Value** | ₹25,000 INR (*Itemized: Website Development ₹15,000 + 30-Day Local SEO ₹10,000*) |
 | **Author & Delivery Lead** | **Mohammed Nibrasul Haqq** |
-| **Professional Role** | Full-Stack Developer · UI/UX Designer · Kreovate Marketing Agency |
+| **Professional Role** | Freelance Full-Stack Developer · UI/UX Designer · Kreovate Marketing Agency |
 | **Client Entity** | Sooraj Badminton Academy (SBA) / S & A Badminton Academy |
 | **Client Leadership** | Head Coach Sooraj M S & Academy Directorate |
-| **Document Classification** | Official Client Handover & Technical Specification Document |
+| **Document Classification** | Official Client Handover & Technical Specification Package |
 
 ---
 
@@ -52,14 +56,15 @@
 24. [Known Limitations & Pending Client Actions](#24-known-limitations--pending-client-actions)
 25. [Strategic Future Roadmap](#25-strategic-future-roadmap)
 26. [Final Project Component Status](#26-final-project-component-status)
-27. [Final Handover & Delivery Declaration](#27-final-handover--delivery-declaration)
-28. [Appendix A: Production & Preview URLs](#appendix-a-production--preview-urls)
-29. [Appendix B: Administrative Routes](#appendix-b-administrative-routes)
-30. [Appendix C: SEO & Sitemap Endpoints](#appendix-c-seo--sitemap-endpoints)
-31. [Appendix D: Backend API Endpoints Catalog](#appendix-d-backend-api-endpoints-catalog)
-32. [Appendix E: Database Models Catalog](#appendix-e-database-models-catalog)
-33. [Appendix F: Repository Directory Structure](#appendix-f-repository-directory-structure)
-34. [Appendix G: Production Build & Deployment Reference](#appendix-g-production-build--deployment-reference)
+27. [7-Day Testing, Review & Correction Period](#27-7-day-testing-review--correction-period)
+28. [Final Handover & Delivery Declaration](#28-final-handover--delivery-declaration)
+29. [Appendix A: Production & Preview URLs](#appendix-a-production--preview-urls)
+30. [Appendix B: Administrative Routes](#appendix-b-administrative-routes)
+31. [Appendix C: SEO & Sitemap Endpoints](#appendix-c-seo--sitemap-endpoints)
+32. [Appendix D: Backend API Endpoints Catalog](#appendix-d-backend-api-endpoints-catalog)
+33. [Appendix E: Database Models Catalog](#appendix-e-database-models-catalog)
+34. [Appendix F: Repository Directory Tree](#appendix-f-repository-directory-tree)
+35. [Appendix G: Production Build & Deployment Reference](#appendix-g-production-build--deployment-reference)
 
 ---
 
@@ -96,43 +101,62 @@ Prior to this engagement, the academy relied primarily on distributed social med
 
 ## 2. AGREED SCOPE OF WORK & DELIVERY MATRIX
 
-The contractually agreed scope under reference `SAA-WEB-SEO-2026-001` comprised two integrated commercial pillars totaling ₹25,000 INR. Every item has been rigorously verified against live production code:
+The contractually agreed scope under reference `SAA-WEB-SEO-2026-001` comprised two integrated commercial pillars totaling ₹25,000 INR. Every item has been inspected and audited against live production code.
 
-### 2.1 Pillar 1: Professional Website & Admin CRM (₹15,000)
-- **Responsive Web Application:** Developed with Next.js App Router, React, and Tailwind CSS.
-- **Brand Pages:** Homepage, About Academy, Coaching Staff, Tournament Records, Photo Gallery, Testimonials, Contact & Admissions.
-- **Curriculum Architecture:** Dedicated landing pages for Kids Foundation (5–9 yrs), Junior Development (10–16 yrs), Adult Fitness (16+ yrs), Competitive Tournament Squad, and Summer Badminton Camp.
-- **Multi-Centre Architecture:** Individual, self-canonical landing pages for all 5 training centres: Kadavanthra, Kumbalanghi, Maradu, Palluruthy, and Chullikal.
-- **Tournament / Fixtures Engine:** Listing and detail dynamic route views (`/events`, `/events/[slug]`) with Schema.org Event metadata.
-- **Conversion Systems:** Lead capture modals, click-to-dial badges, and pre-filled WhatsApp trial booking links.
-- **Admin Dashboard / CRM:**
-  - Secure Administrator login with scrypt hashing, JWT access tokens, and DB refresh tokens.
-  - Inbound student inquiry management with status tracking, internal notes, and direct WhatsApp response.
-  - Full CRUD operations for Centres, Coaches, Track Records, Gallery Photos, Blog Articles, Testimonials, Programs, and Events.
-  - Database-backed secure image upload system with immutable cache delivery.
+### 2.1 Scope Item Delivery Matrix
 
-### 2.2 Pillar 2: 30-Day Local SEO Launch & GBP Setup (₹10,000)
-- **Local Keyword Strategy:** Tailored keywords covering Kochi metropolitan queries and hyper-local neighborhood terms for Kadavanthra, Kumbalanghi, Maradu, Palluruthy, and Chullikal.
-- **On-Page Optimization:** Unique metadata titles, descriptions, single H1 hierarchy, and crawlable navigation across all production routes.
-- **Structured Data (JSON-LD):** Implementation of `SportsOrganization`, `SportsActivityLocation`, `LocalBusiness`, `BreadcrumbList`, `FAQPage`, `Event`, and `Article` schemas.
-- **Dual Dynamic XML Sitemaps:** Main `/sitemap.xml` (all core, location, coach, blog, program pages) and `/tournaments-sitemap.xml` (dedicated tournament index).
-- **Robots Directives:** Configured in `app/robots.ts` protecting `/admin/`, `/api/`, and `/private/`.
-- **Google Business Profile (GBP) Launch:** Setup and configuration of all five branch profiles in Google Business Profile manager. Status: *Created / Configured — Pending Live Video Verification*.
+| Scope Item | Category | Delivery Status | Verification Notes |
+| :--- | :--- | :---: | :--- |
+| **Responsive Web Platform** | Website | **Completed** | Next.js 16 App Router with mobile-first CSS architecture |
+| **Homepage & Brand Showcase** | Website | **Completed** | Hero section, trust pillars, dynamic stats, testimonials, CTAs |
+| **Academy About & Leadership** | Website | **Completed** | Founding history, certified coaches, philosophies, facilities |
+| **5 Physical Centre Pages** | Website / SEO | **Completed** | Kadavanthra, Kumbalanghi, Maradu, Palluruthy, Chullikal |
+| **Programs & Curriculum Pages** | Website | **Completed** | 5 developmental tracks with court ratios, timings, fee tiers |
+| **Coaching Panel Directory** | Website / CMS | **Completed** | Head Coach Sooraj & staff profiles with certifications |
+| **Achievements & Trophy Wall** | Website / CMS | **Completed** | Verifiable laurels, district/state tournament medals |
+| **Photo & Video Gallery** | Website / CMS | **Completed** | Categorized court photography and training drills |
+| **Articles & Blog Engine** | Website / SEO | **Completed** | In-depth training guides, equipment advice, footwork tips |
+| **Reviews & Testimonial Wall** | Website / CMS | **Completed** | Verified parent and player ratings with moderation controls |
+| **Tournament & Events Engine** | Website / CMS | **Completed** | Sanctioned fixtures, summer camps, registration triggers |
+| **Contact & Free Trial Form** | Website / Lead | **Completed** | Anti-spam honeypot, phone validation, direct database storage |
+| **Multi-Tier WhatsApp Handoff**| Lead / Comms | **Completed** | Automatic URL encoding for prospective student trials |
+| **Admin Authentication Portal** | Admin CRM | **Completed** | scrypt password hashing, HMAC-SHA256 JWT, refresh tokens |
+| **Lead Management CRM** | Admin CRM | **Completed** | Search, status filtering, notes drawer, click-to-dial/chat |
+| **Centres Management** | Admin CMS | **Completed** | Full CRUD for physical training venues and court counts |
+| **Coaches Management** | Admin CMS | **Completed** | Headshot uploads, bio editing, publish/unpublish toggling |
+| **Track Records Management** | Admin CMS | **Completed** | Medal tracking, tournament records, player laurel updates |
+| **Photo Gallery Management** | Admin CMS | **Completed** | Binary image upload to database storage with cache headers |
+| **Articles CMS** | Admin CMS | **Completed** | Article drafting, slug generation, tags, reading time |
+| **Reviews Moderation** | Admin CMS | **Completed** | Customer testimonial editing, star ratings, approval toggle |
+| **Administrator Accounts** | Admin CRM | **Completed** | Role-based accounts (`SUPER_ADMIN`, `ADMIN`, etc.) in DB |
+| **On-Page Local SEO** | SEO | **Completed** | Unique titles, descriptions, single H1, canonical tags |
+| **Schema.org Structured Data**| SEO | **Completed** | Multi-entity `SportsOrganization`, `LocalBusiness`, `FAQPage` |
+| **Dual Dynamic XML Sitemaps** | SEO | **Completed** | `/sitemap.xml` and `/tournaments-sitemap.xml` active |
+| **Robots Directives** | SEO | **Completed** | Disallows admin/api paths, declares both XML sitemaps |
+| **5 Google Business Profiles** | Local SEO | **Configured** | Profiles created on Google; awaiting live video verification |
+| **GBP Live Video Verification** | Local SEO | **Pending Client Action** | Requires on-site video walk-through by academy management |
+| **High-Res Venue Photography** | Creative | **Pending Client Action** | Real venue photos to replace temporary polished stock assets |
+| **Online Payment Gateway** | eCommerce | **Recommended Future** | Razorpay integration for monthly fee auto-collection |
+| **Student / Parent Portal** | CRM | **Recommended Future** | Portal for attendance tracking, fee receipts, and rubrics |
+| **Native App Store Release** | Mobile | **Recommended Future** | App Store distribution for companion Flutter/iOS admin app |
+| **Paid Ads Management** | Marketing | **Not Included in Scope** | Meta / Google Ads ad spend and ad creation out of scope |
 
 ---
 
 ## 3. TECHNOLOGY STACK SPECIFICATION
 
-The project was constructed using modern, production-grade technologies inspected directly from the repository configuration:
+The project was constructed using modern, production-grade technologies inspected directly from `package.json` and system configuration:
 
 | Layer | Technology | Exact Version | Architectural Purpose |
 | :--- | :--- | :--- | :--- |
-| **Framework** | Next.js (App Router, Turbopack) | `^16.3.4` | Server-Side Rendering (SSR), Static Generation (SSG), and Edge API routes |
+| **Framework** | Next.js (App Router, Turbopack) | `^16.3.4` | Server-Side Rendering (SSR), Static Generation (SSG), Edge API routes |
 | **UI Library** | React & React DOM | `^19.2.8` | Component lifecycle, state management, and server component rendering |
 | **Language** | TypeScript | `^7.0.2` (Compiler) | Static type safety, interface definitions, and compile-time validation |
 | **Styling Engine** | Tailwind CSS & PostCSS | `^4.3.3` / `^8.5.28` | High-performance CSS-first athletic design system |
+| **Utility Libraries** | clsx & tailwind-merge | `^2.1.1` / `^3.6.0` | Conditional class composition and style merging |
 | **Iconography** | Lucide React | `^1.41.0` | Accessible SVG iconography |
 | **Animations & FX** | CSS Keyframes & Canvas Confetti | `^1.9.4` | Smooth transitions and admissions form celebratory effects |
+| **Motion Library** | Framer Motion | `^13.2.0` | Micro-interactions and animated state transitions |
 | **Primary Database** | Neon Serverless PostgreSQL | `@neondatabase/serverless ^1.1.0` | Cloud relational database for leads, centres, coaches, events, auth & audit |
 | **Data Fallback** | File-backed JSON Storage | Node.js `fs/promises` | High-availability resilience layer guaranteeing zero user-facing downtime |
 | **Authentication** | Node.js Crypto (`scrypt` + HMAC-SHA256) | Native Runtime | Timing-safe password verification, JWT access tokens, and DB refresh tokens |
@@ -148,70 +172,70 @@ The project was constructed using modern, production-grade technologies inspecte
 
 ```
                                   [ USER BROWSER / CLIENT ]
-                                             │
-                       ┌─────────────────────┴─────────────────────┐
-                       ▼                                           ▼
-             [ Public Website ]                           [ Admin Dashboard ]
-       (Next.js App Router / SSG + SSR)                  (Protected Session / RBAC)
-                       │                                           │
-                       ├─────────────────────┬─────────────────────┤
-                       │                     │                     │
-                       ▼                     ▼                     ▼
-               [ API Route Layer ]    [ Auth Guard ]       [ Upload Engine ]
-                 • /api/enquiries       • /api/admin/auth    • /api/upload
-                 • /api/centres         • requireAuth()      • /api/images/[id]
-                 • /api/events          • JWT Access Token
-                       │                     │
-                       └─────────────────────┴─────────────────────┐
-                                                                   ▼
-                                                       [ Relational Storage ]
-                                                        Neon PostgreSQL Cloud
-                                                                   │
-                                                       (Dual Fallback Layer)
-                                                                   ▼
-                                                         [ Local JSON Stores ]
-                                                         • data/leads.json
-                                                         • data/site_content.json
+                                              │
+                        ┌─────────────────────┴─────────────────────┐
+                        ▼                                           ▼
+              [ Public Website ]                           [ Admin Dashboard ]
+        (Next.js App Router / SSG + SSR)                  (Protected Session / RBAC)
+                        │                                           │
+                        ├─────────────────────┬─────────────────────┤
+                        │                     │                     │
+                        ▼                     ▼                     ▼
+                [ API Route Layer ]    [ Auth Guard ]       [ Upload Engine ]
+                  • /api/enquiries       • /api/admin/auth    • /api/upload
+                  • /api/centres         • requireAuth()      • /api/images/[id]
+                  • /api/events          • JWT Access Token
+                        │                     │
+                        └─────────────────────┴─────────────────────┐
+                                                                    ▼
+                                                        [ Relational Storage ]
+                                                         Neon PostgreSQL Cloud
+                                                                    │
+                                                        (Dual Fallback Layer)
+                                                                    ▼
+                                                          [ Local JSON Stores ]
+                                                          • data/leads.json
+                                                          • data/site_content.json
 ```
 
 ### 4.2 Core Application Workflows
 
-1. **Public Visitor Flow:** Visitors discover SBA via Google Search, Google Maps, or direct marketing. They land on either the city-level homepage or a hyper-local centre page (`/[location]`). All pages pre-render instantly via Next.js SSR/SSG.
+1. **Public Visitor Flow:** Visitors discover SBA via Google Search, Google Maps, or social referrals. They land on either the city-level homepage or a hyper-local centre page (`/[location]`). All pages pre-render instantly via Next.js SSR/SSG.
 2. **Admissions & Lead Flow:** When a visitor submits the Free Trial Form, `/api/enquiries` validates the telephone number, filters honeypot bot submissions, stores the lead in PostgreSQL (with JSON fallback), sends an in-app admin alert, and constructs a pre-filled WhatsApp admissions URL. The visitor is redirected directly into WhatsApp with their booking parameters intact.
 3. **Admin Operations Flow:** Academy staff visit `/admin/login`, enter credentials, and obtain a short-lived JWT access cookie along with an encrypted refresh cookie. Inside `/admin`, staff can inspect inquiries, advance lead statuses, update centre facilities, publish coaches, and create tournament fixtures.
 4. **Dual-Layer Database Resilience:** If the cloud database experiences intermittent connectivity or network latency, the data layer automatically switches to file-backed JSON stores (`data/site_content.json`, `data/leads.json`) and recovers synchronously once the database reconnects.
 
 ---
 
-## 5. PUBLIC WEBSITE MODULE DOCUMENTATION
+## 5. WEBSITE MODULE DOCUMENTATION
 
 Every public module has been developed, styled with our custom Athletic Dark-Mode theme (`#080B10` Court Black, `#0E141B` Card Surface, `#B8F000` Athletic Lime, and `#FFFFFF` High-Contrast White), and verified in production:
 
-| Route | Module Name | Type | Data Source | Administrative Control |
-| :--- | :--- | :--- | :--- | :--- |
-| `/` | **Homepage** | SSR / Dynamic | Content DB (`lib/contentDb.ts`) | Fully dynamic: Hero, Centres, Coaches, Reviews, Events |
-| `/about` | **About & Philosophy** | Static / Hybrid | Academy Config (`data/academy.ts`) | Academy founding story, leadership, and trust pillars |
-| `/branches` | **Centres Directory** | Dynamic | Neon DB `centres` table | Displays active training centres across Kochi |
-| `/[location]` | **Local Centre Landing Pages** | SSG / Dynamic | Neon DB `centres` table | Individual micro-market pages (`/kadavanthra`, etc.) |
-| `/programs` | **Programs Matrix** | Hybrid | `data/programs.ts` & Neon DB | Age/skill developmental pathways & batch details |
-| `/programs/[slug]` | **Program Detail Page** | Dynamic | `data/programs.ts` & Content DB | Curriculum breakdown, court ratios, and fees |
-| `/coaches` | **Coaching Staff** | Dynamic | Neon DB `coaches` table | Coach biographies, certifications, and assignments |
-| `/achievements` | **Track Record & Medals** | Dynamic | Content DB `achievements` | Verifiable tournament laurels, medals, and rankings |
-| `/gallery` | **Photo & Video Gallery** | Dynamic | Content DB `gallery` | Filterable training court, action, and event photos |
-| `/blog` | **Articles & Guides** | Dynamic | Content DB `blog` | Educational coaching articles and badminton tips |
-| `/blog/[slug]` | **Article Detail View** | Dynamic | Content DB `blog` | In-depth reader with reading time and author metadata |
-| `/testimonials` | **Reviews & Ratings** | Dynamic | Content DB `testimonials` | Student and parent ratings and verified feedback |
-| `/events` | **Fixtures & Tournaments** | Dynamic | Neon DB `events` table | Upcoming championships, camps, and workshops |
-| `/events/[slug]` | **Event Detail View** | Dynamic | Neon DB `events` table | Venue, timing, registration URL, and WhatsApp trigger |
-| `/contact` | **Contact & Admissions** | Dynamic | Form API `/api/enquiries` | Multi-field trial enquiry form with direct WhatsApp |
-| `/privacy`, `/terms`| **Legal Policies** | Static | Component templates | Data privacy policy and service terms |
+| Route | Module Name | Type | Data Source | Administrative Control | User Interaction |
+| :--- | :--- | :---: | :--- | :--- | :--- |
+| `/` | **Homepage** | SSR / Dynamic | Content DB (`lib/contentDb.ts`) | Fully dynamic: Hero, Centres, Coaches, Reviews, Events | View programs, explore centres, book trials |
+| `/about` | **About & Philosophy** | Static / Hybrid | Academy Config (`data/academy.ts`) | Academy founding story, leadership, and trust pillars | Explore coaching methodology and ethos |
+| `/branches` | **Centres Directory** | Dynamic | Neon DB `centres` table | Displays active training centres across Kochi | Filter locations, check court specs |
+| `/[location]` | **Local Centre Landing Pages** | SSG / Dynamic | Neon DB `centres` table | Individual micro-market pages (`/kadavanthra`, etc.) | Neighborhood maps, hours, court photos, trials |
+| `/programs` | **Programs Matrix** | Hybrid | `data/programs.ts` & Neon DB | Age/skill developmental pathways & batch details | Compare curricula, student-to-coach ratios |
+| `/programs/[slug]` | **Program Detail Page** | Dynamic | `data/programs.ts` & Content DB | Curriculum breakdown, court ratios, and fees | Direct trial booking for specific track |
+| `/coaches` | **Coaching Staff** | Dynamic | Neon DB `coaches` table | Coach biographies, certifications, and assignments | Inspect coach background, BWF credentials |
+| `/achievements` | **Track Record & Medals** | Dynamic | Content DB `achievements` | Verifiable tournament laurels, medals, and rankings | Trophy wall with championship details |
+| `/gallery` | **Photo & Video Gallery** | Dynamic | Content DB `gallery` | Filterable training court, action, and event photos | View court photos, drills, match highlights |
+| `/blog` | **Articles & Guides** | Dynamic | Content DB `blog` | Educational coaching articles and badminton tips | Read coaching guides, share articles |
+| `/blog/[slug]` | **Article Detail View** | Dynamic | Content DB `blog` | In-depth reader with reading time and author metadata | Full article reading, related articles |
+| `/testimonials` | **Reviews & Ratings** | Dynamic | Content DB `testimonials` | Student and parent ratings and verified feedback | Read parent and athlete reviews |
+| `/events` | **Fixtures & Tournaments** | Dynamic | Neon DB `events` table | Upcoming championships, camps, and workshops | Filter fixtures, check dates and venues |
+| `/events/[slug]` | **Event Detail View** | Dynamic | Neon DB `events` table | Venue, timing, registration URL, and WhatsApp trigger | Instant registration via WhatsApp or web link |
+| `/contact` | **Contact & Admissions** | Dynamic | Form API `/api/enquiries` | Multi-field trial enquiry form with direct WhatsApp | Submit free trial request, click-to-call |
+| `/privacy`, `/terms`| **Legal Policies** | Static | Component templates | Data privacy policy and service terms | Read legal disclosures |
 
 ---
 
 ## 6. ACTIVE TRAINING CENTRES & BRANCH DIRECTORY
 
 ### 6.1 Strict Verification of Active Branches
-An exhaustive codebase search confirmed that **zero active references to legacy or planned centres such as Edappally or Kakkanad exist in active branch documentation**. 
+An exhaustive codebase search confirmed that **zero active references to legacy or planned centres such as Edappally or Kakkanad exist in active branch documentation**.
 
 The official, production-active SBA network comprises strictly the following **five (5) training centres**:
 
@@ -289,8 +313,9 @@ The administrative platform at `/admin` empowers academy directors and coaches t
 │                               │ • Blog Articles (SEO Guides, Excerpts, Tags)     │
 │                               │ • Reviews & Feedback (Moderation & Approvals)    │
 ├───────────────────────────────┼──────────────────────────────────────────────────┤
-│ Category: Security & Session  │ • Change Password Modal (scrypt Hashing)         │
-│                               │ • View Public Site (Deep-Link)                   │
+│ Category: Security & Staff    │ • Administrator & Staff Management (RBAC Users)  │
+│                               │ • Change Password Modal (scrypt Hashing)         │
+│                               │ • WhatsApp Templates & Message Configuration     │
 │                               │ • Secure Sign Out (Cookie Invalidation)          │
 └───────────────────────────────┴──────────────────────────────────────────────────┘
 ```
@@ -306,6 +331,8 @@ The administrative platform at `/admin` empowers academy directors and coaches t
 7. **Blog / Articles:** Rich article publishing engine supporting title, slug, summary, markdown content, tags, author, and reading time.
 8. **Reviews / Testimonials:** Allows moderating customer reviews, editing testimonials, and setting star ratings.
 9. **Events / Tournaments:** Create and update sanctioned championships, holiday coaching camps, entry fees, start dates, and external registration links.
+10. **Administrator & Staff Management:** Control administrative accounts stored in PostgreSQL `users` table with strict role assignment (`SUPER_ADMIN`, `ADMIN`, `COACH`, `FRONT_DESK`, `CONTENT_MANAGER`).
+11. **WhatsApp Templates Configuration:** Standardized messaging templates for admissions confirmation, free trial scheduling, and coaching fee reminders.
 
 ---
 
@@ -338,7 +365,7 @@ Stored Format: {16-byte-hex-salt}:{64-byte-scrypt-derived-key-hex}
 
 ## 9. DATABASE ARCHITECTURE & SCHEMA DOCUMENTATION
 
-The database is built on **Neon Serverless PostgreSQL** with 24 dedicated tables and a dual-layer local JSON fallback system.
+The database is built on **Neon Serverless PostgreSQL** with 24 dedicated relational tables, 1 JSONB CMS store, and a dual-layer local JSON fallback system.
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
@@ -592,11 +619,13 @@ The events engine handles academy fixtures, ranking tournaments, and holiday tra
 
 All sensitive secrets are isolated strictly within production environment configurations. **No private secret values are printed in this document.**
 
-| Variable Name | Purpose | Required in Production | Security Classification |
+| Variable Name | Purpose | Required in Production | Secret / Security Classification |
 | :--- | :--- | :---: | :--- |
 | `DATABASE_URL` | Neon PostgreSQL pooled connection string | **YES** | **Secret / High Risk** |
 | `JWT_SECRET` | Secret key used for signing JWT access tokens | **YES** | **Secret / High Risk** |
 | `NEXT_PUBLIC_SITE_URL` | Authoritative base URL for canonicals & sitemaps | **YES** | Public Configuration |
+| `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` | Google Search Console verification token | Optional | Public Configuration |
+| `NEXT_PUBLIC_GTM_ID` | Google Tag Manager telemetry container ID | Optional | Public Configuration |
 | `ADMIN_EMAIL` | Default Super Admin bootstrap email | Optional (CLI only) | Internal Configuration |
 | `ADMIN_PASSWORD` | Default Super Admin bootstrap password | Optional (CLI only) | **Secret / High Risk** |
 | `ADMIN_NAME` | Default Super Admin display name | Optional (CLI only) | Internal Configuration |
@@ -757,9 +786,9 @@ This user guide provides simple, numbered instructions for non-technical academy
 - Post at least one new coaching article on `/blog` to sustain organic search momentum.
 - Update tournament achievements with recent medal winners.
 
-### 23.3 Technical Maintenance (Included Warranty vs Ongoing Retainer)
-- **Included in Project Handover:** 7-day post-handover bug warranty covering any technical flaws in delivered features.
-- **Optional Ongoing Service Retainer (₹8,000/month):** Covers ongoing local SEO keyword monitoring, monthly ranking reports, database backups, dependency upgrades, and content updates.
+### 23.3 Technical Maintenance (Included Testing Window vs Ongoing Retainer)
+- **Included 7-Day Testing, Review & Correction Period (07 October 2026 to 13 October 2026):** Active window covering functional verification, bug reporting, and agreed scope corrections for delivered website components. The final date for submitting included correction requests is **13 October 2026**.
+- **Optional Ongoing Service Retainer (₹8,000/month):** Covers continuous local SEO monitoring, monthly keyword tracking, database backups, dependency upgrades, and ongoing content updates after 13 October 2026.
 
 ---
 
@@ -789,7 +818,7 @@ Recommended enhancements for future platform phases:
 | :--- | :---: | :--- |
 | **Public Website** | **COMPLETED** | Fully operational on Next.js 16 App Router |
 | **Responsive Design** | **COMPLETED** | Tested on desktop, tablet, and mobile devices |
-| **Admin Dashboard** | **COMPLETED** | Fully functional with 10 operational modules |
+| **Admin Dashboard** | **COMPLETED** | Fully functional with 11 operational modules |
 | **Authentication & RBAC** | **COMPLETED** | Secure scrypt hashing and JWT sessions |
 | **Student Inquiries CRM** | **COMPLETED** | Real-time lead capture, drawer, and notes |
 | **Centres Management** | **COMPLETED** | Full CRUD for 5 physical training venues |
@@ -806,16 +835,46 @@ Recommended enhancements for future platform phases:
 
 ---
 
-## 27. FINAL HANDOVER & DELIVERY DECLARATION
+## 27. 7-DAY TESTING, REVIEW & CORRECTION PERIOD
 
-I hereby declare that the **Sooraj Badminton Academy Website, CRM & Local SEO** project (`SAA-WEB-SEO-2026-001`) has been completed in accordance with the agreed technical specifications and delivered for formal client handover.
+| Parameter | Specification & Milestone Date |
+| :--- | :--- |
+| **Project Handover Date** | **07 October 2026** |
+| **Testing & Review Period** | **07 October 2026 to 13 October 2026** |
+| **Final Date for Reporting Included Corrections** | **13 October 2026** |
+| **Handover Status** | **Project handed over for client testing and review** |
+
+### 27.1 Included Testing, Review & Correction Terms
+1. **Handover Inception:** The project is officially handed over on **07 October 2026**.
+2. **7-Day Testing Window:** The client has an active 7-day testing and review period commencing on **07 October 2026** and concluding on **13 October 2026**.
+3. **Scope of Permitted Testing:** During this designated window, the client may test all delivered website features and report functional issues, errors, bugs, or corrections directly related to the agreed project scope (`SAA-WEB-SEO-2026-001`).
+4. **Agreed Corrections:** Agreed corrections and reasonable edits related to the original project scope will be addressed during this 7-day window.
+5. **Communication Deadline:** All testing feedback, bug reports, and correction requests must be formally submitted within the 7-day period. The final date for submitting testing/correction requests is **13 October 2026**.
+
+### 27.2 Boundary Conditions, Exclusions & Post-Period Requests
+1. **Strict Final Cutoff:** The included testing, review, and correction window strictly concludes at the end of **13 October 2026**.
+2. **Post-Period Work Policy:** Any requests submitted after **13 October 2026** are outside the included 7-day testing/review window and may be treated as additional work or a separate change request, subject to mutual agreement (or handled under the optional ongoing service retainer).
+3. **Out-of-Scope Exclusions:** New features, new modules, major architectural/visual redesigns, additional functional scope, or third-party integrations outside the contracted scope are not considered part of the 7-day correction period.
+4. **Defined Purpose:** The 7-day period is designated exclusively for functional verification, testing, bug reporting, and agreed scope corrections—not unlimited redesign or new feature development.
+
+---
+
+## 28. FINAL HANDOVER & DELIVERY DECLARATION
+
+I hereby declare that the **Sooraj Badminton Academy Website, CRM & Local SEO** project (`SAA-WEB-SEO-2026-001`) has been completed in accordance with the agreed technical specifications and delivered on **07 October 2026** for formal client testing and review during the designated 7-day window (**07 October 2026 to 13 October 2026**).
 
 All delivered frontend pages, dynamic routes, administrative modules, database schemas, and SEO configurations have been inspected, tested, and verified in the live production environment.
 
 **Handed Over By:**  
 **Mohammed Nibrasul Haqq**  
-Full-Stack Developer · UI/UX Designer · Kreovate Marketing Agency  
-Date: 07 October 2026
+Freelance Full-Stack Developer · UI/UX Designer · Kreovate Marketing Agency  
+Handover Date: 07 October 2026 · Kochi, Kerala
+
+**Received & Acknowledged For:**  
+**Head Coach Sooraj M S**  
+Founder & Head Coach · Sooraj Badminton Academy (SBA)  
+Handover Status: Project handed over for client testing and review  
+Testing & Review Period: 07 October 2026 – 13 October 2026 (Final Date for Reporting Included Corrections: 13 October 2026)
 
 ---
 

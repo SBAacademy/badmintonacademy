@@ -2,12 +2,11 @@ import React from "react";
 import type { Metadata } from "next";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { createMetadata } from "@/lib/seo";
-import { getEvents } from "@/lib/contentDb";
+import { getEvents, getCentres } from "@/lib/contentDb";
 import { EventsPageClient } from "@/components/events/EventsPageClient";
 import { FinalCTA } from "@/components/sections/FinalCTA";
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+export const revalidate = 300;
 
 export const metadata: Metadata = createMetadata({
   title: "Badminton Tournaments & Events in Kochi | S & A Badminton Academy",
@@ -25,7 +24,10 @@ export const metadata: Metadata = createMetadata({
 });
 
 export default async function EventsPage() {
-  const events = await getEvents({ includeUnpublished: false });
+  const [events, centres] = await Promise.all([
+    getEvents({ includeUnpublished: false }),
+    getCentres({ includeInactive: false }),
+  ]);
 
   return (
     <div className="bg-[#07090D] min-h-screen text-white select-none">
@@ -58,7 +60,7 @@ export default async function EventsPage() {
         <EventsPageClient initialEvents={events} />
       </div>
 
-      <FinalCTA />
+      <FinalCTA initialCount={centres.length} />
     </div>
   );
 }

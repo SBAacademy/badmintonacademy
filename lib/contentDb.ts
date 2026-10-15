@@ -1,6 +1,7 @@
 import { neon } from "@neondatabase/serverless";
 import fs from "fs/promises";
 import path from "path";
+import { unstable_cache, revalidateTag } from "next/cache";
 
 import { GalleryItem } from "@/data/gallery";
 import { Coach, CoachPhoto, normalizeWhatsAppNumber } from "@/data/coaches";
@@ -15,10 +16,45 @@ export type ContentSectionKey = "gallery" | "coaches" | "achievements" | "testim
 
 const CONTENT_FILE_PATH = path.join(process.cwd(), "data", "site_content.json");
 
+let sqlInstance: ReturnType<typeof neon> | null = null;
+
 function getSql(): ReturnType<typeof neon> | null {
   const url = process.env.DATABASE_URL;
   if (!url) return null;
-  return neon(url);
+  if (!sqlInstance) {
+    sqlInstance = neon(url);
+  }
+  return sqlInstance;
+}
+
+export function invalidateCacheTag(tag: string) {
+  try {
+    revalidateTag(tag, "max");
+  } catch {
+    // Graceful fallback outside Next.js request context
+  }
+}
+
+function createCachedReader<TArgs extends any[], TReturn>(
+  fn: (...args: TArgs) => Promise<TReturn>,
+  keyParts: string[],
+  options: { revalidate?: number; tags?: string[] }
+): (...args: TArgs) => Promise<TReturn> {
+  try {
+    const cached = unstable_cache(fn, keyParts, options);
+    return async (...args: TArgs): Promise<TReturn> => {
+      try {
+        return await cached(...args);
+      } catch (err: any) {
+        if (err && typeof err.message === "string" && err.message.includes("incrementalCache missing")) {
+          return await fn(...args);
+        }
+        throw err;
+      }
+    };
+  } catch {
+    return fn;
+  }
 }
 
 // Local JSON fallback store (for non-relational CMS sections; centres, coaches, and events are strictly database-only)
@@ -54,197 +90,10 @@ async function writeFallbackContent(content: Record<string, unknown[]>): Promise
   }
 }
 
-let isInitialized = false;
-
+// Runtime DDL schema verification is decoupled from the user request path.
+// One-time migrations are managed via `npm run db:migrate` (scripts/migrate-db.mjs).
 export async function initContentDb(): Promise<void> {
-  const sql = getSql();
-  if (!sql || isInitialized) return;
-
-  try {
-    await sql`
-      CREATE TABLE IF NOT EXISTS site_content (
-        section VARCHAR(64) PRIMARY KEY,
-        data JSONB NOT NULL,
-        updated_at TIMESTAMPTZ DEFAULT NOW()
-      );
-    `;
-
-    // Check if initial sections exist, if not seed them
-    const existing = (await sql`SELECT section FROM site_content;`) as unknown as Array<{ section: string }>;
-    const existingSections = new Set(existing.map((r) => r.section));
-
-    const defaults: Record<ContentSectionKey, unknown[]> = {
-      gallery: [],
-      coaches: [],
-      achievements: [],
-      testimonials: [],
-      blog: [],
-      centres: [],
-      programs: [],
-    };
-
-    for (const [sectionKey, defaultItems] of Object.entries(defaults)) {
-      if (!existingSections.has(sectionKey)) {
-        await sql`
-          INSERT INTO site_content (section, data, updated_at)
-          VALUES (${sectionKey}, ${JSON.stringify(defaultItems)}, NOW())
-          ON CONFLICT (section) DO NOTHING;
-        `;
-      }
-    }
-
-    // Ensure centres table has modern schema
-    try {
-      await sql`
-        CREATE TABLE IF NOT EXISTS centres (
-          slug VARCHAR(64) PRIMARY KEY,
-          name VARCHAR(128) NOT NULL,
-          short_name VARCHAR(64) NOT NULL,
-          address TEXT NOT NULL,
-          phone VARCHAR(32) NOT NULL,
-          whatsapp VARCHAR(32) NOT NULL,
-          email VARCHAR(128) NOT NULL,
-          court_count INTEGER NOT NULL DEFAULT 3,
-          surface_type VARCHAR(128) DEFAULT 'BWF Wooden Cushion & Synthetic Mat',
-          google_maps_url TEXT,
-          status VARCHAR(32) DEFAULT 'ACTIVE',
-          created_at TIMESTAMPTZ DEFAULT NOW()
-        );
-      `;
-      await sql`ALTER TABLE centres ADD COLUMN IF NOT EXISTS area VARCHAR(128);`;
-      await sql`ALTER TABLE centres ADD COLUMN IF NOT EXISTS city VARCHAR(64) DEFAULT 'Kochi';`;
-      await sql`ALTER TABLE centres ADD COLUMN IF NOT EXISTS district VARCHAR(64) DEFAULT 'Ernakulam';`;
-      await sql`ALTER TABLE centres ADD COLUMN IF NOT EXISTS state VARCHAR(64) DEFAULT 'Kerala';`;
-      await sql`ALTER TABLE centres ADD COLUMN IF NOT EXISTS pincode VARCHAR(32);`;
-      await sql`ALTER TABLE centres ADD COLUMN IF NOT EXISTS postal_code VARCHAR(32);`;
-      await sql`ALTER TABLE centres ADD COLUMN IF NOT EXISTS phone_display VARCHAR(64);`;
-      await sql`ALTER TABLE centres ADD COLUMN IF NOT EXISTS whatsapp_display VARCHAR(64);`;
-      await sql`ALTER TABLE centres ADD COLUMN IF NOT EXISTS google_maps_embed_url TEXT;`;
-      await sql`ALTER TABLE centres ADD COLUMN IF NOT EXISTS latitude NUMERIC(10, 6);`;
-      await sql`ALTER TABLE centres ADD COLUMN IF NOT EXISTS longitude NUMERIC(10, 6);`;
-      await sql`ALTER TABLE centres ADD COLUMN IF NOT EXISTS display_order INTEGER DEFAULT 1;`;
-      await sql`ALTER TABLE centres ADD COLUMN IF NOT EXISTS is_active BOOLEAN DEFAULT TRUE;`;
-      await sql`ALTER TABLE centres ADD COLUMN IF NOT EXISTS description TEXT;`;
-      await sql`ALTER TABLE centres ADD COLUMN IF NOT EXISTS image TEXT;`;
-      await sql`ALTER TABLE centres ADD COLUMN IF NOT EXISTS court_image TEXT;`;
-      await sql`ALTER TABLE centres ADD COLUMN IF NOT EXISTS seo_title VARCHAR(255);`;
-      await sql`ALTER TABLE centres ADD COLUMN IF NOT EXISTS seo_description TEXT;`;
-      await sql`ALTER TABLE centres ADD COLUMN IF NOT EXISTS is_placeholder BOOLEAN DEFAULT FALSE;`;
-      await sql`ALTER TABLE centres ADD COLUMN IF NOT EXISTS data JSONB DEFAULT '{}'::jsonb;`;
-      await sql`ALTER TABLE centres ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT NOW();`;
-
-    } catch {
-      // Ignored for concurrent workers
-    }
-
-    // Ensure coaches table has modern columns
-    try {
-      await sql`ALTER TABLE coaches ADD COLUMN IF NOT EXISTS achievements TEXT[] DEFAULT '{}';`;
-      await sql`ALTER TABLE coaches ADD COLUMN IF NOT EXISTS is_published BOOLEAN DEFAULT TRUE;`;
-      await sql`ALTER TABLE coaches ADD COLUMN IF NOT EXISTS display_order INTEGER DEFAULT 0;`;
-      await sql`ALTER TABLE coaches ADD COLUMN IF NOT EXISTS whatsapp_number VARCHAR(32);`;
-      await sql`ALTER TABLE coaches ADD COLUMN IF NOT EXISTS slug VARCHAR(128);`;
-      await sql`ALTER TABLE coaches ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT NOW();`;
-    } catch {
-      // Ignored for concurrent workers
-    }
-
-    // 1. Create dedicated relational coach_photos table
-    try {
-      await sql`
-        CREATE TABLE IF NOT EXISTS coach_photos (
-          id VARCHAR(64) PRIMARY KEY,
-          coach_id VARCHAR(64) NOT NULL REFERENCES coaches(id) ON DELETE CASCADE,
-          image_url TEXT NOT NULL,
-          sort_order INTEGER NOT NULL DEFAULT 1,
-          is_primary BOOLEAN NOT NULL DEFAULT FALSE,
-          created_at TIMESTAMPTZ DEFAULT NOW(),
-          updated_at TIMESTAMPTZ DEFAULT NOW()
-        );
-      `;
-      await sql`CREATE INDEX IF NOT EXISTS idx_coach_photos_coach_id ON coach_photos(coach_id);`;
-      await sql`CREATE INDEX IF NOT EXISTS idx_coach_photos_sort_order ON coach_photos(coach_id, sort_order ASC);`;
-    } catch {
-      // Ignored if created by concurrent worker
-    }
-
-    // 2. Safe Data Migration: Migrate existing coach image_url into coach_photos
-    try {
-      await sql`
-        INSERT INTO coach_photos (id, coach_id, image_url, sort_order, is_primary, created_at, updated_at)
-        SELECT 
-          'photo_' || c.id || '_primary',
-          c.id,
-          c.image_url,
-          1,
-          TRUE,
-          NOW(),
-          NOW()
-        FROM coaches c
-        WHERE c.image_url IS NOT NULL 
-          AND TRIM(c.image_url) != ''
-          AND NOT EXISTS (
-            SELECT 1 FROM coach_photos cp WHERE cp.coach_id = c.id
-          )
-        ON CONFLICT (id) DO NOTHING;
-      `;
-    } catch {
-      // Ignored
-    }
-
-    // 3. Ensure sequential default display_order for existing coaches
-    try {
-      await sql`
-        WITH ordered_coaches AS (
-          SELECT id, ROW_NUMBER() OVER (ORDER BY COALESCE(display_order, 999) ASC, created_at ASC) as new_order
-          FROM coaches
-          WHERE display_order IS NULL OR display_order = 0
-        )
-        UPDATE coaches c
-        SET display_order = oc.new_order
-        FROM ordered_coaches oc
-        WHERE c.id = oc.id AND (c.display_order IS NULL OR c.display_order = 0);
-      `;
-    } catch {
-      // Ignored
-    }
-
-    // 4. Create dedicated relational events table
-    try {
-      await sql`
-        CREATE TABLE IF NOT EXISTS events (
-          id VARCHAR(64) PRIMARY KEY,
-          title VARCHAR(255) NOT NULL,
-          slug VARCHAR(255) UNIQUE NOT NULL,
-          description TEXT,
-          event_type VARCHAR(64) NOT NULL DEFAULT 'TOURNAMENT',
-          event_date VARCHAR(64) NOT NULL,
-          start_time VARCHAR(32),
-          end_time VARCHAR(32),
-          venue VARCHAR(255) NOT NULL,
-          centre_slug VARCHAR(64) REFERENCES centres(slug) ON DELETE SET NULL,
-          image TEXT,
-          registration_url TEXT,
-          contact VARCHAR(128),
-          status VARCHAR(32) NOT NULL DEFAULT 'UPCOMING',
-          is_featured BOOLEAN NOT NULL DEFAULT FALSE,
-          is_published BOOLEAN NOT NULL DEFAULT TRUE,
-          display_order INTEGER NOT NULL DEFAULT 1,
-          created_at TIMESTAMPTZ DEFAULT NOW(),
-          updated_at TIMESTAMPTZ DEFAULT NOW()
-        );
-      `;
-      await sql`CREATE INDEX IF NOT EXISTS idx_events_date ON events(event_date ASC);`;
-      await sql`CREATE INDEX IF NOT EXISTS idx_events_status ON events(status);`;
-      await sql`CREATE INDEX IF NOT EXISTS idx_events_centre ON events(centre_slug);`;
-    } catch {
-      // Ignored for concurrent workers
-    }
-
-    isInitialized = true;
-  } catch (err) {
-    console.error("Neon DB initContentDb error (falling back to local):", err);
-  }
+  return;
 }
 
 export const DEFAULT_COACH_IMAGE = "/images/training-coach.jpg";
@@ -299,7 +148,7 @@ function sanitizeItemImageUrls<T>(item: T): T {
   return clone as T;
 }
 
-export async function getContentSection<T>(
+async function getContentSectionDirect<T>(
   section: ContentSectionKey,
   defaultItems: T[]
 ): Promise<T[]> {
@@ -307,7 +156,6 @@ export async function getContentSection<T>(
 
   if (sql) {
     try {
-      await initContentDb();
       const rows = (await sql`
         SELECT data FROM site_content WHERE section = ${section} LIMIT 1;
       `) as unknown as Array<{ data: unknown }>;
@@ -330,6 +178,24 @@ export async function getContentSection<T>(
   return defaultItems.map(sanitizeItemImageUrls);
 }
 
+const getCachedContentSection = createCachedReader(
+  async (section: string) => getContentSectionDirect(section as ContentSectionKey, []),
+  ["content-section-data-v1"],
+  { revalidate: 3600, tags: ["site-content"] }
+);
+
+export async function getContentSection<T>(
+  section: ContentSectionKey,
+  defaultItems: T[]
+): Promise<T[]> {
+  const cached = (await getCachedContentSection(section)) as T[];
+  if (cached && cached.length > 0) {
+    return cached;
+  }
+  const direct = await getContentSectionDirect<T>(section, defaultItems);
+  return direct && direct.length > 0 ? direct : defaultItems;
+}
+
 export async function saveContentSection<T>(
   section: ContentSectionKey,
   items: T[]
@@ -340,7 +206,6 @@ export async function saveContentSection<T>(
 
   if (sql) {
     try {
-      await initContentDb();
       await sql`
         INSERT INTO site_content (section, data, updated_at)
         VALUES (${section}, ${JSON.stringify(sanitizedItems)}, ${now})
@@ -404,19 +269,21 @@ export async function saveContentSection<T>(
   const fallback = await readFallbackContent();
   fallback[section] = sanitizedItems;
   await writeFallbackContent(fallback);
+
+  invalidateCacheTag("site-content");
+  invalidateCacheTag(section);
 }
 
 // ============================================================================
 // AUTHORITATIVE COACHES DATA LAYER (PostgreSQL coaches is single source of truth)
 // ============================================================================
 
-export async function getCoaches(options: { includeUnpublished?: boolean } = {}): Promise<Coach[]> {
+async function getCoachesDirect(options: { includeUnpublished?: boolean } = {}): Promise<Coach[]> {
   const { includeUnpublished = false } = options;
   const sql = getSql();
 
   if (sql) {
     try {
-      await initContentDb();
       const rows = (await sql`
         SELECT 
           c.id,
@@ -574,13 +441,25 @@ export async function getCoaches(options: { includeUnpublished?: boolean } = {})
   return [];
 }
 
+const getCachedPublicCoaches = createCachedReader(
+  async () => getCoachesDirect({ includeUnpublished: false }),
+  ["public-coaches-v1"],
+  { revalidate: 3600, tags: ["coaches"] }
+);
+
+export async function getCoaches(options: { includeUnpublished?: boolean } = {}): Promise<Coach[]> {
+  if (options.includeUnpublished) {
+    return getCoachesDirect({ includeUnpublished: true });
+  }
+  return getCachedPublicCoaches();
+}
+
 export async function getCoachBySlug(slug: string): Promise<Coach | null> {
   const cleanSlug = decodeURIComponent(slug).toLowerCase().trim();
   const sql = getSql();
 
   if (sql) {
     try {
-      await initContentDb();
       const rows = (await sql`
         SELECT 
           c.id,
@@ -700,7 +579,6 @@ export async function saveCoachRecord(coachData: Partial<Coach>): Promise<Coach>
   let current: Partial<Coach> | null = null;
   if (sql) {
     try {
-      await initContentDb();
       const existing = (await sql`SELECT * FROM coaches WHERE id = ${cleanId} LIMIT 1;`) as unknown as Array<Record<string, unknown>>;
       if (existing.length > 0) {
         current = {
@@ -807,7 +685,6 @@ export async function saveCoachRecord(coachData: Partial<Coach>): Promise<Coach>
   const whatsappNumber = rawWhatsApp ? normalizeWhatsAppNumber(rawWhatsApp) : null;
 
   if (sql) {
-    await initContentDb();
     await sql`
       INSERT INTO coaches (
         id, slug, name, role, bio, certifications, achievements,
@@ -894,6 +771,7 @@ export async function saveCoachRecord(coachData: Partial<Coach>): Promise<Coach>
     console.warn("Downstream site_content sync warning:", syncErr);
   }
 
+  invalidateCacheTag("coaches");
   return savedCoach;
 }
 
@@ -906,7 +784,6 @@ export async function reorderCoaches(
   const sql = getSql();
   if (sql && orderMap.length > 0) {
     try {
-      await initContentDb();
       for (const item of orderMap) {
         const order = Number(item.displayOrder) || 1;
         await sql`
@@ -935,6 +812,7 @@ export async function reorderCoaches(
     await writeFallbackContent(fallback);
   }
 
+  invalidateCacheTag("coaches");
   return await getCoaches({ includeUnpublished: true });
 }
 
@@ -954,7 +832,6 @@ export async function deleteCoachRecord(
     return { success: true, softDeleted: false, message: "Coach removed from fallback store." };
   }
 
-  await initContentDb();
 
   // Check if coach is referenced by batches, sessions, trials, or performance assessments
   let isReferenced = false;
@@ -996,6 +873,7 @@ export async function deleteCoachRecord(
     console.warn("Downstream site_content sync warning:", syncErr);
   }
 
+  invalidateCacheTag("coaches");
   return {
     success: true,
     softDeleted: softDelete || isReferenced,
@@ -1027,11 +905,10 @@ export interface ProgramItem {
   createdAt?: string;
 }
 
-export async function getPrograms(): Promise<ProgramItem[]> {
+async function getProgramsDirect(): Promise<ProgramItem[]> {
   const sql = getSql();
   if (sql) {
     try {
-      await initContentDb();
       const rows = (await sql`
         SELECT 
           slug,
@@ -1063,6 +940,16 @@ export async function getPrograms(): Promise<ProgramItem[]> {
   }));
 }
 
+const getCachedPublicPrograms = createCachedReader(
+  async () => getProgramsDirect(),
+  ["public-programs-v1"],
+  { revalidate: 3600, tags: ["programs"] }
+);
+
+export async function getPrograms(): Promise<ProgramItem[]> {
+  return getCachedPublicPrograms();
+}
+
 export async function saveProgramRecord(data: Partial<ProgramItem>): Promise<ProgramItem> {
   const sql = getSql();
   const name = String(data.name || "").trim();
@@ -1080,7 +967,6 @@ export async function saveProgramRecord(data: Partial<ProgramItem>): Promise<Pro
   const status = data.status === "INACTIVE" ? "INACTIVE" : "ACTIVE";
 
   if (sql) {
-    await initContentDb();
     await sql`
       INSERT INTO programs (
         slug, name, description, display_order, status, created_at
@@ -1093,6 +979,7 @@ export async function saveProgramRecord(data: Partial<ProgramItem>): Promise<Pro
         status = COALESCE(EXCLUDED.status, programs.status);
     `;
 
+    invalidateCacheTag("programs");
     return {
       slug,
       name,
@@ -1102,6 +989,7 @@ export async function saveProgramRecord(data: Partial<ProgramItem>): Promise<Pro
     };
   }
 
+  invalidateCacheTag("programs");
   return {
     slug,
     name,
@@ -1119,12 +1007,12 @@ export async function deleteProgramRecord(slug: string): Promise<{ success: bool
 
   if (sql) {
     try {
-      await initContentDb();
       await sql`UPDATE batches SET program_slug = NULL WHERE program_slug = ${slug};`.catch(() => {});
       await sql`UPDATE students SET primary_program = NULL WHERE primary_program = ${slug};`.catch(() => {});
       await sql`UPDATE free_trials SET program_slug = NULL WHERE program_slug = ${slug};`.catch(() => {});
       
       await sql`DELETE FROM programs WHERE slug = ${slug};`;
+      invalidateCacheTag("programs");
       return { success: true, message: "Training program deleted successfully." };
     } catch (err: any) {
       console.error(`Failed to delete program ${slug}:`, err);
@@ -1132,6 +1020,7 @@ export async function deleteProgramRecord(slug: string): Promise<{ success: bool
     }
   }
 
+  invalidateCacheTag("programs");
   return { success: true, message: "Program deleted." };
 }
 
@@ -1157,13 +1046,12 @@ export async function getBlogPosts(): Promise<BlogPost[]> {
 // AUTHORITATIVE CENTRES DATA LAYER (PostgreSQL centres is single source of truth)
 // ============================================================================
 
-export async function getCentres(options: { includeInactive?: boolean } = {}): Promise<Centre[]> {
+async function getCentresDirect(options: { includeInactive?: boolean } = {}): Promise<Centre[]> {
   const { includeInactive = false } = options;
   const sql = getSql();
 
   if (sql) {
     try {
-      await initContentDb();
       const rows = (await sql`
         SELECT 
           c.slug as id,
@@ -1265,6 +1153,19 @@ export async function getCentres(options: { includeInactive?: boolean } = {}): P
   // Neon PostgreSQL 'centres' table is the ONLY source of truth.
   // If the database has 0 centres, it returns [] cleanly.
   return [];
+}
+
+const getCachedPublicCentres = createCachedReader(
+  async () => getCentresDirect({ includeInactive: false }),
+  ["public-centres-data-v1"],
+  { revalidate: 3600, tags: ["centres"] }
+);
+
+export async function getCentres(options: { includeInactive?: boolean } = {}): Promise<Centre[]> {
+  if (options.includeInactive) {
+    return getCentresDirect({ includeInactive: true });
+  }
+  return getCachedPublicCentres();
 }
 
 export async function getCentreBySlug(slug: string): Promise<Centre | null> {
@@ -1397,7 +1298,6 @@ export async function saveCentreRecord(centreData: Partial<Centre>): Promise<Cen
 
   if (sql) {
     try {
-      await initContentDb();
       await sql`
         INSERT INTO centres (
           slug, name, short_name, area, city, district, state,
@@ -1454,6 +1354,7 @@ export async function saveCentreRecord(centreData: Partial<Centre>): Promise<Cen
     }
   }
 
+  invalidateCacheTag("centres");
   return savedCentre;
 }
 
@@ -1463,7 +1364,6 @@ export async function reorderCentres(
   const sql = getSql();
   if (sql && orderMap.length > 0) {
     try {
-      await initContentDb();
       for (const item of orderMap) {
         const order = Number(item.displayOrder) || 1;
         await sql`
@@ -1477,6 +1377,7 @@ export async function reorderCentres(
     }
   }
 
+  invalidateCacheTag("centres");
   return getCentres({ includeInactive: true });
 }
 
@@ -1488,7 +1389,6 @@ export async function deleteCentreRecord(
   const sql = getSql();
 
   try {
-    await initContentDb();
 
     // 1. Soft-delete branch (only when explicitly requested via softDelete: true)
     if (softDelete) {
@@ -1503,6 +1403,7 @@ export async function deleteCentreRecord(
           console.warn("Could not deactivate centre in Neon:", e);
         }
       }
+      invalidateCacheTag("centres");
       return {
         success: true,
         softDeleted: true,
@@ -1609,6 +1510,7 @@ export async function deleteCentreRecord(
       console.warn("Could not clean up fallback store on centre deletion:", err);
     }
 
+    invalidateCacheTag("centres");
     return {
       success: true,
       softDeleted: false,
@@ -1628,7 +1530,7 @@ export async function deleteCentreRecord(
 // AUTHORITATIVE EVENTS & TOURNAMENTS DATA LAYER (Neon PostgreSQL events table)
 // ============================================================================
 
-export async function getEvents(options: {
+async function getEventsDirect(options: {
   includeUnpublished?: boolean;
   status?: EventStatus | "upcoming" | "all";
   eventType?: string;
@@ -1642,7 +1544,6 @@ export async function getEvents(options: {
   }
 
   try {
-    await initContentDb();
 
     // Query events with left join to centres to fetch centre name
     const rawRows = (await sql`
@@ -1727,6 +1628,36 @@ export async function getEvents(options: {
   }
 }
 
+const getCachedPublicUpcomingEvents = createCachedReader(
+  async () => getEventsDirect({ includeUnpublished: false, status: "upcoming" }),
+  ["public-upcoming-events-v1"],
+  { revalidate: 1800, tags: ["events"] }
+);
+
+const getCachedPublicAllEvents = createCachedReader(
+  async () => getEventsDirect({ includeUnpublished: false, status: "all" }),
+  ["public-all-events-v1"],
+  { revalidate: 1800, tags: ["events"] }
+);
+
+export async function getEvents(options: {
+  includeUnpublished?: boolean;
+  status?: EventStatus | "upcoming" | "all";
+  eventType?: string;
+  limit?: number;
+} = {}): Promise<EventItem[]> {
+  const { includeUnpublished = false, status = "all", eventType, limit } = options;
+  if (!includeUnpublished && !eventType && !limit) {
+    if (status === "upcoming") {
+      return getCachedPublicUpcomingEvents();
+    }
+    if (status === "all") {
+      return getCachedPublicAllEvents();
+    }
+  }
+  return getEventsDirect(options);
+}
+
 export async function getEventBySlug(
   slug: string,
   options: { includeUnpublished?: boolean } = {}
@@ -1738,7 +1669,6 @@ export async function getEventBySlug(
   if (!sql) return null;
 
   try {
-    await initContentDb();
     const cleanSlug = slug.toLowerCase().trim();
 
     const rawRows = (await sql`
@@ -1817,7 +1747,6 @@ export async function saveEventRecord(data: Partial<EventItem>): Promise<EventIt
     throw new Error("Database connection is not configured.");
   }
 
-  await initContentDb();
 
   if (!data.title || !data.title.trim()) {
     throw new Error("Event title is required.");
@@ -1926,6 +1855,7 @@ export async function saveEventRecord(data: Partial<EventItem>): Promise<EventIt
   if (!saved) {
     throw new Error("Failed to retrieve saved event record from database.");
   }
+  invalidateCacheTag("events");
   return saved;
 }
 
@@ -1935,11 +1865,11 @@ export async function deleteEventRecord(idOrSlug: string): Promise<{ success: bo
     throw new Error("Database connection is not configured.");
   }
 
-  await initContentDb();
   const clean = idOrSlug.trim();
 
   await sql`DELETE FROM events WHERE id = ${clean} OR slug = ${clean};`;
 
+  invalidateCacheTag("events");
   return {
     success: true,
     message: "Event deleted successfully.",
@@ -1951,6 +1881,7 @@ export async function toggleEventPublish(id: string, isPublished: boolean): Prom
   if (!sql) throw new Error("No database connection.");
 
   await sql`UPDATE events SET is_published = ${isPublished}, updated_at = NOW() WHERE id = ${id};`;
+  invalidateCacheTag("events");
   const updated = await getEventById(id);
   if (!updated) throw new Error("Event not found.");
   return updated;
@@ -1964,6 +1895,7 @@ export async function toggleEventFeatured(id: string, isFeatured: boolean): Prom
     await sql`UPDATE events SET is_featured = FALSE;`;
   }
   await sql`UPDATE events SET is_featured = ${isFeatured}, updated_at = NOW() WHERE id = ${id};`;
+  invalidateCacheTag("events");
   const updated = await getEventById(id);
   if (!updated) throw new Error("Event not found.");
   return updated;

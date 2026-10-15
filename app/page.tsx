@@ -15,10 +15,17 @@ import { FinalCTA } from "@/components/sections/FinalCTA";
 import { ReviewsSliderSection } from "@/components/sections/ReviewsSliderSection";
 import { UpcomingEventsSection } from "@/components/sections/UpcomingEventsSection";
 import { createMetadata } from "@/lib/seo";
-import { getCentres, getPrograms, getCoaches, getTestimonials, getEvents } from "@/lib/contentDb";
+import {
+  getCentres,
+  getPrograms,
+  getCoaches,
+  getTestimonials,
+  getEvents,
+  getAchievements,
+  getGalleryItems,
+} from "@/lib/contentDb";
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+export const revalidate = 300;
 
 export const metadata: Metadata = createMetadata({
   title: "Badminton Coaching & Academy in Kochi | Kadavanthra, Kumbalanghi, Maradu, Palluruthy, Chullikal",
@@ -38,12 +45,22 @@ export const metadata: Metadata = createMetadata({
 });
 
 export default async function HomePage() {
-  const [centres, programs, coaches, testimonials, upcomingEvents] = await Promise.all([
+  const [
+    centres,
+    programs,
+    coaches,
+    testimonials,
+    upcomingEvents,
+    achievements,
+    galleryItems,
+  ] = await Promise.all([
     getCentres({ includeInactive: false }),
     getPrograms(),
     getCoaches(),
     getTestimonials({ includePending: false }),
     getEvents({ status: "upcoming" }),
+    getAchievements(),
+    getGalleryItems(),
   ]);
 
   return (
@@ -76,10 +93,10 @@ export default async function HomePage() {
       <CoachesSpotlight initialCoaches={coaches} />
 
       {/* 08. Trophy Wall Tournament Archive */}
-      <AchievementsSection />
+      <AchievementsSection initialAchievements={achievements} />
 
       {/* 10. Court Action Visual Gallery */}
-      <GalleryPreview />
+      <GalleryPreview initialGallery={galleryItems} />
 
       {/* 11. FAQ Intel Briefing */}
       <FAQSection limit={6} />

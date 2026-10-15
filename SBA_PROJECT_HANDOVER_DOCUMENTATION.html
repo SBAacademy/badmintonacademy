@@ -1,0 +1,2196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Sooraj Badminton Academy — Project Handover & Technical Documentation</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+    @page {
+      size: A4 portrait;
+      margin: 0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: #0F172A;
+      background-color: #E2E8F0;
+      line-height: 1.45;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .page {
+      width: 210mm;
+      height: 297mm;
+      page-break-after: always;
+      page-break-inside: avoid;
+      position: relative;
+      background: #FFFFFF;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      padding: 13mm 15mm 13mm 15mm;
+      box-sizing: border-box;
+    }
+
+    /* -------------------------------------------------------------
+     COVER PAGE STYLING
+     ------------------------------------------------------------- */
+    .page-cover {
+      padding: 0;
+      background: radial-gradient(circle at 100% 0%, #1E293B 0%, #0B1120 70%, #060913 100%);
+      color: #FFFFFF;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .cover-decor-top {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, #10B981 0%, #059669 40%, #B8F000 80%, #38BDF8 100%);
+    }
+
+    .cover-inner {
+      padding: 22mm 18mm 18mm 18mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+      z-index: 2;
+    }
+
+    .cover-badge-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .cover-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #34D399;
+    }
+
+    .cover-ref-badge {
+      padding: 5px 12px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 9999px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: #94A3B8;
+    }
+
+    .cover-title-group h1 {
+      font-size: 34px;
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      color: #FFFFFF;
+      margin-bottom: 8px;
+    }
+
+    .cover-title-group h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #38BDF8;
+      margin-bottom: 12px;
+      letter-spacing: -0.01em;
+    }
+
+    .cover-title-group p {
+      font-size: 13.5px;
+      color: #94A3B8;
+      line-height: 1.5;
+      max-width: 620px;
+    }
+
+    .cover-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin: 28px 0;
+    }
+
+    .cover-stat-card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 12px;
+    }
+
+    .cover-stat-label {
+      font-size: 9.5px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: #64748B;
+      letter-spacing: 0.05em;
+      margin-bottom: 4px;
+    }
+
+    .cover-stat-value {
+      font-size: 16px;
+      font-weight: 800;
+      color: #F8FAFC;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .cover-stat-sub {
+      font-size: 9px;
+      color: #34D399;
+      margin-top: 2px;
+      font-weight: 600;
+    }
+
+    .cover-meta-card {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 16px;
+    }
+
+    .cover-meta-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      font-size: 11px;
+    }
+
+    .cover-meta-item strong {
+      color: #CBD5E1;
+      display: block;
+      margin-bottom: 2px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .cover-meta-item span {
+      color: #F1F5F9;
+      font-weight: 600;
+    }
+
+    .cover-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 14px;
+    }
+
+    .cover-author strong {
+      display: block;
+      font-size: 13px;
+      color: #FFFFFF;
+      font-weight: 700;
+    }
+
+    .cover-author span {
+      font-size: 10.5px;
+      color: #94A3B8;
+    }
+
+    .cover-agency {
+      text-align: right;
+    }
+
+    .cover-agency strong {
+      display: block;
+      font-size: 13px;
+      color: #10B981;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+    }
+
+    .cover-agency span {
+      font-size: 10px;
+      color: #64748B;
+    }
+
+    /* -------------------------------------------------------------
+     RUNNING HEADERS & FOOTERS (CONTENT PAGES)
+     ------------------------------------------------------------- */
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 8px;
+      border-bottom: 1.5px solid #E2E8F0;
+      margin-bottom: 12px;
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #64748B;
+    }
+
+    .page-header .brand {
+      color: #0F172A;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .page-header .brand::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #10B981;
+      display: inline-block;
+    }
+
+    .page-footer {
+      margin-top: auto;
+      padding-top: 8px;
+      border-top: 1px solid #E2E8F0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 8.5px;
+      color: #64748B;
+    }
+
+    .page-footer .page-number {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      color: #0F172A;
+    }
+
+    /* -------------------------------------------------------------
+     TYPOGRAPHY & CONTENT ELEMENTS
+     ------------------------------------------------------------- */
+    h2.section-title {
+      font-size: 15.5px;
+      font-weight: 800;
+      color: #0F172A;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    h2.section-title .num-badge {
+      background: #0F172A;
+      color: #FFFFFF;
+      font-size: 9.5px;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    h3.sub-title {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #1E293B;
+      margin: 8px 0 4px 0;
+    }
+
+    p {
+      font-size: 9.8px;
+      color: #334155;
+      margin-bottom: 6px;
+      line-height: 1.45;
+    }
+
+    /* TABLES */
+    table.custom-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 6px 0 10px 0;
+      font-size: 8.8px;
+    }
+
+    table.custom-table th {
+      background: #F1F5F9;
+      color: #0F172A;
+      font-weight: 700;
+      text-align: left;
+      padding: 5px 7px;
+      border: 1px solid #CBD5E1;
+      font-size: 8.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    table.custom-table td {
+      padding: 4.5px 7px;
+      border: 1px solid #E2E8F0;
+      color: #334155;
+      line-height: 1.35;
+    }
+
+    table.custom-table tr:nth-child(even) td {
+      background: #F8FAFC;
+    }
+
+    /* STATUS BADGES */
+    .badge {
+      display: inline-block;
+      padding: 1.5px 6px;
+      border-radius: 4px;
+      font-size: 7.8px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .badge-pass,
+    .badge-completed {
+      background: #DCFCE7;
+      color: #15803D;
+      border: 1px solid #86EFAC;
+    }
+
+    .badge-partial,
+    .badge-pending {
+      background: #FEF3C7;
+      color: #B45309;
+      border: 1px solid #FCD34D;
+    }
+
+    .badge-configured {
+      background: #DBEAFE;
+      color: #1D4ED8;
+      border: 1px solid #93C5FD;
+    }
+
+    .badge-secret {
+      background: #FFE4E6;
+      color: #BE123C;
+      border: 1px solid #FDA4AF;
+    }
+
+    /* ALERT BOXES */
+    .alert-box {
+      background: #F8FAFC;
+      border-left: 3.5px solid #10B981;
+      border-radius: 0 6px 6px 0;
+      padding: 7px 10px;
+      margin: 6px 0;
+      font-size: 8.8px;
+      color: #334155;
+      border-top: 1px solid #E2E8F0;
+      border-right: 1px solid #E2E8F0;
+      border-bottom: 1px solid #E2E8F0;
+    }
+
+    .alert-box.important {
+      border-left-color: #3B82F6;
+      background: #EFF6FF;
+      border-color: #BFDBFE;
+    }
+
+    .alert-box.warning {
+      border-left-color: #F59E0B;
+      background: #FFFBEB;
+      border-color: #FDE68A;
+    }
+
+    .alert-title {
+      font-weight: 800;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 2px;
+      color: #0F172A;
+    }
+
+    /* CODE BLOCKS */
+    pre.code-box {
+      background: #0B1120;
+      color: #E2E8F0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 7.8px;
+      padding: 7px 10px;
+      border-radius: 6px;
+      overflow: hidden;
+      line-height: 1.35;
+      margin: 5px 0 8px 0;
+    }
+
+    /* GRIDS & CARDS */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin: 6px 0;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin: 6px 0;
+    }
+
+    .grid-5 {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+      margin: 6px 0;
+    }
+
+    .card {
+      background: #FFFFFF;
+      border: 1px solid #CBD5E1;
+      border-radius: 6px;
+      padding: 7px 9px;
+    }
+
+    .card-header {
+      font-size: 9.5px;
+      font-weight: 700;
+      color: #0F172A;
+      margin-bottom: 3px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* SCREENSHOT CARD */
+    .screenshot-card {
+      border: 1px solid #CBD5E1;
+      border-radius: 6px;
+      overflow: hidden;
+      background: #F8FAFC;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .screenshot-img-wrap {
+      height: 110px;
+      overflow: hidden;
+      background: #0B1120;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .screenshot-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top;
+    }
+
+    .screenshot-caption {
+      padding: 5px 7px;
+      font-size: 7.8px;
+      background: #FFFFFF;
+      border-top: 1px solid #E2E8F0;
+    }
+
+    .screenshot-title {
+      font-weight: 700;
+      color: #0F172A;
+      margin-bottom: 1px;
+    }
+
+    .screenshot-desc {
+      color: #64748B;
+      font-size: 7.2px;
+    }
+
+    /* LISTS */
+    ol.guide-steps {
+      padding-left: 14px;
+      font-size: 8.8px;
+      color: #334155;
+      margin-bottom: 6px;
+    }
+
+    ol.guide-steps li {
+      margin-bottom: 3px;
+      line-height: 1.35;
+    }
+
+    ul.clean-list {
+      list-style: none;
+      font-size: 8.8px;
+      color: #334155;
+      margin-bottom: 6px;
+    }
+
+    ul.clean-list li {
+      position: relative;
+      padding-left: 12px;
+      margin-bottom: 2px;
+      line-height: 1.35;
+    }
+
+    ul.clean-list li::before {
+      content: "•";
+      color: #10B981;
+      font-weight: bold;
+      position: absolute;
+      left: 0;
+    }
+
+    .checklist-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 4.5px 7px;
+      border-bottom: 1px solid #F1F5F9;
+      font-size: 8.6px;
+    }
+
+    .checklist-item:last-child {
+      border-bottom: none;
+    }
+
+    /* PRINT & INTERACTIVE ACTIONS */
+    @media print {
+      .no-print {
+        display: none !important;
+      }
+    }
+
+    @media screen {
+      .print-bar {
+        position: fixed;
+        top: 14px;
+        right: 18px;
+        z-index: 99999;
+      }
+
+      .print-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: #0284C7;
+        color: #FFFFFF;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 12px;
+        font-weight: 700;
+        padding: 9px 16px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);
+        transition: all 0.2s ease;
+      }
+
+      .print-btn:hover {
+        background: #0369A1;
+        transform: translateY(-1px);
+        box-shadow: 0 6px 18px rgba(2, 132, 199, 0.5);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="no-print print-bar">
+    <button onclick="window.print()" class="print-btn">
+      🖨️ Print / Save as PDF
+    </button>
+  </div>
+
+  <!-- =========================================================================
+     PAGE 1: COVER PAGE
+     ========================================================================= -->
+  <div class="page page-cover">
+    <div class="cover-decor-top"></div>
+    <div class="cover-inner">
+      <div>
+        <div class="cover-badge-row">
+          <span class="cover-badge">Formal Client Handover</span>
+          <span class="cover-ref-badge">REF: SAA-WEB-SEO-2026-001</span>
+        </div>
+
+        <div class="cover-title-group">
+          <h1>SOORAJ BADMINTON ACADEMY</h1>
+          <h2>PROJECT HANDOVER & TECHNICAL SPECIFICATION</h2>
+          <p>A comprehensive technical record and client handover package documenting the end-to-end delivery of the
+            official website, dynamic content management engine, admissions CRM, multi-branch local SEO, and Google
+            Business Profile setup.</p>
+        </div>
+
+        <div class="cover-stats-grid">
+          <div class="cover-stat-card">
+            <div class="cover-stat-label">Commercial Investment</div>
+            <div class="cover-stat-value">₹25,000</div>
+            <div class="cover-stat-sub">Website + 30-Day SEO</div>
+          </div>
+          <div class="cover-stat-card">
+            <div class="cover-stat-label">Physical Training Hubs</div>
+            <div class="cover-stat-value">5 Centres</div>
+            <div class="cover-stat-sub">Active in Kochi Metro</div>
+          </div>
+          <div class="cover-stat-card">
+            <div class="cover-stat-label">Database Models</div>
+            <div class="cover-stat-value">25 Tables</div>
+            <div class="cover-stat-sub">PostgreSQL Cloud + Cache</div>
+          </div>
+          <div class="cover-stat-card">
+            <div class="cover-stat-label">Live Production URL</div>
+            <div class="cover-stat-value">soorajbadmintonacademy.in</div>
+            <div class="cover-stat-sub">Vercel Edge Global CDN</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="cover-meta-card">
+          <div class="cover-meta-grid">
+            <div class="cover-meta-item">
+              <strong>Client Entity</strong>
+              <span>Sooraj Badminton Academy (SBA) / S & A Academy</span>
+            </div>
+            <div class="cover-meta-item">
+              <strong>Client Directorate</strong>
+              <span>Head Coach Sooraj M S & Management Directorate</span>
+            </div>
+            <div class="cover-meta-item">
+              <strong>Project Inception</strong>
+              <span>06 September 2026</span>
+            </div>
+            <div class="cover-meta-item">
+              <strong>Official Handover Date</strong>
+              <span>07 October 2026</span>
+            </div>
+            <div class="cover-meta-item">
+              <strong>Handover Status</strong>
+              <span style="color: #38BDF8;">Project handed over for client testing and review</span>
+            </div>
+            <div class="cover-meta-item">
+              <strong>7-Day Testing & Review Period</strong>
+              <span style="color: #34D399;">07 October 2026 to 13 October 2026 (Final: 13 October 2026)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="cover-footer" style="margin-top: 16px;">
+          <div class="cover-author">
+            <strong>Mohammed Nibrasul Haqq</strong>
+            <span>Freelance Full-Stack Developer · UI/UX Designer</span>
+          </div>
+          <div class="cover-agency">
+            <strong>KREOVATE MARKETING AGENCY</strong>
+            <span>Software Solutions · Web Architecture · Local SEO</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+     PAGE 2: EXECUTIVE SUMMARY & TABLE OF CONTENTS
+     ========================================================================= -->
+  <div class="page">
+    <div class="page-header">
+      <span class="brand">Sooraj Badminton Academy</span>
+      <span>Project Handover · SAA-WEB-SEO-2026-001</span>
+    </div>
+
+    <h2 class="section-title"><span class="num-badge">01</span> Executive Summary & Project Purpose</h2>
+    <p><strong>Sooraj Badminton Academy (SBA)</strong> (operating interchangeably as <em>S & A Badminton Academy</em>)
+      is an athletic sports institution based in Kochi, Kerala. The academy operates five dedicated court centres
+      providing BWF-standard synthetic and wooden sprung flooring, certified coaching mentorship, video stroke analysis,
+      and structured junior development pipelines.</p>
+
+    <p>Under contract reference <code>SAA-WEB-SEO-2026-001</code> commencing 06 September 2026, a total commercial
+      package valued at <strong>₹25,000 INR</strong> (Itemized: <em>Professional Website Development ₹15,000</em> and
+      <em>30-Day Local SEO Launch ₹10,000</em>) was executed to establish an authoritative digital hub, streamline
+      student admissions, empower administration through a secure custom CRM, and secure regional local search dominance
+      across Kochi.
+    </p>
+
+    <div class="alert-box important">
+      <div class="alert-title">Core Objective Fulfilment</div>
+      The digital platform transitions SBA from fragmented social media channels into a self-contained, high-performance
+      platform hosted at <strong>https://soorajbadmintonacademy.in/</strong> with automated WhatsApp admissions,
+      real-time lead capture, centralized operations, and verified Google Business Profiles.
+    </div>
+
+    <div class="alert-box" style="margin-top: 8px;">
+      <div class="alert-title">Official Handover Status & 7-Day Testing Window</div>
+      <strong>Handover Status:</strong> Project handed over for client testing and review. &nbsp;|&nbsp;
+      <strong>Project Handover Date:</strong> 07 October 2026<br>
+      <strong>7-Day Testing & Review Period:</strong> 07 October 2026 to 13 October 2026 &nbsp;|&nbsp;
+      <strong>Final Date for Reporting Included Corrections:</strong> 13 October 2026.
+    </div>
+
+    <h2 class="section-title" style="margin-top: 12px;"><span class="num-badge">02</span> Table of Contents</h2>
+    <div class="grid-2" style="font-size: 8.6px;">
+      <div class="card">
+        <ul class="clean-list" style="margin: 0;">
+          <li><strong>01.</strong> Executive Summary & Project Purpose</li>
+          <li><strong>02.</strong> Table of Contents</li>
+          <li><strong>03.</strong> Agreed Scope of Work & Delivery Matrix</li>
+          <li><strong>04.</strong> Verified Technology Stack Specification</li>
+          <li><strong>05.</strong> Application Architecture & System Data Flow</li>
+          <li><strong>06.</strong> Public Website Modules Catalog</li>
+          <li><strong>07.</strong> Official SBA Training Centres Directory</li>
+          <li><strong>08.</strong> Admin Dashboard & Operations Platform</li>
+          <li><strong>09.</strong> Authentication & Security Architecture</li>
+          <li><strong>10.</strong> Database Architecture (25 Tables)</li>
+          <li><strong>11.</strong> Lead Lifecycle & Admissions CRM Workflow</li>
+          <li><strong>12.</strong> Multi-Channel WhatsApp Integration</li>
+        </ul>
+      </div>
+      <div class="card">
+        <ul class="clean-list" style="margin: 0;">
+          <li><strong>13.</strong> Local SEO & Keyword Architecture</li>
+          <li><strong>14.</strong> Dynamic XML Sitemaps & Robots Directives</li>
+          <li><strong>15.</strong> Google Business Profile (GBP) Verification Audit</li>
+          <li><strong>16.</strong> Production Infrastructure & Deployment</li>
+          <li><strong>17.</strong> Environment Variables Reference</li>
+          <li><strong>18.</strong> Quality Assurance & Testing Matrix</li>
+          <li><strong>19.</strong> Mobile Responsiveness & Viewports</li>
+          <li><strong>20.</strong> Step-by-Step Administrator User Guide</li>
+          <li><strong>21.</strong> Client Handover Deliverables Checklist</li>
+          <li><strong>22.</strong> 7-Day Testing, Review & Correction Period</li>
+          <li><strong>23.</strong> Final Handover & Delivery Declaration</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="page-footer">
+      <span>Document Ref: SAA-WEB-SEO-2026-001</span>
+      <span>Prepared by Mohammed Nibrasul Haqq · Kreovate</span>
+      <span class="page-number">Page 2 of 15</span>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+     PAGE 3: SCOPE OF WORK & DELIVERY MATRIX
+     ========================================================================= -->
+  <div class="page">
+    <div class="page-header">
+      <span class="brand">Sooraj Badminton Academy</span>
+      <span>Scope of Work & Delivery Matrix</span>
+    </div>
+
+    <h2 class="section-title"><span class="num-badge">03</span> Agreed Scope of Work & Delivery Matrix</h2>
+    <p>All contractual milestones were audited against live production code. Deliverables are strictly categorized into
+      6 distinct operational classifications:</p>
+
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th style="width: 28%;">Scope Milestone</th>
+          <th style="width: 14%;">Domain</th>
+          <th style="width: 18%;">Status</th>
+          <th style="width: 40%;">Delivery Verification Record</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Responsive Website Platform</strong></td>
+          <td>Frontend</td>
+          <td><span class="badge badge-completed">Completed</span></td>
+          <td>Next.js 16 App Router, Tailwind CSS, Athletic dark UI theme.</td>
+        </tr>
+        <tr>
+          <td><strong>Core Public Pages (15+ Routes)</strong></td>
+          <td>Website</td>
+          <td><span class="badge badge-completed">Completed</span></td>
+          <td>Homepage, About, Centres, Coaches, Gallery, Articles, Reviews, Contact.</td>
+        </tr>
+        <tr>
+          <td><strong>5 Branch Micro-Market Hubs</strong></td>
+          <td>SEO / Web</td>
+          <td><span class="badge badge-completed">Completed</span></td>
+          <td>Individual canonical URLs for Kadavanthra, Kumbalanghi, Maradu, Palluruthy, Chullikal.</td>
+        </tr>
+        <tr>
+          <td><strong>Training Curricula Catalog</strong></td>
+          <td>Programs</td>
+          <td><span class="badge badge-completed">Completed</span></td>
+          <td>5 distinct pathways: Kids, Junior, Adult, Competitive Squad, Summer Camp.</td>
+        </tr>
+        <tr>
+          <td><strong>Lead Capture & Trial Booking</strong></td>
+          <td>CRM / Lead</td>
+          <td><span class="badge badge-completed">Completed</span></td>
+          <td>Honeypot protection, phone validation, direct DB logging, instant WhatsApp handoff.</td>
+        </tr>
+        <tr>
+          <td><strong>Admin Dashboard & Operations</strong></td>
+          <td>Admin CRM</td>
+          <td><span class="badge badge-completed">Completed</span></td>
+          <td>Role-based dashboard controlling leads, venues, coaches, blog, reviews, events.</td>
+        </tr>
+        <tr>
+          <td><strong>Authentication & Security</strong></td>
+          <td>Security</td>
+          <td><span class="badge badge-completed">Completed</span></td>
+          <td>scrypt password hashing, JWT access token, PostgreSQL refresh token rotation.</td>
+        </tr>
+        <tr>
+          <td><strong>On-Page SEO & Structured Data</strong></td>
+          <td>Local SEO</td>
+          <td><span class="badge badge-completed">Completed</span></td>
+          <td>SportsOrganization, SportsActivityLocation, LocalBusiness, Breadcrumbs, FAQPage.</td>
+        </tr>
+        <tr>
+          <td><strong>Dual Dynamic XML Sitemaps</strong></td>
+          <td>SEO</td>
+          <td><span class="badge badge-completed">Completed</span></td>
+          <td>Dynamic /sitemap.xml and dedicated dynamic /tournaments-sitemap.xml.</td>
+        </tr>
+        <tr>
+          <td><strong>Google Business Profiles (5 Hubs)</strong></td>
+          <td>Local SEO</td>
+          <td><span class="badge badge-configured">Configured</span></td>
+          <td>All 5 branch accounts claimed & configured; pending Google video verification.</td>
+        </tr>
+        <tr>
+          <td><strong>GBP On-Site Video Verification</strong></td>
+          <td>Client Action</td>
+          <td><span class="badge badge-pending">Pending Client</span></td>
+          <td>Requires on-site video recording walk-through by Coach Sooraj / staff.</td>
+        </tr>
+        <tr>
+          <td><strong>Authentic High-Res Venue Photos</strong></td>
+          <td>Client Action</td>
+          <td><span class="badge badge-pending">Pending Client</span></td>
+          <td>Client to provide authentic photos to replace polished baseline stock court images.</td>
+        </tr>
+        <tr>
+          <td><strong>Online Payment Gateway (UPI/Card)</strong></td>
+          <td>Future Plan</td>
+          <td><span class="badge badge-configured">Future Phase</span></td>
+          <td>Recommended Razorpay / Cashfree integration for automated monthly tuition billing.</td>
+        </tr>
+        <tr>
+          <td><strong>Parent & Student Mobile Portal</strong></td>
+          <td>Future Plan</td>
+          <td><span class="badge badge-configured">Future Phase</span></td>
+          <td>Self-service portal for attendance tracking, fitness rubrics, and fee receipts.</td>
+        </tr>
+        <tr>
+          <td><strong>Paid Digital Ads Management</strong></td>
+          <td>Marketing</td>
+          <td><span class="badge" style="background:#F1F5F9; color:#64748B;">Out of Scope</span></td>
+          <td>Meta Ads & Google Ads media budgets and ad management excluded from contract.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="alert-box">
+      <div class="alert-title">Strict Commercial Integrity & Handover Testing Framework</div>
+      Zero unverified claims are made in this document. Completed features exist as functioning production code. All
+      client-dependent dependencies are explicitly identified. <strong>Handover Status:</strong> Project handed over for
+      client testing and review. All delivered components are subject to the agreed <strong>7-Day Testing, Review &
+        Correction Period (07 October 2026 to 13 October 2026)</strong>, with <strong>13 October 2026</strong> as the
+      final deadline for reporting included scope corrections.
+    </div>
+
+    <div class="page-footer">
+      <span>Document Ref: SAA-WEB-SEO-2026-001</span>
+      <span>Prepared by Mohammed Nibrasul Haqq · Kreovate</span>
+      <span class="page-number">Page 3 of 15</span>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+     PAGE 4: TECHNOLOGY STACK & ARCHITECTURE
+     ========================================================================= -->
+  <div class="page">
+    <div class="page-header">
+      <span class="brand">Sooraj Badminton Academy</span>
+      <span>Technology Stack & Architecture</span>
+    </div>
+
+    <h2 class="section-title"><span class="num-badge">04</span> Verified Technology Stack Specification</h2>
+    <p>The system was engineered using modern, production-hardened technologies verified directly from
+      <code>package.json</code> and repository configuration:
+    </p>
+
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th>Layer</th>
+          <th>Technology</th>
+          <th>Exact Version</th>
+          <th>Architectural Function</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Framework</strong></td>
+          <td>Next.js (App Router)</td>
+          <td><code>^16.3.4</code></td>
+          <td>Hybrid SSR/SSG rendering, routing, API endpoints, Turbopack bundling</td>
+        </tr>
+        <tr>
+          <td><strong>UI Engine</strong></td>
+          <td>React / React DOM</td>
+          <td><code>^19.2.8</code></td>
+          <td>Component lifecycle, server components, and responsive state</td>
+        </tr>
+        <tr>
+          <td><strong>Language</strong></td>
+          <td>TypeScript</td>
+          <td><code>^7.0.2</code></td>
+          <td>Strict type safety across schema models and API request contracts</td>
+        </tr>
+        <tr>
+          <td><strong>Styling</strong></td>
+          <td>Tailwind CSS & PostCSS</td>
+          <td><code>^4.3.3 / ^8.5.28</code></td>
+          <td>Athletic color system, dark-mode styling, zero runtime CSS overhead</td>
+        </tr>
+        <tr>
+          <td><strong>Database</strong></td>
+          <td>Neon Serverless PostgreSQL</td>
+          <td><code>^1.1.0</code></td>
+          <td>High-concurrency cloud relational storage with pooling</td>
+        </tr>
+        <tr>
+          <td><strong>Data Fallback</strong></td>
+          <td>File-Backed JSON Store</td>
+          <td>Node.js <code>fs/promises</code></td>
+          <td>Local cache layer guaranteeing zero downtime during DB connection loss</td>
+        </tr>
+        <tr>
+          <td><strong>Cryptography</strong></td>
+          <td>Node.js <code>crypto</code></td>
+          <td>Native</td>
+          <td>scrypt key derivation, HMAC-SHA256 JWT, secure random salts</td>
+        </tr>
+        <tr>
+          <td><strong>Iconography</strong></td>
+          <td>Lucide React</td>
+          <td><code>^1.41.0</code></td>
+          <td>Lightweight, accessible vector iconography</td>
+        </tr>
+        <tr>
+          <td><strong>PDF Engine</strong></td>
+          <td>Puppeteer & PDF-Lib</td>
+          <td><code>^23.6.0 / ^1.17.1</code></td>
+          <td>Headless Chrome document rendering and PDF byte compilation</td>
+        </tr>
+        <tr>
+          <td><strong>Hosting</strong></td>
+          <td>Vercel Edge Platform</td>
+          <td>Edge Runtime</td>
+          <td>Global CDN caching, automatic SSL, serverless function execution</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 class="section-title" style="margin-top: 10px;"><span class="num-badge">05</span> Application Architecture
+      Diagram</h2>
+    <pre class="code-box">
+  [ USER BROWSER ] ──> [ VERCEL GLOBAL EDGE CDN ] ──> [ NEXT.JS APP ROUTER ]
+                                                            │
+                 ┌──────────────────────────────────────────┴──────────────────────────┐
+                 ▼                                                                     ▼
+       [ PUBLIC FRONTEND ]                                                    [ ADMIN DASHBOARD ]
+  (SSG / SSR Dynamic Pages)                                              (RBAC Protected Session)
+                 │                                                                     │
+                 ▼                                                                     ▼
+       [ API ROUTE LAYER ] ─────────────> [ REQUIRE AUTH GUARD ] ─────────────> [ DATA ACCESS LAYER ]
+     • /api/enquiries (Leads)                 • scrypt verify                        • Neon PostgreSQL
+     • /api/centres (Venues)                  • HMAC JWT verify                      • Local JSON Fallback
+     • /api/events (Fixtures)                 • Refresh rotation                     • Upload binary store
+  </pre>
+
+    <div class="page-footer">
+      <span>Document Ref: SAA-WEB-SEO-2026-001</span>
+      <span>Prepared by Mohammed Nibrasul Haqq · Kreovate</span>
+      <span class="page-number">Page 4 of 15</span>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+     PAGE 5: PUBLIC WEBSITE MODULES
+     ========================================================================= -->
+  <div class="page">
+    <div class="page-header">
+      <span class="brand">Sooraj Badminton Academy</span>
+      <span>Public Website Module Documentation</span>
+    </div>
+
+    <h2 class="section-title"><span class="num-badge">06</span> Public Website Modules Catalog</h2>
+    <p>The public web application comprises 15+ modules crafted with SBA's signature athletic visual system (Court Black
+      <code>#080B10</code>, Surface <code>#0E141B</code>, Lime <code>#B8F000</code>, and High-Contrast White):
+    </p>
+
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th style="width: 18%;">Module & Route</th>
+          <th style="width: 14%;">Type</th>
+          <th style="width: 20%;">Data Authority</th>
+          <th style="width: 48%;">Purpose & Functionality</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Homepage</strong><br><code>/</code></td>
+          <td>SSR / Dynamic</td>
+          <td>Content DB & Config</td>
+          <td>Hero showcase, trust metrics, 5-branch preview cards, coach spotlight, tournament banner, and admissions
+            CTA.</td>
+        </tr>
+        <tr>
+          <td><strong>About Academy</strong><br><code>/about</code></td>
+          <td>Hybrid</td>
+          <td><code>data/academy.ts</code></td>
+          <td>Founding story, Head Coach Sooraj's vision, world-class court standards, and academy trust pillars.</td>
+        </tr>
+        <tr>
+          <td><strong>Centres Directory</strong><br><code>/branches</code></td>
+          <td>Dynamic</td>
+          <td>PostgreSQL <code>centres</code></td>
+          <td>Interactive regional directory displaying all active training venues across Kochi with maps and specs.
+          </td>
+        </tr>
+        <tr>
+          <td><strong>5 Local Hub Pages</strong><br><code>/[location]</code></td>
+          <td>Dynamic / SSG</td>
+          <td>PostgreSQL <code>centres</code></td>
+          <td>Hyper-local landing pages for Kadavanthra, Kumbalanghi, Maradu, Palluruthy, and Chullikal with structured
+            JSON-LD.</td>
+        </tr>
+        <tr>
+          <td><strong>Programs Matrix</strong><br><code>/programs</code></td>
+          <td>Hybrid</td>
+          <td><code>data/programs.ts</code></td>
+          <td>Stage-by-stage player pathways: Kids (5-9 yrs), Junior (10-16 yrs), Adults (16+ yrs), Tournament Squad,
+            Camp.</td>
+        </tr>
+        <tr>
+          <td><strong>Program Details</strong><br><code>/programs/[slug]</code></td>
+          <td>Dynamic</td>
+          <td>Programs Data</td>
+          <td>Curriculum breakdown, coach-to-student ratios (1:6), court surface details, and instant trial booking.
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Coaching Panel</strong><br><code>/coaches</code></td>
+          <td>Dynamic</td>
+          <td>PostgreSQL <code>coaches</code></td>
+          <td>Certified coaches directory with headshots, BWF/NIS qualifications, experience, and home centre badges.
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Achievements Wall</strong><br><code>/achievements</code></td>
+          <td>Dynamic</td>
+          <td>Content DB</td>
+          <td>Trophy wall recording state championships, district laurels, student medalists, and tournament rankings.
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Photo Gallery</strong><br><code>/gallery</code></td>
+          <td>Dynamic</td>
+          <td>Content DB & Images</td>
+          <td>Visual media wall showcasing court training, footwork drills, junior batches, and tournament triumphs.
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Articles & Blog</strong><br><code>/blog</code></td>
+          <td>Dynamic</td>
+          <td>Content DB</td>
+          <td>Educational coaching guides, racket selection advice, footwork tutorials, and badminton nutrition.</td>
+        </tr>
+        <tr>
+          <td><strong>Testimonials Wall</strong><br><code>/testimonials</code></td>
+          <td>Dynamic</td>
+          <td>Content DB</td>
+          <td>Verified ratings and testimonials from parents, junior athletes, and evening corporate batch players.</td>
+        </tr>
+        <tr>
+          <td><strong>Fixtures & Events</strong><br><code>/events</code></td>
+          <td>Dynamic</td>
+          <td>PostgreSQL <code>events</code></td>
+          <td>Academy tournaments, holiday training camps, registration dates, entry fees, and status filters.</td>
+        </tr>
+        <tr>
+          <td><strong>Admissions Form</strong><br><code>/contact</code></td>
+          <td>Dynamic API</td>
+          <td><code>/api/enquiries</code></td>
+          <td>Multi-step free trial registration form with direct phone validation, honeypot protection, and WhatsApp
+            link.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="page-footer">
+      <span>Document Ref: SAA-WEB-SEO-2026-001</span>
+      <span>Prepared by Mohammed Nibrasul Haqq · Kreovate</span>
+      <span class="page-number">Page 5 of 15</span>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+     PAGE 6: ACTIVE TRAINING CENTRES
+     ========================================================================= -->
+  <div class="page">
+    <div class="page-header">
+      <span class="brand">Sooraj Badminton Academy</span>
+      <span>Active Training Centres & Branch Directory</span>
+    </div>
+
+    <h2 class="section-title"><span class="num-badge">07</span> Official SBA Training Centres Directory</h2>
+    <div class="alert-box important">
+      <div class="alert-title">Strict Branch Verification Audit</div>
+      An exhaustive scan across the repository confirmed that <strong>zero active references to obsolete or unverified
+        locations (such as Edappally or Kakkanad) exist in active branch documentation</strong>. The official network
+      comprises strictly the following 5 physical facilities:
+    </div>
+
+    <table class="custom-table" style="margin-top: 8px;">
+      <thead>
+        <tr>
+          <th style="width: 18%;">Branch Hub</th>
+          <th style="width: 25%;">Physical Venue Address</th>
+          <th style="width: 12%;">Courts</th>
+          <th style="width: 20%;">Target Neighborhoods</th>
+          <th style="width: 25%;">Contact & Timings</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>1. Kadavanthra</strong><br><span style="font-size:7.5px;color:#10B981;font-weight:700;">CENTRAL
+              KOCHI HQ</span></td>
+          <td>S&A Sports Arena, Near Rajiv Gandhi Indoor Stadium, Kadavanthra 682020</td>
+          <td>4 Courts<br><span style="font-size:7px;color:#64748B;">BWF Wooden + Mat</span></td>
+          <td>Panampilly Nagar, Girinagar, Elamkulam, Vyttila, Thevara, MG Road</td>
+          <td><code>+91 79076 55513</code><br>Mon–Sun: 05:00 AM – 10:30 PM</td>
+        </tr>
+        <tr>
+          <td><strong>2. Kumbalanghi</strong><br><span style="font-size:7.5px;color:#38BDF8;font-weight:700;">WEST KOCHI
+              HUB</span></td>
+          <td>All Star Badminton Indoor Court, Kumbalanghi, Kochi 682007</td>
+          <td>3 Courts<br><span style="font-size:7px;color:#64748B;">BWF Cushion Mat</span></td>
+          <td>Perumpadappu, Palluruthy, Aroor, Edakochi, Chellanam, Thoppumpady</td>
+          <td><code>+91 79076 55513</code><br>Mon–Sun: 05:30 AM – 10:00 PM</td>
+        </tr>
+        <tr>
+          <td><strong>3. Maradu</strong><br><span style="font-size:7.5px;color:#F59E0B;font-weight:700;">SOUTH KOCHI
+              HUB</span></td>
+          <td>Society Road, Near Vadakke Cheruvaram, Maradu 682304 (ProSmash)</td>
+          <td>4 Courts<br><span style="font-size:7px;color:#64748B;">Grade-1 Synthetic</span></td>
+          <td>Kundannoor, Nettoor, Thykoodam, Petta, Tripunithura, Vyttila</td>
+          <td><code>+91 79076 55513</code><br>Mon–Sun: 05:30 AM – 10:00 PM</td>
+        </tr>
+        <tr>
+          <td><strong>4. Palluruthy</strong><br><span style="font-size:7.5px;color:#8B5CF6;font-weight:700;">WEST KOCHI
+              FACILITY</span></td>
+          <td>All Star Court, Kumbalanghi / Palluruthy Corridor, Kochi 682007</td>
+          <td>4 Courts<br><span style="font-size:7px;color:#64748B;">Grade-1 Synthetic</span></td>
+          <td>Thoppumpady, Edakochi, Kumbalangi, Fort Kochi, Mattancherry</td>
+          <td><code>+91 79076 55513</code><br>Mon–Sun: 05:30 AM – 10:00 PM</td>
+        </tr>
+        <tr>
+          <td><strong>5. Chullikal</strong><br><span style="font-size:7.5px;color:#EC4899;font-weight:700;">COASTAL /
+              FORT KOCHI</span></td>
+          <td>Chullikal, West Kochi, Kerala 682005</td>
+          <td>4 Courts<br><span style="font-size:7px;color:#64748B;">Multi-Layer Cushion</span></td>
+          <td>Fort Kochi, Mattancherry, Thoppumpady, Rameswaram, Mundamveli</td>
+          <td><code>+91 79076 55513</code><br>Mon–Sun: 05:30 AM – 10:00 PM</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 class="sub-title" style="margin-top: 10px;">Regional Court Distribution</h3>
+    <div class="grid-5" style="text-align: center;">
+      <div class="card"><strong style="font-size:11px;color:#10B981;">Kadavanthra</strong><br><span
+          style="font-size:8px;color:#64748B;">4 BWF Courts</span></div>
+      <div class="card"><strong style="font-size:11px;color:#38BDF8;">Kumbalanghi</strong><br><span
+          style="font-size:8px;color:#64748B;">3 BWF Courts</span></div>
+      <div class="card"><strong style="font-size:11px;color:#F59E0B;">Maradu</strong><br><span
+          style="font-size:8px;color:#64748B;">4 BWF Courts</span></div>
+      <div class="card"><strong style="font-size:11px;color:#8B5CF6;">Palluruthy</strong><br><span
+          style="font-size:8px;color:#64748B;">4 BWF Courts</span></div>
+      <div class="card"><strong style="font-size:11px;color:#EC4899;">Chullikal</strong><br><span
+          style="font-size:8px;color:#64748B;">4 BWF Courts</span></div>
+    </div>
+
+    <div class="page-footer">
+      <span>Document Ref: SAA-WEB-SEO-2026-001</span>
+      <span>Prepared by Mohammed Nibrasul Haqq · Kreovate</span>
+      <span class="page-number">Page 6 of 15</span>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+     PAGE 7: ADMIN DASHBOARD & OPERATIONS
+     ========================================================================= -->
+  <div class="page">
+    <div class="page-header">
+      <span class="brand">Sooraj Badminton Academy</span>
+      <span>Admin Dashboard & Operations Platform</span>
+    </div>
+
+    <h2 class="section-title"><span class="num-badge">08</span> Admin Dashboard & Operations Platform</h2>
+    <p>The management interface at <code>/admin</code> empowers non-technical staff to control academy operations,
+      student enquiries, coaches, tournaments, and content without code changes:</p>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-header">
+          <span>1. Inquiries CRM & Drawer</span>
+          <span class="badge badge-completed">Live</span>
+        </div>
+        <p>Real-time lead list with status filtering (<code>NEW</code>, <code>CONTACTED</code>,
+          <code>TRIAL_SCHEDULED</code>, <code>ENROLLED</code>, <code>DROPPED</code>). Clicking a student opens a
+          slide-over drawer to add internal notes, click-to-dial, and launch pre-filled WhatsApp chats.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span>2. Training Centres CMS</span>
+          <span class="badge badge-completed">Live</span>
+        </div>
+        <p>Add/edit training facilities, update physical addresses, alter court counts, adjust morning/evening opening
+          hours, update Google Maps links, and toggle published status.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span>3. Coaches & Faculty</span>
+          <span class="badge badge-completed">Live</span>
+        </div>
+        <p>Manage coaching staff, upload portrait headshots, record BWF/NIS certifications, input years of experience,
+          assign primary training venue, and publish profiles.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span>4. Photo Gallery Manager</span>
+          <span class="badge badge-completed">Live</span>
+        </div>
+        <p>Direct image upload system with relational database binary storage. Assign photos to Training, Courts, or
+          Tournaments with captions and delete functionality.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span>5. Articles & Blog CMS</span>
+          <span class="badge badge-completed">Live</span>
+        </div>
+        <p>Publish coaching advice, footwork tutorials, and tournament summaries with automatic URL slugs, reading
+          times, tags, and SEO meta tags.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span>6. Trophy Wall & Laurels</span>
+          <span class="badge badge-completed">Live</span>
+        </div>
+        <p>Record state/district tournament medals (Gold, Silver, Bronze), championship names, age categories, and
+          student honorees to update the live trophy wall.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span>7. Customer Reviews</span>
+          <span class="badge badge-completed">Live</span>
+        </div>
+        <p>Moderate student and parent reviews, adjust star ratings (1 to 5), edit copy for typos, and toggle approval
+          flags for display on the public testimonial slider.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span>8. Events & Tournaments</span>
+          <span class="badge badge-completed">Live</span>
+        </div>
+        <p>Create sanctioned championships, holiday coaching camps, entry fees, start dates, and external registration
+          links; automatically feeds dynamic sitemap.</p>
+      </div>
+    </div>
+
+    <div class="alert-box">
+      <div class="alert-title">Staff & User Management (RBAC)</div>
+      Administrators can manage staff accounts inside PostgreSQL <code>users</code> with role-based permissions
+      (<code>SUPER_ADMIN</code>, <code>ADMIN</code>, <code>COACH</code>, <code>FRONT_DESK</code>,
+      <code>CONTENT_MANAGER</code>) to prevent unauthorized access to financial or customer records.
+    </div>
+
+    <div class="page-footer">
+      <span>Document Ref: SAA-WEB-SEO-2026-001</span>
+      <span>Prepared by Mohammed Nibrasul Haqq · Kreovate</span>
+      <span class="page-number">Page 7 of 15</span>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+     PAGE 8: AUTHENTICATION & DATABASE ARCHITECTURE
+     ========================================================================= -->
+  <div class="page">
+    <div class="page-header">
+      <span class="brand">Sooraj Badminton Academy</span>
+      <span>Authentication & Database Architecture</span>
+    </div>
+
+    <h2 class="section-title"><span class="num-badge">09</span> Authentication & Authorization Security</h2>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-header"><span>Password Hashing Engine</span></div>
+        <p>Utilizes Node.js native <code>scrypt</code> cryptographic key derivation with a cryptographically secure
+          16-byte random salt. Verification employs <code>crypto.timingSafeEqual</code> to prevent timing attack
+          enumeration.</p>
+        <code
+          style="font-size:7.5px;color:#10B981;font-family:'JetBrains Mono';">{16-byte-salt}:{64-byte-scrypt-derived-key}</code>
+      </div>
+      <div class="card">
+        <div class="card-header"><span>JWT Sessions & Rotation</span></div>
+        <p>Access tokens signed with HMAC-SHA256 (15-min lifespan). Refresh tokens (30-day lifespan) stored in
+          PostgreSQL with SHA-256 token hashing, rotation upon use, and automatic reuse attack revocation.</p>
+        <code
+          style="font-size:7.5px;color:#38BDF8;font-family:'JetBrains Mono';">HttpOnly; SameSite=Lax; Secure (Production)</code>
+      </div>
+    </div>
+
+    <h2 class="section-title" style="margin-top: 10px;"><span class="num-badge">10</span> Database Architecture (25
+      Tables)</h2>
+    <p>The data layer is built on <strong>Neon Serverless PostgreSQL</strong> with pooled connections and local JSON
+      fallback resilience:</p>
+
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th style="width: 25%;">Domain Category</th>
+          <th style="width: 35%;">Database Tables</th>
+          <th style="width: 40%;">Primary Purpose & Constraints</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Identity & Security</strong></td>
+          <td><code>users</code>, <code>refresh_tokens</code>, <code>audit_logs</code></td>
+          <td>Admin accounts, hashed passwords, session tokens, immutable audit trail.</td>
+        </tr>
+        <tr>
+          <td><strong>Facilities & Coaches</strong></td>
+          <td><code>centres</code>, <code>coaches</code>, <code>coach_photos</code></td>
+          <td>Authoritative branch specs, coach bios, BWF credentials, multi-photo portraits.</td>
+        </tr>
+        <tr>
+          <td><strong>Curricula & Events</strong></td>
+          <td><code>programs</code>, <code>events</code></td>
+          <td>5 training pathways, fees, ratios, tournaments, registration links.</td>
+        </tr>
+        <tr>
+          <td><strong>Admissions & CRM</strong></td>
+          <td><code>leads</code>, <code>lead_notes</code>, <code>free_trials</code></td>
+          <td>Inbound website leads, internal CRM follow-up commentary, trial bookings.</td>
+        </tr>
+        <tr>
+          <td><strong>Student Operations</strong></td>
+          <td><code>students</code>, <code>parents</code>, <code>batches</code>, <code>batch_students</code></td>
+          <td>Enrolled athlete records, guardian contacts, training batch enrollments.</td>
+        </tr>
+        <tr>
+          <td><strong>Training Sessions</strong></td>
+          <td><code>sessions</code>, <code>attendance</code></td>
+          <td>Daily court sessions with unique constraint <code>(session_id, student_id)</code>.</td>
+        </tr>
+        <tr>
+          <td><strong>Financial Ledger</strong></td>
+          <td><code>fee_invoices</code>, <code>payments</code>, <code>payment_allocations</code></td>
+          <td>Tuition invoices, payment receipts (UPI/Bank/Cash), allocation ledger.</td>
+        </tr>
+        <tr>
+          <td><strong>Dynamic CMS & Media</strong></td>
+          <td><code>site_content</code>, <code>uploaded_images</code>, <code>announcements</code></td>
+          <td>JSONB dynamic content (gallery, blog, medals), binary image storage.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="alert-box">
+      <div class="alert-title">Zero Downtime Dual-Layer Fallback</div>
+      If the cloud database experiences intermittent connectivity or network latency, the data access layer
+      automatically switches to file-backed JSON stores (<code>data/site_content.json</code>,
+      <code>data/leads.json</code>) and recovers synchronously once the database reconnects.
+    </div>
+
+    <div class="page-footer">
+      <span>Document Ref: SAA-WEB-SEO-2026-001</span>
+      <span>Prepared by Mohammed Nibrasul Haqq · Kreovate</span>
+      <span class="page-number">Page 8 of 15</span>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+     PAGE 9: LEAD CRM & WHATSAPP INTEGRATION
+     ========================================================================= -->
+  <div class="page">
+    <div class="page-header">
+      <span class="brand">Sooraj Badminton Academy</span>
+      <span>Lead Lifecycle CRM & WhatsApp Integration</span>
+    </div>
+
+    <h2 class="section-title"><span class="num-badge">11</span> Lead Lifecycle & Admissions CRM Workflow</h2>
+    <p>The student admissions pipeline is engineered for zero lead leakage from initial search query to on-court free
+      trial:</p>
+
+    <pre class="code-box">
+  [ VISITOR FILLS TRIAL FORM ] ──> [ POST /api/enquiries ] ──> [ DATABASE LOGGING ]
+  • Name & Phone (Required)          • Honeypot Anti-Spam       • Neon PostgreSQL 'leads'
+  • Age Group & Centre               • Phone Sanitization       • Status: 'NEW'
+                 │                                                    │
+                 ├────────────────────────────────────────────────────┤
+                 ▼                                                    ▼
+    [ INSTANT WHATSAPP HANDOVER ]                              [ REAL-TIME CRM ALERT ]
+    • Visitor redirected to WhatsApp                           • Appears in /admin CRM table
+    • Pre-filled inquiry parameters                            • Staff opens Lead Drawer
+    • Direct chat with Admissions Head                         • Click-to-Call / Click-to-Chat
+                                                               • Status: NEW -> CONTACTED -> ENROLLED
+  </pre>
+
+    <h2 class="section-title" style="margin-top: 10px;"><span class="num-badge">12</span> Multi-Channel WhatsApp
+      Integration</h2>
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-header"><span>Tier 1: Dynamic Lead Chat</span></div>
+        <p>Inside the Admin Lead Drawer, staff click <strong>WhatsApp</strong> to launch a direct chat with the
+          prospect's mobile number pre-populated with a personalized greeting.</p>
+      </div>
+      <div class="card">
+        <div class="card-header"><span>Tier 2: Admissions Line</span></div>
+        <p>General website buttons route prospective parents directly to the academy's official admissions phone
+          numbers: <code>+91 79076 55513</code> and <code>+91 90746 80420</code>.</p>
+      </div>
+      <div class="card">
+        <div class="card-header"><span>Tier 3: Form Handoff</span></div>
+        <p>Upon submitting the free trial form, a structured WhatsApp text is generated with the student's name,
+          preferred training centre, age bracket, and selected program.</p>
+      </div>
+    </div>
+
+    <h3 class="sub-title" style="margin-top: 8px;">Pre-Formatted Free Trial WhatsApp Handoff Template</h3>
+    <pre class="code-box">
+  🏸 *S&A BADMINTON ACADEMY — FREE TRIAL BOOKING*
+  --------------------------------------------------
+  👤 *Name:* [Visitor Name]
+  📞 *Phone:* [Visitor Phone]
+  🎯 *Age Group:* [5-10 / 11-15 / 15-25 / 26+]
+  📍 *Preferred Centre:* [Kadavanthra / Kumbalanghi / Maradu / Palluruthy / Chullikal]
+  🏆 *Training Track:* [Kids Foundation / Junior Squad / Adult Fitness / Competitive]
+  💬 *Goal/Level:* [Beginner / Intermediate / Competitive]
+  --------------------------------------------------
+  👟 *Requirement:* Non-marking shoes & racket required for trial.
+  _Please confirm available trial slots for this week._
+  </pre>
+
+    <div class="page-footer">
+      <span>Document Ref: SAA-WEB-SEO-2026-001</span>
+      <span>Prepared by Mohammed Nibrasul Haqq · Kreovate</span>
+      <span class="page-number">Page 9 of 15</span>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+     PAGE 10: SEO & DYNAMIC XML SITEMAPS
+     ========================================================================= -->
+  <div class="page">
+    <div class="page-header">
+      <span class="brand">Sooraj Badminton Academy</span>
+      <span>Search Engine Optimization & Sitemaps</span>
+    </div>
+
+    <h2 class="section-title"><span class="num-badge">13</span> Local SEO & Keyword Architecture</h2>
+    <p>To avoid keyword cannibalization across five facilities, distinct geographic query clusters are assigned strictly
+      to self-canonical landing pages:</p>
+
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th style="width: 32%;">Target Search Intent</th>
+          <th style="width: 25%;">Canonical Destination</th>
+          <th style="width: 43%;">Primary Keyword Cluster</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Regional Kochi Authority</strong></td>
+          <td><code>/</code> (Homepage)</td>
+          <td><code>badminton academy in kochi</code>, <code>badminton coaching kochi</code></td>
+        </tr>
+        <tr>
+          <td><strong>Central Kochi Hub</strong></td>
+          <td><code>/kadavanthra</code></td>
+          <td><code>badminton coaching kadavanthra</code>, <code>badminton panampilly nagar</code></td>
+        </tr>
+        <tr>
+          <td><strong>West Kochi Facility</strong></td>
+          <td><code>/kumbalanghi</code></td>
+          <td><code>badminton coaching kumbalanghi</code>, <code>indoor badminton aroor</code></td>
+        </tr>
+        <tr>
+          <td><strong>South Kochi Hub</strong></td>
+          <td><code>/maradu</code></td>
+          <td><code>badminton academy maradu</code>, <code>badminton classes kundannoor</code></td>
+        </tr>
+        <tr>
+          <td><strong>West Kochi Corridor</strong></td>
+          <td><code>/palluruthy</code></td>
+          <td><code>badminton coaching palluruthy</code>, <code>badminton thoppumpady</code></td>
+        </tr>
+        <tr>
+          <td><strong>Coastal / Fort Kochi</strong></td>
+          <td><code>/chullikal</code></td>
+          <td><code>badminton academy chullikal</code>, <code>badminton classes fort kochi</code></td>
+        </tr>
+        <tr>
+          <td><strong>Youth & Junior Coaching</strong></td>
+          <td><code>/programs/kids...</code></td>
+          <td><code>kids badminton coaching kochi</code>, <code>junior training kochi</code></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 class="section-title" style="margin-top: 10px;"><span class="num-badge">14</span> Dynamic XML Sitemaps & Robots
+      Directives</h2>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-header">
+          <span>Dynamic XML Sitemaps</span>
+          <span class="badge badge-pass">HTTP 200</span>
+        </div>
+        <p>1. <code>/sitemap.xml</code>: Dynamic sitemap listing all core pages, 5 local branch hubs, coach profiles,
+          curricula, and blog articles.<br>
+          2. <code>/tournaments-sitemap.xml</code>: Dedicated sitemap dynamically querying the PostgreSQL
+          <code>events</code> table to index fixtures.
+        </p>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <span>Robots.txt Directives</span>
+          <span class="badge badge-pass">HTTP 200</span>
+        </div>
+        <p>Configured in <code>app/robots.ts</code> allowing search engines to index public routes while shielding
+          administrative paths:
+        <pre class="code-box" style="margin:2px 0 0 0;font-size:7px;">
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Disallow: /private/
+Sitemap: https://soorajbadmintonacademy.in/sitemap.xml
+Sitemap: https://soorajbadmintonacademy.in/tournaments-sitemap.xml
+      </pre>
+        </p>
+      </div>
+    </div>
+
+    <div class="alert-box">
+      <div class="alert-title">Schema.org Multi-Entity JSON-LD</div>
+      Implements <code>SportsOrganization</code> on the homepage, <code>SportsActivityLocation</code> and
+      <code>LocalBusiness</code> on each centre page, <code>BreadcrumbList</code>, <code>FAQPage</code>, and
+      <code>Event</code> schemas to qualify for Google Rich Snippets.
+    </div>
+
+    <div class="page-footer">
+      <span>Document Ref: SAA-WEB-SEO-2026-001</span>
+      <span>Prepared by Mohammed Nibrasul Haqq · Kreovate</span>
+      <span class="page-number">Page 10 of 15</span>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+     PAGE 11: GOOGLE BUSINESS PROFILE AUDIT
+     ========================================================================= -->
+  <div class="page">
+    <div class="page-header">
+      <span class="brand">Sooraj Badminton Academy</span>
+      <span>Google Business Profile (GBP) Implementation</span>
+    </div>
+
+    <h2 class="section-title"><span class="num-badge">15</span> Google Business Profile (GBP) Verification Audit</h2>
+    <p>To capture local neighborhood searches (e.g. <em>"badminton coaching near me"</em>), authoritative Google
+      Business Profile accounts were established across all five physical training venues:</p>
+
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th style="width: 20%;">Branch Profile</th>
+          <th style="width: 18%;">Account Setup</th>
+          <th style="width: 22%;">Verification Status</th>
+          <th style="width: 40%;">Current Operational Standing</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>1. Kadavanthra</strong></td>
+          <td><span class="badge badge-completed">Completed</span></td>
+          <td><span class="badge badge-pending">Pending Video</span></td>
+          <td>HQ profile configured; awaiting live video verification walk-through at Rajiv Gandhi Indoor Stadium.</td>
+        </tr>
+        <tr>
+          <td><strong>2. Kumbalanghi</strong></td>
+          <td><span class="badge badge-completed">Completed</span></td>
+          <td><span class="badge badge-pending">Pending Video</span></td>
+          <td>All Star Court profile configured; awaiting live video recording of exterior street and indoor court.</td>
+        </tr>
+        <tr>
+          <td><strong>3. Maradu</strong></td>
+          <td><span class="badge badge-completed">Completed</span></td>
+          <td><span class="badge badge-pending">Pending Video</span></td>
+          <td>ProSmash hosted venue profile configured; awaiting live video recording.</td>
+        </tr>
+        <tr>
+          <td><strong>4. Palluruthy</strong></td>
+          <td><span class="badge badge-completed">Completed</span></td>
+          <td><span class="badge badge-pending">Pending Video</span></td>
+          <td>West Kochi training facility configured; awaiting live video recording.</td>
+        </tr>
+        <tr>
+          <td><strong>5. Chullikal</strong></td>
+          <td><span class="badge badge-completed">Completed</span></td>
+          <td><span class="badge badge-pending">Pending Video</span></td>
+          <td>Coastal Fort Kochi training centre configured; awaiting live video recording.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="alert-box important">
+      <div class="alert-title">Google Public Search Visibility Policy</div>
+      Some or all branch profiles may currently not be visible publicly on Google Maps or in Google Search results.
+      <strong>This is standard and expected behavior while Google verification is pending.</strong> Google temporarily
+      suppresses public search indexing until ownership verification is submitted and approved. The profiles are active
+      in the GBP dashboard awaiting the client's video recording step.
+    </div>
+
+    <h3 class="sub-title">Mandatory On-Site Live Video Verification Requirements</h3>
+    <p>Google requires an uninterrupted 1 to 2 minute continuous video recording per centre displaying:</p>
+    <ul class="clean-list">
+      <li><strong>1. Outside Signage & Street:</strong> Capture the street name sign, building exterior, and academy
+        entrance banners.</li>
+      <li><strong>2. Court Infrastructure:</strong> Walk inside without stopping to display BWF synthetic courts,
+        training nets, and shuttlecocks.</li>
+      <li><strong>3. Proof of Management:</strong> Show staff unlocking court doors, accessing the administrative desk,
+        or showing official academy documents.</li>
+    </ul>
+
+    <div class="page-footer">
+      <span>Document Ref: SAA-WEB-SEO-2026-001</span>
+      <span>Prepared by Mohammed Nibrasul Haqq · Kreovate</span>
+      <span class="page-number">Page 11 of 15</span>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+     PAGE 12: DEPLOYMENT & ENVIRONMENT VARIABLES
+     ========================================================================= -->
+  <div class="page">
+    <div class="page-header">
+      <span class="brand">Sooraj Badminton Academy</span>
+      <span>Deployment & Environment Variables</span>
+    </div>
+
+    <h2 class="section-title"><span class="num-badge">16</span> Production Infrastructure & Deployment</h2>
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th style="width: 25%;">Infrastructure Layer</th>
+          <th style="width: 75%;">Configuration Details & Verification</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Production URL</strong></td>
+          <td><code>https://soorajbadmintonacademy.in/</code> (Verified HTTP/2 200 via Vercel Mumbai Edge Node
+            <code>bom1</code>)
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Hosting Platform</strong></td>
+          <td>Vercel Serverless Edge Platform with automatic continuous deployment from Git <code>main</code> branch.
+          </td>
+        </tr>
+        <tr>
+          <td><strong>SSL / Encryption</strong></td>
+          <td>Automated Let's Encrypt TLS 1.3 certificate with HSTS security headers active.</td>
+        </tr>
+        <tr>
+          <td><strong>Build & Start Command</strong></td>
+          <td>Build: <code>npm run build</code> (<code>next build</code>) · Start: <code>npm run start</code>
+            (<code>next start</code>)</td>
+        </tr>
+        <tr>
+          <td><strong>Database Server</strong></td>
+          <td>Neon Serverless PostgreSQL (AWS Region: <code>us-east-2</code>) with connection pooling.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 class="section-title" style="margin-top: 10px;"><span class="num-badge">17</span> Environment Variables
+      Reference</h2>
+    <p>All sensitive credentials are isolated strictly within production environment configurations. <strong>No private
+        secret values are exposed in this document:</strong></p>
+
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th style="width: 32%;">Variable Name</th>
+          <th style="width: 40%;">Purpose & Usage</th>
+          <th style="width: 14%;">Required</th>
+          <th style="width: 14%;">Classification</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>DATABASE_URL</code></td>
+          <td>Neon PostgreSQL pooled database connection string</td>
+          <td><strong>YES</strong></td>
+          <td><span class="badge badge-secret">Secret / High</span></td>
+        </tr>
+        <tr>
+          <td><code>JWT_SECRET</code></td>
+          <td>Cryptographic secret key for signing admin access tokens</td>
+          <td><strong>YES</strong></td>
+          <td><span class="badge badge-secret">Secret / High</span></td>
+        </tr>
+        <tr>
+          <td><code>NEXT_PUBLIC_SITE_URL</code></td>
+          <td>Canonical base URL for canonical tags, sitemaps, and schemas</td>
+          <td><strong>YES</strong></td>
+          <td><span class="badge badge-pass">Public</span></td>
+        </tr>
+        <tr>
+          <td><code>NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION</code></td>
+          <td>Google Search Console ownership verification token</td>
+          <td>Optional</td>
+          <td><span class="badge badge-pass">Public</span></td>
+        </tr>
+        <tr>
+          <td><code>NEXT_PUBLIC_GTM_ID</code></td>
+          <td>Google Tag Manager container ID for web telemetry</td>
+          <td>Optional</td>
+          <td><span class="badge badge-pass">Public</span></td>
+        </tr>
+        <tr>
+          <td><code>ADMIN_EMAIL</code></td>
+          <td>Default Super Admin bootstrap email (Setup scripts only)</td>
+          <td>CLI Only</td>
+          <td><span class="badge badge-configured">Internal</span></td>
+        </tr>
+        <tr>
+          <td><code>ADMIN_PASSWORD</code></td>
+          <td>Default Super Admin bootstrap password (Setup scripts only)</td>
+          <td>CLI Only</td>
+          <td><span class="badge badge-secret">Secret / High</span></td>
+        </tr>
+        <tr>
+          <td><code>NODE_ENV</code></td>
+          <td>Runtime environment mode (<code>production</code> vs <code>development</code>)</td>
+          <td><strong>YES</strong></td>
+          <td><span class="badge badge-pass">System</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="page-footer">
+      <span>Document Ref: SAA-WEB-SEO-2026-001</span>
+      <span>Prepared by Mohammed Nibrasul Haqq · Kreovate</span>
+      <span class="page-number">Page 12 of 15</span>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+     PAGE 13: QA TESTING & MOBILE RESPONSIVENESS
+     ========================================================================= -->
+  <div class="page">
+    <div class="page-header">
+      <span class="brand">Sooraj Badminton Academy</span>
+      <span>Quality Assurance & Mobile Optimization</span>
+    </div>
+
+    <h2 class="section-title"><span class="num-badge">18</span> Quality Assurance (QA) Verification Matrix</h2>
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th style="width: 28%;">Test Area</th>
+          <th style="width: 14%;">Status</th>
+          <th style="width: 58%;">Observations & Findings</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Homepage & Brand Assets</strong></td>
+          <td><span class="badge badge-pass">PASS</span></td>
+          <td>Hero photography, trust stats, animated counters, and CTAs render without layout shift.</td>
+        </tr>
+        <tr>
+          <td><strong>Navigation & Mobile Drawer</strong></td>
+          <td><span class="badge badge-pass">PASS</span></td>
+          <td>Desktop hover menus trigger smoothly; mobile slide-over drawer locks background scroll.</td>
+        </tr>
+        <tr>
+          <td><strong>5 Centre SEO Landing Pages</strong></td>
+          <td><span class="badge badge-pass">PASS</span></td>
+          <td>All 5 micro-market pages render self-canonical URLs and local structured JSON-LD schemas.</td>
+        </tr>
+        <tr>
+          <td><strong>HTTP 308 Redirections</strong></td>
+          <td><span class="badge badge-pass">PASS</span></td>
+          <td>Legacy <code>/branches/:slug</code> routes redirect permanently to <code>/:slug</code> in 1 hop.</td>
+        </tr>
+        <tr>
+          <td><strong>Lead Submission & WhatsApp</strong></td>
+          <td><span class="badge badge-pass">PASS</span></td>
+          <td>Phone validation enforces 10 digits; honeypot blocks bots; instant WhatsApp handoff fires.</td>
+        </tr>
+        <tr>
+          <td><strong>Admin Auth & RBAC Security</strong></td>
+          <td><span class="badge badge-pass">PASS</span></td>
+          <td>scrypt verification passes; 401 on missing token; 403 on role mismatch; cookies HttpOnly.</td>
+        </tr>
+        <tr>
+          <td><strong>Admin CRM & CMS Operations</strong></td>
+          <td><span class="badge badge-pass">PASS</span></td>
+          <td>Lead status changes, notes, venue updates, and coach publishing persist in PostgreSQL.</td>
+        </tr>
+        <tr>
+          <td><strong>Dual XML Sitemaps & Robots</strong></td>
+          <td><span class="badge badge-pass">PASS</span></td>
+          <td><code>/sitemap.xml</code> and <code>/tournaments-sitemap.xml</code> return valid XML (HTTP 200).</td>
+        </tr>
+        <tr>
+          <td><strong>Google Business Profiles</strong></td>
+          <td><span class="badge badge-partial">PARTIAL</span></td>
+          <td>All 5 profiles created and configured; pending on-site live video verification.</td>
+        </tr>
+        <tr>
+          <td><strong>Authentic Venue Photos</strong></td>
+          <td><span class="badge badge-pending">PENDING</span></td>
+          <td>High-resolution venue photos pending final photography delivery from client.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 class="section-title" style="margin-top: 10px;"><span class="num-badge">19</span> Mobile Responsiveness &
+      Viewports</h2>
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-header"><span>Mobile (iPhone / Android)</span></div>
+        <p>Tested on 390px, 412px viewports. Features 48px touch targets, full-width thumb-friendly buttons, and a
+          sticky bottom conversion bar (<em>Book Trial</em> + <em>WhatsApp</em>).</p>
+      </div>
+      <div class="card">
+        <div class="card-header"><span>Tablets (iPad / Surface)</span></div>
+        <p>Tested on 768px, 1024px viewports. Multi-column grids collapse gracefully into 2-column cards; interactive
+          navigation adapts touch interactions cleanly.</p>
+      </div>
+      <div class="card">
+        <div class="card-header"><span>Desktop (1440px / 4K)</span></div>
+        <p>Fluid typography scaling via CSS clamp rules; hero banners and court photography render crisply without
+          horizontal overflow.</p>
+      </div>
+    </div>
+
+    <div class="page-footer">
+      <span>Document Ref: SAA-WEB-SEO-2026-001</span>
+      <span>Prepared by Mohammed Nibrasul Haqq · Kreovate</span>
+      <span class="page-number">Page 13 of 15</span>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+     PAGE 14: STEP-BY-STEP ADMINISTRATOR USER GUIDE
+     ========================================================================= -->
+  <div class="page">
+    <div class="page-header">
+      <span class="brand">Sooraj Badminton Academy</span>
+      <span>Administrator User Guide</span>
+    </div>
+
+    <h2 class="section-title"><span class="num-badge">20</span> Step-by-Step Administrator User Guide</h2>
+    <p>Practical, numbered instructions for academy directors and front-desk staff to manage daily operations:</p>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-header"><span>Workflow 1: Sign in to Dashboard</span></div>
+        <ol class="guide-steps">
+          <li>Navigate to: <code>https://soorajbadmintonacademy.in/admin</code></li>
+          <li>Enter your registered administrative email and password.</li>
+          <li>Click <strong>Sign In to Dashboard</strong>.</li>
+          <li>The system redirects to the live operations overview.</li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><span>Workflow 2: Manage Student Enquiries</span></div>
+        <ol class="guide-steps">
+          <li>Click <strong>Student Inquiries</strong> in the left sidebar.</li>
+          <li>Filter by status (<code>New</code>, <code>Contacted</code>, <code>Trial Booked</code>).</li>
+          <li>Click any lead row to open the <strong>Lead Drawer</strong>.</li>
+          <li>Click <strong>Call</strong> or <strong>WhatsApp</strong> to contact the parent.</li>
+          <li>Update the lead status and add internal notes.</li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><span>Workflow 3: Update Training Centres</span></div>
+        <ol class="guide-steps">
+          <li>Click <strong>Centres & Hubs</strong> in the left sidebar.</li>
+          <li>Click <strong>Edit Centre</strong> on the venue to modify.</li>
+          <li>Update address, court counts, operating hours, or maps URL.</li>
+          <li>Click <strong>Save Changes</strong> to instantly update the public site.</li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><span>Workflow 4: Add or Edit Coaches</span></div>
+        <ol class="guide-steps">
+          <li>Click <strong>Coaches & Staff</strong> in the left sidebar.</li>
+          <li>Click <strong>Add New Coach</strong> or click an existing coach card.</li>
+          <li>Enter name, certifications (BWF/NIS), and experience.</li>
+          <li>Upload a portrait photo and click <strong>Publish Coach</strong>.</li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><span>Workflow 5: Upload Photos to Gallery</span></div>
+        <ol class="guide-steps">
+          <li>Click <strong>Photo Gallery</strong> in the left sidebar.</li>
+          <li>Click <strong>Upload New Photo</strong> and choose an image.</li>
+          <li>Enter a caption (e.g., <em>"Junior Batch at Kadavanthra"</em>).</li>
+          <li>Select category (Training, Courts, Tournaments) and save.</li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><span>Workflow 6: Publish Blog Articles</span></div>
+        <ol class="guide-steps">
+          <li>Click <strong>Blog Articles</strong> in the left sidebar.</li>
+          <li>Click <strong>Create New Article</strong>.</li>
+          <li>Enter the title, summary, markdown body, and topic tags.</li>
+          <li>Click <strong>Publish Article</strong> to update <code>/blog</code>.</li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><span>Workflow 7: Log Tournament Medals</span></div>
+        <ol class="guide-steps">
+          <li>Click <strong>Track Record & Awards</strong> in the left sidebar.</li>
+          <li>Click <strong>Add Achievement</strong>.</li>
+          <li>Enter tournament name, student name, year, and medal type.</li>
+          <li>Click <strong>Save Record</strong> to update the live Trophy Wall.</li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><span>Workflow 8: Change Admin Password</span></div>
+        <ol class="guide-steps">
+          <li>Click <strong>Password</strong> at the bottom of the sidebar.</li>
+          <li>Enter your current password and your new secure password.</li>
+          <li>Click <strong>Update Password</strong>.</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="page-footer">
+      <span>Document Ref: SAA-WEB-SEO-2026-001</span>
+      <span>Prepared by Mohammed Nibrasul Haqq · Kreovate</span>
+      <span class="page-number">Page 14 of 15</span>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+     PAGE 16: HANDOVER CHECKLIST & FORMAL DECLARATION
+     ========================================================================= -->
+  <div class="page">
+    <div class="page-header">
+      <span class="brand">Sooraj Badminton Academy</span>
+      <span>Handover Deliverables, Testing Terms & Formal Declaration</span>
+    </div>
+
+    <h2 class="section-title"><span class="num-badge">21</span> Client Handover Deliverables Checklist</h2>
+    <div class="card" style="margin-bottom: 8px;">
+      <div class="checklist-item">
+        <span><strong>1. Production Website & Domain Live:</strong>
+          <code>https://soorajbadmintonacademy.in/</code></span>
+        <span class="badge badge-completed">Delivered ✅</span>
+      </div>
+      <div class="checklist-item">
+        <span><strong>2. Admin Dashboard & Inquiries CRM:</strong> Full access at <code>/admin</code></span>
+        <span class="badge badge-completed">Delivered ✅</span>
+      </div>
+      <div class="checklist-item">
+        <span><strong>3. Administrative Master Credentials:</strong> Transferred securely outside this document</span>
+        <span class="badge badge-completed">Transferred Privately ✅</span>
+      </div>
+      <div class="checklist-item">
+        <span><strong>4. PostgreSQL Cloud Database:</strong> Neon Serverless Instance active</span>
+        <span class="badge badge-completed">Configured & Active ✅</span>
+      </div>
+      <div class="checklist-item">
+        <span><strong>5. Google Business Profiles (5 Hubs):</strong> Setup complete; pending live video step</span>
+        <span class="badge badge-configured">Ready for Video ✅</span>
+      </div>
+      <div class="checklist-item">
+        <span><strong>6. Dynamic XML Sitemaps:</strong> <code>/sitemap.xml</code> and
+          <code>/tournaments-sitemap.xml</code></span>
+        <span class="badge badge-completed">Configured & Live ✅</span>
+      </div>
+      <div class="checklist-item">
+        <span><strong>7. Complete Source Code & Git Repository:</strong> Fully documented repository</span>
+        <span class="badge badge-completed">Delivered ✅</span>
+      </div>
+      <div class="checklist-item">
+        <span><strong>8. Handover Documentation Package:</strong> PDF & Editable Markdown source</span>
+        <span class="badge badge-completed">Delivered ✅</span>
+      </div>
+    </div>
+
+    <h2 class="section-title" style="margin-top: 8px;"><span class="num-badge">22</span> 7-Day Testing, Review &
+      Correction Period</h2>
+    <div class="card" style="background: #F8FAFC; border: 1.5px solid #0284C7; padding: 7px 10px; margin-bottom: 6px;">
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; font-size: 8.5px;">
+        <div>
+          <strong
+            style="color: #64748B; text-transform: uppercase; font-size: 7.5px; display: block; letter-spacing: 0.04em;">Official
+            Handover Date</strong>
+          <span style="font-weight: 700; color: #0F172A; font-family: 'JetBrains Mono', monospace;">07 October
+            2026</span>
+        </div>
+        <div>
+          <strong
+            style="color: #0284C7; text-transform: uppercase; font-size: 7.5px; display: block; letter-spacing: 0.04em;">7-Day
+            Testing & Review Period</strong>
+          <span style="font-weight: 700; color: #0284C7; font-family: 'JetBrains Mono', monospace;">07 October 2026 → 13
+            October 2026</span>
+        </div>
+        <div>
+          <strong
+            style="color: #DC2626; text-transform: uppercase; font-size: 7.5px; display: block; letter-spacing: 0.04em;">Final
+            Date for Reporting Corrections</strong>
+          <span style="font-weight: 800; color: #DC2626; font-family: 'JetBrains Mono', monospace;">13 October
+            2026</span>
+        </div>
+      </div>
+      <div style="margin-top: 5px; padding-top: 5px; border-top: 1px dashed #CBD5E1; font-size: 8.2px; color: #334155;">
+        <strong>Handover Status:</strong> <span style="color: #059669; font-weight: 700;">Project handed over for client
+          testing and review.</span>
+      </div>
+    </div>
+
+    <div class="grid-2" style="font-size: 8.2px; line-height: 1.35; margin-bottom: 6px;">
+      <div class="card" style="padding: 7px 10px;">
+        <div class="card-header" style="margin-bottom: 3px; padding-bottom: 2px;">
+          <span style="color: #0F172A; font-weight: 700;">Included Testing, Review & Correction Scope</span>
+        </div>
+        <ul class="clean-list" style="margin: 0; font-size: 8px;">
+          <li><strong>Handover Date:</strong> The project is officially handed over on <strong>07 October 2026</strong>.
+          </li>
+          <li><strong>7-Day Testing Window:</strong> The client has a 7-day testing and review period beginning on
+            <strong>07 October 2026</strong> and ending on <strong>13 October 2026</strong>.</li>
+          <li><strong>Functional Verification:</strong> During this period, the client may test the delivered website
+            and report functional issues, errors, bugs, or corrections related to the agreed project scope
+            (<code>SAA-WEB-SEO-2026-001</code>).</li>
+          <li><strong>Agreed Corrections:</strong> Agreed corrections and reasonable edits related to the original
+            project scope may be addressed during this 7-day period.</li>
+          <li><strong>Reporting Requirement:</strong> All testing observations and correction requests must be formally
+            communicated within the 7-day period. The final date for reporting testing issues and requesting agreed
+            edits/corrections is <strong>13 October 2026</strong>.</li>
+        </ul>
+      </div>
+
+      <div class="card" style="padding: 7px 10px;">
+        <div class="card-header" style="margin-bottom: 3px; padding-bottom: 2px;">
+          <span style="color: #0F172A; font-weight: 700;">Boundary Terms, Exclusions & Post-Period Policy</span>
+        </div>
+        <ul class="clean-list" style="margin: 0; font-size: 8px;">
+          <li><strong>Strict Cutoff Date:</strong> The testing and review period strictly concludes on <strong>13
+              October 2026</strong>.</li>
+          <li><strong>Post-Period Requests:</strong> Requests received after <strong>13 October 2026</strong> are
+            outside the included 7-day testing/review window and may be treated as additional work or a separate change
+            request, subject to mutual agreement (or covered under optional ongoing maintenance).</li>
+          <li><strong>Scope Exclusions:</strong> New features, new modules, major design changes, additional
+            functionality, or requirements outside the agreed scope are not considered part of the 7-day correction
+            period.</li>
+          <li><strong>Defined Purpose:</strong> The 7-day period is designated specifically for testing, verification,
+            bug reporting, and agreed corrections—not unlimited redesign or new feature development.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="alert-box warning" style="margin: 5px 0; padding: 5px 8px; font-size: 8px;">
+      <div class="alert-title" style="font-size: 8.5px;">Cybersecurity Credential Notice</div>
+      In compliance with strict data security standards, administrator passwords, database connection strings, and
+      secret keys are <strong>NOT</strong> documented in this report. Master credentials have been delivered directly to
+      Head Coach Sooraj via private, encrypted channels.
+    </div>
+
+    <h2 class="section-title" style="margin-top: 8px;"><span class="num-badge">23</span> Final Handover & Delivery
+      Declaration</h2>
+    <p style="font-size: 8.4px; line-height: 1.35; margin-bottom: 3px;">I hereby certify that the <strong>Sooraj
+        Badminton Academy Website, CRM & Local SEO</strong> project under
+      commercial reference <code>SAA-WEB-SEO-2026-001</code> has been successfully completed in accordance with agreed
+      specifications and delivered on <strong>07 October 2026</strong> for formal client testing and review during the
+      designated 7-day window (<strong>07 October 2026 to 13 October 2026</strong>).</p>
+
+    <p style="font-size: 8.4px; line-height: 1.35; margin-bottom: 6px;">All delivered components have been inspected,
+      tested, and verified on the live production infrastructure. Following the conclusion of the 7-day testing and
+      correction window on <strong>13 October 2026</strong>, ongoing
+      platform maintenance and local SEO rank tracking are available under the optional monthly retainer.</p>
+
+    <div class="grid-2" style="margin-top: 10px; align-items: flex-end;">
+      <div class="card" style="padding: 8px 10px;">
+        <div
+          style="font-size: 7.5px; color: #64748B; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px;">
+          Delivered & Handed Over By</div>
+        <strong style="font-size: 11.5px; color: #0F172A; display: block;">Mohammed Nibrasul Haqq</strong>
+        <span style="font-size: 8.5px; color: #475569; display: block;">Freelance Full-Stack Developer · UI/UX
+          Designer</span>
+        <span style="font-size: 8.5px; color: #10B981; font-weight: 700; display: block;">Kreovate Marketing
+          Agency</span>
+        <div style="margin-top: 8px; font-size: 8px; color: #64748B; font-family: 'JetBrains Mono', monospace;">Handover
+          Date:
+          07 October 2026 · Kochi, Kerala</div>
+      </div>
+
+      <div class="card" style="padding: 8px 10px;">
+        <div
+          style="font-size: 7.5px; color: #64748B; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px;">
+          Received & Acknowledged For</div>
+        <strong style="font-size: 11.5px; color: #0F172A; display: block;">Head Coach Sooraj M S</strong>
+        <span style="font-size: 8.5px; color: #475569; display: block;">Founder & Head Coach</span>
+        <span style="font-size: 8.5px; color: #0284C7; font-weight: 700; display: block;">Sooraj Badminton Academy
+          (SBA)</span>
+        <div
+          style="margin-top: 4px; font-size: 8px; color: #059669; font-family: 'JetBrains Mono', monospace; font-weight: 700;">
+          Handover Status: Project handed over for client testing and review</div>
+        <div style="margin-top: 2px; font-size: 7.8px; color: #64748B; font-family: 'JetBrains Mono', monospace;">
+          Testing Period: 07 October 2026 – 13 October 2026</div>
+      </div>
+    </div>
+
+    <div class="page-footer">
+      <span>Document Ref: SAA-WEB-SEO-2026-001</span>
+      <span>Prepared by Mohammed Nibrasul Haqq · Kreovate</span>
+      <span class="page-number">Page 15 of 15</span>
+    </div>
+  </div>
+
+</body>

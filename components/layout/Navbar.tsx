@@ -33,16 +33,27 @@ const NAV_LINKS = [
   { name: "Contact", href: "/contact" },
 ];
 
-export function Navbar() {
+export function Navbar({ initialCentres }: { initialCentres?: any[] } = {}) {
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [openMobileMenu, setOpenMobileMenu] = useState<string | null>(null);
-  const [dynamicCentres, setDynamicCentres] = useState<{ name: string; href: string; desc: string }[]>([]);
+  const [dynamicCentres, setDynamicCentres] = useState<{ name: string; href: string; desc: string }[]>(() => {
+    if (initialCentres && Array.isArray(initialCentres) && initialCentres.length > 0) {
+      return initialCentres.map((c: any) => ({
+        name: c.shortName || c.name,
+        href: `/${c.slug}`,
+        desc: c.district || "Kochi",
+      }));
+    }
+    return [];
+  });
 
   useEffect(() => {
-    fetch("/api/centres", { cache: "no-store" })
+    if (initialCentres && initialCentres.length > 0) return;
+
+    fetch("/api/centres")
       .then((res) => res.json())
       .then((data) => {
         if (data.success && Array.isArray(data.items)) {
@@ -56,7 +67,7 @@ export function Navbar() {
         }
       })
       .catch((err) => console.error("Failed to load centres for Navbar:", err));
-  }, []);
+  }, [initialCentres]);
 
   const navLinks = useMemo(() => {
     return NAV_LINKS.map((link) => {

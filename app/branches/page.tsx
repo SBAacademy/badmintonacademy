@@ -10,7 +10,7 @@ import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { FinalCTA } from "@/components/sections/FinalCTA";
 import { CentreGallerySection } from "@/components/sections/CentreGallerySection";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 300;
 
 export const metadata: Metadata = createMetadata({
   title: "Badminton Academy Centres in Kochi | Kadavanthra, Kumbalanghi, Maradu, Palluruthy, Chullikal",
@@ -166,7 +166,7 @@ export default async function BranchesPage() {
         description="Take an interactive tour through our BWF Grade-1 certified badminton courts across Kadavanthra, Kumbalanghi, Maradu, Palluruthy, and Chullikal."
       />
 
-      <FinalCTA />
+      <FinalCTA initialCount={centres.length} />
     </div>
   );
 }

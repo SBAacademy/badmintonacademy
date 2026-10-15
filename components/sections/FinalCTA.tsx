@@ -11,7 +11,9 @@ export function FinalCTA({ initialCount }: { initialCount?: number }) {
   const [centreCount, setCentreCount] = useState<number>(initialCount !== undefined ? initialCount : 0);
 
   useEffect(() => {
-    fetch("/api/centres", { cache: "no-store" })
+    if (initialCount !== undefined && initialCount > 0) return;
+
+    fetch("/api/centres")
       .then((res) => res.json())
       .then((data) => {
         const list = Array.isArray(data.centres)
@@ -28,7 +30,7 @@ export function FinalCTA({ initialCount }: { initialCount?: number }) {
         }
       })
       .catch(() => {});
-  }, []);
+  }, [initialCount]);
 
   const handleWhatsApp = () => {
     trackEvent("whatsapp_click", { source: "rebel_final_cta" });

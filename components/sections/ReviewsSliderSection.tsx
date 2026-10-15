@@ -27,6 +27,8 @@ export function ReviewsSliderSection({ initialReviews }: ReviewsSliderSectionPro
 
   // Client-side refresh from API to catch newly approved reviews
   useEffect(() => {
+    if (initialReviews && initialReviews.length > 0) return;
+
     fetch("/api/content/testimonials")
       .then((res) => res.json())
       .then((data) => {
@@ -38,7 +40,7 @@ export function ReviewsSliderSection({ initialReviews }: ReviewsSliderSectionPro
         }
       })
       .catch(() => {});
-  }, []);
+  }, [initialReviews]);
 
   const total = reviews.length;
 

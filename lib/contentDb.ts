@@ -65,13 +65,7 @@ function createCachedReader<TArgs extends any[], TReturn>(
 async function readFallbackContent(): Promise<Record<string, any>> {
   try {
     const fileData = await fs.readFile(CONTENT_FILE_PATH, "utf-8");
-    const parsed = JSON.parse(fileData);
-    return {
-      ...parsed,
-      centres: [], // The PostgreSQL database is the SOLE authority for centres
-      coaches: [], // The PostgreSQL database is the SOLE authority for coaches
-      events: [], // The PostgreSQL database is the SOLE authority for events
-    };
+    return JSON.parse(fileData);
   } catch {
     return {
       gallery: [],

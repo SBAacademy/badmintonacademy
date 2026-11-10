@@ -7,13 +7,13 @@ import { FinalCTA } from "@/components/sections/FinalCTA";
 
 export const metadata: Metadata = createMetadata({
   title: "Badminton Academy Photo & Video Gallery | Courts & Coaching",
-  description: "Browse photos and videos of S & A Badminton Academy Kochi. Tour our synthetic courts across Kadavanthra, Kumbalanghi, Maradu, Palluruthy, and Chullikal, junior drills, and tournaments.",
+  description: "Browse photos and videos of SBA Badminton Academy Kochi. Tour our synthetic courts across Kadavanthra, Kumbalanghi, Maradu, Palluruthy, and Chullikal, junior drills, and tournaments.",
   path: "/gallery",
   keywords: [
     "badminton courts photos Kochi",
     "badminton academy gallery",
     "badminton coaching pictures Kochi",
-    "S&A badminton arena",
+    "SBA badminton arena",
   ],
 });
 
@@ -40,7 +40,7 @@ export default async function GalleryPage() {
             Visual Experience
           </div>
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
-            Inside S & A Badminton Academy
+            Inside SBA Badminton Academy
           </h1>
           <p className="text-slate-400 text-sm sm:text-base leading-relaxed">
             Take a visual tour of our world-class synthetic courts, high-tempo training sessions, video analysis rooms, and tournament podium celebrations.

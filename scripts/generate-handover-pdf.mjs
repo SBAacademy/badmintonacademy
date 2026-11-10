@@ -1186,7 +1186,7 @@ const html = `<!DOCTYPE html>
         <tr>
           <td><strong>1. Kadavanthra</strong><br><span style="font-size:7.5px;color:#10B981;font-weight:700;">CENTRAL
               KOCHI HQ</span></td>
-          <td>S&A Sports Arena, Near Rajiv Gandhi Indoor Stadium, Kadavanthra 682020</td>
+          <td>SBA Sports Arena, Near Rajiv Gandhi Indoor Stadium, Kadavanthra 682020</td>
           <td>4 Courts<br><span style="font-size:7px;color:#64748B;">BWF Wooden + Mat</span></td>
           <td>Panampilly Nagar, Girinagar, Elamkulam, Vyttila, Thevara, MG Road</td>
           <td><code>+91 79076 55513</code><br>Mon–Sun: 05:00 AM – 10:30 PM</td>
@@ -1498,7 +1498,7 @@ const html = `<!DOCTYPE html>
 
     <h3 class="sub-title" style="margin-top: 8px;">Pre-Formatted Free Trial WhatsApp Handoff Template</h3>
     <pre class="code-box">
-  🏸 *S&A BADMINTON ACADEMY — FREE TRIAL BOOKING*
+  🏸 *SBA BADMINTON ACADEMY — FREE TRIAL BOOKING*
   --------------------------------------------------
   👤 *Name:* [Visitor Name]
   📞 *Phone:* [Visitor Phone]

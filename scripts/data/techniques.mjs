@@ -8,7 +8,7 @@ export const techniquesArticles = [
     "publishDate": "October 05, 2024",
     "updatedAt": "2024-10-05T08:00:00.000Z",
     "author": "Coach Anand Varma",
-    "authorRole": "Head Coach, S&A Badminton Academy",
+    "authorRole": "Head Coach, SBA Badminton Academy",
     "tags": [
       "Forehand Grip",
       "V-Grip",
@@ -109,7 +109,7 @@ export const techniquesArticles = [
     "publishDate": "October 18, 2024",
     "updatedAt": "2024-10-18T10:15:00.000Z",
     "author": "Coach Anand Varma",
-    "authorRole": "Head Coach, S&A Badminton Academy",
+    "authorRole": "Head Coach, SBA Badminton Academy",
     "tags": [
       "High Clear",
       "Forehand Clear",
@@ -208,7 +208,7 @@ export const techniquesArticles = [
     "publishDate": "November 01, 2024",
     "updatedAt": "2024-11-01T08:30:00.000Z",
     "author": "Coach Anand Varma",
-    "authorRole": "Head Coach, S&A Badminton Academy",
+    "authorRole": "Head Coach, SBA Badminton Academy",
     "tags": [
       "Drop Shot",
       "Slow Drop",
@@ -247,7 +247,7 @@ export const techniquesArticles = [
       "- **Warm-Up Phase:** 5 minutes of dynamic joint mobilization and shadow movement.",
       "- **Drill Volume:** 4 to 6 sets of 15 to 20 focused repetitions with a 45-second recovery interval between sets.",
       "- **Pressure Match Application:** Conclude with 15 minutes of conditional match play where points scored using this specific technique earn double value.",
-      "Develop delicate net touch and deception through dedicated training at [S & A Badminton Academy](/programs)."
+      "Develop delicate net touch and deception through dedicated training at [SBA Badminton Academy](/programs)."
     ]
   },
   {
@@ -307,7 +307,7 @@ export const techniquesArticles = [
     "publishDate": "November 15, 2024",
     "updatedAt": "2024-11-15T09:40:00.000Z",
     "author": "Coach Anand Varma",
-    "authorRole": "Head Coach, S&A Badminton Academy",
+    "authorRole": "Head Coach, SBA Badminton Academy",
     "tags": [
       "Jump Smash",
       "Smash Power",
@@ -456,7 +456,7 @@ export const techniquesArticles = [
     "publishDate": "December 06, 2024",
     "updatedAt": "2024-12-06T09:15:00.000Z",
     "author": "Coach Anand Varma",
-    "authorRole": "Head Coach, S&A Badminton Academy",
+    "authorRole": "Head Coach, SBA Badminton Academy",
     "tags": [
       "Backhand Clear",
       "Backhand Technique",
@@ -550,7 +550,7 @@ export const techniquesArticles = [
     "publishDate": "December 20, 2024",
     "updatedAt": "2024-12-20T08:50:00.000Z",
     "author": "Coach Anand Varma",
-    "authorRole": "Head Coach, S&A Badminton Academy",
+    "authorRole": "Head Coach, SBA Badminton Academy",
     "tags": [
       "Hairpin Net Shot",
       "Net Spin",
@@ -697,7 +697,7 @@ export const techniquesArticles = [
     "publishDate": "January 10, 2025",
     "updatedAt": "2025-01-10T10:15:00.000Z",
     "author": "Coach Anand Varma",
-    "authorRole": "Head Coach, S&A Badminton Academy",
+    "authorRole": "Head Coach, SBA Badminton Academy",
     "tags": [
       "Flick Serve",
       "Deception",

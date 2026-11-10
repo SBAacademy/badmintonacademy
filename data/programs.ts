@@ -149,7 +149,7 @@ export const PROGRAMS: Program[] = [
       },
       {
         question: "Do you help students register for District and State tournaments?",
-        answer: "Yes, S&A Academy is affiliated with district badminton associations and directly manages tournament entries, rankings, and coach accompaniment for registered athletes."
+        answer: "Yes, SBA Academy is affiliated with district badminton associations and directly manages tournament entries, rankings, and coach accompaniment for registered athletes."
       }
     ]
   },
@@ -221,7 +221,7 @@ export const PROGRAMS: Program[] = [
     badge: "Advanced & Ranking",
     tagline: "High-Intensity Pro Coaching for State & National Contenders",
     shortDescription: "Rigorous high-performance training program designed for state, national, and university tournament players seeking podium finishes.",
-    fullDescription: "The S&A Elite Squad is our signature high-performance academy pathway. Led by former national medalists and BWF Level 2 certified head coaches, this program delivers 3 to 4 hours daily of exhaustive tactical drilling, high-velocity multi-shuttle feeds, sports nutrition planning, mental resilience coaching, and national ranking tournament preparation.",
+    fullDescription: "The SBA Elite Squad is our signature high-performance academy pathway. Led by former national medalists and BWF Level 2 certified head coaches, this program delivers 3 to 4 hours daily of exhaustive tactical drilling, high-velocity multi-shuttle feeds, sports nutrition planning, mental resilience coaching, and national ranking tournament preparation.",
     targetAge: "10 to 22 Years (Selection by Trial Only)",
     skillLevel: "Advanced / Tournament Ranking",
     duration: "180 Minutes / Day (Intensive 6-day training)",
@@ -291,7 +291,7 @@ export const PROGRAMS: Program[] = [
     image: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=1200&auto=format&fit=crop",
     benefits: [
       "Rapid progress in 30 days — equivalent to a full quarter of regular weekend coaching",
-      "Free S&A Academy pro jersey, water bottle, and camp training kit",
+      "Free SBA Academy pro jersey, water bottle, and camp training kit",
       "Intensive fitness conditioning and agility development",
       "Fun end-of-camp tournament with trophies, medals, and parent showcase",
       "Priority admission discount for students continuing into regular year-round batches"
@@ -317,7 +317,7 @@ export const PROGRAMS: Program[] = [
     trainingHighlights: [
       "Guest appearances and clinics by former Indian international players",
       "Fun obstacle courses and speed radar smash speed tracking",
-      "Official S&A Camp Completion Certificate and detailed coach assessment card",
+      "Official SBA Camp Completion Certificate and detailed coach assessment card",
       "Nutritious sports hydration and fruit snack support"
     ],
     suitableFor: [

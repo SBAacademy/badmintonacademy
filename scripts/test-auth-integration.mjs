@@ -3,7 +3,7 @@ import assert from "assert";
 const BASE_URL = "http://localhost:3000";
 
 async function testAuthIntegration() {
-  console.log("=== S&A BADMINTON ACADEMY AUTH INTEGRATION TEST SUITE ===\n");
+  console.log("=== SBA BADMINTON ACADEMY AUTH INTEGRATION TEST SUITE ===\n");
 
   // 1. Test unauthenticated redirect
   console.log("[1] Testing unauthenticated redirect on /admin...");

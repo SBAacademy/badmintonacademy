@@ -191,7 +191,7 @@ export function CentreGallerySection({
           <div className="flex items-center gap-3">
             <span className="w-2 h-2 rounded-full bg-[#B8F000] animate-pulse shrink-0" />
             <span className="text-[#A8B0BA]">
-              All photos captured live at S&amp;A Badminton Academy centres in Kochi.
+              All photos captured live at SBA Badminton Academy centres in Kochi.
             </span>
           </div>
 

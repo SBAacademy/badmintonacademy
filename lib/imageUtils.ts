@@ -1,5 +1,5 @@
 /**
- * Utility functions for robust image URL handling across S&A Badminton Academy web components.
+ * Utility functions for robust image URL handling across SBA Badminton Academy web components.
  */
 
 export function normalizeImageSrc(src?: string | null): string {

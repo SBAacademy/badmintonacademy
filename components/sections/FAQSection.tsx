@@ -99,7 +99,7 @@ export function FAQSection({ category, limit, showSchema = true }: FAQSectionPro
           </div>
 
           <a
-            href={buildWhatsAppUrl({ customMessage: "Hello S&A Academy! I have a question regarding batch timings and fees." })}
+            href={buildWhatsAppUrl({ customMessage: "Hello SBA Academy! I have a question regarding batch timings and fees." })}
             target="_blank"
             rel="noopener noreferrer"
             className="px-5 py-2.5 bg-[#11161D] hover:bg-[#17212C] text-white text-xs font-bold uppercase tracking-wider flex items-center gap-2 border border-[#1F2937] transition-colors shrink-0"

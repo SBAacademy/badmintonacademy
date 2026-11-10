@@ -76,7 +76,7 @@ export async function POST(request: Request) {
       specialization: body.specialization || "Badminton Coaching & Conditioning",
       certifications: Array.isArray(body.certifications) ? body.certifications : [],
       achievements: Array.isArray(body.achievements) ? body.achievements : [],
-      bio: body.bio || "Dedicated badminton coach at S&A Badminton Academy.",
+      bio: body.bio || "Dedicated badminton coach at SBA Badminton Academy.",
       image: body.image ?? body.image_url,
       whatsappNumber: body.whatsappNumber ?? body.whatsapp_number,
       status: body.status === "INACTIVE" ? "INACTIVE" : "ACTIVE",

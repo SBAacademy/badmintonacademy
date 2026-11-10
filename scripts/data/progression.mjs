@@ -8,7 +8,7 @@ export const progressionArticles = [
     "publishDate": "October 06, 2024",
     "updatedAt": "2024-10-06T08:30:00.000Z",
     "author": "Coach Anand Varma",
-    "authorRole": "Head Coach, S&A Badminton Academy",
+    "authorRole": "Head Coach, SBA Badminton Academy",
     "tags": [
       "Improvement Habits",
       "Fast Progress",
@@ -142,7 +142,7 @@ export const progressionArticles = [
     "publishDate": "November 01, 2024",
     "updatedAt": "2024-11-01T08:45:00.000Z",
     "author": "Coach Anand Varma",
-    "authorRole": "Head Coach, S&A Badminton Academy",
+    "authorRole": "Head Coach, SBA Badminton Academy",
     "tags": [
       "Video Analysis",
       "Stroke Mechanics",
@@ -173,7 +173,7 @@ export const progressionArticles = [
       "- **Warm-Up Phase:** 5 minutes of dynamic joint mobilization and shadow movement.",
       "- **Drill Volume:** 4 to 6 sets of 15 to 20 focused repetitions with a 45-second recovery interval between sets.",
       "- **Pressure Match Application:** Conclude with 15 minutes of conditional match play where points scored using this specific technique earn double value.",
-      "At S & A Badminton Academy, our coaching rigs feature high-definition slow-motion video capture to provide athletes with visual proof of their progress. Explore our [Curriculum](/programs)."
+      "At SBA Badminton Academy, our coaching rigs feature high-definition slow-motion video capture to provide athletes with visual proof of their progress. Explore our [Curriculum](/programs)."
     ]
   },
   {
@@ -216,7 +216,7 @@ export const progressionArticles = [
       "- **Warm-Up Phase:** 5 minutes of dynamic joint mobilization and shadow movement.",
       "- **Drill Volume:** 4 to 6 sets of 15 to 20 focused repetitions with a 45-second recovery interval between sets.",
       "- **Pressure Match Application:** Conclude with 15 minutes of conditional match play where points scored using this specific technique earn double value.",
-      "Once you identify their weakest link, direct 60% of your tactical pressure there. Learn championship tactics at [S & A Badminton Academy](/about)."
+      "Once you identify their weakest link, direct 60% of your tactical pressure there. Learn championship tactics at [SBA Badminton Academy](/about)."
     ]
   },
   {
@@ -314,7 +314,7 @@ export const progressionArticles = [
     "publishDate": "December 07, 2024",
     "updatedAt": "2024-12-07T08:15:00.000Z",
     "author": "Coach Anand Varma",
-    "authorRole": "Head Coach, S&A Badminton Academy",
+    "authorRole": "Head Coach, SBA Badminton Academy",
     "tags": [
       "Unforced Errors",
       "High Percentage Badminton",
@@ -478,7 +478,7 @@ export const progressionArticles = [
       "- **Warm-Up Phase:** 5 minutes of dynamic joint mobilization and shadow movement.",
       "- **Drill Volume:** 4 to 6 sets of 15 to 20 focused repetitions with a 45-second recovery interval between sets.",
       "- **Pressure Match Application:** Conclude with 15 minutes of conditional match play where points scored using this specific technique earn double value.",
-      "Experience our warm, disciplined sporting environment at [S & A Badminton Academy](/about)."
+      "Experience our warm, disciplined sporting environment at [SBA Badminton Academy](/about)."
     ]
   }
 ];

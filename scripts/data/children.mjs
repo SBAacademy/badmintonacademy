@@ -57,7 +57,7 @@ export const childrenArticles = [
     "publishDate": "October 14, 2024",
     "updatedAt": "2024-10-14T09:00:00.000Z",
     "author": "Coach Anand Varma",
-    "authorRole": "Head Coach, S&A Badminton Academy",
+    "authorRole": "Head Coach, SBA Badminton Academy",
     "tags": [
       "Benefits for Kids",
       "Physical Fitness",
@@ -198,7 +198,7 @@ export const childrenArticles = [
     "publishDate": "November 07, 2024",
     "updatedAt": "2024-11-07T08:15:00.000Z",
     "author": "Coach Anand Varma",
-    "authorRole": "Head Coach, S&A Badminton Academy",
+    "authorRole": "Head Coach, SBA Badminton Academy",
     "tags": [
       "Academics and Sports",
       "Student Athletes",
@@ -253,7 +253,7 @@ export const childrenArticles = [
     "image": "/images/badminton-junior.jpg",
     "status": "PUBLISHED",
     "content": [
-      "Young children learn through play, not through long tactical lectures. At S & A Badminton Academy, our certified youth coaches incorporate game-based learning into every foundational session to keep smiles wide and energy high.",
+      "Young children learn through play, not through long tactical lectures. At SBA Badminton Academy, our certified youth coaches incorporate game-based learning into every foundational session to keep smiles wide and energy high.",
       "### Game 1: The 'Feed the Shark' Target Game",
       "Place a clean equipment basket in the center of the court. Children stand 3 meters away and attempt to drop-serve shuttlecocks into the 'shark's mouth'. Builds touch, release consistency, and diagonal aim.",
       "### Game 2: The Shuttle Balance Race",
@@ -334,7 +334,7 @@ export const childrenArticles = [
     "publishDate": "November 28, 2024",
     "updatedAt": "2024-11-28T11:20:00.000Z",
     "author": "Coach Anand Varma",
-    "authorRole": "Head Coach, S&A Badminton Academy",
+    "authorRole": "Head Coach, SBA Badminton Academy",
     "tags": [
       "Junior Nutrition",
       "Hydration for Kids",
@@ -371,7 +371,7 @@ export const childrenArticles = [
       "- **Warm-Up Phase:** 5 minutes of dynamic joint mobilization and shadow movement.",
       "- **Drill Volume:** 4 to 6 sets of 15 to 20 focused repetitions with a 45-second recovery interval between sets.",
       "- **Pressure Match Application:** Conclude with 15 minutes of conditional match play where points scored using this specific technique earn double value.",
-      "Learn more holistic athlete health guidelines at [S & A Badminton Academy](/about)."
+      "Learn more holistic athlete health guidelines at [SBA Badminton Academy](/about)."
     ]
   },
   {
@@ -463,19 +463,19 @@ export const childrenArticles = [
       "- **Warm-Up Phase:** 5 minutes of dynamic joint mobilization and shadow movement.",
       "- **Drill Volume:** 4 to 6 sets of 15 to 20 focused repetitions with a 45-second recovery interval between sets.",
       "- **Pressure Match Application:** Conclude with 15 minutes of conditional match play where points scored using this specific technique earn double value.",
-      "Experience our holistic family-first sporting community at [S & A Badminton Academy](/contact)."
+      "Experience our holistic family-first sporting community at [SBA Badminton Academy](/contact)."
     ]
   },
   {
     "slug": "junior-badminton-development-stages-from-fun-to-podium",
     "title": "The Junior Badminton Development Pathway: From First Racket to Tournament Podium",
-    "excerpt": "An inside look at S&A Badminton Academy's 4-stage youth pathway: Foundation, Development, Advanced Squad, and State Championship representation.",
+    "excerpt": "An inside look at SBA Badminton Academy's 4-stage youth pathway: Foundation, Development, Advanced Squad, and State Championship representation.",
     "category": "Children / Junior Badminton",
     "readTime": "8 min read",
     "publishDate": "December 19, 2024",
     "updatedAt": "2024-12-19T09:10:00.000Z",
     "author": "Coach Anand Varma",
-    "authorRole": "Head Coach, S&A Badminton Academy",
+    "authorRole": "Head Coach, SBA Badminton Academy",
     "tags": [
       "Development Pathway",
       "Youth Progression",

@@ -24,7 +24,7 @@ function prompt(question) {
 
 async function setupSuperAdmin() {
   console.log("\n========================================================");
-  console.log("   S&A BADMINTON ACADEMY — SUPER ADMIN SETUP UTILITY     ");
+  console.log("   SBA BADMINTON ACADEMY — SUPER ADMIN SETUP UTILITY     ");
   console.log("========================================================\n");
 
   const databaseUrl = process.env.DATABASE_URL;

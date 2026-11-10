@@ -8,7 +8,7 @@ export const drillsArticles = [
     "publishDate": "October 09, 2024",
     "updatedAt": "2024-10-09T08:00:00.000Z",
     "author": "Coach Anand Varma",
-    "authorRole": "Head Coach, S&A Badminton Academy",
+    "authorRole": "Head Coach, SBA Badminton Academy",
     "tags": [
       "Footwork Drills",
       "6-Corner Footwork",
@@ -156,7 +156,7 @@ export const drillsArticles = [
     "publishDate": "October 28, 2024",
     "updatedAt": "2024-10-28T11:00:00.000Z",
     "author": "Coach Anand Varma",
-    "authorRole": "Head Coach, S&A Badminton Academy",
+    "authorRole": "Head Coach, SBA Badminton Academy",
     "tags": [
       "Shadow Badminton",
       "Footwork Rhythm",
@@ -244,7 +244,7 @@ export const drillsArticles = [
     "publishDate": "November 11, 2024",
     "updatedAt": "2024-11-11T09:30:00.000Z",
     "author": "Coach Anand Varma",
-    "authorRole": "Head Coach, S&A Badminton Academy",
+    "authorRole": "Head Coach, SBA Badminton Academy",
     "tags": [
       "Net Tumbling",
       "Spin Drills",
@@ -318,7 +318,7 @@ export const drillsArticles = [
       "- **Warm-Up Phase:** 5 minutes of dynamic joint mobilization and shadow movement.",
       "- **Drill Volume:** 4 to 6 sets of 15 to 20 focused repetitions with a 45-second recovery interval between sets.",
       "- **Pressure Match Application:** Conclude with 15 minutes of conditional match play where points scored using this specific technique earn double value.",
-      "Experience competitive tactical sparring at [S & A Badminton Academy](/)."
+      "Experience competitive tactical sparring at [SBA Badminton Academy](/)."
     ]
   },
   {
@@ -372,7 +372,7 @@ export const drillsArticles = [
     "publishDate": "December 02, 2024",
     "updatedAt": "2024-12-02T08:30:00.000Z",
     "author": "Coach Anand Varma",
-    "authorRole": "Head Coach, S&A Badminton Academy",
+    "authorRole": "Head Coach, SBA Badminton Academy",
     "tags": [
       "Defense to Attack",
       "Counter Attack",
@@ -501,7 +501,7 @@ export const drillsArticles = [
     "publishDate": "December 23, 2024",
     "updatedAt": "2024-12-23T08:15:00.000Z",
     "author": "Coach Anand Varma",
-    "authorRole": "Head Coach, S&A Badminton Academy",
+    "authorRole": "Head Coach, SBA Badminton Academy",
     "tags": [
       "Half Court Singles",
       "Accuracy Drills",
@@ -553,7 +553,7 @@ export const drillsArticles = [
     "image": "/images/training-coach.jpg",
     "status": "PUBLISHED",
     "content": [
-      "Practicing your serve should never be an afterthought during the final 5 minutes of training. At S & A Badminton Academy, players complete 50 dedicated target serves before hitting their first rally shuttle.",
+      "Practicing your serve should never be an afterthought during the final 5 minutes of training. At SBA Badminton Academy, players complete 50 dedicated target serves before hitting their first rally shuttle.",
       "### The Target Sheet Setup",
       "- Place an A4 sheet of paper or plastic disc right on the intersection of the center line and short service line.",
       "- Aim to hit 20 out of 25 serves landing directly on or within 10 cm of the target sheet.",
@@ -627,7 +627,7 @@ export const drillsArticles = [
     "publishDate": "January 13, 2025",
     "updatedAt": "2025-01-13T11:30:00.000Z",
     "author": "Coach Anand Varma",
-    "authorRole": "Head Coach, S&A Badminton Academy",
+    "authorRole": "Head Coach, SBA Badminton Academy",
     "tags": [
       "Tournament Prep",
       "Match Simulation",
@@ -637,7 +637,7 @@ export const drillsArticles = [
     "image": "/images/badminton-arena.jpg",
     "status": "PUBLISHED",
     "content": [
-      "Walking onto a tournament court in front of cheering crowds and strict umpires feels vastly different from training in a comfortable club setting. At S & A Badminton Academy, we simulate real tournament stress during weekend match preparation.",
+      "Walking onto a tournament court in front of cheering crowds and strict umpires feels vastly different from training in a comfortable club setting. At SBA Badminton Academy, we simulate real tournament stress during weekend match preparation.",
       "### The '18-All Pressure Match'",
       "Instead of playing games from 0-0, athletes begin every practice game tied at **18-18**. Every unforced error is magnified, teaching players to execute high-percentage shots under extreme physiological stress.",
       "### The 'Handicap Deficit' Challenge",
@@ -699,7 +699,7 @@ export const drillsArticles = [
       "- **Warm-Up Phase:** 5 minutes of dynamic joint mobilization and shadow movement.",
       "- **Drill Volume:** 4 to 6 sets of 15 to 20 focused repetitions with a 45-second recovery interval between sets.",
       "- **Pressure Match Application:** Conclude with 15 minutes of conditional match play where points scored using this specific technique earn double value.",
-      "Learn more athletic recovery tips from our team at [S & A Badminton Academy](/about)."
+      "Learn more athletic recovery tips from our team at [SBA Badminton Academy](/about)."
     ]
   }
 ];

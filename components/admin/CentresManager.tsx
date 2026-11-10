@@ -821,7 +821,7 @@ export function CentresManager() {
                         required
                         value={form.name}
                         onChange={(e) => handleNameChange(e.target.value)}
-                        placeholder="e.g. S & A Badminton Academy — Kumbalanghi"
+                        placeholder="e.g. SBA Badminton Academy — Kumbalanghi"
                         className="w-full px-3.5 h-10 bg-[#0D111A] border border-slate-800 rounded-xl text-white text-xs placeholder-slate-500 focus:outline-none focus:border-[#B8F000] focus:ring-1 focus:ring-[#B8F000]/30 transition-all font-mono"
                       />
                     </div>

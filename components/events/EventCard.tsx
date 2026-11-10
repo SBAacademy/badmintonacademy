@@ -113,7 +113,7 @@ export function EventCard({ event, featuredLayout = false }: EventCardProps) {
               </Link>
 
               <a
-                href={`https://wa.me/${(event.contact || "917907655513").replace(/[^0-9]/g, "")}?text=${encodeURIComponent(`Hi S&A Badminton Academy, I would like to enquire about ${event.title} on ${formatEventDate(event.eventDate)}.`)}`}
+                href={`https://wa.me/${(event.contact || "917907655513").replace(/[^0-9]/g, "")}?text=${encodeURIComponent(`Hi SBA Badminton Academy, I would like to enquire about ${event.title} on ${formatEventDate(event.eventDate)}.`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-5 py-3.5 bg-[#161F2C] hover:bg-[#1E293B] border border-[#1F2937] hover:border-[#25D366]/60 text-white font-bold text-xs uppercase tracking-wider rounded-xl transition-colors group/wa"
@@ -207,7 +207,7 @@ export function EventCard({ event, featuredLayout = false }: EventCardProps) {
           </Link>
 
           <a
-            href={`https://wa.me/${(event.contact || "917907655513").replace(/[^0-9]/g, "")}?text=${encodeURIComponent(`Hi S&A Badminton Academy, I would like to enquire about ${event.title} on ${formatEventDate(event.eventDate)}.`)}`}
+            href={`https://wa.me/${(event.contact || "917907655513").replace(/[^0-9]/g, "")}?text=${encodeURIComponent(`Hi SBA Badminton Academy, I would like to enquire about ${event.title} on ${formatEventDate(event.eventDate)}.`)}`}
             target="_blank"
             rel="noopener noreferrer"
             className="text-[11px] font-mono text-[#A8B0BA] hover:text-[#25D366] inline-flex items-center gap-1 uppercase transition-colors"

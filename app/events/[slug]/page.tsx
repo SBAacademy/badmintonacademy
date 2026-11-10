@@ -42,19 +42,19 @@ export async function generateMetadata({
 
   if (!event) {
     return {
-      title: "Event Not Found | S&A Badminton Academy",
+      title: "Event Not Found | SBA Badminton Academy",
     };
   }
 
   // Section 8: Target title format
-  // Academy Tournament 2026 | Badminton Tournament in Kochi | S&A Badminton Academy
-  const title = `${event.title} | Badminton Tournament in Kochi | S&A Badminton Academy`;
+  // Academy Tournament 2026 | Badminton Tournament in Kochi | SBA Badminton Academy
+  const title = `${event.title} | Badminton Tournament in Kochi | SBA Badminton Academy`;
 
   // Section 8: Dynamic meta description using real event information
-  // Example: Academy Tournament 2026 at S&A Badminton Academy, Kumbalanghi, Kochi. View tournament details, date, venue and event information.
+  // Example: Academy Tournament 2026 at SBA Badminton Academy, Kumbalanghi, Kochi. View tournament details, date, venue and event information.
   const centrePart = event.centreName || (event.venue.toLowerCase().includes("kumbalanghi") ? "Kumbalanghi" : event.venue.toLowerCase().includes("kadavanthra") ? "Kadavanthra" : "");
   const venueLocation = centrePart ? `${centrePart}, Kochi` : event.venue;
-  const description = `${event.title} at S&A Badminton Academy, ${venueLocation}. View tournament details, date, venue and event information.`;
+  const description = `${event.title} at SBA Badminton Academy, ${venueLocation}. View tournament details, date, venue and event information.`;
 
   const canonicalUrl = `${SITE_URL}/events/${event.slug}`;
   const ogImage = event.image || `${SITE_URL}/images/hero-athlete.jpg`;
@@ -109,7 +109,7 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
     : event.eventDate;
 
   const venueName = event.centreName
-    ? `S&A Badminton Academy — ${event.centreName}`
+    ? `SBA Badminton Academy — ${event.centreName}`
     : event.venue;
 
   // JSON-LD SportsEvent Schema Markup
@@ -156,7 +156,7 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
 
   const whatsappInquiryUrl = buildWhatsAppUrl({
     phone: event.contact ? event.contact.replace(/[^0-9]/g, "") : undefined,
-    customMessage: `Hello S&A Academy, I would like more information/registration details regarding "${event.title}" scheduled on ${formatEventDate(event.eventDate)}.`,
+    customMessage: `Hello SBA Academy, I would like more information/registration details regarding "${event.title}" scheduled on ${formatEventDate(event.eventDate)}.`,
   });
 
   return (
@@ -194,8 +194,8 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
             </span>
             <span className="text-xs font-mono font-bold tracking-wider text-[#A8B0BA] uppercase">
               {event.centreName
-                ? `S&A BADMINTON ACADEMY — ${event.centreName.toUpperCase()}`
-                : "S&A BADMINTON ACADEMY"}
+                ? `SBA BADMINTON ACADEMY — ${event.centreName.toUpperCase()}`
+                : "SBA BADMINTON ACADEMY"}
             </span>
           </div>
 
@@ -259,7 +259,7 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
                   <span>Event Overview &amp; Format</span>
                 </h2>
                 <div className="text-sm sm:text-base text-[#A8B0BA] leading-relaxed whitespace-pre-line font-normal space-y-4">
-                  {event.description || "Official tournament hosted and organized under S & A Badminton Academy standards. Contact the admissions desk for category entries, reporting times, and draw announcements."}
+                  {event.description || "Official tournament hosted and organized under SBA Badminton Academy standards. Contact the admissions desk for category entries, reporting times, and draw announcements."}
                 </div>
               </div>
 

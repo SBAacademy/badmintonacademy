@@ -49,7 +49,7 @@ export function HeroSection({ initialCentres }: { initialCentres?: Array<{ short
         <div className="relative w-full h-full">
           <Image
             src="/images/hero-athlete.jpg"
-            alt="Elite badminton athlete executing an explosive jump smash at S&A Badminton Academy Kochi"
+            alt="Elite badminton athlete executing an explosive jump smash at SBA Badminton Academy Kochi"
             fill
             priority
             className="object-cover object-right lg:object-center opacity-85 transition-transform duration-700 hover:scale-[1.02]"
@@ -86,7 +86,7 @@ export function HeroSection({ initialCentres }: { initialCentres?: Array<{ short
               01 // PERFORMANCE
             </span>
             <span className="text-[11px] sm:text-xs font-mono tracking-[0.25em] text-[#A8B0BA] uppercase">
-              S&amp;A BADMINTON ACADEMY • KOCHI
+              SBA BADMINTON ACADEMY • KOCHI
             </span>
           </div>
 

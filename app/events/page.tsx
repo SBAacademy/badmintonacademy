@@ -9,9 +9,9 @@ import { FinalCTA } from "@/components/sections/FinalCTA";
 export const revalidate = 300;
 
 export const metadata: Metadata = createMetadata({
-  title: "Badminton Tournaments & Events in Kochi | S & A Badminton Academy",
+  title: "Badminton Tournaments & Events in Kochi | SBA Badminton Academy",
   description:
-    "Explore upcoming badminton tournaments, championships, holiday training camps, and workshops across S & A Badminton Academy centres in Kadavanthra, Kumbalanghi, Maradu, Palluruthy, and Chullikal.",
+    "Explore upcoming badminton tournaments, championships, holiday training camps, and workshops across SBA Badminton Academy centres in Kadavanthra, Kumbalanghi, Maradu, Palluruthy, and Chullikal.",
   path: "/events",
   keywords: [
     "badminton tournaments in Kochi",

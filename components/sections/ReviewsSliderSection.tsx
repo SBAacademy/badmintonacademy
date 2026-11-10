@@ -174,7 +174,7 @@ export function ReviewsSliderSection({ initialReviews }: ReviewsSliderSectionPro
                     {current.name}
                   </h3>
                   <div className="text-xs font-mono text-[#B8F000] uppercase tracking-wider">
-                    {current.branch || "S&A Badminton Academy"}
+                    {current.branch || "SBA Badminton Academy"}
                   </div>
                 </div>
 

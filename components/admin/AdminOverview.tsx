@@ -229,7 +229,7 @@ export function AdminOverview({
                 const isNew = lead.status === "NEW";
                 const phone = getCleanPhone(lead.phone);
                 const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(
-                  `Hello ${lead.name}, this is S&A Badminton Academy Kochi. We received your inquiry and would like to schedule a free trial session for you!`
+                  `Hello ${lead.name}, this is SBA Badminton Academy Kochi. We received your inquiry and would like to schedule a free trial session for you!`
                 )}`;
 
                 return (

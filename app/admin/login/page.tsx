@@ -102,7 +102,7 @@ function AdminLoginForm() {
             <ShieldCheck className="w-7 h-7 relative z-10" />
           </div>
           <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-            S&amp;A Badminton Academy
+            SBA Badminton Academy
           </h1>
           <p className="text-sm text-slate-400 mt-1 font-medium">
             Administrative Management Portal
@@ -241,7 +241,7 @@ function AdminLoginForm() {
             Kochi Centres: Kadavanthra &bull; Kumbalanghi &bull; Maradu &bull; Palluruthy &bull; Chullikal
           </p>
           <p className="text-[11px] text-slate-600">
-            Authorized S&amp;A Badminton Academy staff only.
+            Authorized SBA Badminton Academy staff only.
           </p>
         </div>
       </div>

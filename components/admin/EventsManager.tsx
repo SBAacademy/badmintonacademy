@@ -80,7 +80,7 @@ export function EventsManager() {
     description: "",
     eventType: "TOURNAMENT",
     eventDate: new Date().toISOString().split("T")[0],
-    venue: "S & A Badminton Arena, Kadavanthra",
+    venue: "SBA Badminton Arena, Kadavanthra",
     centreSlug: "",
     image: "",
     contact: "+91 79076 55513",
@@ -134,7 +134,7 @@ export function EventsManager() {
       description: "",
       eventType: "TOURNAMENT",
       eventDate: today,
-      venue: centres.length > 0 ? centres[0].name : "S & A Badminton Arena, Kadavanthra",
+      venue: centres.length > 0 ? centres[0].name : "SBA Badminton Arena, Kadavanthra",
       centreSlug: centres.length > 0 ? centres[0].slug : "",
       image: "/images/badminton-arena.jpg",
       contact: "+91 79076 55513",
@@ -650,7 +650,7 @@ export function EventsManager() {
                 <input
                   type="text"
                   required
-                  placeholder="e.g. S&A Kochi Junior Badminton Championship 2026"
+                  placeholder="e.g. SBA Kochi Junior Badminton Championship 2026"
                   value={form.title || ""}
                   onChange={(e) => handleTitleChange(e.target.value)}
                   className="w-full bg-[#161F2C] border border-[#1F2937] text-white px-4 py-3 rounded-xl focus:outline-none focus:border-[#B8F000] text-sm font-medium"
@@ -717,7 +717,7 @@ export function EventsManager() {
                   <input
                     type="text"
                     required
-                    placeholder="e.g. S & A Badminton Academy, Kumbalanghi"
+                    placeholder="e.g. SBA Badminton Academy, Kumbalanghi"
                     value={form.venue || ""}
                     onChange={(e) => setForm({ ...form, venue: e.target.value })}
                     className="w-full bg-[#161F2C] border border-[#1F2937] text-white px-4 py-2.5 rounded-xl text-xs focus:outline-none focus:border-[#B8F000]"

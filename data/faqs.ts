@@ -9,7 +9,7 @@ export const FAQS: FAQItem[] = [
   {
     id: "faq-1",
     category: "Admissions",
-    question: "What age can children start badminton coaching at S&A Academy?",
+    question: "What age can children start badminton coaching at SBA Academy?",
     answer: "Children can start in our Kids Foundation Program as young as 5 years old. The curriculum at this age focuses on fun hand-eye coordination games, agility, and natural racket handling before progressing to formal strokes."
   },
   {
@@ -39,7 +39,7 @@ export const FAQS: FAQItem[] = [
   {
     id: "faq-6",
     category: "Courts & Infrastructure",
-    question: "What type of court flooring does S&A Badminton Academy use?",
+    question: "What type of court flooring does SBA Badminton Academy use?",
     answer: "All our centres use BWF Grade-1 certified multi-layer synthetic court mats laid over shock-absorbing sprung wooden subflooring. This dual-cushion design absorbs up to 60% of joint impact, safeguarding players' knees and ankles."
   },
   {

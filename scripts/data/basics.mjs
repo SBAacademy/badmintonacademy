@@ -8,7 +8,7 @@ export const basicsArticles = [
     "publishDate": "October 02, 2024",
     "updatedAt": "2024-10-02T10:00:00.000Z",
     "author": "Coach Anand Varma",
-    "authorRole": "Head Coach, S&A Badminton Academy",
+    "authorRole": "Head Coach, SBA Badminton Academy",
     "tags": [
       "Badminton Basics",
       "Beginner Guide",
@@ -33,7 +33,7 @@ export const basicsArticles = [
       "If the score reaches 20-all, the side that gains a two-point lead first wins the game. If the score climbs to 29-all, the side scoring the 30th point wins outright.",
       "### How to Transition from Casual Play to Structured Training",
       "Many enthusiasts in Kochi and across Kerala begin playing outdoor recreationally during cool evenings. However, moving indoors onto certified wooden-sprung synthetic courts and receiving structured guidance makes an enormous difference to biomechanics, joint longevity, and shot consistency.",
-      "At [S & A Badminton Academy](/), beginner players are introduced to proper grip mechanics and foundational split-step footwork early, preventing bad habits that become difficult to unlearn later. Explore our [Kids Foundation Program](/programs/kids-badminton-coaching) or [Adult Coaching Sessions](/programs/adult-badminton-coaching) to begin your structured training journey."
+      "At [SBA Badminton Academy](/), beginner players are introduced to proper grip mechanics and foundational split-step footwork early, preventing bad habits that become difficult to unlearn later. Explore our [Kids Foundation Program](/programs/kids-badminton-coaching) or [Adult Coaching Sessions](/programs/adult-badminton-coaching) to begin your structured training journey."
     ]
   },
   {
@@ -86,7 +86,7 @@ export const basicsArticles = [
     "publishDate": "October 16, 2024",
     "updatedAt": "2024-10-16T11:00:00.000Z",
     "author": "Coach Anand Varma",
-    "authorRole": "Head Coach, S&A Badminton Academy",
+    "authorRole": "Head Coach, SBA Badminton Academy",
     "tags": [
       "Badminton Scoring",
       "21 Points",
@@ -162,7 +162,7 @@ export const basicsArticles = [
     "publishDate": "October 29, 2024",
     "updatedAt": "2024-10-29T14:15:00.000Z",
     "author": "Coach Anand Varma",
-    "authorRole": "Head Coach, S&A Badminton Academy",
+    "authorRole": "Head Coach, SBA Badminton Academy",
     "tags": [
       "Court Dimensions",
       "Net Height",
@@ -192,7 +192,7 @@ export const basicsArticles = [
       "- **Side Tramlines (Alleys):** The 0.46-meter (1.5 feet) strip on either side of the court that is OUT for singles but IN for doubles.",
       "### Ceiling Height & Lighting Standards",
       "A frequently overlooked aspect of badminton infrastructure is vertical clearance. BWF Level 1 tournament venues require a minimum clear ceiling height of **12 meters**, while commercial club standards should not fall below **9 meters**. Low beams or low-hanging LED fixtures interfere with high clears and defensive lifts.",
-      "At S & A Badminton Academy's venues—such as our central facility in [Kadavanthra](/kadavanthra)—courts feature professional 9.5-meter vertical clearance, glare-free high-bay lighting, and sprung wooden timber under synthetic tournament mats for maximum shock absorption."
+      "At SBA Badminton Academy's venues—such as our central facility in [Kadavanthra](/kadavanthra)—courts feature professional 9.5-meter vertical clearance, glare-free high-bay lighting, and sprung wooden timber under synthetic tournament mats for maximum shock absorption."
     ]
   },
   {
@@ -229,7 +229,7 @@ export const basicsArticles = [
       "Practice the universal **V-Grip (Forehand Grip)**: hold the racket handle as if shaking hands with a friend. The 'V' formed between your thumb and index finger should align with the bevel of the handle. This grip unlocks full forearm pronation and supination.",
       "### Step 4: Seek Structured Coaching Early",
       "Playing uncoached for two years reinforces mechanical compensations that can take months of corrective drilling to untangle. Joining a structured academy for just 3 to 6 months establishes correct footwork split-steps, overhead mechanics, and tactical awareness.",
-      "Check out S&A Badminton Academy's introductory batches across [Kadavanthra](/kadavanthra), [Kumbalanghi](/kumbalanghi), and [Maradu](/maradu) or submit an inquiry through our [Contact Page](/contact)."
+      "Check out SBA Badminton Academy's introductory batches across [Kadavanthra](/kadavanthra), [Kumbalanghi](/kumbalanghi), and [Maradu](/maradu) or submit an inquiry through our [Contact Page](/contact)."
     ]
   },
   {
@@ -241,7 +241,7 @@ export const basicsArticles = [
     "publishDate": "November 12, 2024",
     "updatedAt": "2024-11-12T11:20:00.000Z",
     "author": "Coach Anand Varma",
-    "authorRole": "Head Coach, S&A Badminton Academy",
+    "authorRole": "Head Coach, SBA Badminton Academy",
     "tags": [
       "Badminton Glossary",
       "Terminology",
@@ -354,7 +354,7 @@ export const basicsArticles = [
       "### Mistake 5: Lunging with the Wrong Foot Forward",
       "Lunging to the net with your non-dominant foot leads to awkward balance, restricted reach, and severe knee strain.",
       "**The Fix:** For right-handed players, the right foot must always lead the final lunge step with a smooth heel-to-toe ground contact. For left-handers, lead with the left foot.",
-      "Eliminate these technical roadblocks with guided feedback from our mentors at [S & A Badminton Academy](/coaches)."
+      "Eliminate these technical roadblocks with guided feedback from our mentors at [SBA Badminton Academy](/coaches)."
     ]
   },
   {
@@ -366,7 +366,7 @@ export const basicsArticles = [
     "publishDate": "December 03, 2024",
     "updatedAt": "2024-10-03T08:30:00.000Z",
     "author": "Coach Anand Varma",
-    "authorRole": "Head Coach, S&A Badminton Academy",
+    "authorRole": "Head Coach, SBA Badminton Academy",
     "tags": [
       "Service Rules",
       "Serving Lines",
@@ -417,7 +417,7 @@ export const basicsArticles = [
       "Stepping onto an indoor court and immediately smashing a cold shuttlecock is the number one cause of shoulder impingement, Achilles tendonitis, and hamstring strains. Badminton demands rapid acceleration, deceleration, and high-impact torsional rotation that cold muscles cannot safely accommodate.",
       "### Why Static Stretching Before Play Is Obsolete",
       "Traditional static stretching (holding a muscle in a lengthened position for 30 seconds) actually reduces explosive muscle force output when performed before high-velocity sports. Pre-game preparation must focus on **Dynamic Mobility**—moving joints through their active range of motion while gradually increasing heart rate and core temperature.",
-      "### The 10-Minute S&A Academy Pre-Court Warm-Up Routine",
+      "### The 10-Minute SBA Academy Pre-Court Warm-Up Routine",
       "Follow this sequence before every training session or match:",
       "#### Phase 1: General Cardiovascular Elevation (3 Minutes)",
       "- **Light Court Jogging:** 2 laps around the court perimeter.",

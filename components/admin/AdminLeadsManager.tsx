@@ -296,7 +296,7 @@ export function AdminLeadsManager({
           {filteredLeads.map((lead) => {
             const phone = getCleanPhone(lead.phone);
             const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(
-              `Hello ${lead.name}, this is S&A Badminton Academy Kochi regarding your badminton coaching inquiry. We'd love to schedule your free trial session!`
+              `Hello ${lead.name}, this is SBA Badminton Academy Kochi regarding your badminton coaching inquiry. We'd love to schedule your free trial session!`
             )}`;
 
             return (
@@ -418,7 +418,7 @@ export function AdminLeadsManager({
               {filteredLeads.map((lead) => {
                 const phone = getCleanPhone(lead.phone);
                 const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(
-                  `Hello ${lead.name}, this is S&A Badminton Academy Kochi regarding your badminton coaching inquiry. We'd love to schedule your free trial session!`
+                  `Hello ${lead.name}, this is SBA Badminton Academy Kochi regarding your badminton coaching inquiry. We'd love to schedule your free trial session!`
                 )}`;
 
                 return (

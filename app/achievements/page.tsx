@@ -6,8 +6,8 @@ import { createMetadata } from "@/lib/seo";
 import { FinalCTA } from "@/components/sections/FinalCTA";
 
 export const metadata: Metadata = createMetadata({
-  title: "Tournament Achievements & State Medals | S & A Badminton Academy",
-  description: "Explore the tournament victories, state and district championship medals won by athletes of S & A Badminton Academy Kochi.",
+  title: "Tournament Achievements & State Medals | SBA Badminton Academy",
+  description: "Explore the tournament victories, state and district championship medals won by athletes of SBA Badminton Academy Kochi.",
   path: "/achievements",
   keywords: [
     "badminton achievements Kochi",

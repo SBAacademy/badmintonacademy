@@ -253,7 +253,7 @@ The official, production-active SBA network comprises strictly the following **f
 
 #### 1. Kadavanthra Branch (Central Kochi Headquarters)
 - **URL:** [https://soorajbadmintonacademy.in/kadavanthra](https://soorajbadmintonacademy.in/kadavanthra)
-- **Physical Address:** S&A Sports Arena, Near Rajiv Gandhi Indoor Stadium, Kadavanthra, Kochi, Kerala 682020
+- **Physical Address:** SBA Sports Arena, Near Rajiv Gandhi Indoor Stadium, Kadavanthra, Kochi, Kerala 682020
 - **Phone:** `+91 79076 55513` | **WhatsApp:** `+91 90746 80420`
 - **Court Infrastructure:** 4 Active BWF-Standard Courts (Sprung Wooden Cushion & Synthetic Mat)
 - **Neighborhoods Served:** Panampilly Nagar, Girinagar, Elamkulam, Vyttila, Thevara, MG Road, Ernakulam South
@@ -483,7 +483,7 @@ For general website queries, floating action buttons, and header triggers, traff
 ### 11.3 Tier 3: Pre-Formatted Trial Booking Handoff
 When an enquiry form is submitted, the system compiles a structured message with parameters:
 ```
-🏸 *S&A BADMINTON ACADEMY — FREE TRIAL BOOKING*
+🏸 *SBA BADMINTON ACADEMY — FREE TRIAL BOOKING*
 --------------------------------------------------
 👤 *Name:* [Visitor Name]
 📞 *Phone:* [Visitor Phone]

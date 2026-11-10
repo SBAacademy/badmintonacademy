@@ -9,8 +9,8 @@ import { ACADEMY_DATA } from "@/data/academy";
 import { FinalCTA } from "@/components/sections/FinalCTA";
 
 export const metadata: Metadata = createMetadata({
-  title: "About S & A Badminton Academy | Coaching Philosophy & Infrastructure",
-  description: "Learn about S & A Badminton Academy's vision, BWF certified coaches, world-class synthetic sprung wooden courts, and our athlete development philosophy in Kochi.",
+  title: "About SBA Badminton Academy | Coaching Philosophy & Infrastructure",
+  description: "Learn about SBA Badminton Academy's vision, BWF certified coaches, world-class synthetic sprung wooden courts, and our athlete development philosophy in Kochi.",
   path: "/about",
   keywords: [
     "best badminton academy in Kochi",
@@ -32,7 +32,7 @@ export default function AboutPage() {
         <div className="pt-8 pb-16 border-b border-[#1F2937] space-y-6">
           <div className="flex items-center gap-3">
             <span className="px-2 py-0.5 text-[10px] font-mono font-black tracking-widest text-[#07090D] bg-[#B8F000] uppercase">
-              ABOUT // S&amp;A
+              ABOUT // SBA
             </span>
             <span className="text-[11px] font-mono tracking-[0.25em] text-[#A8B0BA] uppercase">
               ATHLETIC IDENTITY &amp; FOUNDATION
@@ -45,7 +45,7 @@ export default function AboutPage() {
           </h1>
 
           <p className="text-base sm:text-xl text-[#A8B0BA] max-w-2xl font-normal leading-relaxed">
-            Founded in {ACADEMY_DATA.foundedYear}, S&amp;A Badminton Academy was built with a singular mission: to provide world-class, injury-safe badminton coaching in Kerala, bridging the gap between casual recreation and elite competitive sports science.
+            Founded in {ACADEMY_DATA.foundedYear}, SBA Badminton Academy was built with a singular mission: to provide world-class, injury-safe badminton coaching in Kerala, bridging the gap between casual recreation and elite competitive sports science.
           </p>
         </div>
 
@@ -54,7 +54,7 @@ export default function AboutPage() {
           <div className="relative aspect-[21/9] w-full overflow-hidden bg-[#0B0F14] border border-[#1F2937]">
             <Image
               src="/images/badminton-arena.jpg"
-              alt="S&A Badminton Academy Arena Kochi"
+              alt="SBA Badminton Academy Arena Kochi"
               fill
               className="object-cover filter contrast-110"
               sizes="100vw"
@@ -89,7 +89,7 @@ export default function AboutPage() {
               Badminton in Kerala has unmatched grassroots passion. However, for decades, players lacked systematic biomechanical instruction and safe court infrastructure. Most training took place on hard concrete or tiles, causing premature meniscus wear and chronic ankle injuries.
             </p>
             <p>
-              S&amp;A changed that reality. By investing in international-standard tournament synthetic mats over shock-absorbing wooden subfloors, and uniting certified BWF coaches under one rigorous curriculum, we created an academy environment where talent is nurtured without physical breakdown.
+              SBA changed that reality. By investing in international-standard tournament synthetic mats over shock-absorbing wooden subfloors, and uniting certified BWF coaches under one rigorous curriculum, we created an academy environment where talent is nurtured without physical breakdown.
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 font-mono text-xs">

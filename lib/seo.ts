@@ -28,6 +28,8 @@ export function createMetadata({
   const cleanTitle = title
     .replace(/\s*\|\s*S\s*&\s*A\s*Badminton\s*Academy/gi, "")
     .replace(/\s*\|\s*S\s*&\s*A\s*BADMINTON\s*ACADEMY/gi, "")
+    .replace(/\s*\|\s*SBA\s*Badminton\s*Academy/gi, "")
+    .replace(/\s*\|\s*SBA\s*BADMINTON\s*ACADEMY/gi, "")
     .trim();
 
   const fullTitle = path === "" || path === "/" 

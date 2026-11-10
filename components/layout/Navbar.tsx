@@ -194,7 +194,7 @@ export function Navbar({ initialCentres }: { initialCentres?: any[] } = {}) {
 
             <div className="flex flex-col text-left">
               <span className="font-black text-sm lg:text-base xl:text-lg tracking-tight text-[#F8FAFC] leading-none group-hover:text-white transition-colors">
-                S & A
+                SBA
               </span>
               <span className="text-[9px] lg:text-[10px] xl:text-[11px] font-bold text-[#A7B0BC] uppercase tracking-wider mt-0.5 lg:mt-1">
                 Badminton Academy
@@ -383,7 +383,7 @@ export function Navbar({ initialCentres }: { initialCentres?: any[] } = {}) {
               </div>
               <div className="flex flex-col text-left">
                 <span className="font-black text-base tracking-tight text-[#F8FAFC] leading-none">
-                  S & A
+                  SBA
                 </span>
                 <span className="text-[10px] font-bold text-[#A7B0BC] uppercase tracking-wider mt-1">
                   Badminton Academy

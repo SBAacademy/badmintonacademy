@@ -8,7 +8,7 @@ export const localArticles = [
     "publishDate": "October 01, 2024",
     "updatedAt": "2024-10-01T08:00:00.000Z",
     "author": "Coach Anand Varma",
-    "authorRole": "Head Coach, S&A Badminton Academy",
+    "authorRole": "Head Coach, SBA Badminton Academy",
     "tags": [
       "Badminton in Kochi",
       "Choosing an Academy",
@@ -116,7 +116,7 @@ export const localArticles = [
       "### The Problem with Concrete Subfloors",
       "Many budget facilities lay thin 4.5 mm PVC court mats directly onto rigid concrete slabs. Concrete has zero force dissipation. When a player lands from a jump smash or brakes hard on a forward lunge, 100% of the shockwave travels upward through the foot into the patellar tendon, hip joint, and lumbar vertebrae.",
       "### The Sprung Wooden Subfloor Standard",
-      "At S & A Badminton Academy, our courts utilize a multi-tier architectural foundation:",
+      "At SBA Badminton Academy, our courts utilize a multi-tier architectural foundation:",
       "1. **Elastic Neoprene Dampening Pads:** Absorb primary impact energy.",
       "2. **Interlocking Hardwood Timber Sleepers:** Flex microscopically under landing forces.",
       "3. **Sprung Tongue-and-Groove Wooden Subfloor:** Distributes impact load evenly.",
@@ -190,7 +190,7 @@ export const localArticles = [
     "publishDate": "November 14, 2024",
     "updatedAt": "2024-11-14T08:30:00.000Z",
     "author": "Coach Anand Varma",
-    "authorRole": "Head Coach, S&A Badminton Academy",
+    "authorRole": "Head Coach, SBA Badminton Academy",
     "tags": [
       "Adult Coaching Kochi",
       "Working Professionals",
@@ -200,7 +200,7 @@ export const localArticles = [
     "image": "/images/hero-athlete.jpg",
     "status": "PUBLISHED",
     "content": [
-      "Many working adults in Kochi want to play badminton, but feel intimidated by joining courts dominated by competitive teenagers or aggressive club players. S & A Badminton Academy provides dedicated adult coaching batches specifically curated for adult fitness and technique.",
+      "Many working adults in Kochi want to play badminton, but feel intimidated by joining courts dominated by competitive teenagers or aggressive club players. SBA Badminton Academy provides dedicated adult coaching batches specifically curated for adult fitness and technique.",
       "### Flexible Early-Bird & Late-Night Batches",
       "- **Early Morning (5:30 AM to 7:00 AM / 7:00 AM to 8:30 AM):** Energize your day before heading to work.",
       "- **Late Evening (8:00 PM to 9:30 PM / 9:30 PM to 11:00 PM):** Decompress after office hours.",
@@ -243,7 +243,7 @@ export const localArticles = [
     "image": "/images/training-coach.jpg",
     "status": "PUBLISHED",
     "content": [
-      "Every year during April and May, as well as Onam and Christmas school breaks, hundreds of children across Ernakulam join S & A Badminton Academy's intensive **Badminton Vacation Camps**.",
+      "Every year during April and May, as well as Onam and Christmas school breaks, hundreds of children across Ernakulam join SBA Badminton Academy's intensive **Badminton Vacation Camps**.",
       "### Why Vacation Camps Are Transformative",
       "During regular school terms, children train 2 to 3 days a week. In a vacation camp, daily 2-hour morning sessions provide rapid, continuous skill immersion. In just 4 weeks, absolute beginners master basic footwork, serve consistency, and full-court clearing rallies.",
       "### Daily Camp Structure",
@@ -317,7 +317,7 @@ export const localArticles = [
     "publishDate": "December 11, 2024",
     "updatedAt": "2024-12-11T09:20:00.000Z",
     "author": "Coach Anand Varma",
-    "authorRole": "Head Coach, S&A Badminton Academy",
+    "authorRole": "Head Coach, SBA Badminton Academy",
     "tags": [
       "Ernakulam Tournaments",
       "District Rankings",
@@ -392,7 +392,7 @@ export const localArticles = [
       "- **Warm-Up Phase:** 5 minutes of dynamic joint mobilization and shadow movement.",
       "- **Drill Volume:** 4 to 6 sets of 15 to 20 focused repetitions with a 45-second recovery interval between sets.",
       "- **Pressure Match Application:** Conclude with 15 minutes of conditional match play where points scored using this specific technique earn double value.",
-      "Join our welcoming sporting community at [S & A Badminton Academy](/about)."
+      "Join our welcoming sporting community at [SBA Badminton Academy](/about)."
     ]
   },
   {
@@ -446,7 +446,7 @@ export const localArticles = [
     "publishDate": "January 07, 2025",
     "updatedAt": "2025-01-07T09:00:00.000Z",
     "author": "Coach Anand Varma",
-    "authorRole": "Head Coach, S&A Badminton Academy",
+    "authorRole": "Head Coach, SBA Badminton Academy",
     "tags": [
       "Maradu Badminton",
       "Kundannoor Sports",
@@ -482,7 +482,7 @@ export const localArticles = [
   {
     "slug": "badminton-coaching-in-west-kochi-and-suburbs",
     "title": "Expanding Badminton Access in West Kochi: Coaching in Kumbalanghi, Maradu & Suburbs",
-    "excerpt": "How S&A Badminton Academy is bringing certified coaching infrastructure to suburban and coastal Kochi communities.",
+    "excerpt": "How SBA Badminton Academy is bringing certified coaching infrastructure to suburban and coastal Kochi communities.",
     "category": "Kochi & Local Guides",
     "readTime": "7 min read",
     "publishDate": "January 16, 2025",
@@ -500,7 +500,7 @@ export const localArticles = [
     "content": [
       "Historically, premier badminton coaching in Ernakulam was concentrated exclusively in dense city centers. Families in suburban and coastal communities like Kumbalanghi, Maradu, and surrounding sectors had to undertake grueling 45-minute commutes.",
       "### Decentralized Excellence",
-      "S & A Badminton Academy is committed to expanding world-class court infrastructure across Greater Kochi. By operating dedicated training hubs in areas like [Kumbalanghi](/kumbalanghi) and [Maradu](/maradu), local talent receives identical certified BWF curriculum instruction right in their neighborhoods.",
+      "SBA Badminton Academy is committed to expanding world-class court infrastructure across Greater Kochi. By operating dedicated training hubs in areas like [Kumbalanghi](/kumbalanghi) and [Maradu](/maradu), local talent receives identical certified BWF curriculum instruction right in their neighborhoods.",
       "### Developing Local Grassroots Champions",
       "Children from across coastal and suburban Kochi are demonstrating exceptional natural stamina and grit, winning accolades in school and district opens.",
       "### Structured Execution & Key Coaching Pointers",

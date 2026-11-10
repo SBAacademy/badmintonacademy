@@ -81,7 +81,7 @@ export function BranchesSection({ initialCentres }: { initialCentres?: Centre[] 
       achievements: [],
       localFAQs: [],
       seo: {
-        title: c.seoTitle || c.seo?.title || `${c.name} | S & A Badminton Academy`,
+        title: c.seoTitle || c.seo?.title || `${c.name} | SBA Badminton Academy`,
         description: c.seoDescription || c.seo?.description || c.description || "",
         primaryKeyword: c.seo?.primaryKeyword || `badminton coaching in ${c.name}`,
         secondaryKeywords: c.seo?.secondaryKeywords || [],

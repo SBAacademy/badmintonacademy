@@ -12,14 +12,14 @@ import { FAQSection } from "@/components/sections/FAQSection";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = createMetadata({
-  title: "Contact & Book Free Trial | S & A Badminton Academy Kochi",
-  description: "Get in touch with S & A Badminton Academy in Kochi. Book a free trial assessment, enquire about batch timings across Kadavanthra, Kumbalanghi, Maradu, Palluruthy, and Chullikal.",
+  title: "Contact & Book Free Trial | SBA Badminton Academy Kochi",
+  description: "Get in touch with SBA Badminton Academy in Kochi. Book a free trial assessment, enquire about batch timings across Kadavanthra, Kumbalanghi, Maradu, Palluruthy, and Chullikal.",
   path: "/contact",
   keywords: [
     "badminton academy contact Kochi",
     "book badminton trial session",
     "badminton coaching admission Kochi",
-    "S&A badminton phone number",
+    "SBA badminton phone number",
   ],
 });
 

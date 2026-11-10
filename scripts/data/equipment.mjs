@@ -8,7 +8,7 @@ export const equipmentArticles = [
     "publishDate": "October 03, 2024",
     "updatedAt": "2024-10-03T08:00:00.000Z",
     "author": "Coach Anand Varma",
-    "authorRole": "Head Coach, S&A Badminton Academy",
+    "authorRole": "Head Coach, SBA Badminton Academy",
     "tags": [
       "Racket Guide",
       "Buying a Racket",
@@ -88,7 +88,7 @@ export const equipmentArticles = [
       "- **Warm-Up Phase:** 5 minutes of dynamic joint mobilization and shadow movement.",
       "- **Drill Volume:** 4 to 6 sets of 15 to 20 focused repetitions with a 45-second recovery interval between sets.",
       "- **Pressure Match Application:** Conclude with 15 minutes of conditional match play where points scored using this specific technique earn double value.",
-      "Test different demo frames during your trial session at [S & A Badminton Academy](/contact)."
+      "Test different demo frames during your trial session at [SBA Badminton Academy](/contact)."
     ]
   },
   {
@@ -149,7 +149,7 @@ export const equipmentArticles = [
     "publishDate": "October 30, 2024",
     "updatedAt": "2024-10-30T08:45:00.000Z",
     "author": "Coach Anand Varma",
-    "authorRole": "Head Coach, S&A Badminton Academy",
+    "authorRole": "Head Coach, SBA Badminton Academy",
     "tags": [
       "String Tension",
       "String Gauge",
@@ -285,7 +285,7 @@ export const equipmentArticles = [
     "publishDate": "November 23, 2024",
     "updatedAt": "2024-11-23T10:30:00.000Z",
     "author": "Coach Anand Varma",
-    "authorRole": "Head Coach, S&A Badminton Academy",
+    "authorRole": "Head Coach, SBA Badminton Academy",
     "tags": [
       "Grip Types",
       "Towel Grip",
@@ -411,7 +411,7 @@ export const equipmentArticles = [
       "- **Warm-Up Phase:** 5 minutes of dynamic joint mobilization and shadow movement.",
       "- **Drill Volume:** 4 to 6 sets of 15 to 20 focused repetitions with a 45-second recovery interval between sets.",
       "- **Pressure Match Application:** Conclude with 15 minutes of conditional match play where points scored using this specific technique earn double value.",
-      "Prepare like a champion with our mentors at [S & A Badminton Academy](/about)."
+      "Prepare like a champion with our mentors at [SBA Badminton Academy](/about)."
     ]
   },
   {
@@ -469,7 +469,7 @@ export const equipmentArticles = [
     "publishDate": "December 21, 2024",
     "updatedAt": "2024-12-21T09:15:00.000Z",
     "author": "Coach Anand Varma",
-    "authorRole": "Head Coach, S&A Badminton Academy",
+    "authorRole": "Head Coach, SBA Badminton Academy",
     "tags": [
       "Gear Maintenance",
       "Kerala Humidity",

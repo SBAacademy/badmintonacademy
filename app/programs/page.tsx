@@ -11,7 +11,7 @@ import { CentreGallerySection } from "@/components/sections/CentreGallerySection
 
 export const metadata: Metadata = createMetadata({
   title: "Badminton Coaching Programs in Kochi | Kids, Juniors, Adults & Pros",
-  description: "Explore all badminton training programs at S & A Badminton Academy Kochi. Structured coaching for kids (ages 5-9), junior development, adult fitness, competitive squad, and holiday camps.",
+  description: "Explore all badminton training programs at SBA Badminton Academy Kochi. Structured coaching for kids (ages 5-9), junior development, adult fitness, competitive squad, and holiday camps.",
   path: "/programs",
   keywords: [
     "badminton classes in Kochi",
@@ -127,7 +127,7 @@ export default function ProgramsPage() {
       <CentreGallerySection
         eyebrow="FACILITY INFRASTRUCTURE // ALL VENUES"
         title="TRAINING CENTRES & COURTS GALLERY"
-        description="Every program at S&A is conducted in world-class indoor badminton facilities with specialized wooden-sprung and synthetic rubber mat flooring."
+        description="Every program at SBA is conducted in world-class indoor badminton facilities with specialized wooden-sprung and synthetic rubber mat flooring."
       />
 
       {/* Campaign Ending CTA */}

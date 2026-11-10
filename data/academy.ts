@@ -52,11 +52,11 @@ export interface AcademyConfig {
 }
 
 export const ACADEMY_DATA: AcademyConfig = {
-  name: "S & A BADMINTON ACADEMY",
-  shortName: "S & A Badminton",
+  name: "SBA BADMINTON ACADEMY",
+  shortName: "SBA Badminton",
   tagline: "Train Hard. Smash Harder. Master The Court.",
   subheadline: "Structured badminton coaching for kids, juniors, adults and competitive players across our Kochi training centres.",
-  description: "S & A Badminton Academy is a premier athletic badminton training institution in Kochi, offering dedicated synthetic court infrastructure, certified coaching faculty, video stroke analysis, and age-specific developmental pathways.",
+  description: "SBA Badminton Academy is a premier athletic badminton training institution in Kochi, offering dedicated synthetic court infrastructure, certified coaching faculty, video stroke analysis, and age-specific developmental pathways.",
   foundedYear: 2018,
   phone: "+917907655513",
   phoneDisplay: "+91 79076 55513",
@@ -64,7 +64,7 @@ export const ACADEMY_DATA: AcademyConfig = {
   whatsappDisplay: "+91 79076 55513",
   email: "admissions@sabadminton.com",
   mainLocation: "Kochi, Kerala, India",
-  headquartersAddress: "S&A Sports Arena, Near Rajiv Gandhi Indoor Stadium, Kadavanthra, Kochi, Kerala 682020",
+  headquartersAddress: "SBA Sports Arena, Near Rajiv Gandhi Indoor Stadium, Kadavanthra, Kochi, Kerala 682020",
   city: "Kochi",
   state: "Kerala",
   country: "India",

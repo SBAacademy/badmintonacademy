@@ -55,7 +55,7 @@ export const fitnessArticles = [
     "publishDate": "October 17, 2024",
     "updatedAt": "2024-10-17T09:15:00.000Z",
     "author": "Coach Anand Varma",
-    "authorRole": "Head Coach, S&A Badminton Academy",
+    "authorRole": "Head Coach, SBA Badminton Academy",
     "tags": [
       "Plyometrics",
       "Jump Smash",
@@ -233,7 +233,7 @@ export const fitnessArticles = [
     "publishDate": "November 20, 2024",
     "updatedAt": "2024-11-20T10:30:00.000Z",
     "author": "Coach Anand Varma",
-    "authorRole": "Head Coach, S&A Badminton Academy",
+    "authorRole": "Head Coach, SBA Badminton Academy",
     "tags": [
       "Hip Mobility",
       "Groin Strain",
@@ -403,7 +403,7 @@ export const fitnessArticles = [
     "publishDate": "December 18, 2024",
     "updatedAt": "2024-12-18T10:00:00.000Z",
     "author": "Coach Anand Varma",
-    "authorRole": "Head Coach, S&A Badminton Academy",
+    "authorRole": "Head Coach, SBA Badminton Academy",
     "tags": [
       "Sleep Science",
       "Athlete Recovery",

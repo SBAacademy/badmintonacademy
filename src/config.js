@@ -1,5 +1,5 @@
 /**
- * Central Configuration for S & A BADMINTON ACADEMY
+ * Central Configuration for SBA BADMINTON ACADEMY
  * Website Development + Local SEO Commercial Proposal & Service Agreement.
  * Service Provider: KREOVATE - Marketing Agency
  * Project Contact / Delivery Lead: Mohammed Nibrasul Haqq
@@ -15,8 +15,8 @@ export const config = {
   providerLocation: "Kerala, India",
 
   // Client Details
-  academyName: "S & A BADMINTON ACADEMY",
-  clientName: "S & A BADMINTON ACADEMY",
+  academyName: "SBA BADMINTON ACADEMY",
+  clientName: "SBA BADMINTON ACADEMY",
   quotationId: "SAA-WEB-SEO-2026-001",
 
   // Core Commercial Pricing (Strict Consistency)

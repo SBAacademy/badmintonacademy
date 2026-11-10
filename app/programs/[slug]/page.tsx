@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: ProgramDetailPageProps): Prom
   }
 
   return createMetadata({
-    title: `${program.name} in Kochi | S & A Badminton Academy`,
+    title: `${program.name} in Kochi | SBA Badminton Academy`,
     description: `${program.shortDescription} Structured badminton coaching in Kochi across Kadavanthra, Kumbalanghi, Maradu, Palluruthy & Chullikal.`,
     path: `/programs/${program.slug}`,
     keywords: [
@@ -59,7 +59,7 @@ export default async function ProgramDetailPage({ params }: ProgramDetailPagePro
     description: program.fullDescription,
     provider: {
       "@type": "SportsOrganization",
-      name: "S & A BADMINTON ACADEMY",
+      name: "SBA BADMINTON ACADEMY",
       sameAs: SITE_URL,
     },
     educationalCredentialAwarded: "Certificate of Completion",
@@ -321,7 +321,7 @@ export default async function ProgramDetailPage({ params }: ProgramDetailPagePro
 
       {/* Training Facilities & Courts Gallery */}
       <CentreGallerySection
-        eyebrow="FACILITIES // S&A CENTRES"
+        eyebrow="FACILITIES // SBA CENTRES"
         title="TRAINING COURTS & ARENA GALLERY"
         description="Our coaching sessions take place on international-standard BWF courts equipped with glare-free illumination and anti-injury flooring."
       />

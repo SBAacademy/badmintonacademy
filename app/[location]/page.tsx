@@ -48,14 +48,14 @@ export async function generateMetadata({ params }: LocationPageProps): Promise<M
 
   if (!dynamicCentre || dynamicCentre.status === "INACTIVE" || dynamicCentre.isActive === false) {
     return {
-      title: "Centre Not Found | S & A Badminton Academy",
+      title: "Centre Not Found | SBA Badminton Academy",
     };
   }
 
   const location = dynamicCentre;
   const canonicalUrl = `${SITE_URL}/${location.slug}`;
 
-  const title = dynamicCentre?.seo?.title || `${location.name} | S & A Badminton Academy`;
+  const title = dynamicCentre?.seo?.title || `${location.name} | SBA Badminton Academy`;
   const description = dynamicCentre?.seo?.description || dynamicCentre?.description || "";
   const primaryKeyword = dynamicCentre?.seo?.primaryKeyword || "badminton coaching";
   const secondaryKeywords = dynamicCentre?.seo?.secondaryKeywords || [];
@@ -182,7 +182,7 @@ export default async function LocationPage({ params }: LocationPageProps) {
       ? dynamicCentre.localFAQs
       : [],
     seo: {
-      title: dynamicCentre.seo?.title || dynamicCentre.seoTitle || `${dynamicCentre.name || "Centre"} | S & A Badminton Academy`,
+      title: dynamicCentre.seo?.title || dynamicCentre.seoTitle || `${dynamicCentre.name || "Centre"} | SBA Badminton Academy`,
       description: dynamicCentre.seo?.description || dynamicCentre.seoDescription || dynamicCentre.description || "",
       primaryKeyword: dynamicCentre.seo?.primaryKeyword || "badminton academy",
       secondaryKeywords: dynamicCentre.seo?.secondaryKeywords || [],
@@ -397,7 +397,7 @@ export default async function LocationPage({ params }: LocationPageProps) {
                 <div className="relative aspect-[4/3] w-full">
                   <Image
                     src={location.gallery[0]?.url || "/images/hero-athlete.jpg"}
-                    alt={`Badminton court and training action at S&A Badminton Academy ${location.shortName}`}
+                    alt={`Badminton court and training action at SBA Badminton Academy ${location.shortName}`}
                     fill
                     sizes="(max-width: 1024px) 100vw, 40vw"
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
@@ -813,7 +813,7 @@ export default async function LocationPage({ params }: LocationPageProps) {
         </div>
       </section>
 
-      {/* 10. Internal Link Mesh: Other S&A Centres */}
+      {/* 10. Internal Link Mesh: Other SBA Centres */}
       <section className="py-16 lg:py-20 border-b border-[#26313D] bg-[#0E141B]/40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-left">
           <div className="max-w-2xl mb-8">
@@ -821,7 +821,7 @@ export default async function LocationPage({ params }: LocationPageProps) {
               Explore Our Greater Kochi Network
             </div>
             <h2 className="text-xl sm:text-3xl font-extrabold uppercase tracking-tight text-[#F8FAFC]">
-              Other S & A Badminton Academy Centres
+              Other SBA Badminton Academy Centres
             </h2>
           </div>
 

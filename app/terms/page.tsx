@@ -5,8 +5,8 @@ import { createMetadata } from "@/lib/seo";
 import { ACADEMY_DATA } from "@/data/academy";
 
 export const metadata: Metadata = createMetadata({
-  title: "Terms & Conditions | S & A Badminton Academy",
-  description: "Terms and conditions, court code of conduct, and coaching policies of S & A Badminton Academy.",
+  title: "Terms & Conditions | SBA Badminton Academy",
+  description: "Terms and conditions, court code of conduct, and coaching policies of SBA Badminton Academy.",
   path: "/terms",
   noIndex: true,
 });

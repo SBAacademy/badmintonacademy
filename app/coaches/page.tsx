@@ -9,7 +9,7 @@ import { FinalCTA } from "@/components/sections/FinalCTA";
 
 export const metadata: Metadata = createMetadata({
   title: "Certified Badminton Coaches in Kochi | BWF & NIS Mentors",
-  description: "Meet the elite coaching panel at S & A Badminton Academy Kochi. BWF Level 1 & 2 certified trainers, NIS diploma holders, and former state champions.",
+  description: "Meet the elite coaching panel at SBA Badminton Academy Kochi. BWF Level 1 & 2 certified trainers, NIS diploma holders, and former state champions.",
   path: "/coaches",
   keywords: [
     "badminton coaches in Kochi",

@@ -8,7 +8,7 @@ export const adultsArticles = [
     "publishDate": "October 11, 2024",
     "updatedAt": "2024-10-11T09:00:00.000Z",
     "author": "Coach Anand Varma",
-    "authorRole": "Head Coach, S&A Badminton Academy",
+    "authorRole": "Head Coach, SBA Badminton Academy",
     "tags": [
       "Adult Beginners",
       "Starting at 30+",
@@ -152,7 +152,7 @@ export const adultsArticles = [
       "For adult players returning to badminton after age 35, joint preservation is the #1 priority. Decelerating from a full sprint puts up to 4 times your body weight through your patellar tendons. Here is how to play pain-free for decades.",
       "### Never Play on Bare Concrete Subfloors",
       "Many amateur courts lay thin green PVC mats directly over rigid concrete slabs. Concrete has zero shock dampening. Over months of play, micro-shocks reverberate into your knees, hips, and lumbar spine, accelerating osteoarthritis.",
-      "At S & A Badminton Academy, all courts feature **BWF-approved shock-absorbing sprung wooden subflooring** beneath specialized synthetic mats, reducing ground impact strain by over 50%.",
+      "At SBA Badminton Academy, all courts feature **BWF-approved shock-absorbing sprung wooden subflooring** beneath specialized synthetic mats, reducing ground impact strain by over 50%.",
       "### Master the 'Heel-to-Toe' Lunge Roll",
       "When lunging forward to retrieve a net drop, **never land flat on your toes with a locked, stiff knee**. Always land heel first, rolling smoothly through the arch to the ball of your foot. Keep your knee aligned over your second toe, never allowing your knee to cave inward.",
       "### Targeted Calf & Quadricep Pre-Hab",
@@ -184,7 +184,7 @@ export const adultsArticles = [
     "publishDate": "November 10, 2024",
     "updatedAt": "2024-11-10T11:00:00.000Z",
     "author": "Coach Anand Varma",
-    "authorRole": "Head Coach, S&A Badminton Academy",
+    "authorRole": "Head Coach, SBA Badminton Academy",
     "tags": [
       "Adult Mistakes",
       "Club Players",
@@ -320,7 +320,7 @@ export const adultsArticles = [
     "publishDate": "December 01, 2024",
     "updatedAt": "2024-12-01T09:30:00.000Z",
     "author": "Coach Anand Varma",
-    "authorRole": "Head Coach, S&A Badminton Academy",
+    "authorRole": "Head Coach, SBA Badminton Academy",
     "tags": [
       "Doubles Tactics",
       "Club Badminton",
@@ -394,7 +394,7 @@ export const adultsArticles = [
       "- **Warm-Up Phase:** 5 minutes of dynamic joint mobilization and shadow movement.",
       "- **Drill Volume:** 4 to 6 sets of 15 to 20 focused repetitions with a 45-second recovery interval between sets.",
       "- **Pressure Match Application:** Conclude with 15 minutes of conditional match play where points scored using this specific technique earn double value.",
-      "Find your athletic balance with our supportive community at [S & A Badminton Academy](/about)."
+      "Find your athletic balance with our supportive community at [SBA Badminton Academy](/about)."
     ]
   },
   {
@@ -449,7 +449,7 @@ export const adultsArticles = [
     "publishDate": "December 22, 2024",
     "updatedAt": "2024-12-22T09:40:00.000Z",
     "author": "Coach Anand Varma",
-    "authorRole": "Head Coach, S&A Badminton Academy",
+    "authorRole": "Head Coach, SBA Badminton Academy",
     "tags": [
       "Corporate Badminton",
       "Infopark Kochi",
@@ -462,7 +462,7 @@ export const adultsArticles = [
       "Corporate team building no longer means awkward icebreakers in conference rooms. Leading organizations across Infopark Kochi and Greater Ernakulam are embracing corporate badminton tournaments to foster genuine leadership, stress relief, and inter-departmental trust.",
       "### Breaking Corporate Hierarchies",
       "On a badminton court, job titles disappear. A junior developer can partner with a vice-president in doubles, learning mutual communication, trust, and shared victory under pressure.",
-      "### S&A Corporate Coaching & Arena Bookings",
+      "### SBA Corporate Coaching & Arena Bookings",
       "### Structured Execution & Key Coaching Pointers",
       "To execute this effectively on court, certified mentors emphasize three core technical checkpoints:",
       "- **Preparation & Stance:** Invest in BWF-standard sprung wooden court facilities that reduce knee and lumbar shock impact.",
@@ -478,7 +478,7 @@ export const adultsArticles = [
       "- **Warm-Up Phase:** 5 minutes of dynamic joint mobilization and shadow movement.",
       "- **Drill Volume:** 4 to 6 sets of 15 to 20 focused repetitions with a 45-second recovery interval between sets.",
       "- **Pressure Match Application:** Conclude with 15 minutes of conditional match play where points scored using this specific technique earn double value.",
-      "At S & A Badminton Academy, we provide customized corporate coaching packages, weekend corporate tournament hosting, and dedicated court slots for business teams. Discover corporate arrangements through our [Contact Desk](/contact)."
+      "At SBA Badminton Academy, we provide customized corporate coaching packages, weekend corporate tournament hosting, and dedicated court slots for business teams. Discover corporate arrangements through our [Contact Desk](/contact)."
     ]
   }
 ];

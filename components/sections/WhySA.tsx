@@ -102,7 +102,7 @@ export function WhySA() {
           <div className="lg:col-span-6 relative aspect-[16/10] overflow-hidden bg-[#07090D] border border-[#1F2937]">
             <Image
               src="/images/training-coach.jpg"
-              alt="Real S&A coach working on court stroke mechanics with athlete"
+              alt="Real SBA coach working on court stroke mechanics with athlete"
               fill
               className="object-cover object-center filter grayscale contrast-125 hover:grayscale-0 transition-all duration-500"
               sizes="(max-width: 1024px) 100vw, 50vw"

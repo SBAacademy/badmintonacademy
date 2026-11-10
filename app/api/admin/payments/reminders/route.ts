@@ -47,7 +47,7 @@ export async function GET(request: Request) {
 
     const reminders = rows.map((r) => {
       const cleanPhone = String(r.parent_phone).replace(/[^0-9]/g, "");
-      const message = `Hello ${r.parent_name}, this is a gentle reminder from S&A Badminton Academy regarding ${r.student_name}'s coaching fee of ₹${r.balance_due} for ${r.billing_period} (Due: ${r.due_date}). Please clear the dues via UPI or cash at the academy reception. Thank you!`;
+      const message = `Hello ${r.parent_name}, this is a gentle reminder from SBA Badminton Academy regarding ${r.student_name}'s coaching fee of ₹${r.balance_due} for ${r.billing_period} (Due: ${r.due_date}). Please clear the dues via UPI or cash at the academy reception. Thank you!`;
       const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`;
 
       return {

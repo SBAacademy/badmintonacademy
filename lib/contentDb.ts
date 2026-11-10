@@ -237,7 +237,7 @@ export async function saveContentSection<T>(
                 image_url, whatsapp_number, status, is_published, display_order, created_at, updated_at
               ) VALUES (
                 ${cleanId}, ${slug}, ${rawItem.name.trim()}, ${rawItem.role.trim()},
-                ${rawItem.bio || "Dedicated badminton coach at S&A Badminton Academy."},
+                ${rawItem.bio || "Dedicated badminton coach at SBA Badminton Academy."},
                 ${certs}, ${achs}, ${exp}, ${rawItem.specialization || "Badminton Coaching"},
                 ${centreSlug}, ${img}, ${whatsappNum}, ${status}, ${isPub},
                 ${Number(rawItem.displayOrder) || 0}, NOW(), NOW()
@@ -605,7 +605,7 @@ export async function saveCoachRecord(coachData: Partial<Coach>): Promise<Coach>
 
   const name = (coachData.name || current?.name || "Coaching Faculty").trim();
   const role = (coachData.role || current?.role || "Badminton Coach").trim();
-  const bio = coachData.bio !== undefined ? coachData.bio.trim() : (current?.bio || "Dedicated badminton coach at S&A Badminton Academy.");
+  const bio = coachData.bio !== undefined ? coachData.bio.trim() : (current?.bio || "Dedicated badminton coach at SBA Badminton Academy.");
   const centreSlug = mapBranchToCentreSlug(coachData.primaryBranch || coachData.primaryCentre || current?.primaryCentre);
   const certs = Array.isArray(coachData.certifications)
     ? coachData.certifications.filter(Boolean)
@@ -1193,7 +1193,7 @@ export async function saveCentreRecord(centreData: Partial<Centre>): Promise<Cen
   // Check existing
   const current = await getCentreBySlug(slug);
 
-  const name = (centreData.name || current?.name || "S & A Badminton Academy Centre").trim();
+  const name = (centreData.name || current?.name || "SBA Badminton Academy Centre").trim();
   const shortName = (centreData.shortName || current?.shortName || name).trim();
   const area = (centreData.area || current?.area || shortName.replace(/centre|branch/gi, "").trim() || "Kochi").trim();
   const city = (centreData.city || current?.city || "Kochi").trim();
@@ -1216,7 +1216,7 @@ export async function saveCentreRecord(centreData: Partial<Centre>): Promise<Cen
   const order = Number(centreData.displayOrder ?? current?.displayOrder) || 1;
   const status = (centreData.status || (centreData.isActive === false ? "INACTIVE" : current?.status) || "ACTIVE") as "ACTIVE" | "INACTIVE";
   const isActive = status === "ACTIVE";
-  const seoTitle = (centreData.seoTitle || current?.seoTitle || `${name} | S&A Badminton Academy`).trim();
+  const seoTitle = (centreData.seoTitle || current?.seoTitle || `${name} | SBA Badminton Academy`).trim();
   const seoDescription = (centreData.seoDescription || current?.seoDescription || description || `${name} premier badminton training facility in Kochi.`).trim();
   const image = centreData.image || current?.image || "/images/badminton-arena.jpg";
   const courtImage = centreData.courtImage || current?.courtImage || image;

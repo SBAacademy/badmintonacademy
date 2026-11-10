@@ -56,7 +56,7 @@ export function Footer({
               REBEL PERFORMANCE // ATHLETIC TRAINING
             </span>
             <div className="text-4xl sm:text-6xl font-black text-white tracking-[-0.04em] uppercase leading-none">
-              S&amp;A BADMINTON ACADEMY
+              SBA BADMINTON ACADEMY
             </div>
           </div>
           <div className="font-mono text-xs text-[#A8B0BA] uppercase tracking-wider">

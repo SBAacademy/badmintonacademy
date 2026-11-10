@@ -47,7 +47,7 @@ function formatLastmod(event: {
 
 /**
  * GET /tournaments-sitemap.xml
- * Dedicated XML sitemap strictly containing public S&A Badminton Academy
+ * Dedicated XML sitemap strictly containing public SBA Badminton Academy
  * tournament and event detail pages.
  * Reads dynamically from the PostgreSQL events database table.
  */

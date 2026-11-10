@@ -314,7 +314,7 @@ export default function AdminDashboardPage() {
           </div>
           <div>
             <h2 className="text-lg font-bold text-white tracking-tight">
-              S&amp;A Badminton Academy
+              SBA Badminton Academy
             </h2>
             <p className="text-xs text-slate-400 mt-1">
               Verifying administrative session...

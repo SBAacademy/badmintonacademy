@@ -14,7 +14,7 @@ export const revalidate = 300;
 
 export const metadata: Metadata = createMetadata({
   title: "Badminton Academy Centres in Kochi | Kadavanthra, Kumbalanghi, Maradu, Palluruthy, Chullikal",
-  description: "Explore all S & A Badminton Academy training centres across Kochi. Dedicated multi-court facilities in Kadavanthra, Kumbalanghi, Maradu, Palluruthy, and Chullikal.",
+  description: "Explore all SBA Badminton Academy training centres across Kochi. Dedicated multi-court facilities in Kadavanthra, Kumbalanghi, Maradu, Palluruthy, and Chullikal.",
   path: "/branches",
   keywords: [
     "badminton academy near me",

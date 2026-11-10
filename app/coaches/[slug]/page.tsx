@@ -38,13 +38,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!coach || coach.isPublished === false || coach.status === "INACTIVE") {
     return {
-      title: "Coach Not Found | S&A Badminton Academy",
+      title: "Coach Not Found | SBA Badminton Academy",
       description: "The requested badminton coach profile could not be located.",
     };
   }
 
-  const title = `${coach.name} – ${coach.role} | S&A Badminton Academy`;
-  const description = `Train with ${coach.name}, ${coach.role} at S&A Badminton Academy, ${coach.primaryBranch}. Specializing in ${coach.specialization} with ${coach.experienceYears}+ years experience.`;
+  const title = `${coach.name} – ${coach.role} | SBA Badminton Academy`;
+  const description = `Train with ${coach.name}, ${coach.role} at SBA Badminton Academy, ${coach.primaryBranch}. Specializing in ${coach.specialization} with ${coach.experienceYears}+ years experience.`;
   const canonicalPath = `/coaches/${coach.slug || coach.id}`;
 
   return createMetadata({
@@ -101,7 +101,7 @@ export default async function CoachProfilePage({ params }: PageProps) {
     description: coach.bio,
     worksFor: {
       "@type": "SportsClub",
-      name: "S & A Badminton Academy",
+      name: "SBA Badminton Academy",
       url: SITE_URL,
     },
     url: coachUrl,
@@ -224,7 +224,7 @@ export default async function CoachProfilePage({ params }: PageProps) {
               {hasWhatsApp && (
                 <a
                   href={`https://wa.me/${coach.whatsappNumber}?text=${encodeURIComponent(
-                    `Hello S&A Badminton Academy, I want to enquire about training with Coach ${coach.name}.`
+                    `Hello SBA Badminton Academy, I want to enquire about training with Coach ${coach.name}.`
                   )}`}
                   target="_blank"
                   rel="noopener noreferrer"

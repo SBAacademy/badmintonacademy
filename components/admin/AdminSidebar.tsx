@@ -169,7 +169,7 @@ export function AdminSidebar({
         <div className="p-5 border-b border-slate-800/80 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-[#B8F000] text-black font-black text-sm flex items-center justify-center shadow-[0_0_20px_rgba(184,240,0,0.25)]">
-              S&A
+              SBA
             </div>
             <div>
               <div className="text-sm font-bold text-white tracking-tight flex items-center gap-1.5">

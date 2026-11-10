@@ -94,7 +94,7 @@ export function CoachEnquiryForm({ coach, initialCentres }: CoachEnquiryFormProp
       : `https://www.soorajbadmintonacademy.in/coaches/${coach.slug || coach.id}`;
 
     const textLines = [
-      `Hello S&A Badminton Academy,`,
+      `Hello SBA Badminton Academy,`,
       ``,
       `I am interested in training with Coach ${coach.name}.`,
       ``,

@@ -8,8 +8,8 @@ import { createMetadata } from "@/lib/seo";
 import { FinalCTA } from "@/components/sections/FinalCTA";
 
 export const metadata: Metadata = createMetadata({
-  title: "Badminton Coaching Tips & Articles | S & A Badminton Academy Kochi",
-  description: "Read expert badminton guides, junior training drills, footwork tips, and court gear recommendations from certified coaches at S & A Badminton Academy.",
+  title: "Badminton Coaching Tips & Articles | SBA Badminton Academy Kochi",
+  description: "Read expert badminton guides, junior training drills, footwork tips, and court gear recommendations from certified coaches at SBA Badminton Academy.",
   path: "/blog",
   keywords: [
     "badminton training tips",

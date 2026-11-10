@@ -92,7 +92,7 @@ export function UpcomingEventsSection({ initialEvents }: UpcomingEventsSectionPr
                 03 // EVENTS &amp; TOURNAMENTS
               </span>
               <span className="text-[11px] font-mono tracking-[0.25em] text-[#A8B0BA] uppercase">
-                WHAT&apos;S HAPPENING AT S&amp;A
+                WHAT&apos;S HAPPENING AT SBA
               </span>
             </div>
             <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-[-0.03em] uppercase leading-[0.95]">
@@ -208,7 +208,7 @@ export function UpcomingEventsSection({ initialEvents }: UpcomingEventsSectionPr
                 </Link>
 
                 <a
-                  href={`https://wa.me/${(featured.contact || "917907655513").replace(/[^0-9]/g, "")}?text=${encodeURIComponent(`Hi S&A Badminton Academy, I would like to enquire about ${featured.title} on ${featuredDate}.`)}`}
+                  href={`https://wa.me/${(featured.contact || "917907655513").replace(/[^0-9]/g, "")}?text=${encodeURIComponent(`Hi SBA Badminton Academy, I would like to enquire about ${featured.title} on ${featuredDate}.`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-5 py-3.5 bg-[#161F2C] hover:bg-[#1E293B] border border-[#1F2937] hover:border-[#25D366]/60 text-white font-bold font-mono text-xs uppercase tracking-wider rounded-lg transition-colors group/wa"

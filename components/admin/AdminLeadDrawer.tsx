@@ -62,7 +62,7 @@ export function AdminLeadDrawer({
   const cleanPhone = lead.phone.replace(/[^0-9]/g, "");
   const formattedPhone = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
   const whatsappUrl = `https://wa.me/${formattedPhone}?text=${encodeURIComponent(
-    `Hello ${lead.name}, this is S&A Badminton Academy Kochi regarding your badminton coaching inquiry. We'd love to assist you and schedule your free trial session!`
+    `Hello ${lead.name}, this is SBA Badminton Academy Kochi regarding your badminton coaching inquiry. We'd love to assist you and schedule your free trial session!`
   )}`;
 
   const handleSaveNotesClick = async () => {

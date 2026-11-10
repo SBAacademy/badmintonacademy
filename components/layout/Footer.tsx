@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { MapPin, Phone, Mail, Clock, Shield, Sparkles, MessageCircle } from "lucide-react";
 import { ACADEMY_DATA } from "@/data/academy";
 import { PROGRAMS } from "@/data/programs";
@@ -91,12 +92,23 @@ export function Footer({
 
         {/* Massive Editorial Brand Lockup */}
         <div className="pb-12 border-b border-[#1F2937] flex flex-col md:flex-row md:items-end justify-between gap-6">
-          <div className="space-y-1 text-left">
-            <span className="font-mono text-xs font-black tracking-[0.3em] text-[#B8F000] uppercase">
-              {brandTagline}
-            </span>
-            <div className="text-4xl sm:text-6xl font-black text-white tracking-[-0.04em] uppercase leading-none">
-              {academyName}
+          <div className="flex items-center gap-4 sm:gap-5">
+            <div className="relative w-14 h-14 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-full overflow-hidden border border-[#26313D] shadow-lg shrink-0 bg-[#07090D]">
+              <Image
+                src="/images/logo.png"
+                alt={academyName}
+                width={80}
+                height={80}
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="space-y-1 text-left">
+              <span className="font-mono text-xs font-black tracking-[0.3em] text-[#B8F000] uppercase">
+                {brandTagline}
+              </span>
+              <div className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-[-0.04em] uppercase leading-none">
+                {academyName}
+              </div>
             </div>
           </div>
           <div className="font-mono text-xs text-[#A8B0BA] uppercase tracking-wider">

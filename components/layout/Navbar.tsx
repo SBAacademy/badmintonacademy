@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Menu, X, MessageCircle, ChevronDown, ArrowRight, Phone } from "lucide-react";
 import { ACADEMY_DATA } from "@/data/academy";
@@ -165,31 +166,15 @@ export function Navbar({ initialCentres }: { initialCentres?: any[] } = {}) {
           
           {/* Compact Horizontal Logo Lockup */}
           <Link href="/" className="flex items-center gap-2.5 lg:gap-3 group shrink-0 mr-2 lg:mr-4 xl:mr-6">
-            <div className="w-9 h-9 lg:w-10 lg:h-10 xl:w-11 xl:h-11 rounded-xl bg-[#121A23] border border-[#26313D] group-hover:border-[#B8F000]/60 flex items-center justify-center transition-colors shadow-sm">
-              {/* Authentic Badminton Racket & Shuttlecock Vector */}
-              <svg
-                viewBox="0 0 24 24"
-                className="w-4.5 h-4.5 lg:w-5 lg:h-5 xl:w-6 xl:h-6 text-[#B8F000]"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                {/* Badminton Racket Head */}
-                <circle cx="15" cy="8.5" r="5" strokeWidth="2" />
-                {/* Racket Shaft & Grip Handle */}
-                <line x1="11.5" y1="12" x2="4.5" y2="19" strokeWidth="2.5" />
-                <line x1="3.5" y1="18" x2="5.5" y2="20" strokeWidth="2.5" />
-                {/* Strings */}
-                <line x1="15" y1="4" x2="15" y2="13" strokeWidth="1" strokeDasharray="1.2 1.5" />
-                <line x1="10.5" y1="8.5" x2="19.5" y2="8.5" strokeWidth="1" strokeDasharray="1.2 1.5" />
-                {/* Dynamic Flying Shuttlecock */}
-                <circle cx="6" cy="6" r="1.4" fill="currentColor" stroke="none" />
-                <path d="M7 7l3.5 3.5" strokeWidth="1.4" />
-                <path d="M5.2 7.5l2 3.8" strokeWidth="1.2" />
-                <path d="M7.5 5.2l3.8 2" strokeWidth="1.2" />
-              </svg>
+            <div className="relative w-9 h-9 lg:w-10 lg:h-10 xl:w-11 xl:h-11 rounded-full overflow-hidden border border-[#26313D] group-hover:border-[#B8F000]/60 transition-colors shadow-sm shrink-0 bg-[#07090D]">
+              <Image
+                src="/images/logo.png"
+                alt="SBA Badminton Academy Logo"
+                width={44}
+                height={44}
+                priority
+                className="w-full h-full object-cover"
+              />
             </div>
 
             <div className="flex flex-col text-left">
@@ -360,26 +345,14 @@ export function Navbar({ initialCentres }: { initialCentres?: any[] } = {}) {
               onClick={() => setMobileMenuOpen(false)}
               className="flex items-center gap-3"
             >
-              <div className="w-10 h-10 rounded-xl bg-[#121A23] border border-[#26313D] flex items-center justify-center shadow-sm">
-                <svg
-                  viewBox="0 0 24 24"
-                  className="w-5 h-5 text-[#B8F000]"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <circle cx="15" cy="8.5" r="5" strokeWidth="2" />
-                  <line x1="11.5" y1="12" x2="4.5" y2="19" strokeWidth="2.5" />
-                  <line x1="3.5" y1="18" x2="5.5" y2="20" strokeWidth="2.5" />
-                  <line x1="15" y1="4" x2="15" y2="13" strokeWidth="1" strokeDasharray="1.2 1.5" />
-                  <line x1="10.5" y1="8.5" x2="19.5" y2="8.5" strokeWidth="1" strokeDasharray="1.2 1.5" />
-                  <circle cx="6" cy="6" r="1.4" fill="currentColor" stroke="none" />
-                  <path d="M7 7l3.5 3.5" strokeWidth="1.4" />
-                  <path d="M5.2 7.5l2 3.8" strokeWidth="1.2" />
-                  <path d="M7.5 5.2l3.8 2" strokeWidth="1.2" />
-                </svg>
+              <div className="relative w-10 h-10 rounded-full overflow-hidden border border-[#26313D] shadow-sm shrink-0 bg-[#07090D]">
+                <Image
+                  src="/images/logo.png"
+                  alt="SBA Badminton Academy Logo"
+                  width={40}
+                  height={40}
+                  className="w-full h-full object-cover"
+                />
               </div>
               <div className="flex flex-col text-left">
                 <span className="font-black text-base tracking-tight text-[#F8FAFC] leading-none">

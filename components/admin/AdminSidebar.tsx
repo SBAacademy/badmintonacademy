@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   LayoutDashboard,
   Users,
@@ -175,8 +176,15 @@ export function AdminSidebar({
         {/* Brand Header */}
         <div className="p-5 border-b border-slate-800/80 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[#B8F000] text-black font-black text-sm flex items-center justify-center shadow-[0_0_20px_rgba(184,240,0,0.25)]">
-              SBA
+            <div className="relative w-10 h-10 rounded-full overflow-hidden border border-slate-700 shadow-[0_0_20px_rgba(184,240,0,0.2)] shrink-0 bg-[#07090D]">
+              <Image
+                src="/images/logo.png"
+                alt="SBA"
+                width={40}
+                height={40}
+                className="w-full h-full object-cover"
+                priority
+              />
             </div>
             <div>
               <div className="text-sm font-bold text-white tracking-tight flex items-center gap-1.5">

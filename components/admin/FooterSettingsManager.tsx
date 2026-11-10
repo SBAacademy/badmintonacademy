@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import {
   MapPin,
   Phone,
@@ -718,12 +719,23 @@ export function FooterSettingsManager() {
               <div className="absolute top-0 inset-x-0 h-1 bg-[#B8F000]" />
 
               {/* Brand Header */}
-              <div className="space-y-1">
-                <div className="font-mono text-[9px] font-black tracking-[0.25em] text-[#B8F000] uppercase truncate">
-                  {settings.brandTagline || "REBEL PERFORMANCE // ATHLETIC TRAINING"}
+              <div className="flex items-center gap-3">
+                <div className="relative w-10 h-10 rounded-full overflow-hidden border border-[#26313D] shadow-sm shrink-0 bg-[#07090D]">
+                  <Image
+                    src="/images/logo.png"
+                    alt="SBA"
+                    width={40}
+                    height={40}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
-                <div className="text-xl font-black text-white tracking-tight uppercase leading-tight">
-                  {settings.academyName || "SBA BADMINTON ACADEMY"}
+                <div className="space-y-0.5 min-w-0">
+                  <div className="font-mono text-[9px] font-black tracking-[0.25em] text-[#B8F000] uppercase truncate">
+                    {settings.brandTagline || "REBEL PERFORMANCE // ATHLETIC TRAINING"}
+                  </div>
+                  <div className="text-lg font-black text-white tracking-tight uppercase leading-tight truncate">
+                    {settings.academyName || "SBA BADMINTON ACADEMY"}
+                  </div>
                 </div>
               </div>
 

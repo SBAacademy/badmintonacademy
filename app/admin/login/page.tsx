@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   Lock,
@@ -97,9 +98,15 @@ function AdminLoginForm() {
         
         {/* Academy Branding Card Header */}
         <div className="text-center mb-6">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-[#0F141F] border border-slate-800 text-[#B8F000] shadow-xl mb-4 relative group">
-            <div className="absolute inset-0 bg-[#B8F000]/10 rounded-2xl blur-sm" />
-            <ShieldCheck className="w-7 h-7 relative z-10" />
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full overflow-hidden border border-slate-800 shadow-2xl mb-4 relative bg-[#07090D]">
+            <Image
+              src="/images/logo.png"
+              alt="SBA Badminton Academy"
+              width={64}
+              height={64}
+              className="w-full h-full object-cover"
+              priority
+            />
           </div>
           <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
             SBA Badminton Academy

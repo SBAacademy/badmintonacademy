@@ -49,7 +49,8 @@ next-env.d.ts
 
 # scratch / test scripts
 scratch/
-admin
+/admin
+WhatsApp Image*
 
 # ide
 .vscode/

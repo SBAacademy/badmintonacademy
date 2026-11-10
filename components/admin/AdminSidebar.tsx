@@ -19,6 +19,7 @@ import {
   Calendar,
   KeyRound,
   Shield,
+  PanelBottom,
 } from "lucide-react";
 
 export type AdminTab =
@@ -31,7 +32,8 @@ export type AdminTab =
   | "blog"
   | "coaches"
   | "achievements"
-  | "testimonials";
+  | "testimonials"
+  | "footer";
 
 export interface CurrentUser {
   id?: string;
@@ -144,6 +146,11 @@ export function AdminSidebar({
           id: "testimonials",
           label: "Reviews & Feedback",
           icon: Star,
+        },
+        {
+          id: "footer",
+          label: "Footer & Admissions",
+          icon: PanelBottom,
         },
       ],
     },

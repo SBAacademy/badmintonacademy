@@ -17,6 +17,7 @@ import {
   Star,
   Target,
   Calendar,
+  PanelBottom,
 } from "lucide-react";
 import { AdminTab } from "./AdminSidebar";
 
@@ -107,6 +108,13 @@ const TAB_INFO: Record<
     icon: Star,
     publicUrl: "/testimonials",
     publicLabel: "View Reviews",
+  },
+  footer: {
+    title: "Footer & Admissions Desk Settings",
+    subtitle: "Manage admissions desk contacts, operating hours, free trial notes, and social media archive",
+    icon: PanelBottom,
+    publicUrl: "/#footer",
+    publicLabel: "View Website Footer",
   },
 };
 

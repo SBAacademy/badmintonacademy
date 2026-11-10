@@ -21,6 +21,7 @@ import { TestimonialsManager } from "@/components/admin/TestimonialsManager";
 import { CentresManager } from "@/components/admin/CentresManager";
 import { ProgramsManager } from "@/components/admin/ProgramsManager";
 import { EventsManager } from "@/components/admin/EventsManager";
+import { FooterSettingsManager } from "@/components/admin/FooterSettingsManager";
 
 export default function AdminDashboardPage() {
   const router = useRouter();
@@ -386,6 +387,7 @@ export default function AdminDashboardPage() {
           {activeTab === "achievements" && <AchievementsManager />}
           {activeTab === "blog" && <BlogManager />}
           {activeTab === "testimonials" && <TestimonialsManager />}
+          {activeTab === "footer" && <FooterSettingsManager />}
         </main>
       </div>
 

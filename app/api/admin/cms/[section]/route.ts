@@ -5,6 +5,8 @@ import {
   getContentSection,
   saveContentSection,
   getCoaches,
+  getFooterSettings,
+  saveFooterSettings,
 } from "@/lib/contentDb";
 import { logAuditEvent } from "@/lib/audit";
 
@@ -14,6 +16,7 @@ const VALID_SECTIONS: ContentSectionKey[] = [
   "achievements",
   "testimonials",
   "blog",
+  "footer",
 ];
 
 function getDefaultItems(_section: ContentSectionKey): unknown[] {
@@ -37,6 +40,16 @@ export async function GET(
     }
 
     const sectionKey = section as ContentSectionKey;
+
+    if (sectionKey === "footer") {
+      const settings = await getFooterSettings();
+      return NextResponse.json({
+        success: true,
+        section: sectionKey,
+        settings,
+        data: settings,
+      });
+    }
 
     if (sectionKey === "coaches") {
       const coaches = await getCoaches({ includeUnpublished: true });
@@ -81,6 +94,30 @@ export async function PUT(
 
     const sectionKey = section as ContentSectionKey;
     const body = await request.json();
+
+    if (sectionKey === "footer") {
+      const updateData =
+        body && typeof body === "object" && body.settings && typeof body.settings === "object"
+          ? body.settings
+          : body;
+      const saved = await saveFooterSettings(updateData);
+
+      await logAuditEvent({
+        actorUserId: auth.user.userId,
+        actorName: auth.user.fullName,
+        action: "CMS_UPDATED_FOOTER",
+        entity: "site_content",
+        entityId: "footer",
+        newData: saved as unknown as Record<string, unknown>,
+      });
+
+      return NextResponse.json({
+        success: true,
+        message: "Footer & admissions settings updated successfully.",
+        settings: saved,
+      });
+    }
+
     const { items } = body;
 
     if (!Array.isArray(items)) {

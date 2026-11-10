@@ -11,8 +11,12 @@ import { BlogPost } from "@/data/blog";
 import { Centre, CentreOpeningHours } from "@/data/centres";
 import { PROGRAMS, Program } from "@/data/programs";
 import { EventItem, EventStatus, EventType, resolveEventDisplayStatus } from "@/data/events";
+import { FooterSettings, DEFAULT_FOOTER_SETTINGS } from "@/data/footer";
 
-export type ContentSectionKey = "gallery" | "coaches" | "achievements" | "testimonials" | "blog" | "centres" | "programs";
+export type { FooterSettings };
+export { DEFAULT_FOOTER_SETTINGS };
+
+export type ContentSectionKey = "gallery" | "coaches" | "achievements" | "testimonials" | "blog" | "centres" | "programs" | "footer";
 
 const CONTENT_FILE_PATH = path.join(process.cwd(), "data", "site_content.json");
 
@@ -58,7 +62,7 @@ function createCachedReader<TArgs extends any[], TReturn>(
 }
 
 // Local JSON fallback store (for non-relational CMS sections; centres, coaches, and events are strictly database-only)
-async function readFallbackContent(): Promise<Record<string, unknown[]>> {
+async function readFallbackContent(): Promise<Record<string, any>> {
   try {
     const fileData = await fs.readFile(CONTENT_FILE_PATH, "utf-8");
     const parsed = JSON.parse(fileData);
@@ -78,11 +82,12 @@ async function readFallbackContent(): Promise<Record<string, unknown[]>> {
       centres: [],
       events: [],
       programs: [],
+      footer: DEFAULT_FOOTER_SETTINGS,
     };
   }
 }
 
-async function writeFallbackContent(content: Record<string, unknown[]>): Promise<void> {
+async function writeFallbackContent(content: Record<string, any>): Promise<void> {
   try {
     await fs.writeFile(CONTENT_FILE_PATH, JSON.stringify(content, null, 2), "utf-8");
   } catch (err) {
@@ -1040,6 +1045,87 @@ export async function getTestimonials(options: { includePending?: boolean } = {}
 
 export async function getBlogPosts(): Promise<BlogPost[]> {
   return getContentSection<BlogPost>("blog", []);
+}
+
+// ============================================================================
+// FOOTER & ADMISSIONS DESK SETTINGS DATA LAYER
+// ============================================================================
+
+async function getFooterSettingsDirect(): Promise<FooterSettings> {
+  const sql = getSql();
+  if (sql) {
+    try {
+      const rows = (await sql`
+        SELECT data FROM site_content WHERE section = 'footer' LIMIT 1;
+      `) as unknown as Array<{ data: unknown }>;
+
+      if (rows.length > 0 && rows[0].data) {
+        const raw = rows[0].data;
+        const parsed = typeof raw === "string" ? JSON.parse(raw) : raw;
+        if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+          return { ...DEFAULT_FOOTER_SETTINGS, ...parsed };
+        }
+      }
+    } catch (err) {
+      console.error("Error querying footer from Neon DB:", err);
+    }
+  }
+
+  try {
+    const fallback = await readFallbackContent();
+    if (fallback.footer && typeof fallback.footer === "object" && !Array.isArray(fallback.footer)) {
+      return { ...DEFAULT_FOOTER_SETTINGS, ...fallback.footer };
+    }
+  } catch {}
+
+  return DEFAULT_FOOTER_SETTINGS;
+}
+
+const getCachedFooterSettings = createCachedReader(
+  async () => getFooterSettingsDirect(),
+  ["footer-settings-v2"],
+  { revalidate: 3600, tags: ["footer", "site-content"] }
+);
+
+export async function getFooterSettings(): Promise<FooterSettings> {
+  try {
+    const cached = await getCachedFooterSettings();
+    if (cached) return cached;
+  } catch {}
+  return getFooterSettingsDirect();
+}
+
+export async function saveFooterSettings(settings: Partial<FooterSettings>): Promise<FooterSettings> {
+  const current = await getFooterSettingsDirect();
+  const merged: FooterSettings = { ...current, ...settings };
+  const sql = getSql();
+  const now = new Date().toISOString();
+
+  if (sql) {
+    try {
+      await sql`
+        INSERT INTO site_content (section, data, updated_at)
+        VALUES ('footer', ${JSON.stringify(merged)}, ${now})
+        ON CONFLICT (section)
+        DO UPDATE SET data = ${JSON.stringify(merged)}, updated_at = ${now};
+      `;
+    } catch (err) {
+      console.error("Error saving footer settings to Neon DB:", err);
+    }
+  }
+
+  try {
+    const fallback = await readFallbackContent();
+    fallback.footer = merged;
+    await writeFallbackContent(fallback);
+  } catch (err) {
+    console.error("Failed to write fallback footer:", err);
+  }
+
+  invalidateCacheTag("footer");
+  invalidateCacheTag("site-content");
+
+  return merged;
 }
 
 // ============================================================================

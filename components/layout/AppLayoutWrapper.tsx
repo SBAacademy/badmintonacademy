@@ -5,15 +5,18 @@ import { usePathname } from "next/navigation";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { MobileConversionBar } from "@/components/layout/MobileConversionBar";
+import { FooterSettings } from "@/data/footer";
 
 export function AppLayoutWrapper({
   children,
   initialCentres,
   initialPrograms,
+  initialFooterSettings,
 }: {
   children: React.ReactNode;
   initialCentres?: any[];
   initialPrograms?: any[];
+  initialFooterSettings?: FooterSettings;
 }) {
   const pathname = usePathname();
   const isAdmin = pathname?.startsWith("/admin");
@@ -26,9 +29,12 @@ export function AppLayoutWrapper({
     <>
       <Navbar initialCentres={initialCentres} />
       <main className="flex-1 w-full">{children}</main>
-      <Footer initialCentres={initialCentres} initialPrograms={initialPrograms} />
+      <Footer
+        initialCentres={initialCentres}
+        initialPrograms={initialPrograms}
+        initialSettings={initialFooterSettings}
+      />
       <MobileConversionBar />
     </>
   );
 }
-

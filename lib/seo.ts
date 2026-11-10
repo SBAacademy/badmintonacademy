@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import { ACADEMY_DATA } from "@/data/academy";
+import type { FooterSettings } from "@/data/footer";
 
 export const SITE_URL = (
   process.env.NEXT_PUBLIC_SITE_URL || "https://www.soorajbadmintonacademy.in"
@@ -100,22 +101,30 @@ export function createMetadata({
   };
 }
 
-export function getOrganizationSchema() {
+export function getOrganizationSchema(settings?: Partial<FooterSettings>) {
+  const socialSameAs = [
+    settings?.instagramUrl || ACADEMY_DATA.socialLinks.instagram,
+    settings?.facebookUrl || ACADEMY_DATA.socialLinks.facebook,
+    settings?.youtubeUrl || ACADEMY_DATA.socialLinks.youtube,
+    settings?.twitterUrl,
+    settings?.linkedinUrl,
+  ].filter(Boolean) as string[];
+
   return {
     "@context": "https://schema.org",
     "@type": ["SportsOrganization", "EducationalOrganization"],
     "@id": `${SITE_URL}/#organization`,
-    name: ACADEMY_DATA.name,
-    legalName: ACADEMY_DATA.name,
+    name: settings?.academyName || ACADEMY_DATA.name,
+    legalName: settings?.academyName || ACADEMY_DATA.name,
     url: SITE_URL,
     logo: `${SITE_URL}/logo.png`,
-    description: ACADEMY_DATA.description,
-    telephone: ACADEMY_DATA.phone,
-    email: ACADEMY_DATA.email,
+    description: settings?.description || ACADEMY_DATA.description,
+    telephone: settings?.phone || ACADEMY_DATA.phone,
+    email: settings?.email || ACADEMY_DATA.email,
     foundingDate: `${ACADEMY_DATA.foundedYear}`,
     address: {
       "@type": "PostalAddress",
-      streetAddress: ACADEMY_DATA.headquartersAddress,
+      streetAddress: settings?.headquartersAddress || ACADEMY_DATA.headquartersAddress,
       addressLocality: ACADEMY_DATA.city,
       addressRegion: ACADEMY_DATA.state,
       postalCode: ACADEMY_DATA.postalCode,
@@ -126,11 +135,7 @@ export function getOrganizationSchema() {
       latitude: ACADEMY_DATA.geo.latitude,
       longitude: ACADEMY_DATA.geo.longitude,
     },
-    sameAs: [
-      ACADEMY_DATA.socialLinks.instagram,
-      ACADEMY_DATA.socialLinks.facebook,
-      ACADEMY_DATA.socialLinks.youtube,
-    ],
+    sameAs: socialSameAs,
   };
 }
 

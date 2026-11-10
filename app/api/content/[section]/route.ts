@@ -16,6 +16,8 @@ import {
   saveProgramRecord,
   deleteProgramRecord,
   getTestimonials,
+  getFooterSettings,
+  saveFooterSettings,
 } from "@/lib/contentDb";
 import { requireAuth } from "@/lib/auth";
 import type { Coach } from "@/data/coaches";
@@ -28,6 +30,7 @@ const VALID_SECTIONS: ContentSectionKey[] = [
   "blog",
   "centres",
   "programs",
+  "footer",
 ];
 
 function getDefaultItems(_section: ContentSectionKey): unknown[] {
@@ -114,6 +117,23 @@ export async function GET(
             "Cache-Control": includePending
               ? "no-store, no-cache, must-revalidate"
               : "public, s-maxage=1800, stale-while-revalidate=86400",
+          },
+        }
+      );
+    }
+
+    if (sectionKey === "footer") {
+      const settings = await getFooterSettings();
+      return NextResponse.json(
+        {
+          success: true,
+          section: sectionKey,
+          settings,
+          data: settings,
+        },
+        {
+          headers: {
+            "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300",
           },
         }
       );
@@ -247,6 +267,20 @@ export async function POST(
       });
     }
 
+    if (sectionKey === "footer") {
+      const updateData =
+        body && typeof body === "object" && body.settings && typeof body.settings === "object"
+          ? body.settings
+          : body;
+      const saved = await saveFooterSettings(updateData);
+      revalidatePath("/", "layout");
+      return NextResponse.json({
+        success: true,
+        message: "Footer & admissions settings updated successfully.",
+        settings: saved,
+      });
+    }
+
     const defaults = getDefaultItems(sectionKey);
     const currentItems = await getContentSection<Record<string, unknown>>(sectionKey, defaults as Record<string, unknown>[]);
 
@@ -341,6 +375,20 @@ export async function PUT(
         success: true,
         message: "Centres display order updated successfully.",
         items: updatedCentres,
+      });
+    }
+
+    if (sectionKey === "footer") {
+      const updateData =
+        body && typeof body === "object" && body.settings && typeof body.settings === "object"
+          ? body.settings
+          : body;
+      const saved = await saveFooterSettings(updateData);
+      revalidatePath("/", "layout");
+      return NextResponse.json({
+        success: true,
+        message: "Footer & admissions settings updated successfully.",
+        settings: saved,
       });
     }
 
@@ -472,6 +520,14 @@ export async function DELETE(
     }
 
     const sectionKey = section as ContentSectionKey;
+
+    if (sectionKey === "footer") {
+      return NextResponse.json(
+        { success: false, message: "Footer settings cannot be deleted." },
+        { status: 400 }
+      );
+    }
+
     const { searchParams } = new URL(request.url);
     const identifier = searchParams.get("id") || searchParams.get("slug");
 

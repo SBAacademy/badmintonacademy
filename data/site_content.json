@@ -5373,5 +5373,27 @@
     }
   ],
   "centres": [],
-  "events": []
+  "events": [],
+  "footer": {
+    "headquartersAddress": "SBA Sports Arena, Near Rajiv Gandhi Indoor Stadium, Kadavanthra, Kochi, Kerala 682020",
+    "phone": "+917907655513",
+    "phoneDisplay": "+91 79076 55513",
+    "email": "admissions@sabadminton.com",
+    "operatingHoursDays": "Monday – Sunday (7 Days Open)",
+    "operatingHoursMorning": "05:30 AM – 10:30 AM",
+    "operatingHoursEvening": "04:00 PM – 10:00 PM",
+    "whatsappNumber": "917907655513",
+    "whatsappButtonText": "WHATSAPP DESK",
+    "trialNote": "Shoes & racket required for free trial.",
+    "instagramUrl": "https://instagram.com/sabadmintonacademy",
+    "facebookUrl": "https://facebook.com/sabadmintonacademy",
+    "youtubeUrl": "https://youtube.com/@sabadmintonacademy",
+    "twitterUrl": "",
+    "linkedinUrl": "",
+    "description": "SBA Badminton Academy is a premier athletic badminton training institution in Kochi, offering dedicated synthetic court infrastructure, certified coaching faculty, video stroke analysis, and age-specific developmental pathways.",
+    "badge1": "BWF & NIS CERTIFIED FACULTY",
+    "badge2": "SPRUNG WOODEN SUBFLOORS",
+    "brandTagline": "REBEL PERFORMANCE // ATHLETIC TRAINING",
+    "academyName": "SBA BADMINTON ACADEMY"
+  }
 }
